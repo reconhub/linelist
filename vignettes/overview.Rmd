@@ -1,0 +1,43 @@
+---
+title: "linelist: package overview"
+date: "`r Sys.Date()`"
+output:
+   rmarkdown::html_vignette:
+     toc: true
+     toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{Overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+*linelist* provides ...
+
+# Installing the package
+
+To install the current stable, CRAN version of the package, type:
+```{r install, eval=FALSE}
+install.packages("linelist")
+```
+
+To benefit from the latest features and bug fixes, install the development, *github* version of the package using:
+```{r install2, eval=FALSE}
+devtools::install_github("reconhub/linelist")
+```
+
+Note that this requires the package *devtools* installed.
+
+# Main visible functions of the package
+
+The main functions of the package include:
+
+...
+
+Also consider adding some examples.
+
+# Main internal functions
+
+In case you want to describe internal function as well.
+... 
+
+
