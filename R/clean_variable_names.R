@@ -6,7 +6,7 @@
 #' \code{?epitrix::clean_labels} for more information.
 #'
 #' @author Thibaut Jombart
-#' 
+#'
 #' @param x a \code{data.frame}
 #'
 #' @param ... further arguments passed to \code{epitrix::clean_labels}; the most
@@ -14,7 +14,27 @@
 #'   and defaults to the underscore \code{_}.
 #'
 #' @export
-#' 
+#'
+#' @return A \code{data.frame} with standardised variable names.
+#'
+#' @examples
+#'
+#' ## make toy data
+#' onsets <- as.Date("2018-01-01") + sample(1:10, 20, replace = TRUE)
+#' gender <- sample(c("male", "female"), 20, replace = TRUE)
+#' case_type <- c("confirmed", "probable", "suspected", "not a case")
+#' case <- sample(case_type, 20, replace = TRUE)
+#' toy_data <- data.frame("Date of Onset." = onsets,
+#'                        "_GENDER_ " = gender,
+#'                        "Épi.Case_définition" = case)
+#' ## show data
+#' toy_data
+#'
+#'
+#' ## clean variable names, store in new object, show results
+#' clean_data <- clean_variable_names(toy_data)
+#' clean_data
+
 clean_variable_names <- function(x, ...) {
   variable_names <- colnames(x)
   if (is.null(variable_names)) {
