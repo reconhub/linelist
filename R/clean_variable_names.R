@@ -1,6 +1,6 @@
 #' Clean variable names
 #'
-#' This function takes standardises the variable names in a
+#' This function standardises the variable names in a
 #' \code{data.frame}. It uses the standardisation implemented by
 #' \code{\link[epitrix]{clean_labels}} in the \code{epitrix} package. See
 #' \code{?epitrix::clean_labels} for more information.
@@ -25,7 +25,7 @@
 #' case_type <- c("confirmed", "probable", "suspected", "not a case")
 #' case <- sample(case_type, 20, replace = TRUE)
 #' toy_data <- data.frame("Date of Onset." = onsets,
-#'                        "_GENDER_ " = gender,
+#'                        "GENDER_ " = gender,
 #'                        "Épi.Case_définition" = case)
 #' ## show data
 #' toy_data
