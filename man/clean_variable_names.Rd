@@ -9,7 +9,7 @@ clean_variable_names(x, ...)
 \arguments{
 \item{x}{a \code{data.frame}}
 
-\item{...}{further arguments passed to \code{epitrix::clean_labels}; the most
+\item{...}{further arguments passed to \code{\link[epitrix:clean_labels]{epitrix::clean_labels()}}; the most
 important is \code{sep}, which refers to the separator used between words,
 and defaults to the underscore \code{_}.}
 }
@@ -19,7 +19,7 @@ A \code{data.frame} with standardised variable names.
 \description{
 This function standardises the variable names in a
 \code{data.frame}. It uses the standardisation implemented by
-\code{\link[epitrix]{clean_labels}} in the \code{epitrix} package. See
+\code{\link[epitrix:clean_labels]{epitrix::clean_labels()}} in the \code{epitrix} package. See
 \code{?epitrix::clean_labels} for more information.
 }
 \examples{
@@ -30,7 +30,7 @@ gender <- sample(c("male", "female"), 20, replace = TRUE)
 case_type <- c("confirmed", "probable", "suspected", "not a case")
 case <- sample(case_type, 20, replace = TRUE)
 toy_data <- data.frame("Date of Onset." = onsets,
-                       "GENDER_ " = gender,
+                       "_GENDER_ " = gender,
                        "Épi.Case_définition" = case)
 ## show data
 toy_data

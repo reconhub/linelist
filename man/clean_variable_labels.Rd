@@ -9,18 +9,18 @@ clean_variable_labels(x, ...)
 \arguments{
 \item{x}{a \code{data.frame}}
 
-\item{...}{further arguments passed to \code{epitrix::clean_labels}; the most
+\item{...}{further arguments passed to \code{\link[epitrix:clean_labels]{epitrix::clean_labels()}}; the most
 important is \code{sep}, which refers to the separator used between words,
 and defaults to the underscore \code{_}.}
 }
 \value{
 A \code{data.frame} with standardised labels for characters and
-  factors.
+factors.
 }
 \description{
 This function standardises the labels of all characters of factors in a
 \code{data.frame}. It uses the standardisation implemented by
-\code{\link[epitrix]{clean_labels}} in the \code{epitrix} package. See
+\code{\link[epitrix:clean_labels]{epitrix::clean_labels()}} in the \code{epitrix} package. See
 \code{?epitrix::clean_labels} for more information.
 }
 \author{
