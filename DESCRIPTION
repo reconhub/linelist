@@ -17,3 +17,4 @@ Imports:
 URL: https://github.com/reconhub/linelist
 BugReports: https://github.com/reconhub/linelist/issues
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
