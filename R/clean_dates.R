@@ -37,7 +37,7 @@
 #' admissions[1:5] <- NA
 #' discharges <- factor(as.Date(admissions) + 1)
 #' onset_with_errors <- onset2
-#' onset_with_errors[c(1,20]] <- c("male", "confirmed")
+#' onset_with_errors[c(1,20)] <- c("male", "confirmed")
 #' mixed_info <- onset3
 #' mixed_info[1:10] <- sample(c("bleeding", "fever"), 10, replace = TRUE)
 #' gender <- sample(c("male", "female"), 20, replace = TRUE)
@@ -71,14 +71,14 @@ clean_dates <- function(x, force_Date = TRUE, error_tolerance = 0.1) {
   are_factors <- which(classes == "factor")
 
   if (force_Date) {
-    for (e in are_POSIX) {
-      x[[e]] <- as.Date(x[[e]])
+    for (i in are_POSIX) {
+      x[[i]] <- as.Date(x[[i]])
     }
   }
 
-  for (e in c(are_characters, are_factors)) {
-    if (i_looks_like_date(i_x[[e]], 1 - error_tolerance)) {
-      x[[e]] <- i_convert_char_to_date(x[[e]])
+  for (i in c(are_characters, are_factors)) {
+    if (i_looks_like_date(x[[i]], 1 - error_tolerance)) {
+      x[[i]] <- i_convert_char_to_date(x[[i]])
     }
   }
 
