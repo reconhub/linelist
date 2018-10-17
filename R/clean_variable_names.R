@@ -25,7 +25,7 @@
 #' case_type <- c("confirmed", "probable", "suspected", "not a case")
 #' case <- sample(case_type, 20, replace = TRUE)
 #' toy_data <- data.frame("Date of Onset." = onsets,
-#'                        "GENDER_ " = gender,
+#'                        "_GENDER_ " = gender,
 #'                        "Épi.Case_définition" = case)
 #' ## show data
 #' toy_data

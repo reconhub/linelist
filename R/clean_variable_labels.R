@@ -44,7 +44,7 @@ clean_variable_labels <- function(x, ...) {
     stop("x has no columns")
   }
 
-  classes <- vapply(x, class, character(1))
+  classes <- i_find_classes(x)
   are_characters <- which(classes == "character")
   are_factors <- which(classes == "factor")
 
