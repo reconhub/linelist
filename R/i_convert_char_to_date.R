@@ -1,7 +1,8 @@
-#' Converts a character string to a Date
+#' Try and convert a character string to dates
 #'
-#' Internal function. This is a wrapper for `as.Date` which uses several
-#' possible formats for dates.
+#' Internal function. This function processes each element of a character vector
+#' independently, trying for each to detect the date format, and extract the
+#' date using Ymd format (e.g. `2018-01-21`).
 #'
 #'
 #' @author Thibaut Jombart
@@ -20,11 +21,5 @@ i_convert_char_to_date <- function(x) {
   ## well-formatted date, but still returning a character. If it can't convert
   ## it, it returns NA.
 
-  date_info <- i_find_date_format(x)
-  if (is.null(date_info)) {
-    return(NA_character_)
-  }
-
-  as.Date(date_info["date"], format = date_info["format"])
 
 }
