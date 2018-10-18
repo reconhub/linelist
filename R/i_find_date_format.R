@@ -1,17 +1,17 @@
-#' Guess date format of a character string
-#'
-#' Internal function. The motivation behing this is that `as.Date` does not
-#' handle correctly its `format` argument,
-#' e.g. `as.Date("01-12-2001", format = "%Y-%m-%d")` returns `1-12-20`. Tries to
-#' match a single character string against regular expressions representing
-#' potential date formats. Returns the format as something that can be processed
-#' by `as.Date` if a match is found, and `NULL` otherwise.
-#'
-#' @author Thibaut Jombart
-#'
-#' @return If no matching format can be found, the function returns NULL; if a
-#'   matching format is found, the function returned the matched regular
-#'   expression (clean date) and its format compatible with `as.Date`.
+## Guess date format of a character string
+##
+## Internal function. The motivation behing this is that `as.Date` does not
+## handle correctly its `format` argument,
+## e.g. `as.Date("01-12-2001", format = "%Y-%m-%d")` returns `1-12-20`. Tries to
+## match a single character string against regular expressions representing
+## potential date formats. Returns the format as something that can be processed
+## by `as.Date` if a match is found, and `NULL` otherwise.
+##
+## @author Thibaut Jombart
+##
+## @return If no matching format can be found, the function returns NULL; if a
+##   matching format is found, the function returned the matched regular
+##   expression (clean date) and its format compatible with `as.Date`.
 
 i_find_date_format <- function(x) {
   x <- as.character(x[1])

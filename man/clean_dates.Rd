@@ -4,44 +4,78 @@
 \alias{clean_dates}
 \title{Handle dates data}
 \usage{
-clean_dates(x, ...)
+clean_dates(x, force_Date = TRUE, guess_dates = FALSE,
+  error_tolerance = 0.1)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
 
-\item{...}{}
+\item{force_Date}{a \code{logical} indicating if \code{POSIXct} and \code{POSIXlt} objects
+should be converted to \code{Date} objects; defaults to \code{TRUE}; you should use
+this if your dates are only precise to the day (i.e. no time information
+within days).}
+
+\item{guess_dates}{a \code{logical} indicating if dates should be guessed in
+columns storing character strings or \code{factors}; this feature is
+experimental; see \code{\link[=guess_dates]{guess_dates()}} for more information.}
+
+\item{error_tolerance}{the maximum proportion of failed conversions allowed
+in \code{guess_dates}; see \code{\link[=guess_dates]{guess_dates()}} for more information.}
 }
 \value{
 A \code{data.frame} with standardised dates.
 }
 \description{
 This function detects variables of \code{data.frame} which are effectively
-representing dates, and converts them to \code{Date} objects.
+representing dates, and converts them to \code{Date} objects. When variables are
+character strings or factors, the function will try to convert dates with
+various pre-defined formats (see \emph{details}). For each variable, the most
+common date format is automatically detected, and dates not following it are
+set to \code{NA} (i.e. missing). It uses a tolerance threshold for the amount of
+entries which cannot be converted to date (\code{error_tolerance}). By default,
+tolerance is set to \code{0.1}, meaning 10% of errors in dates entry is allowed
+for a given variable. If there are more errors, this variable is assumed not
+to be a date, and left untouched.
 }
 \examples{
 
 ## make toy data
 onsets <- as.POSIXct("2018-01-01") + sample(1:10, 20, replace = TRUE)
+onsets2 <- format(as.Date(onsets), "\%d/\%m/\%Y")
+onsets3 <- format(as.Date(onsets), "\%d \%m \%Y")
 outcomes <- onsets + 1e7
 admissions <- as.character(as.Date(onsets) + 1)
+admissions[1:5] <- NA
 discharges <- factor(as.Date(admissions) + 1)
+onset_with_errors <- onsets2
+onset_with_errors[c(1,20)] <- c("male", "confirmed")
+mixed_info <- onsets3
+mixed_info[1:10] <- sample(c("bleeding", "fever"), 10, replace = TRUE)
 gender <- sample(c("male", "female"), 20, replace = TRUE)
 case_type <- c("confirmed", "probable", "suspected", "not a case")
 case <- sample(case_type, 20, replace = TRUE)
 toy_data <- data.frame("Date of Onset." = onsets,
-                       "_GENDER_ " = gender,
+                       "onset 2" = onsets2,
+                       "ONSET 3" = onsets3,
+                       "onset_4" = onset_with_errors,
+                       "date admission" = admissions,
+                       "DATE.of.DISCHARGE" = discharges,
+                       "GENDER_ " = gender,
                        "Épi.Case_définition" = case,
                        "date of admission" = admissions,
                        "Date-of_discharge" = discharges,
+                       "extra" = mixed_info,
                        stringsAsFactors = FALSE)
 ## show data
 toy_data
 str(toy_data)
-
 ## clean variable names, store in new object, show results
 clean_data <- clean_variable_names(toy_data)
 clean_data <- clean_dates(clean_data)
 clean_data
+}
+\seealso{
+\code{\link[=guess_dates]{guess_dates()}} to extract dates from a messy input vector
 }
 \author{
 Thibaut Jombart

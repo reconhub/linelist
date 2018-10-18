@@ -20,8 +20,15 @@
 #'   this if your dates are only precise to the day (i.e. no time information
 #'   within days).
 #'
-#' @param error_tolerance
+#' @param guess_dates a `logical` indicating if dates should be guessed in
+#'   columns storing character strings or `factors`; this feature is
+#'   experimental; see [guess_dates()] for more information.
+#' 
+#' @param error_tolerance the maximum proportion of failed conversions allowed
+#'   in `guess_dates`; see [guess_dates()] for more information.
 #'
+#' @seealso  [guess_dates()] to extract dates from a messy input vector
+#' 
 #' @export
 #'
 #' @return A `data.frame` with standardised dates.
@@ -36,9 +43,9 @@
 #' admissions <- as.character(as.Date(onsets) + 1)
 #' admissions[1:5] <- NA
 #' discharges <- factor(as.Date(admissions) + 1)
-#' onset_with_errors <- onset2
+#' onset_with_errors <- onsets2
 #' onset_with_errors[c(1,20)] <- c("male", "confirmed")
-#' mixed_info <- onset3
+#' mixed_info <- onsets3
 #' mixed_info[1:10] <- sample(c("bleeding", "fever"), 10, replace = TRUE)
 #' gender <- sample(c("male", "female"), 20, replace = TRUE)
 #' case_type <- c("confirmed", "probable", "suspected", "not a case")
@@ -64,7 +71,7 @@
 #' clean_data <- clean_dates(clean_data)
 #' clean_data
 
-clean_dates <- function(x, force_Date = TRUE, error_tolerance = 0.1) {
+clean_dates <- function(x, force_Date = TRUE, guess_dates = FALSE, error_tolerance = 0.1) {
   classes <- i_find_classes(x)
   are_POSIX <- i_find_POSIX(x)
   are_characters <- which(classes == "character")
@@ -76,9 +83,9 @@ clean_dates <- function(x, force_Date = TRUE, error_tolerance = 0.1) {
     }
   }
 
-  for (i in c(are_characters, are_factors)) {
-    if (i_looks_like_date(x[[i]], 1 - error_tolerance)) {
-      x[[i]] <- i_convert_char_to_date(x[[i]])
+  if (guess_dates) {
+    for (i in c(are_characters, are_factors)) {
+      x[[i]] <- guess_dates(x[[i]], error_tolerance)
     }
   }
 

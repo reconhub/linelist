@@ -3,3 +3,4 @@
 export(clean_dates)
 export(clean_variable_labels)
 export(clean_variable_names)
+export(guess_dates)

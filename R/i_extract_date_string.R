@@ -1,15 +1,15 @@
-#' Extract date fron a character string
-#'
-#' Internal function. This function looks for a well-formatted date character
-#' string inside a single character string, and returns the matching date using
-#' the `%Y-%m-%d` format (e.g. `2018-01-23`).
-#'
-#'
-#' @author Thibaut Jombart
-#'
-#' @return
-#' Either `NA_character_` or a date, as a standardised character string.
-#'
+## Extract date fron a character string
+##
+## Internal function. This function looks for a well-formatted date character
+## string inside a single character string, and returns the matching date using
+## the `%Y-%m-%d` format (e.g. `2018-01-23`).
+##
+##
+## @author Thibaut Jombart
+##
+## @return
+## Either `NA_character_` or a date, as a standardised character string.
+##
 i_extract_date_string <- function(x) {
 
   ## This function tries converting a single character string into a

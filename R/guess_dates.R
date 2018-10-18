@@ -13,6 +13,8 @@
 #'
 #' @author Thibaut Jombart
 #'
+#' @export
+#'
 #' @details Converting ambiguous character strings to dates is difficult for
 #'     many reasons:
 #'
@@ -32,7 +34,7 @@
 #' @param error_tolerance a number between 0 and 1 indicating the proportion of
 #'     entries which cannot be identified as dates to be tolerated; if this
 #'     proportion is exceeded, the original vector is returned, and a message is
-#'     issued; defaults to 0.1 (10%)
+#'     issued; defaults to 0.1 (10 percent)
 #'
 #' @param quiet a logical indicating if messages should be displayed to the
 #'     console (`TRUE`, default); set to `FALSE` to silence messages
@@ -42,7 +44,7 @@
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
 #'       "2018 10 19", "// 24/12/1989", "this is 24/12/1989!")
 #' guess_dates(x, error_tolerance = 1) # forced conversion
-#' guess_dates(x, error_tolerance = 0.15) # 15% errors allowed 
+#' guess_dates(x, error_tolerance = 0.15) # 15 percent errors allowed 
 
 guess_dates <- function(x, error_tolerance = 0.1, quiet = TRUE) {
 
