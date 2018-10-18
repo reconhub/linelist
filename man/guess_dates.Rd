@@ -39,12 +39,24 @@ many reasons:
 sometimes returning \code{NA}, sometimes issuing an error.
 }
 
-This function tries to address all the above issues.
+This function tries to address all the above issues. Dates with the following
+format should be automatically detected, irrespective of separators
+(e.g. "-", " ", "/") and surrounding text:
+\itemize{
+\item "19 09 2018"
+\item "2018 09 19"
+\item "19 Sep 2018"
+\item "2018 Sep 19"
+}
+
+Note that if a character string has multiple dates, it is currently hard to
+predict which date will be returned.
 }
 \examples{
 
 x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
-      "2018 10 19", "// 24/12/1989", "this is 24/12/1989!")
+      "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
+      "RECON NGO: 19 Sep 2018 :)")
 guess_dates(x, error_tolerance = 1) # forced conversion
 guess_dates(x, error_tolerance = 0.15) # 15 percent errors allowed 
 }

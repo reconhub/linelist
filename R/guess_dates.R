@@ -27,7 +27,17 @@
 #' - the behaviour of `as.Date` in the presence of non-date is hard to predict,
 #'   sometimes returning `NA`, sometimes issuing an error.
 #'
-#' This function tries to address all the above issues.
+#' This function tries to address all the above issues. Dates with the following
+#' format should be automatically detected, irrespective of separators
+#' (e.g. "-", " ", "/") and surrounding text:
+#'
+#' - "19 09 2018"
+#' - "2018 09 19"
+#' - "19 Sep 2018"
+#' - "2018 Sep 19"
+#'
+#' Note that if a character string has multiple dates, it is currently hard to
+#' predict which date will be returned.
 #'
 #' @param x a `character` vector or a `factor`
 #'

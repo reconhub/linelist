@@ -23,6 +23,26 @@ This function standardises the labels of all characters of factors in a
 \code{\link[epitrix:clean_labels]{epitrix::clean_labels()}} in the \code{epitrix} package. See
 \code{?epitrix::clean_labels} for more information.
 }
+\examples{
+
+## make toy data
+onsets <- as.Date("2018-01-01") + sample(1:10, 20, replace = TRUE)
+genders <- c("male", "female", "FEMALE", "Male", "Female", "MALE")
+gender <- sample(genders, 20, replace = TRUE)
+case_types <- c("confirmed", "probable", "suspected", "not a case",
+                "Confirmed", "PROBABLE", "suspected  ", "Not.a.Case")
+case <- factor(sample(case_types, 20, replace = TRUE))
+toy_data <- data.frame("Date of Onset." = onsets,
+                       "GENDER_ " = gender,
+                       "Épi.Case_définition" = case)
+## show data
+toy_data
+
+
+## clean variable names, store in new object, show results
+clean_data <- clean_variable_names(toy_data)
+clean_data
+}
 \author{
 Thibaut Jombart
 }

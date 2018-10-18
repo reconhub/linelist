@@ -25,7 +25,7 @@
 #' genders <- c("male", "female", "FEMALE", "Male", "Female", "MALE")
 #' gender <- sample(genders, 20, replace = TRUE)
 #' case_types <- c("confirmed", "probable", "suspected", "not a case",
-#'                 "Confirmed", "PROBABLE, "suspected  ", "Not.a.Case")
+#'                 "Confirmed", "PROBABLE", "suspected  ", "Not.a.Case")
 #' case <- factor(sample(case_types, 20, replace = TRUE))
 #' toy_data <- data.frame("Date of Onset." = onsets,
 #'                        "GENDER_ " = gender,
