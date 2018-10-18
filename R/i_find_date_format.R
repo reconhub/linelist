@@ -19,16 +19,31 @@ i_find_date_format <- function(x) {
   ## define the regular expressions used to find dates
 
   num <- "[[:digit:]]"
+  letters <- "[[:alpha:]]"
   separator <- "[[:punct:][:blank:]]+"
   x <- gsub(separator, "-", x)
 
+
+  ## These are the formats currently handled; not that any punctuation is
+  ## coerced to a single "-" prior to conversion.
+  
   formats <- list(
-    "%Y-%m-%d" = paste0(num, "{4}", "-",
-                 num, "{2}", "-",
-                 num, "{2}", collapse = ""),
+      ## 2010-01-23
+      "%Y-%m-%d" = paste0(num, "{4}", "-",
+                        num, "{2}", "-",
+                        num, "{2}", collapse = ""),
+      ##  23-01-2010
     "%d-%m-%Y" = paste0(num, "{2}", "-",
-                 num, "{2}",  "-",
-                 num, "{4}", collapse = "")
+                        num, "{2}",  "-",
+                        num, "{4}", collapse = ""),
+    ## 23-Jan-2010
+    "%d-%b-%Y" = paste0(num, "{2}", "-",
+                        letters, "{3}",  "-",
+                        num, "{4}", collapse = ""),
+    ## 2010-Jan-23
+    "%Y-%b-%d" = paste0(num, "{4}", "-",
+                        letters, "{3}",  "-",
+                        num, "{2}", collapse = "")
   )
 
 

@@ -42,7 +42,8 @@
 #' @examples
 #' 
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
-#'       "2018 10 19", "// 24/12/1989", "this is 24/12/1989!")
+#'       "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
+#'       "RECON NGO: 19 Sep 2018 :)")
 #' guess_dates(x, error_tolerance = 1) # forced conversion
 #' guess_dates(x, error_tolerance = 0.15) # 15 percent errors allowed 
 
