@@ -5,7 +5,7 @@
 \title{Clean a data.frame}
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.1, quiet = FALSE)
+  error_tolerance = 0.5, quiet = FALSE)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -22,8 +22,13 @@ within days).}
 columns storing character strings or \code{factors}; this feature is
 experimental; see \code{\link[=guess_dates]{guess_dates()}} for more information.}
 
-\item{error_tolerance}{the maximum proportion of failed conversions allowed
-in \code{guess_dates}; see \code{\link[=guess_dates]{guess_dates()}} for more information.}
+\item{error_tolerance}{a number between 0 and 1 indicating the proportion of
+entries which cannot be identified as dates to be tolerated; if this
+proportion is exceeded, the original vector is returned, and a message is
+issued; defaults to 0.1 (10 percent)}
+
+\item{quiet}{a logical indicating if messages should be displayed to the
+console (\code{TRUE}, default); set to \code{FALSE} to silence messages}
 }
 \value{
 A \code{data.frame} with standardised labels for characters and
@@ -60,10 +65,10 @@ toy_data
 
 
 ## clean variable names, store in new object, show results
-clean_data <- clean_data(toy_data)
+clean_data <- clean_data(toy_data, error_tolerance = 0.1)
 clean_data
 
-clean_data2 <- clean_data(toy_data, error_tolerance = 0.25)
+clean_data2 <- clean_data(toy_data, error_tolerance = 0.8)
 clean_data2
 }
 \author{

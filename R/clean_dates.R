@@ -23,9 +23,8 @@
 #' @param guess_dates a `logical` indicating if dates should be guessed in
 #'   columns storing character strings or `factors`; this feature is
 #'   experimental; see [guess_dates()] for more information.
-#' 
-#' @param error_tolerance the maximum proportion of failed conversions allowed
-#'   in `guess_dates`; see [guess_dates()] for more information.
+#'
+#' @inheritParams guess_dates
 #'
 #' @seealso  [guess_dates()] to extract dates from a messy input vector
 #' 
@@ -71,7 +70,7 @@
 #' clean_data <- clean_dates(clean_data)
 #' clean_data
 
-clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_tolerance = 0.1) {
+clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_tolerance = 0.5) {
   classes <- i_find_classes(x)
   are_POSIX <- i_find_POSIX(x)
   are_characters <- which(classes == "character")
