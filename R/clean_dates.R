@@ -71,7 +71,7 @@
 #' clean_data <- clean_dates(clean_data)
 #' clean_data
 
-clean_dates <- function(x, force_Date = TRUE, guess_dates = FALSE, error_tolerance = 0.1) {
+clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_tolerance = 0.1) {
   classes <- i_find_classes(x)
   are_POSIX <- i_find_POSIX(x)
   are_characters <- which(classes == "character")

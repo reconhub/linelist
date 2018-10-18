@@ -4,7 +4,7 @@
 \alias{clean_dates}
 \title{Handle dates data}
 \usage{
-clean_dates(x, force_Date = TRUE, guess_dates = FALSE,
+clean_dates(x, force_Date = TRUE, guess_dates = TRUE,
   error_tolerance = 0.1)
 }
 \arguments{
