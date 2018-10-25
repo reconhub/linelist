@@ -38,7 +38,7 @@ test_that("function works with no POSIX", {
 
   expected_result <- integer(0)
 
-  expect_true(i_find_POSIX(x) == expected_result))
+  expect_equal(i_find_POSIX(x), expected_result)
 
 })
 
