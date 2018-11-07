@@ -4,3 +4,4 @@ appveyor.yml
 README.html
 ^.*\.Rproj$
 ^\.Rproj\.user$
+docs
