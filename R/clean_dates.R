@@ -11,7 +11,7 @@
 #' for a given variable. If there are more errors, this variable is assumed not
 #' to be a date, and left untouched.
 #'
-#' @author Thibaut Jombart
+#' @author Thibaut Jombart, Zhian N. Kamvar
 #'
 #' @param x a `data.frame`
 #'
@@ -64,13 +64,16 @@
 #' ## show data
 #' toy_data
 #' str(toy_data)
-
+#'
 #' ## clean variable names, store in new object, show results
 #' clean_data <- clean_variable_names(toy_data)
 #' clean_data <- clean_dates(clean_data)
 #' clean_data
 
 clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_tolerance = 0.5) {
+  if (!is.data.frame(x)) {
+    stop("x must be a data frame or linelist object")
+  }
   classes <- i_find_classes(x)
   are_POSIX <- i_find_POSIX(x)
   are_characters <- which(classes == "character")
