@@ -87,7 +87,7 @@ clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_toleranc
         next
       }
       x[[cleancol]] <- as.Date(x[[i]]) 
-      comment(x[[cleancol]]) <- c(comment(x[[cleancol]]), "<linelist>clean")
+      comment(x[[cleancol]]) <- c(comment(x[[i]]), "<linelist>clean")
     }
   }
 
@@ -97,7 +97,7 @@ clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_toleranc
       if (inherits(tmp, "Date")) {
         cleancol <- sprintf("%s_clean", i)
         x[[cleancol]] <- tmp
-        comment(x[[cleancol]]) <- c(comment(x[[cleancol]]), "<linelist>clean")
+        comment(x[[cleancol]]) <- c(comment(x[[i]]), "<linelist>clean")
       }     
     }
   }

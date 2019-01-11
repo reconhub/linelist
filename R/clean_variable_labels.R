@@ -59,7 +59,7 @@ clean_variable_labels <- function(x, ...) {
     tmp <- epitrix::clean_labels(out[[e]], ...)
     if (!identical(tmp, out[[e]])) {
       out[[cleancol]] <- tmp
-      comment(out[[cleancol]]) <- "<linelist>clean"
+      comment(out[[cleancol]]) <- c(comment(out[[e]]), "<linelist>clean")
     }
   }
   for(e in are_factors) {
@@ -71,7 +71,7 @@ clean_variable_labels <- function(x, ...) {
     levels(tmp) <- epitrix::clean_labels(levels(out[[e]]), ...)
     if (!identical(tmp, out[[e]])) {
       out[[cleancol]] <- tmp
-      comment(out[[cleancol]]) <- "<linelist>clean"
+      comment(out[[cleancol]]) <- c(comment(out[[e]]), "<linelist>clean")
     }
   }
   out
