@@ -13,7 +13,7 @@
 \alias{set_vars<-}
 \alias{set_vars.linelist}
 \alias{set_vars<-.linelist}
-\title{Accessor functions}
+\title{Accessor functfons}
 \usage{
 get_var(x, var)
 

@@ -18,13 +18,13 @@ set_vars <- function(x, ...) {
 #' @export
 set_vars.linelist <- function(x, ...) {
   dots <- valid_dots(list(...))
-  evars <- attr(x, "epivars")
+  evars <- attr(x, "epivars")$vars
   for (dot in names(dots)) {
     # This is necesarry so that NULL values can remove the element
-    evars[[dot]]$name <- dots[[dot]]
+    evars[[dot]] <- dots[[dot]]
   }
   evars <- if (length(evars) > 0) evars else list()
-  attr(x, "epivars") <- evars
+  attr(x, "epivars")$vars <- evars
   x
 }
 
@@ -33,7 +33,7 @@ set_vars.linelist <- function(x, ...) {
 "set_vars<-.linelist" <- function(x, name, value) {
   if (missing(name)) {
     if (is.null(value)) {
-      attr(x, "epivars") <- list()
+      attr(x, "epivars") <- list(vars = list(), meta = data.frame())
       return(x)
     }
     the_call <- c(list(x), as.list(value))

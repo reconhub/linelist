@@ -1,4 +1,4 @@
-#' Accessor functions
+#' Accessor functfons
 #'
 #' This set of fucntions defines helper functions for accessing pre-defined
 #' epivars in your linelist object.
@@ -24,14 +24,14 @@
 #' # epivars that haven't been defined for the data set will return an error
 #' try(date_report(ll))
 get_var <- function(x, var) {
-  evars <- attr(x, "epivars")
+  evars <- attr(x, "epivars")$vars
   if (is.null(evars)) {
     stop("This object has no epivars attribute.")
   }
   if (is.null(evars[[var]])) {
     stop(paste(var, "not defined."))
   }
-  doname <- attr(x, "epivars")[[c(var, "name")]]
+  doname <- evars[[var]]
   x[[doname]]
 }
 

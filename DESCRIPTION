@@ -10,7 +10,7 @@ LazyData: true
 Suggests:
   testthat,
   roxygen2
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Imports:
   epitrix,
   knitr

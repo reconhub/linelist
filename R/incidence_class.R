@@ -42,7 +42,8 @@ as_linelist.default <- function(dat, ...) {
 #' @aliases as_linelist.default
 as_linelist.data.frame <- function(dat, ...) {
   dots <- list(...)
-  attr(dat, "epivars") <- list()
+  meta <- i_make_meta(dat)
+  attr(dat, "epivars") <- list(vars = list(), meta = meta)
   class(dat) <- c("linelist", oldClass(dat))
   set_vars(dat) <- dots
   dat
