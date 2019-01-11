@@ -67,11 +67,11 @@ clean_data <- function(x, sep = "_", force_Date = TRUE,
   }
 
   out <- clean_variable_names(x, sep = sep)
-  out <- clean_variable_labels(out, sep = sep)
   out <- clean_dates(out,
                      force_Date = force_Date,
                      guess_dates = guess_dates,
                      error_tolerance = error_tolerance)
+  out <- clean_variable_labels(out, sep = sep)
   out
 }
 

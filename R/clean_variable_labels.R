@@ -45,23 +45,35 @@ clean_variable_labels <- function(x, ...) {
   }
 
   classes <- i_find_classes(x)
-  dirty <- vapply(x, function(i) !isTRUE(comment(i) == "cleaned"), logical(1))
+  dirty <- i_find_unclean_columns(x)
   are_characters <- names(x)[classes == "character" & dirty]
   are_factors    <- names(x)[classes == "factor" & dirty]
 
   out <- x
   for(e in are_characters) {
     cleancol <- sprintf("%s_clean", e)
-    out[[cleancol]] <- epitrix::clean_labels(out[[e]], ...)
-    comment(out[[cleancol]]) <- "cleaned"
+    # prevents overwriting of previously cleaned variable
+    if (i_think_this_is_clean(out[[cleancol]])) {
+      next
+    }
+    tmp <- epitrix::clean_labels(out[[e]], ...)
+    if (!identical(tmp, out[[e]])) {
+      out[[cleancol]] <- tmp
+      comment(out[[cleancol]]) <- "<linelist>clean"
+    }
   }
   for(e in are_factors) {
     cleancol <- sprintf("%s_clean", e)
-    out[[cleancol]] <- out[[e]]
-    levels(out[[cleancol]]) <- epitrix::clean_labels(levels(out[[e]]), ...)
-    comment(out[[cleancol]]) <- "cleaned"
+    if (i_think_this_is_clean(out[[cleancol]])) {
+      next
+    }
+    tmp <- out[[e]]
+    levels(tmp) <- epitrix::clean_labels(levels(out[[e]]), ...)
+    if (!identical(tmp, out[[e]])) {
+      out[[cleancol]] <- tmp
+      comment(out[[cleancol]]) <- "<linelist>clean"
+    }
   }
-
   out
 }
 

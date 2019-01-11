@@ -76,15 +76,18 @@ clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_toleranc
   }
   classes <- i_find_classes(x)
   are_POSIX <- i_find_POSIX(x)
-  dirty <- vapply(x, function(i) !isTRUE(comment(i) == "cleaned"), logical(1))
+  dirty <- i_find_unclean_columns(x)
   are_characters <- names(x)[classes == "character" & dirty]
   are_factors    <- names(x)[classes == "factor" & dirty]
 
   if (force_Date) {
     for (i in are_POSIX) {
       cleancol <- sprintf("%s_clean", i)
+      if (i_think_this_is_clean(x[[cleancol]])) {
+        next
+      }
       x[[cleancol]] <- as.Date(x[[i]]) 
-      comment(x[[cleancol]]) <- "cleaned"
+      comment(x[[cleancol]]) <- c(comment(x[[cleancol]]), "<linelist>clean")
     }
   }
 
@@ -94,7 +97,7 @@ clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_toleranc
       if (inherits(tmp, "Date")) {
         cleancol <- sprintf("%s_clean", i)
         x[[cleancol]] <- tmp
-        comment(x[[cleancol]]) <- "cleaned"
+        comment(x[[cleancol]]) <- c(comment(x[[cleancol]]), "<linelist>clean")
       }     
     }
   }
