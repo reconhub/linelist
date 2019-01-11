@@ -31,8 +31,10 @@ issued; defaults to 0.1 (10 percent)}
 console (\code{TRUE}, default); set to \code{FALSE} to silence messages}
 }
 \value{
-A \code{data.frame} with standardised labels for characters and
-factors.
+A \code{data.frame} with additional columns containing standardised
+labels for characters, dates, and factors. These column names will be the
+same as the original columns with "_clean" appended and the \code{\link[=comment]{comment()}}
+"<linelist>clean" attached.
 }
 \description{
 This function applies several cleaning procedures to an input \code{data.frame},

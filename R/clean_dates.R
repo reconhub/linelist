@@ -30,7 +30,9 @@
 #' 
 #' @export
 #'
-#' @return A `data.frame` with standardised dates.
+#' @return A `data.frame` with additional columns containing standardised dates.
+#'   These column names will be the same as the original columns with "_clean"
+#'    appended and the [comment()] "<linelist>clean" attached. 
 #'
 #' @examples
 #'

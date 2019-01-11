@@ -14,8 +14,10 @@ important is \code{sep}, which refers to the separator used between words,
 and defaults to the underscore \code{_}.}
 }
 \value{
-A \code{data.frame} with standardised labels for characters and
-factors.
+A \code{data.frame} with new columns containing  standardised labels for
+characters and factors. These column names will be the same as the original
+columns with "_clean" appended and the \code{\link[=comment]{comment()}} "<linelist>clean"
+attached.
 }
 \description{
 This function standardises the labels of all characters of factors in a

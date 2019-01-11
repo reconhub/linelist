@@ -15,8 +15,10 @@
 #'
 #' @export
 #'
-#' @return A `data.frame` with standardised labels for characters and
-#'   factors.
+#' @return A `data.frame` with new columns containing  standardised labels for
+#' characters and factors. These column names will be the same as the original
+#' columns with "_clean" appended and the [comment()] "<linelist>clean"
+#' attached. 
 #'
 #' @examples
 #'
