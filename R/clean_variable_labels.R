@@ -45,15 +45,21 @@ clean_variable_labels <- function(x, ...) {
   }
 
   classes <- i_find_classes(x)
-  are_characters <- which(classes == "character")
-  are_factors <- which(classes == "factor")
+  dirty <- vapply(x, function(i) !isTRUE(comment(i) == "cleaned"), logical(1))
+  are_characters <- names(x)[classes == "character" & dirty]
+  are_factors    <- names(x)[classes == "factor" & dirty]
 
   out <- x
   for(e in are_characters) {
-    out[[e]] <- epitrix::clean_labels(out[[e]], ...)
+    cleancol <- sprintf("%s_clean", e)
+    out[[cleancol]] <- epitrix::clean_labels(out[[e]], ...)
+    comment(out[[cleancol]]) <- "cleaned"
   }
   for(e in are_factors) {
-    levels(out[[e]]) <- epitrix::clean_labels(levels(out[[e]]), ...)
+    cleancol <- sprintf("%s_clean", e)
+    out[[cleancol]] <- out[[e]]
+    levels(out[[cleancol]]) <- epitrix::clean_labels(levels(out[[e]]), ...)
+    comment(out[[cleancol]]) <- "cleaned"
   }
 
   out

@@ -21,7 +21,7 @@ test_that("passing a non-data frame throws an error", {
   expect_error(clean_dates(x), "x must be a data frame")
   res <- clean_dates(data.frame(date = x), error_tol = 1)
   expect_is(res, "data.frame")
-  expect_length(res, 1)
-  expect_is(res$date, "Date")
+  expect_length(res, 2)
+  expect_is(res$date_clean, "Date")
 
 })
