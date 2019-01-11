@@ -5,6 +5,8 @@
 #'
 #' @param x a linelist object
 #' @param var the name of a variable as a string
+#' @param vector if `TRUE` (default), the result will be a vector (or a matrix
+#'   if it's in two columns). When `FALSE`, a data frame is returned.
 #' @return a vector if the epivar can be represented by a single column, a data
 #'   frame otherwise (e.g. a location column).
 #' @export
@@ -16,14 +18,16 @@
 #' ll <- as_linelist(cleaned_data, 
 #'                   id = "id", 
 #'                   date_onset = "date_of_onset",
-#'                   gender = "gender")
+#'                   gender = "gender",
+#'                   geo = c("lon", "lat"))
 #' date_of_onset(ll)
 #' id(ll)
 #' gender(ll)
-#' 
+#' geo(ll)
+#' get_var(ll, "geo", vector = FALSE)
 #' # epivars that haven't been defined for the data set will return an error
 #' try(date_report(ll))
-get_var <- function(x, var) {
+get_var <- function(x, var, vector = TRUE) {
   evars <- attr(x, "epivars")$vars
   if (is.null(evars)) {
     stop("This object has no epivars attribute.")
@@ -32,7 +36,16 @@ get_var <- function(x, var) {
     stop(paste(var, "not defined."))
   }
   doname <- evars[[var]]
-  x[[doname]]
+  if (vector) {
+    if (length(doname) == 1) {
+      x[[doname]]
+    } else {
+      as.matrix(x[doname])
+    }
+  } else {
+    as.data.frame(x[doname])
+    
+  }
 }
 
 #' @rdname accessors
@@ -75,3 +88,8 @@ age_group <- function(x) {
   get_var(x, "age_group")
 }
 
+#' @rdname accessors
+#' @export
+geo <- function(x) {
+  get_var(x, "geo")
+}

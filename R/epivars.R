@@ -31,7 +31,8 @@ epivars <- function(..., set = FALSE, reset = FALSE) {
                         "date_report", # Date of reporting
                         "gender",      # Gender of individual
                         "age",         # Age of individual
-                        "age_group"    # Age grouping
+                        "age_group",   # Age grouping
+                        "geo"          # Geographical coordinates (must be two columns)
   )
   res <- unique(c(getOption("linelist.epivars"), c(...), linelist.epivars))
   if (set)   options(linelist.epivars = res)

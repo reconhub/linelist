@@ -22,7 +22,9 @@
 #' ll <- as_linelist(cd, 
 #'                   id = "id", 
 #'                   date_onset = "date_of_onset", 
-#'                   gender = "gender")
+#'                   gender = "gender",
+#'                   geo = c("lon", "lat")
+#'                  )
 #' ll
 #' class(ll)
 as_linelist <- function(dat, ...) {

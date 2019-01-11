@@ -5,6 +5,7 @@
 #' @examples
 #' messy_data(n = 5)
 #' messy_data()
+#' @importFrom stats rnorm
 messy_data <- function(n = 20) {
   onsets <- as.Date("2018-01-01") + sample(1:10, n, replace = TRUE)
   discharge <- format(as.Date(onsets) + 10, "%d/%m/%Y")
@@ -18,12 +19,16 @@ messy_data <- function(n = 20) {
                    n, replace = TRUE)
   ID <- replicate(n, paste(sample(letters, 6, replace = TRUE), collapse = ""))
   case <- factor(sample(case_types, n, replace = TRUE))
+  lat <- rnorm(40) * 2 + 13
+  lon <- rnorm(40) + 48
   toy_data <- data.frame("'ID" = ID,
                          "Date of Onset." = onsets,
                          "DisCharge.." = discharge,
                          "GENDER_ " = gender,
                          "\u00c9pi.Case_d\u00e9finition" = case,
                          "messy/dates" = messy_dates,
+                         "lat" = lat,
+                         "lon" = lon, 
                          check.names = FALSE)
   toy_data
 }
