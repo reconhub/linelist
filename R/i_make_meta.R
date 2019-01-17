@@ -7,9 +7,14 @@
 #' @noRd
 #' @importFrom utils stack
 i_make_meta <- function(dat, hxl = NULL, the_comment = NULL) {
-  meta <- stack(i_find_classes(dat))[2:1]
+  meta <- stack(i_find_classes(dat), stringsAsFactors = FALSE)[2:1]
   names(meta)  <- c("column", "class")
+  meta$column  <- as.character(meta$column)
+  meta$class   <- as.character(meta$class)
   meta$hxl     <- if (!is.null(hxl)) hxl else ""
   meta$comment <- if (!is.null(comment)) the_comment else ""
+  meta <- meta[match(names(dat), meta$column), ]
+  rownames(meta) <- NULL
   meta
+
 }

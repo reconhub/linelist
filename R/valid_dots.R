@@ -1,4 +1,4 @@
-## Terminates the workflow and throws an error
+#' Terminates the workflow and throws an error
 #'
 #' @param dots a named list
 #'

@@ -4,6 +4,7 @@
 \alias{as_linelist}
 \alias{as_linelist.default}
 \alias{as_linelist.data.frame}
+\alias{[.linelist}
 \title{Create a linelist object}
 \usage{
 as_linelist(dat, ...)
@@ -11,11 +12,22 @@ as_linelist(dat, ...)
 \method{as_linelist}{default}(dat, ...)
 
 \method{as_linelist}{data.frame}(dat, ...)
+
+\method{[}{linelist}(x, i, j, drop = FALSE)
 }
 \arguments{
 \item{dat}{a data frame}
 
 \item{...}{options passed to \code{\link[=set_vars]{set_vars()}}}
+
+\item{x}{a linelist object}
+
+\item{i}{indicator for rows}
+
+\item{j}{indicator for columns}
+
+\item{drop}{indicator for whether the data frame should be dropped if reduced
+to one column (defaults to FALSE)}
 }
 \description{
 Create a linelist object
@@ -31,4 +43,7 @@ ll <- as_linelist(cd,
                  )
 ll
 class(ll)
+}
+\seealso{
+\code{\link[=get_var]{get_var()}}, \code{\link[=epivars]{epivars()}}, \code{\link[=get_meta]{get_meta()}}, \code{\link[=clean_data]{clean_data()}}
 }
