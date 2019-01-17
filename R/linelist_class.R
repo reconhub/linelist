@@ -17,7 +17,7 @@
 #' @param ... options passed to [set_vars()]
 #' @export
 #' @examples
-#' md <- messy_data()
+#' md <- messy_data(10)
 #' cd <- clean_data(md)
 #' ll <- as_linelist(cd, 
 #'                   id = "id", 
