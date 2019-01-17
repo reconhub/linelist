@@ -21,7 +21,7 @@ as_linelist(dat, ...)
 Create a linelist object
 }
 \examples{
-md <- messy_data()
+md <- messy_data(10)
 cd <- clean_data(md)
 ll <- as_linelist(cd, 
                   id = "id", 

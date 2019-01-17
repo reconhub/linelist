@@ -11,16 +11,21 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-*linelist* provides ...
+*linelist* provides a framework for sensible data standardisation for tabular
+linelist data commonly used in outbreak analysis. This includes functionality
+for guessing dates, cleaning non-standard variable names, and defining a data
+dictionary.
 
 # Installing the package
 
 To install the current stable, CRAN version of the package, type:
+
 ```{r install, eval=FALSE}
 install.packages("linelist")
 ```
 
 To benefit from the latest features and bug fixes, install the development, *github* version of the package using:
+
 ```{r install2, eval=FALSE}
 devtools::install_github("reconhub/linelist")
 ```
@@ -31,8 +36,15 @@ Note that this requires the package *devtools* installed.
 
 The main functions of the package include:
 
-...
-
+ - `clean_data()` will standardise variable names by removing spaces and extra
+   punctuation, attempt to parse dates with a given tolerance, and convert all
+   characters to the closest ASCII approximation
+ - `as_linelist()` will convert a data frame to a linelist object, allowing the
+   user to define a data dictionary.
+ - `epivars()` defines valid variables to be used in the data dictionary
+ - `get_var()` accesses a variable from the linelist
+ - `set_vars()` adds new dictionary definitions to the linelist
+ 
 Also consider adding some examples.
 
 # Main internal functions
