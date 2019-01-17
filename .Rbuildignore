@@ -1,7 +1,9 @@
+^codecov\.yml$
+^\.travis\.yml$
 CONDUCT.md
 README.Rmd
 appveyor.yml
 README.html
 ^.*\.Rproj$
 ^\.Rproj\.user$
-docs
+docs/

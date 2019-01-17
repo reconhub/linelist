@@ -1,21 +1,20 @@
 Package: linelist
 Title: Tools to Import and Tidy Case Linelist Data
-Version: 0.0.1
-Authors@R: c(
-  person("Thibaut", "Jombart", email = "thibautjombart@gmail.com", role = c("aut", "cre")),
-  person("Zhian N.", "Kamvar", email = "zkamvar@gmail.com", role = c("aut"))
-  )
+Version: 0.0.2.9000
+Authors@R: c(person("Thibaut", "Jombart", email = "thibautjombart@gmail.com", role = c("aut", "cre")),
+    person("Zhian N.", "Kamvar", email = "zkamvar@gmail.com", role = c("aut")))
 Description: A collection of wrappers for importing case linelist data from usual formats, and tools for cleaning data, detecting dates, and storing meta-information on the content of the resulting \code{data.frame}.  
 Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests:
-  outbreaks,
-  incidence,
-  testthat,
-  knitr,
-  roxygen2
+    outbreaks,
+    incidence,
+    testthat,
+    knitr,
+    roxygen2,
+    covr
 RoxygenNote: 6.1.1
 Imports:
   epitrix

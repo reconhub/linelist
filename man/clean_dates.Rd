@@ -71,6 +71,7 @@ toy_data <- data.frame("Date of Onset." = onsets,
 ## show data
 toy_data
 str(toy_data)
+
 ## clean variable names, store in new object, show results
 clean_data <- clean_variable_names(toy_data)
 clean_data <- clean_dates(clean_data)
@@ -80,5 +81,5 @@ clean_data
 \code{\link[=guess_dates]{guess_dates()}} to extract dates from a messy input vector
 }
 \author{
-Thibaut Jombart
+Thibaut Jombart, Zhian N. Kamvar
 }
