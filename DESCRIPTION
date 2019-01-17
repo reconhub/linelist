@@ -1,7 +1,10 @@
 Package: linelist
 Title: Tools to Import and Tidy Case Linelist Data
 Version: 0.0.1
-Authors@R: person("Thibaut", "Jombart", email = "thibautjombart@gmail.com", role = c("aut", "cre"))
+Authors@R: c(
+  person("Thibaut", "Jombart", email = "thibautjombart@gmail.com", role = c("aut", "cre")),
+  person("Zhian N.", "Kamvar", email = "zkamvar@gmail.com" role = c("aut"))
+  )
 Description: A collection of wrappers for importing case linelist data from usual formats, and tools for cleaning data, detecting dates, and storing meta-information on the content of the resulting \code{data.frame}.  
 Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
@@ -9,11 +12,11 @@ Encoding: UTF-8
 LazyData: true
 Suggests:
   testthat,
+  knitr,
   roxygen2
 RoxygenNote: 6.1.1
 Imports:
-  epitrix,
-  knitr
+  epitrix
 URL: https://github.com/reconhub/linelist
 BugReports: https://github.com/reconhub/linelist/issues
 VignetteBuilder: knitr
