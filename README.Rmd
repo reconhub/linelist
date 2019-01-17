@@ -123,3 +123,11 @@ Contributions are welcome via **pull requests**.
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
+Roadmap
+=======
+
+The linelist package should have the following features in the future:
+
+ - [ ] A data dictionary that allows you to map standard variable names to columns
+ - [ ] Integration with [\#hxl standard](http://hxlstandard.org/standard/1_1final/)
+ - [ ] Validation of categorical values

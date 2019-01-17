@@ -12,6 +12,7 @@ Encoding: UTF-8
 LazyData: true
 Suggests:
   outbreaks,
+  incidence,
   testthat,
   knitr,
   roxygen2
