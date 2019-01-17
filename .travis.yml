@@ -2,7 +2,7 @@
 language: r
 cache: packages
 
-apt-packages:
+apt_packages:
   - libsodium-dev
 
 matrix:
