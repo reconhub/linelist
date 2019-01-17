@@ -19,6 +19,9 @@ knitr::opts_chunk$set(
 
 # Welcome to the *linelist* package!
 
+[![Travis build status](https://travis-ci.org/reconhub/linelist.svg?branch=master)](https://travis-ci.org/reconhub/linelist)
+[![Codecov test coverage](https://codecov.io/gh/reconhub/linelist/branch/master/graph/badge.svg)](https://codecov.io/gh/reconhub/linelist?branch=master)
+
 This package is dedicated to simplifying the cleaning and standardisation of
 linelist data. Considering a case linelist `data.frame`, it aims to:
 
