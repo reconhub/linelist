@@ -9,8 +9,9 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests:
-  testthat,
-  roxygen2
+    testthat,
+    roxygen2,
+    covr
 RoxygenNote: 6.1.1
 Imports:
   epitrix,
