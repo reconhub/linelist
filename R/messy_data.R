@@ -19,8 +19,8 @@ messy_data <- function(n = 20) {
                    n, replace = TRUE)
   ID <- replicate(n, paste(sample(letters, 6, replace = TRUE), collapse = ""))
   case <- factor(sample(case_types, n, replace = TRUE))
-  lat <- rnorm(40) * 2 + 13
-  lon <- rnorm(40) + 48
+  lat <- rnorm(n) * 2 + 13
+  lon <- rnorm(n) + 48
   toy_data <- data.frame("'ID" = ID,
                          "Date of Onset." = onsets,
                          "DisCharge.." = discharge,
