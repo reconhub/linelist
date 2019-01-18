@@ -11,16 +11,21 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-*linelist* provides ...
+*linelist* provides a framework for sensible data standardisation for tabular
+linelist data commonly used in outbreak analysis. This includes functionality
+for guessing dates, cleaning non-standard variable names, and defining a data
+dictionary.
 
 # Installing the package
 
 To install the current stable, CRAN version of the package, type:
+
 ```{r install, eval=FALSE}
 install.packages("linelist")
 ```
 
 To benefit from the latest features and bug fixes, install the development, *github* version of the package using:
+
 ```{r install2, eval=FALSE}
 devtools::install_github("reconhub/linelist")
 ```
@@ -31,13 +36,87 @@ Note that this requires the package *devtools* installed.
 
 The main functions of the package include:
 
-...
+ - `clean_data()` will standardise variable names by removing spaces and extra
+   punctuation, attempt to parse dates with a given tolerance, and convert all
+   characters to the closest ASCII approximation
+ - `as_linelist()` will convert a data frame to a linelist object, allowing the
+   user to define a data dictionary.
+ - `epivars()` defines valid variables to be used in the data dictionary
+ - `get_var()` accesses a variable from the linelist
+ - `set_vars()` adds new dictionary definitions to the linelist
+ 
+The linelist data class allows you to define variables that are important to
+your analysis that make it easy to create situation report templates no matter
+what the data class is.
 
-Also consider adding some examples.
+As an example, we can use data from the [outbreaks 
+package](https://cran.r-project.org/package=outbreaks). 
 
-# Main internal functions
+```{r load_data}
+library('outbreaks')
+library('incidence')
+library('linelist')
+# define the important variables
+epivars(
+        "id",
+        "date_onset",
+        "gender",
+        "age",
+        "outcome", 
+        "date_outcome", 
+        "date_hospitalisation", 
+        set = TRUE)
 
-In case you want to describe internal function as well.
-... 
+# convert the data set to a linelist and define the variables
+ll <- as_linelist(outbreaks::fluH7N9_china_2013,
+  "outcome" = "outcome", 
+  "date_outcome" = "date_of_outcome", 
+  "date_hospitalisation" = "date_of_hospitalisation",
+  "id" = "case_id",
+  "date_onset" = "date_of_onset",
+  "gender" = "gender",
+  "age" = "age"
+  )
+```
 
+The resulting linelist object acts the same as a data frame in every way, but
+it contains a data dictionary in the metadata:
+
+```{r compare_df}
+# These are the same
+head(ll)
+head(outbreaks::fluH7N9_china_2013)
+
+get_meta(ll)
+```
+
+You can use this data dictionary to access variables:
+
+```{r get_stuff}
+head(gender(ll))
+head(get_var(ll, "outcome"))
+```
+
+This becomes useful in generating templates where the columns from the incoming
+data may not be standardised. For example, if you want to generate an incidence
+curve for the data stratified by gender, you could write something like this:
+
+```{r, ic_gender}
+ic <- incidence(date_onset(ll), interval = "week", groups = gender(ll))
+plot(ic)
+```
+
+Now, if you had a new data set coming into the template, you are prepared:
+
+```{r, new_data}
+old_ll <- ll
+ll <- as_linelist(outbreaks::mers_korea_2015$linelist,
+               "id" = "id",
+               "age" = "age",
+               "gender" = "sex",
+               "date_onset" = "dt_onset"
+              )
+ic <- incidence(date_onset(ll), interval = "week", groups = gender(ll))
+plot(ic)
+```
 
