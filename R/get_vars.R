@@ -5,8 +5,9 @@
 #'
 #' @param x a linelist object
 #' @param var the name of a variable as a string
-#' @param vector if `TRUE` (default), the result will be a vector (or a matrix
-#'   if it's in two columns). When `FALSE`, a data frame is returned.
+#' @param simplify if `TRUE` (default) and if the result is a single column,
+#'   then this variable will be returned as a `vector`; otherwise (`FALSE`), a
+#'   `data.frame` is returned.
 #' @return a vector if the epivar can be represented by a single column, a data
 #'   frame otherwise (e.g. a location column).
 #' @export
@@ -27,25 +28,27 @@
 #' get_var(ll, "geo", vector = FALSE)
 #' # epivars that haven't been defined for the data set will return an error
 #' try(date_report(ll))
-get_var <- function(x, var, vector = TRUE) {
-  evars <- attr(x, "epivars")$vars
-  if (is.null(evars)) {
-    stop("This object has no epivars attribute.")
+
+list_vars <- function(x) {
+  names(attr(x, "epivars")$vars)
+}
+
+
+#' @rdname accessors
+#' @export
+get_vars <- function(x, ..., simplify = TRUE) {
+  ## TODO: this is lacking a validation step, which should throw informative
+  ## errors if ... are not valid epivars subsets
+  vars <- unlist(list(...))
+  epivars <- list_vars(x)
+  names(epivars) <- epivars
+  to_keep <- epivars[vars]
+
+  out <- as.data.frame(x[doname])
+  if (simplify && length(to_keep) == 1L) {
+    out <- unlist(out)
   }
-  if (is.null(evars[[var]])) {
-    stop(paste(var, "not defined."))
-  }
-  doname <- evars[[var]]
-  if (vector) {
-    if (length(doname) == 1) {
-      x[[doname]]
-    } else {
-      as.matrix(x[doname])
-    }
-  } else {
-    as.data.frame(x[doname])
-    
-  }
+  out
 }
 
 #' @rdname accessors
