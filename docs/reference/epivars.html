@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • linelist</title>
+<title>Linelist Global Variables — epivars • linelist</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Linelist Global Variables — epivars" />
+
+<meta property="og:description" content="This defines the legal variables that linelist will recognise." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -47,7 +50,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -111,37 +114,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/reconhub/linelist/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Linelist Global Variables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/epivars.R'><code>R/epivars.R</code></a></small>
+    <div class="hidden name"><code>epivars.Rd</code></div>
     </div>
 
-    <div id="linelist-0-0-2-9000" class="section level1">
-<h1 class="page-header">
-<a href="#linelist-0-0-2-9000" class="anchor"></a>linelist 0.0.2.9000</h1>
-<ul>
-<li>
-<code><a href="../reference/guess_dates.html">guess_dates()</a></code> now throws an appropriate error if a vector is passed instead of a data frame. See <a href="https://github.com/reconhub/linelist/issues/4" class="uri">https://github.com/reconhub/linelist/issues/4</a> for details</li>
-</ul>
-</div>
-    <div id="linelist-0-0-1-9000" class="section level1">
-<h1 class="page-header">
-<a href="#linelist-0-0-1-9000" class="anchor"></a>linelist 0.0.1.9000</h1>
-<ul>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>This defines the legal variables that linelist will recognise.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>epivars</span>(<span class='no'>...</span>, <span class='kw'>set</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>...</th>
+      <td><p>quoted varaibles to add to the default variables</p></td>
+    </tr>
+    <tr>
+      <th>set</th>
+      <td><p>when <code>TRUE</code>, the variables provided in <code>...</code> will be added to the
+global variables. Defaults to `FALSE``</p></td>
+    </tr>
+    <tr>
+      <th>reset</th>
+      <td><p>when <code>TRUE</code>, the global variables are reset to the default
+variables listed above. Defaults to <code>FALSE</code></p></td>
+    </tr>
+    </table>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='co'># see the default varaibles</span>
+<span class='fu'>epivars</span>()</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
+#&gt; [6] "age_group"   "geo"        </div><div class='input'>
+<span class='co'># Equivalent</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist.epivars"</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
+#&gt; [6] "age_group"   "geo"        </div><div class='input'>
+<span class='co'># If you create a new method and need other varaibles, or just want a shorter</span>
+<span class='co'># representation, they can be added to your options:</span>
+
+<span class='fu'>epivars</span>(<span class='st'>"random"</span>, <span class='kw'>set</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
+#&gt; [6] "age_group"   "geo"         "random"     </div><div class='input'>
+<span class='co'># You can also reset the variables</span>
+<span class='fu'>epivars</span>(<span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
+#&gt; [6] "age_group"   "geo"        </div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#linelist-0-0-2-9000">0.0.2.9000</a></li>
-        <li><a href="#linelist-0-0-1-9000">0.0.1.9000</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
+  </div>
 </div>
 
       <footer>
