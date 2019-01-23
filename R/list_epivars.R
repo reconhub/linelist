@@ -16,8 +16,9 @@
 #'                   gender = "gender",
 #'                   geo = c("lon", "lat")
 #'                  )
-#' get_meta(ll)
-#' get_meta(ll, dict = FALSE)
+#' list_epivars(ll)
+#' list_epivars(ll, TRUE)
+#' list_epivars(ll, dictrionary = FALSE)
 
 list_epivars <- function(x, epivars_only = FALSE, dictionary = TRUE) {
   stopifnot(inherits(x, "linelist"))
