@@ -14,8 +14,8 @@
 #' Create a linelist object
 #'
 #' @param dat a data frame
-#' @param ... options passed to [set_vars()]
-#' @seealso [get_vars()], [epivars()], [list_epivars()], [clean_data()]
+#' @param ... options passed to [set_epivars()]
+#' @seealso [get_epivars()], [get_dictionary()], [list_epivars()], [clean_data()]
 #' @export
 #' @examples
 #' md <- messy_data(10)
@@ -48,7 +48,7 @@ as_linelist.data.frame <- function(dat, ...) {
   meta <- i_make_meta(dat)
   attr(dat, "epivars") <- list(vars = list(), meta = meta)
   class(dat) <- c("linelist", oldClass(dat))
-  set_vars(dat) <- dots
+  set_epivars(dat) <- dots
   dat
 }
 

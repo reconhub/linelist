@@ -1,20 +1,20 @@
 #' @rdname accessors
 #' @export
-set_vars <- function(x, ...) {
-  UseMethod("set_vars")
+set_epivars <- function(x, ...) {
+  UseMethod("set_epivars")
 }
 
 #' @rdname accessors
-#' @param name the name of the variable in [epivars()] to assign
+#' @param name the name of the variable in [get_dictionary()] to assign
 #' @param value the name of the column in the locations data
 #' @export
-"set_vars<-" <- function(x, name, value) {
-  UseMethod("set_vars<-")
+"set_epivars<-" <- function(x, name, value) {
+  UseMethod("set_epivars<-")
 }
 
 #' @rdname accessors
 #' @export
-set_vars.linelist <- function(x, ...) {
+set_epivars.linelist <- function(x, ...) {
   dots <- valid_dots(list(...))
   evars <- attr(x, "epivars")$vars
   for (dot in names(dots)) {
@@ -28,7 +28,7 @@ set_vars.linelist <- function(x, ...) {
 
 #' @rdname accessors
 #' @export
-"set_vars<-.linelist" <- function(x, name, value) {
+"set_epivars<-.linelist" <- function(x, name, value) {
   if (missing(name)) {
     if (is.null(value)) {
       attr(x, "epivars") <- list(vars = list(), meta = data.frame())
@@ -40,5 +40,5 @@ set_vars.linelist <- function(x, ...) {
     names(value) <- name
     the_call <- c(list(x), value)
   }
-  do.call("set_vars.linelist", the_call)
+  do.call("set_epivars.linelist", the_call)
 }

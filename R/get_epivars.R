@@ -27,22 +27,22 @@
 #'
 #' ## general purpose accessor
 #' list_epivars(ll, simple = TRUE)
-#' get_vars(ll) # no epi variable
-#' get_vars(ll, 1:3) # first 3 epi variables
-#' get_vars(ll, "id", "date_onset", "gender") # named epi variables
-#' get_vars(ll, TRUE) # all epi variables
+#' get_epivars(ll) # no epi variable
+#' get_epivars(ll, 1:3) # first 3 epi variables
+#' get_epivars(ll, "id", "date_onset", "gender") # named epi variables
+#' get_epivars(ll, TRUE) # all epi variables
 #' date_of_onset(ll)
 #' id(ll)
 #' gender(ll)
 #' geo(ll)
-#' get_vars(ll, "geo", vector = FALSE)
+#' get_epivars(ll, "geo", vector = FALSE)
 #' # epivars that haven't been defined for the data set will return an error
 #' try(date_report(ll))
 
 
 #' @rdname accessors
 #' @export
-get_vars <- function(x, ..., simplify = TRUE) {
+get_epivars <- function(x, ..., simplify = TRUE) {
   ## TODO: this is lacking a validation step, which should throw informative
   ## errors if ... are not valid epivars subsets
   vars <- unlist(list(...))
@@ -58,7 +58,7 @@ get_vars <- function(x, ..., simplify = TRUE) {
 #' @rdname accessors
 #' @export
 date_of_onset <- function(x) {
-  get_vars(x, "date_onset")
+  get_epivars(x, "date_onset")
 }
 
 #' @rdname accessors
@@ -68,35 +68,35 @@ date_onset <- date_of_onset
 #' @rdname accessors
 #' @export
 id <- function(x) {
-  get_vars(x, "id")
+  get_epivars(x, "id")
 }
 
 #' @rdname accessors
 #' @export
 gender <- function(x) {
-  get_vars(x, "gender")
+  get_epivars(x, "gender")
 }
 
 #' @rdname accessors
 #' @export
 date_report <- function(x) {
-  get_vars(x, "date_report")
+  get_epivars(x, "date_report")
 }
 
 #' @rdname accessors
 #' @export
 age <- function(x) {
-  get_vars(x, "age")
+  get_epivars(x, "age")
 }
 
 #' @rdname accessors
 #' @export
 age_group <- function(x) {
-  get_vars(x, "age_group")
+  get_epivars(x, "age_group")
 }
 
 #' @rdname accessors
 #' @export
 geo <- function(x) {
-  get_vars(x, "geo")
+  get_epivars(x, "geo")
 }

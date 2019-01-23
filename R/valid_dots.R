@@ -7,7 +7,7 @@
 valid_dots <- function(dots) {
   if (length(dots) == 0) return(dots)
   # These names can be expanded
-  out <- dots[names(dots) %in% getOption("linelist.epivars")]
+  out <- dots[names(dots) %in% getOption("linelist_epivars")]
   #
   # TODO: Throw error if there are any unnamed arguments
   #
@@ -16,7 +16,7 @@ valid_dots <- function(dots) {
     msg <- paste0("Unknown variables were found: '", diffnames, "'\n\n",
                   "Please inspect them to make sure they are correct.",
                   "If they are correct, please add them using:\n\n",
-                  "\tepivars('", diffnames, "', set = TRUE)\n\n",
+                  "\tget_dictionary('", diffnames, "', set = TRUE)\n\n",
                   "Type ?epivars for details")
     stop(msg, call. = FALSE)
   }

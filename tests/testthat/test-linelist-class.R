@@ -1,7 +1,7 @@
 context("linelist class tests")
 
-oev <- epivars()
-invisible(epivars("date_discharge", "case", set = TRUE))
+oev <- get_dictionary()
+invisible(get_dictionary("date_discharge", "case", set = TRUE))
 ll <- as_linelist(clean_data(messy_data()),
                   id = "id", 
                   date_onset = "date_of_onset",
@@ -28,4 +28,4 @@ test_that("a linelist class will be the same subsetting by nothing", {
   expect_identical(ll, ll[])
 })
 
-epivars(reset = TRUE)
+get_dictionary(reset = TRUE)
