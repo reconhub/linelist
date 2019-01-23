@@ -13,7 +13,8 @@
 #' @export
 #' @rdname accessors
 #' @examples
-#' 
+#'
+#' ## make toy data
 #' toy_data <- messy_data()
 #' cleaned_data <- clean_data(toy_data)
 #' ll <- as_linelist(cleaned_data, 
@@ -21,6 +22,12 @@
 #'                   date_onset = "date_of_onset",
 #'                   gender = "gender",
 #'                   geo = c("lon", "lat"))
+#'
+#' ## general purpose accessor
+#' get_vars(ll) # no epi variable
+#' get_vars(ll, 1:3) # first 3 epi variables
+#' get_vars(ll, "id", "date_onset", "gender") # named epi variables
+#' get_vars(ll, TRUE) # all epi variables
 #' date_of_onset(ll)
 #' id(ll)
 #' gender(ll)
@@ -29,10 +36,6 @@
 #' # epivars that haven't been defined for the data set will return an error
 #' try(date_report(ll))
 
-list_vars <- function(x) {
-  names(attr(x, "epivars")$vars)
-}
-
 
 #' @rdname accessors
 #' @export
@@ -40,13 +43,11 @@ get_vars <- function(x, ..., simplify = TRUE) {
   ## TODO: this is lacking a validation step, which should throw informative
   ## errors if ... are not valid epivars subsets
   vars <- unlist(list(...))
-  epivars <- list_vars(x)
-  names(epivars) <- epivars
-  to_keep <- epivars[vars]
-
+  epivars <- attr(x, "epivars")$vars
+  to_keep <- unlist(epivars[vars])
   out <- as.data.frame(x[to_keep])
   if (simplify && length(to_keep) == 1L) {
-    out <- unlist(out)
+    out <- out[, 1, drop = TRUE]
   }
   out
 }
