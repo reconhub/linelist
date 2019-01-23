@@ -56,9 +56,6 @@ then this variable will be returned as a \code{vector}; otherwise (\code{FALSE})
 \item{name}{the name of the variable in \code{\link[=epivars]{epivars()}} to assign}
 
 \item{value}{the name of the column in the locations data}
-
-\item{...}{For \code{set_vars()}, any number of variables defined in
-\code{\link[=epivars]{epivars()}} that can be used for mapping or modelling.}
 }
 \value{
 a vector if the epivar can be represented by a single column, a data
