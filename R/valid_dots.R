@@ -7,7 +7,7 @@
 valid_dots <- function(dots) {
   if (length(dots) == 0) return(dots)
   # These names can be expanded
-  out <- dots[names(dots) %in% getOption("linelist.epivars")]
+  out <- dots[names(dots) %in% getOption("linelist_epivars")]
   #
   # TODO: Throw error if there are any unnamed arguments
   #
