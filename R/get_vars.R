@@ -44,7 +44,7 @@ get_vars <- function(x, ..., simplify = TRUE) {
   names(epivars) <- epivars
   to_keep <- epivars[vars]
 
-  out <- as.data.frame(x[doname])
+  out <- as.data.frame(x[to_keep])
   if (simplify && length(to_keep) == 1L) {
     out <- unlist(out)
   }
