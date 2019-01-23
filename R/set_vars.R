@@ -1,6 +1,4 @@
 #' @rdname accessors
-#' @param ... For `set_vars()`, any number of variables defined in
-#'   [epivars()] that can be used for mapping or modelling. 
 #' @export
 set_vars <- function(x, ...) {
   UseMethod("set_vars")

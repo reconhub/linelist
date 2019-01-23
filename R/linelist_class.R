@@ -15,7 +15,7 @@
 #'
 #' @param dat a data frame
 #' @param ... options passed to [set_vars()]
-#' @seealso [get_var()], [epivars()], [get_meta()], [clean_data()]
+#' @seealso [get_vars()], [epivars()], [list_epivars()], [clean_data()]
 #' @export
 #' @examples
 #' md <- messy_data(10)
@@ -61,7 +61,7 @@ as_linelist.data.frame <- function(dat, ...) {
 #' @param drop indicator for whether the data frame should be dropped if reduced
 #'   to one column (defaults to FALSE)
 "[.linelist" <- function(x, i, j, drop = FALSE) {
-  md <- get_meta(x)
+  md <- list_epivars(x)
   ev <- attr(x, "epivars")
   x  <- NextMethod()
   newmd <- md[md$column %in% names(x), ]
