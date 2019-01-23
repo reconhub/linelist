@@ -1,9 +1,10 @@
 #' Retrieve metadata from a linelist object
 #'
-#' @param dat a linelist object
-#' @param dictionary when \code{TRUE}, a column called "epivar" is appended to
-#' the metadata table
-#' @return a data frame representing metatdata
+#' @param dat a `linelist` object
+#' @param dictionary if `TRUE`, a column called "*epivar*" is appended to the
+#'   metadata table, indicating which standard epi variable columns correspond
+#'   to; of `FALSE`, the class of the column replaces it
+#' @return a `data.frame` representing metatdata
 #' @export
 #' @examples
 #' dat <- clean_data(messy_data())

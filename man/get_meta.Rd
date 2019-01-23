@@ -7,13 +7,14 @@
 get_meta(dat, dictionary = TRUE)
 }
 \arguments{
-\item{dat}{a linelist object}
+\item{dat}{a \code{linelist} object}
 
-\item{dictionary}{when \code{TRUE}, a column called "epivar" is appended to
-the metadata table}
+\item{dictionary}{if \code{TRUE}, a column called "\emph{epivar}" is appended to the
+metadata table, indicating which standard epi variable columns correspond
+to; of \code{FALSE}, the class of the column replaces it}
 }
 \value{
-a data frame representing metatdata
+a \code{data.frame} representing metatdata
 }
 \description{
 Retrieve metadata from a linelist object
