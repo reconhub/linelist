@@ -4,7 +4,9 @@
 #' epivars in your linelist object.
 #'
 #' @param x a linelist object
-#' @param var the name of a variable as a string
+#' @param ... epi variables to be used; can be provided as characters, integers,
+#'   or logical; integers and logicals are to be matched against the vector of
+#'   epi variables returned by `list_epivars(x, simple = TRUE)`.
 #' @param simplify if `TRUE` (default) and if the result is a single column,
 #'   then this variable will be returned as a `vector`; otherwise (`FALSE`), a
 #'   `data.frame` is returned.
@@ -24,6 +26,7 @@
 #'                   geo = c("lon", "lat"))
 #'
 #' ## general purpose accessor
+#' list_epivars(ll, simple = TRUE)
 #' get_vars(ll) # no epi variable
 #' get_vars(ll, 1:3) # first 3 epi variables
 #' get_vars(ll, "id", "date_onset", "gender") # named epi variables
@@ -32,7 +35,7 @@
 #' id(ll)
 #' gender(ll)
 #' geo(ll)
-#' get_var(ll, "geo", vector = FALSE)
+#' get_vars(ll, "geo", vector = FALSE)
 #' # epivars that haven't been defined for the data set will return an error
 #' try(date_report(ll))
 
@@ -55,7 +58,7 @@ get_vars <- function(x, ..., simplify = TRUE) {
 #' @rdname accessors
 #' @export
 date_of_onset <- function(x) {
-  get_var(x, "date_onset")
+  get_vars(x, "date_onset")
 }
 
 #' @rdname accessors
@@ -65,35 +68,35 @@ date_onset <- date_of_onset
 #' @rdname accessors
 #' @export
 id <- function(x) {
-  get_var(x, "id")
+  get_vars(x, "id")
 }
 
 #' @rdname accessors
 #' @export
 gender <- function(x) {
-  get_var(x, "gender")
+  get_vars(x, "gender")
 }
 
 #' @rdname accessors
 #' @export
 date_report <- function(x) {
-  get_var(x, "date_report")
+  get_vars(x, "date_report")
 }
 
 #' @rdname accessors
 #' @export
 age <- function(x) {
-  get_var(x, "age")
+  get_vars(x, "age")
 }
 
 #' @rdname accessors
 #' @export
 age_group <- function(x) {
-  get_var(x, "age_group")
+  get_vars(x, "age_group")
 }
 
 #' @rdname accessors
 #' @export
 geo <- function(x) {
-  get_var(x, "geo")
+  get_vars(x, "geo")
 }

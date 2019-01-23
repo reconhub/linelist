@@ -45,8 +45,9 @@ set_vars(x, name) <- value
 \arguments{
 \item{x}{a linelist object}
 
-\item{...}{For \code{set_vars()}, any number of variables defined in
-\code{\link[=epivars]{epivars()}} that can be used for mapping or modelling.}
+\item{...}{epi variables to be used; can be provided as characters, integers,
+or logical; integers and logicals are to be matched against the vector of
+epi variables returned by \code{list_epivars(x, simple = TRUE)}.}
 
 \item{simplify}{if \code{TRUE} (default) and if the result is a single column,
 then this variable will be returned as a \code{vector}; otherwise (\code{FALSE}), a
@@ -56,7 +57,8 @@ then this variable will be returned as a \code{vector}; otherwise (\code{FALSE})
 
 \item{value}{the name of the column in the locations data}
 
-\item{var}{the name of a variable as a string}
+\item{...}{For \code{set_vars()}, any number of variables defined in
+\code{\link[=epivars]{epivars()}} that can be used for mapping or modelling.}
 }
 \value{
 a vector if the epivar can be represented by a single column, a data
@@ -78,6 +80,7 @@ ll <- as_linelist(cleaned_data,
                   geo = c("lon", "lat"))
 
 ## general purpose accessor
+list_epivars(ll, simple = TRUE)
 get_vars(ll) # no epi variable
 get_vars(ll, 1:3) # first 3 epi variables
 get_vars(ll, "id", "date_onset", "gender") # named epi variables
@@ -86,7 +89,7 @@ date_of_onset(ll)
 id(ll)
 gender(ll)
 geo(ll)
-get_var(ll, "geo", vector = FALSE)
+get_vars(ll, "geo", vector = FALSE)
 # epivars that haven't been defined for the data set will return an error
 try(date_report(ll))
 }

@@ -15,7 +15,7 @@
 #'
 #' @param dat a data frame
 #' @param ... options passed to [set_vars()]
-#' @seealso [get_var()], [epivars()], [list_vars()], [clean_data()]
+#' @seealso [get_vars()], [epivars()], [list_epivars()], [clean_data()]
 #' @export
 #' @examples
 #' md <- messy_data(10)
