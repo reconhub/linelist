@@ -45,5 +45,5 @@ ll
 class(ll)
 }
 \seealso{
-\code{\link[=get_vars]{get_vars()}}, \code{\link[=epivars]{epivars()}}, \code{\link[=list_epivars]{list_epivars()}}, \code{\link[=clean_data]{clean_data()}}
+\code{\link[=get_epivars]{get_epivars()}}, \code{\link[=epivars]{epivars()}}, \code{\link[=list_epivars]{list_epivars()}}, \code{\link[=clean_data]{clean_data()}}
 }
