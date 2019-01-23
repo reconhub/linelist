@@ -18,7 +18,7 @@ as_linelist(dat, ...)
 \arguments{
 \item{dat}{a data frame}
 
-\item{...}{options passed to \code{\link[=set_vars]{set_vars()}}}
+\item{...}{options passed to \code{\link[=set_epivars]{set_epivars()}}}
 
 \item{x}{a linelist object}
 
@@ -45,5 +45,5 @@ ll
 class(ll)
 }
 \seealso{
-\code{\link[=get_epivars]{get_epivars()}}, \code{\link[=epivars]{epivars()}}, \code{\link[=list_epivars]{list_epivars()}}, \code{\link[=clean_data]{clean_data()}}
+\code{\link[=get_epivars]{get_epivars()}}, \code{\link[=get_dictionary]{get_dictionary()}}, \code{\link[=list_epivars]{list_epivars()}}, \code{\link[=clean_data]{clean_data()}}
 }

@@ -13,7 +13,7 @@
 #' @examples 
 #' 
 #' # see the default varaibles
-#' epivars()
+#' get_dictionary()
 #' 
 #' # Equivalent
 #' getOption("linelist.epivars")
@@ -21,11 +21,11 @@
 #' # If you create a new method and need other varaibles, or just want a shorter
 #' # representation, they can be added to your options:
 #' 
-#' epivars("random", set = TRUE)
+#' get_dictionary("random", set = TRUE)
 #' 
 #' # You can also reset the variables
-#' epivars(reset = TRUE)
-epivars <- function(..., set = FALSE, reset = FALSE) {
+#' get_dictionary(reset = TRUE)
+get_dictionary <- function(..., set = FALSE, reset = FALSE) {
   linelist.epivars <- c("id",          # Unique identification
                         "date_onset",  # Date of symptom onset
                         "date_report", # Date of reporting
@@ -33,7 +33,7 @@ epivars <- function(..., set = FALSE, reset = FALSE) {
                         "age",         # Age of individual
                         "age_group",   # Age grouping
                         "geo"          # Geographical coordinates (must be two columns)
-  )
+                        )
   res <- unique(c(getOption("linelist.epivars"), c(...), linelist.epivars))
   if (set)   options(linelist.epivars = res)
   if (reset) options(linelist.epivars = linelist.epivars)

@@ -41,9 +41,9 @@ The main functions of the package include:
    characters to the closest ASCII approximation
  - `as_linelist()` will convert a data frame to a linelist object, allowing the
    user to define a data dictionary.
- - `epivars()` defines valid variables to be used in the data dictionary
+ - `get_dictionary()` defines valid variables to be used in the data dictionary
  - `get_epivars()` accesses a variable from the linelist
- - `set_vars()` adds new dictionary definitions to the linelist
+ - `set_epivars()` adds new dictionary definitions to the linelist
  
 The linelist data class allows you to define variables that are important to
 your analysis that make it easy to create situation report templates no matter
@@ -57,7 +57,7 @@ library('outbreaks')
 library('incidence')
 library('linelist')
 # define the important variables
-epivars(
+get_dictionary(
         "id",
         "date_onset",
         "gender",

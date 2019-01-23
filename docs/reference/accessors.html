@@ -116,7 +116,7 @@ epivars in your linelist object." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Accessor functfons</h1>
-    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/get_vars.R'><code>R/get_vars.R</code></a>, <a href='https://github.com/reconhub/linelist/blob/master/R/set_vars.R'><code>R/set_vars.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/get_vars.R'><code>R/get_vars.R</code></a>, <a href='https://github.com/reconhub/linelist/blob/master/R/set_epivars.R'><code>R/set_epivars.R</code></a></small>
     <div class="hidden name"><code>accessors.Rd</code></div>
     </div>
 
@@ -145,15 +145,15 @@ epivars in your linelist object.</p>
 
 <span class='fu'>geo</span>(<span class='no'>x</span>)
 
-<span class='fu'>set_vars</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>set_epivars</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>set_vars</span>(<span class='no'>x</span>, <span class='no'>name</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
-
-<span class='co'># S3 method for linelist</span>
-<span class='fu'>set_vars</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>set_epivars</span>(<span class='no'>x</span>, <span class='no'>name</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
 
 <span class='co'># S3 method for linelist</span>
-<span class='fu'>set_vars</span>(<span class='no'>x</span>, <span class='no'>name</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+<span class='fu'>set_epivars</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for linelist</span>
+<span class='fu'>set_epivars</span>(<span class='no'>x</span>, <span class='no'>name</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,7 +173,7 @@ if it's in two columns). When <code>FALSE</code>, a data frame is returned.</p><
     </tr>
     <tr>
       <th>...</th>
-      <td><p>For <code>set_vars()</code>, any number of variables defined in
+      <td><p>For <code>set_epivars()</code>, any number of variables defined in
 <code><a href='epivars.html'>epivars()</a></code> that can be used for mapping or modelling.</p></td>
     </tr>
     <tr>
