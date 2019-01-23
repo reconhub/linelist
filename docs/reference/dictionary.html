@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • linelist</title>
+<title>Linelist Global Variables — default_dictionary • linelist</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Linelist Global Variables — default_dictionary" />
+
+<meta property="og:description" content="This defines the legal variables that linelist will recognise." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -47,7 +50,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -109,102 +112,74 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Linelist Global Variables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/default_dictionary.R'><code>R/default_dictionary.R</code></a>, <a href='https://github.com/reconhub/linelist/blob/master/R/dictionary.R'><code>R/dictionary.R</code></a></small>
+    <div class="hidden name"><code>dictionary.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>This defines the legal variables that linelist will recognise.</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>default_dictionary</span>()
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="accessors.html">get_epivars()</a></code> <code><a href="accessors.html">date_of_onset()</a></code> <code><a href="accessors.html">date_onset()</a></code> <code><a href="accessors.html">id()</a></code> <code><a href="accessors.html">gender()</a></code> <code><a href="accessors.html">date_report()</a></code> <code><a href="accessors.html">age()</a></code> <code><a href="accessors.html">age_group()</a></code> <code><a href="accessors.html">geo()</a></code> <code><a href="accessors.html">set_epivars()</a></code> <code><a href="accessors.html">`set_epivars<-`()</a></code> </p>
-        </td>
-        <td><p>Accessor functfons</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as.data.frame.linelist.html">as.data.frame(<i>&lt;linelist&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Convert a linelist object to a data frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as_linelist.html">as_linelist()</a></code> <code><a href="as_linelist.html">`[`(<i>&lt;linelist&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Create a linelist object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="clean_data.html">clean_data()</a></code> </p>
-        </td>
-        <td><p>Clean a data.frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="clean_dates.html">clean_dates()</a></code> </p>
-        </td>
-        <td><p>Handle dates data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="clean_variable_labels.html">clean_variable_labels()</a></code> </p>
-        </td>
-        <td><p>Clean variable labels</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="clean_variable_names.html">clean_variable_names()</a></code> </p>
-        </td>
-        <td><p>Clean variable names</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dictionary.html">default_dictionary()</a></code> <code><a href="dictionary.html">linelist_options()</a></code> <code><a href="dictionary.html">get_dictionary()</a></code> <code><a href="dictionary.html">set_dictionary()</a></code> <code><a href="dictionary.html">reset_dictionary()</a></code> </p>
-        </td>
-        <td><p>Linelist Global Variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="guess_dates.html">guess_dates()</a></code> </p>
-        </td>
-        <td><p>Try and guess dates from a characters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="list_epivars.html">list_epivars()</a></code> </p>
-        </td>
-        <td><p>Retrieve metadata from a linelist object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="messy_data.html">messy_data()</a></code> </p>
-        </td>
-        <td><p>Function for generating messy data</p></td>
-      </tr>
-    </tbody>
+<span class='fu'>linelist_options</span>(<span class='no'>...</span>, <span class='kw'>set</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>get_dictionary</span>(<span class='no'>...</span>)
+
+<span class='fu'>set_dictionary</span>(<span class='no'>...</span>, <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>reset_dictionary</span>(<span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>...</th>
+      <td><p>quoted varaibles to add to the default variables</p></td>
+    </tr>
+    <tr>
+      <th>set</th>
+      <td><p>when <code>TRUE</code>, the variables provided in <code>...</code> will be added to the
+global variables. Defaults to `FALSE``</p></td>
+    </tr>
+    <tr>
+      <th>reset</th>
+      <td><p>when <code>TRUE</code>, the global variables are reset to the default
+variables listed above. Defaults to <code>FALSE</code></p></td>
+    </tr>
     </table>
-  </div>
+    
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='co'># see the default varaibles</span>
+<span class='fu'>get_dictionary</span>()</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
+#&gt; [6] "age_group"   "geo"        </div><div class='input'>
+<span class='co'># Equivalent</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_epivars"</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
+#&gt; [6] "age_group"   "geo"        </div><div class='input'>
+<span class='co'># If you create a new method and need other varaibles, or just want a shorter</span>
+<span class='co'># representation, they can be added to your options:</span>
+
+<span class='fu'>get_dictionary</span>(<span class='st'>"random"</span>, <span class='kw'>set</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
+#&gt; [6] "age_group"   "geo"         "random"     </div><div class='input'>
+<span class='co'># You can also reset the variables</span>
+<span class='fu'>get_dictionary</span>(<span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
+#&gt; [6] "age_group"   "geo"        </div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+            
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

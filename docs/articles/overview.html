@@ -111,9 +111,9 @@
 <li>
 <code><a href="../reference/as_linelist.html">as_linelist()</a></code> will convert a data frame to a linelist object, allowing the user to define a data dictionary.</li>
 <li>
-<code><a href="../reference/epivars.html">epivars()</a></code> defines valid variables to be used in the data dictionary</li>
+<code><a href="../reference/dictionary.html">get_dictionary()</a></code> defines valid variables to be used in the data dictionary</li>
 <li>
-<code><a href="../reference/accessors.html">get_var()</a></code> accesses a variable from the linelist</li>
+<code><a href="../reference/accessors.html">get_epivars()</a></code> accesses a variable from the linelist</li>
 <li>
 <code><a href="../reference/accessors.html">set_epivars()</a></code> adds new dictionary definitions to the linelist</li>
 </ul>
@@ -122,10 +122,10 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'outbreaks'</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'incidence'</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'linelist'</span>)</code></pre></div>
-<pre><code>## linelist is loaded with the following global variables in `epivars()`:
+<pre><code>## linelist is loaded with the following global variables in `get_dictionary()`:
 ## id, date_onset, date_report, gender, age, age_group, geo</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># define the important variables</span>
-<span class="kw"><a href="../reference/epivars.html">epivars</a></span>(
+<span class="kw"><a href="../reference/dictionary.html">get_dictionary</a></span>(
         <span class="st">"id"</span>,
         <span class="st">"date_onset"</span>,
         <span class="st">"gender"</span>,
@@ -180,7 +180,7 @@ ll &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as_linel
 ## 4      f  45  Jiangsu
 ## 5      f  48  Jiangsu
 ## 6      f  32  Jiangsu</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/get_meta.html">get_meta</a></span>(ll)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_epivars.html">list_epivars</a></span>(ll) <span class="co"># show available epivars</span></code></pre></div>
 <pre><code>##                    column               epivar  class hxl
 ## 1                 case_id                   id factor    
 ## 2           date_of_onset           date_onset   Date    
@@ -190,13 +190,34 @@ ll &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as_linel
 ## 6                  gender               gender factor    
 ## 7                     age                  age factor    
 ## 8                province                 &lt;NA&gt; factor</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_epivars.html">list_epivars</a></span>(ll, <span class="dt">simple =</span> <span class="ot">TRUE</span>) <span class="co"># only names of available epivars</span></code></pre></div>
+<pre><code>## [1] "outcome"              "date_outcome"         "date_hospitalisation"
+## [4] "id"                   "date_onset"           "gender"              
+## [7] "age"</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_epivars.html">list_epivars</a></span>(ll, <span class="dt">epivars_only =</span> <span class="ot">TRUE</span>) <span class="co"># ignore non-epivars columns</span></code></pre></div>
+<pre><code>##                    column               epivar  class hxl
+## 1                 case_id                   id factor    
+## 2           date_of_onset           date_onset   Date    
+## 3 date_of_hospitalisation date_hospitalisation   Date    
+## 4         date_of_outcome         date_outcome   Date    
+## 5                 outcome              outcome factor    
+## 6                  gender               gender factor    
+## 7                     age                  age factor</code></pre>
 <p>You can use this data dictionary to access variables:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/accessors.html">gender</a></span>(ll))</code></pre></div>
 <pre><code>## [1] m m f f f f
 ## Levels: f m</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/accessors.html">get_var</a></span>(ll, <span class="st">"outcome"</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/accessors.html">get_epivars</a></span>(ll, <span class="st">"outcome"</span>)) <span class="co"># only "outcome"</span></code></pre></div>
 <pre><code>## [1] Death   Death   Death   &lt;NA&gt;    Recover Death  
 ## Levels: Death Recover</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/accessors.html">get_epivars</a></span>(ll, <span class="dv">1</span>:<span class="dv">3</span>)) <span class="co"># first 3 epivars</span></code></pre></div>
+<pre><code>##   outcome date_of_outcome date_of_hospitalisation
+## 1   Death      2013-03-04                    &lt;NA&gt;
+## 2   Death      2013-03-10              2013-03-03
+## 3   Death      2013-04-09              2013-03-19
+## 4    &lt;NA&gt;            &lt;NA&gt;              2013-03-27
+## 5 Recover      2013-05-15              2013-03-30
+## 6   Death      2013-04-26              2013-03-28</code></pre>
 <p>This becomes useful in generating templates where the columns from the incoming data may not be standardised. For example, if you want to generate an incidence curve for the data stratified by gender, you could write something like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ic &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/incidence/topics/incidence">incidence</a></span>(<span class="kw"><a href="../reference/accessors.html">date_onset</a></span>(ll), <span class="dt">interval =</span> <span class="st">"week"</span>, <span class="dt">groups =</span> <span class="kw"><a href="../reference/accessors.html">gender</a></span>(ll))</code></pre></div>
 <pre><code>## 10 missing observations were removed.</code></pre>

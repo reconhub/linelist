@@ -14,7 +14,8 @@ Suggests:
     testthat,
     knitr,
     roxygen2,
-    covr
+    covr,
+    magrittr
 RoxygenNote: 6.1.1
 Imports:
   epitrix

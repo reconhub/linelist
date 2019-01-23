@@ -39,8 +39,8 @@ linelist data. Considering a case linelist `data.frame`, it aims to:
   inconsistent formats, and dates flanked by other text
   
 - support data dictionary: `linelist` objects can store meta-data indicating
-  which columns correspond to what type of specific data, usually found in
-  linelists such as a unique identifier, gender, or dates of onset
+  which columns correspond to standard epidemiological variables, usually found
+  in linelists such as a unique identifier, gender, or dates of onset
   
 
 
@@ -61,23 +61,58 @@ Note that this requires the package *devtools* installed.
 
 # What does it do?
 
-The main features of the package include:
+## Data cleaning
 
-- `clean_data`: the main function, taking a `data.frame` as input, and doing all
+Procedures to clean data, first and foremost aimed at `data.frame` formats,
+include:
+
+- `clean_data()`: the main function, taking a `data.frame` as input, and doing all
   the variable names, internal labels, and date processing described above
   
-- `clean_variable_names`: like `clean_data`, but only the variable names
+- `clean_variable_names()`: like `clean_data`, but only the variable names
 
-- `clean_variable_labels`: like `clean_data`, but only the variable labels
+- `clean_variable_labels()`: like `clean_data`, but only the variable labels
 
-- `clean_dates`: like `clean_data`, but only the dates
+- `clean_dates()`: like `clean_data`, but only the dates
 
-- `guess_dates`: find dates in various, unspecified formats in a messy
+- `guess_dates()`: find dates in various, unspecified formats in a messy
   `character` vector
   
-- `get_meta`: see the current epi data dictionary
+- `as_linelist()`: create a new `linelist` object from a `data.frame`
   
+
+## Dictionary
+
+*linelist* also handles a *dictionary* of pre-defined, standard epidemiological
+variables, referred to as `epivars` throughout the package. Meta-information can
+be attached to `linelist` objects to define which columns of the dataset
+correspond to specific `epivars`. 
+
+The main functions to handle the `epivars` of a `linelist` object include:
+
+- `list_epivars()`: lists the `epivars` of a dataset, with options to have more
+  or less information
+
+- `get_epivars()`: extract columns of a dataset corresponding to `epivars`
+
+- `set_epivars()`: set the `epivars` of a dataset
+
+- `as_linelist()`: creates a new `linelist` object, and can define `epivars` as
+  extra arguments
+
+In addition, several functions allow to interact with the dictionary of
+recognised `epivars`, including:
+
+- `default_dictionary()`: shows the default dictionary of `epivars`
+
+- `get_dictionary()`: shows the current `epivars` dictionary
+
+- `set_dictionary()`: set the current `epivars` dictionary; if arguments are
+  empty, reset to the defaults
   
+- `reset_dictionary()`: reset the current `epivars` dictionary to defaults
+  
+
 
 # Worked example
 
@@ -99,7 +134,7 @@ messy_dates <- sample(
 case <- factor(sample(case_types, 20, replace = TRUE))
 toy_data <- data.frame("Date of Onset." = onsets,
                        "DisCharge.." = discharge,
-                       "GENDER_ " = gender,
+                       "SeX_ " = gender,
                        "Épi.Case_définition" = case,
                        "messy/dates" = messy_dates)
 ## show data
@@ -107,6 +142,7 @@ toy_data
 
 ```
 
+We start by cleaning these data:
 
 ```{r clean_data}
 ## load library
@@ -116,8 +152,46 @@ library(linelist)
 x <- clean_data(toy_data)
 x
 
-## lower tolerance for unconverted dates
-clean_data(toy_data, error_tolerance = 0.05)
+```
+
+We can now define some `epivars` for `x`, i.e. identify which columns correspond
+to typical epidemiological variables:
+
+```{r define_epivars}
+## see what the dictionary is
+get_dictionary()
+
+## see current names of variables
+names(x)
+
+## some variables are known epivars; let's create a linelist object and register
+## this information at the same time
+x <- as_linelist(x, date_onset = "date_of_onset", gender = "sex")
+x
+
+```
+
+Note that the equivalent can be done using piping:
+```{r piping}
+library(magrittr)
+x <- toy_data %>%
+  clean_data %>%
+  as_linelist(date_onset = "date_of_onset", gender = "sex")
+x
+```
+
+We now handle a clean dataset, with standardised labels and variable names, and
+dates of onset and gender are now formally identifier:
+```{r epivars}
+## check available epivars
+list_epivars(x, simple = TRUE) # simple
+list_epivars(x, epivars_only = TRUE) # more info
+
+
+get_epivars(x, "gender", "date_onset")
+
+## or equivalent:
+get_epivars(x, c(2,1))
 
 ```
 
