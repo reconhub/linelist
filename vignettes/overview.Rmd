@@ -58,15 +58,15 @@ library('outbreaks')
 library('incidence')
 library('linelist')
 # define the important variables
-set_dictionary(
-  "id",
-  "date_onset",
-  "gender",
-  "age",
-  "outcome", 
-  "date_outcome", 
-  "date_hospitalisation" 
-  )
+## set_dictionary(
+##   "id",
+##   "date_onset",
+##   "gender",
+##   "age",
+##   "outcome", 
+##   "date_outcome", 
+##   "date_hospitalisation" 
+##   )
 
 # convert the data set to a linelist and define the variables
 ll <- as_linelist(outbreaks::fluH7N9_china_2013,
@@ -90,7 +90,7 @@ head(outbreaks::fluH7N9_china_2013)
 
 list_epivars(ll) # show available epivars
 list_epivars(ll, simple = TRUE) # only names of available epivars
-list_epivars(ll, epivars_only = TRUE) # ignore non-epivars columns
+list_epivars(ll, all_dictionary = TRUE) # ignore non-epivars columns
 
 
 ```

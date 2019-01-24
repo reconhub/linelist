@@ -19,14 +19,6 @@ reset_dictionary()
 \item{x}{a \code{data.frame} with 3 columns 'epivar', 'hxl' and 'description',
 representing the new dictionary to be used; see \code{default_dictionary} for a
 template}
-
-\item{...}{quoted varaibles to add to the current dictionary}
-
-\item{set}{when \code{TRUE}, the variables provided in \code{...} will be added to the
-global variables. Defaults to `FALSE``}
-
-\item{reset}{when \code{TRUE}, the global variables are reset to the default
-variables listed above. Defaults to \code{FALSE}}
 }
 \description{
 These functions let the user define variables that are important

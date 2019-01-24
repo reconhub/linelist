@@ -13,7 +13,7 @@
 
 #' Create a linelist object
 #'
-#' @param x a data frame
+#' @param x a `data.frame` or a `linelist` object
 #' @param ... options passed to [set_epivars()]
 #' @seealso [get_epivars()], [get_dictionary()], [list_epivars()], [clean_data()]
 #' @export
@@ -51,7 +51,6 @@ as_linelist.data.frame <- function(x, ...) {
 
 #' @rdname as_linelist
 #' @export
-#' @param x a linelist object
 #' @param i indicator for rows
 #' @param j indicator for columns
 #' @param drop indicator for whether the data frame should be dropped if reduced

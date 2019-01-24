@@ -16,7 +16,7 @@ as_linelist(x, ...)
 \method{[}{linelist}(x, i, j, drop = FALSE)
 }
 \arguments{
-\item{x}{a data frame}
+\item{x}{a \code{data.frame} or a \code{linelist} object}
 
 \item{...}{options passed to \code{\link[=set_epivars]{set_epivars()}}}
 
@@ -26,8 +26,6 @@ as_linelist(x, ...)
 
 \item{drop}{indicator for whether the data frame should be dropped if reduced
 to one column (defaults to FALSE)}
-
-\item{x}{a linelist object}
 }
 \description{
 Create a linelist object

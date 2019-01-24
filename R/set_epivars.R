@@ -3,6 +3,10 @@
 #' These functions can be used to change the `epivars` registred in a `linelist`
 #' object. `set_epivars` replaces previous `epivars` with new
 #' values. `add_epivars` adds new `epivars` to the existing ones.
+#'
+#' @param x a `linelist` object
+#'
+#' @param ... a series of column names named after epivars
 #' 
 #' @export
 

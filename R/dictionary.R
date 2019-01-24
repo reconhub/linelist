@@ -2,11 +2,6 @@
 #' 
 #' This defines the legal variables that linelist will recognise.
 #' 
-#' @param ... quoted varaibles to add to the current dictionary
-#' @param set when `TRUE`, the variables provided in `...` will be added to the
-#'   global variables. Defaults to `FALSE``
-#' @param reset when `TRUE`, the global variables are reset to the default 
-#'   variables listed above. Defaults to `FALSE`
 #' 
 #' @description These functions let the user define variables that are important
 #' to a given analysis script. These functions add to or reset variables
@@ -39,7 +34,7 @@ default_dictionary <- function() {
   file <- system.file("default_dictionary.txt",
                       package = "linelist",
                       mustWork = TRUE)
-  read.delim(file, sep = "\t", stringsAsFactors = FALSE)
+  utils::read.delim(file, sep = "\t", stringsAsFactors = FALSE)
 }
 
 

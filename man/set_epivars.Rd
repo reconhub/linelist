@@ -9,6 +9,11 @@ set_epivars(x, ...)
 
 add_epivars(x, ...)
 }
+\arguments{
+\item{x}{a \code{linelist} object}
+
+\item{...}{a series of column names named after epivars}
+}
 \description{
 These functions can be used to change the \code{epivars} registred in a \code{linelist}
 object. \code{set_epivars} replaces previous \code{epivars} with new

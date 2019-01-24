@@ -75,7 +75,7 @@ ll <- as_linelist(cleaned_data,
 list_epivars(ll, simple = TRUE)
 get_epivars(ll) # all epi variable
 get_epivars(ll, "id", "date_onset", "gender") # named epi variables
-date_of_onset(ll)
+date_onset(ll)
 id(ll)
 gender(ll)
 geo(ll) # a matrix with two columns
