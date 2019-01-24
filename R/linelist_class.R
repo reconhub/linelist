@@ -13,7 +13,7 @@
 
 #' Create a linelist object
 #'
-#' @param dat a data frame
+#' @param x a data frame
 #' @param ... options passed to [set_epivars()]
 #' @seealso [get_epivars()], [get_dictionary()], [list_epivars()], [clean_data()]
 #' @export
@@ -28,28 +28,26 @@
 #'                  )
 #' ll
 #' class(ll)
-as_linelist <- function(dat, ...) {
+as_linelist <- function(x, ...) {
   UseMethod("as_linelist")
 }
 
 #' @rdname as_linelist
 #' @export
 #' @aliases as_linelist.default
-as_linelist.default <- function(dat, ...) {
+as_linelist.default <- function(x, ...) {
   stop(sprintf("Not implemented for class %s",
-               paste(class(dat), collapse = ", ")))
+               paste(class(x), collapse = ", ")))
 }
 
 #' @rdname as_linelist
 #' @export
 #' @aliases as_linelist.default
-as_linelist.data.frame <- function(dat, ...) {
+as_linelist.data.frame <- function(x, ...) {
   dots <- list(...)
-  meta <- i_make_meta(dat)
-  attr(dat, "epivars") <- list(vars = list(), meta = meta)
-  class(dat) <- c("linelist", oldClass(dat))
-  set_epivars(dat) <- dots
-  dat
+  class(x) <- c("linelist", oldClass(x))
+  set_epivars(x, dots)
+  x
 }
 
 
@@ -61,12 +59,19 @@ as_linelist.data.frame <- function(dat, ...) {
 #' @param drop indicator for whether the data frame should be dropped if reduced
 #'   to one column (defaults to FALSE)
 "[.linelist" <- function(x, i, j, drop = FALSE) {
-  md <- list_epivars(x)
-  ev <- attr(x, "epivars")
+
+  ## TODO: check that I haven't messed the code too much here, I did simplify it
+  ## a bit (Tibo)
+  
+  new_epivars <- epivars <- attr(x, "epivars")
+  
   x  <- NextMethod()
-  newmd <- md[md$column %in% names(x), ]
-  ev$vars <- ev$vars[names(ev$vars) %in% newmd$epivar[!is.na(newmd$epivar)]]
-  ev$meta <- newmd[colnames(newmd) != "epivar"]
-  attr(x, "epivars") <- ev
+  for (i in seq_along(epivars)) {
+    if (!all(epivars[[i]] %in% names(x))) {
+      new_epivars[[i]] <- NULL
+    }
+  }
+  
+  attr(x, "epivars") <- new_epivar
   x
 }
