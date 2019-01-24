@@ -2,8 +2,12 @@
 language: r
 cache: packages
 
-apt_packages:
-  - libsodium-dev
+addons:
+  apt:
+    sources:
+    - sourceline: 'ppa:chris-lea/libsodium'
+    packages:
+     - libsodium-dev
 
 matrix:
   include:
