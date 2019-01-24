@@ -6,8 +6,11 @@
 #' @noRd
 valid_dots <- function(dots) {
   if (length(dots) == 0) return(dots)
+
+  current_dict <- get_dictionary()
+  
   # These names can be expanded
-  out <- dots[names(dots) %in% getOption("linelist_epivars")]
+  out <- dots[names(dots) %in% current_dict$epivar)]
   #
   # TODO: Throw error if there are any unnamed arguments
   #
