@@ -1,18 +1,21 @@
-#' Retrieve metadata from a linelist object
+#' List registred epivars in a linelist object
 #'
 #' @param x a `linelist` object
+#' 
 #' @param simple a logical indicating if a single vector of names of present
 #'   `epivars` should be returned (`TRUE`); otherwise the output will contain
 #'   more information as a `data.frame` (`FALSE`, default)
-#' @param dictionary if `TRUE`, a column called "*epivar*" is appended to the
-#'   metadata table, indicating which standard epi variable columns correspond
-#'   to; of `FALSE`, the class of the column replaces it
-#' @param epivars_only a `logical` indicating if columns which are not registers
-#'   `epivars` should be removed from the output
+#' 
+#' @param all_dictionary if `FALSE` (default), only the *epivars* present in the
+#'   object are documented; otherwise, all the available dictionary is appended
+#'   to the output
+#' 
 #' @return if `simple` is `TRUE`, a vector of characters giving the names of
 #'   available `epivariables`; otherwise, a `data.frame` giving more information
 #'   about these variables
+#' 
 #' @export
+#' 
 #' @examples
 #' dat <- clean_data(messy_data())
 #' ll  <- as_linelist(dat,
@@ -23,28 +26,29 @@
 #'                  )
 #' list_epivars(ll)
 #' list_epivars(ll, simple = TRUE)
-#' list_epivars(ll, epivars_only = TRUE)
-#' list_epivars(ll, dictionary = FALSE)
+#' list_epivars(ll, all_dictionary = TRUE)
 
-list_epivars <- function(x, simple = FALSE, epivars_only = FALSE, dictionary = TRUE) {
+list_epivars <- function(x, simple = FALSE, all_dictionary = FALSE) {
   stopifnot(inherits(x, "linelist"))
+  content <- attr(x, "epivars")
+  if (length(content) == 0L ) {
+    return(NULL)
+  }
   if (simple) {
-    out <- names(attr(x, "epivars")$vars)
+    out <- names(content)
     return(out)
   }
-  out <- attr(x, "epivars")$meta
-  if (!dictionary) {
-    return(out)
-  }
-  dict <- stack(attr(x, "epivars")$vars, stringsAsFactors = FALSE)
-  names(dict) <- c("column", "epivar")
-  dict$epivar <- as.character(dict$epivar)
-  out <- merge(dict, out, all = TRUE, sort = FALSE, stringsAsFactors = FALSE, drop = FALSE)
-  out <- out[match(names(x), out$column), ]
+  current_dict <- get_dictionary()
+  
+  epivars <- stack(content, stringsAsFactors = FALSE)
+  
+  names(epivars) <- c("column", "epivar")
+  current_dict$epivar <- as.character(current_dict$epivar)
+  
+  out <- merge(epivars, current_dict, by.x = "epivar",
+               all.x = TRUE, all.y = all_dictionary,
+               sort = FALSE)
+  out[3] <- NULL # remove duplicate column
   rownames(out) <- NULL
-  if (epivars_only) {
-    to_keep <- !is.na(out$epivar)
-    out <- out[to_keep, ]
-  }
   out
 }
