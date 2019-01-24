@@ -3,14 +3,17 @@ context("get_epivars() tests")
 
 oev <- get_dictionary()
 invisible(set_dictionary("date_discharge", "case"))
-ll <- as_linelist(tibble::as_tibble(clean_data(messy_data())),
+dfll <- clean_data(messy_data())
+if (requireNamespace("tibble")) {
+  dfll <- tibble::as_tibble(dfll)
+}
+ll <- as_linelist(dfll,
                   id = "id", 
                   date_onset = "date_of_onset",
                   date_discharge = "discharge",
                   case = "epi_case_definition",
                   gender = "gender",
                   geo = c("lon", "lat"))
-dfll <- as.data.frame(ll)
 
 test_that("id() works as expected", {
   expect_identical(id(ll), dfll$id)                  
@@ -40,7 +43,9 @@ test_that("geo() returns the columns in the specified order", {
 test_that("get_epivars() will return only the defined epivars if provided nothing", {
   noll <- !names(dfll) %in% c("lon", "lat")
   ev <- list_epivars(ll[noll], epivars_only = TRUE)$column
-  expect_identical(get_epivars(ll[noll]), dfll[ev])
+  llev <- get_epivars(ll[noll])
+  class(llev) <- class(dfll[ev])
+  expect_identical(llev, dfll[ev])
 })
 
 test_that("get_epivars() allows character vectors", {
