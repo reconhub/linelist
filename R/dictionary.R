@@ -36,7 +36,9 @@
 #' reset_dictionary()
 #' 
 default_dictionary <- function() {
-  file <- system.file("default_dictionary.txt", package = "linelist")
+  file <- system.file("default_dictionary.txt",
+                      package = "linelist",
+                      stringsAsFactors = FALSE)
   read.delim(file, sep = "\t")
 }
 
@@ -61,6 +63,9 @@ get_dictionary <- function() {
 #'   template
 set_dictionary <- function(x) {
   check_dictionary(x)
+  for (i in seq_len(ncol(x))) {
+    x[i] <- as.character(x[i])
+  }
   options(linelist_dictionary = x)
 }
 
