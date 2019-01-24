@@ -5,9 +5,10 @@
 #'
 #' @param x a linelist object
 #' 
-#' @param ... epi variables to be used; can be provided as characters, integers,
+#' @param ... *epivars* to be used; can be provided as characters, integers,
 #'   or logical; integers and logicals are to be matched against the vector of
-#'   epi variables returned by `list_epivars(x, simple = TRUE)`.
+#'   epi variables returned by `list_epivars(x, simple = TRUE)`. If nothing is
+#'   provided, all *epivars* are returned.
 #'
 #' @param simplify if `TRUE` (default) and a single epivar is specified, it will
 #'   be converted to a `vector`. Otherwise, a data frame is returned.

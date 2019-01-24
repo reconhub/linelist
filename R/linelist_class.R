@@ -44,10 +44,8 @@ as_linelist.default <- function(x, ...) {
 #' @export
 #' @aliases as_linelist.default
 as_linelist.data.frame <- function(x, ...) {
-  dots <- list(...)
   class(x) <- c("linelist", oldClass(x))
-  set_epivars(x, dots)
-  x
+  set_epivars(x, ...)
 }
 
 
