@@ -70,6 +70,6 @@ as_linelist.data.frame <- function(x, ...) {
     }
   }
   
-  attr(x, "epivars") <- new_epivar
+  attr(x, "epivars") <- new_epivars
   x
 }
