@@ -1,9 +1,9 @@
 .onLoad <- function(...) {
   op <- options()
   if (!"epiflows.vars" %in% names(op)) {
-    invisible(get_dictionary(reset = TRUE))
+    invisible(reset_dictionary())
   } else {
-    invisible(get_dictionary(set = TRUE))
+    invisible(set_dictionary())
   }
 }
 

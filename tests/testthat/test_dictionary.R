@@ -14,6 +14,6 @@ test_that("users can add new valid epivars", {
 })
 
 test_that("epivars can be reset", {
-  expect_identical(oev, set_dictionary(reset = TRUE))
+  expect_identical(oev, reset_dictionary())
   expect_identical(oev, get_dictionary())
 })

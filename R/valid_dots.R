@@ -16,8 +16,8 @@ valid_dots <- function(dots) {
     msg <- paste0("Unknown variables were found: '", diffnames, "'\n\n",
                   "Please inspect them to make sure they are correct.",
                   "If they are correct, please add them using:\n\n",
-                  "\tget_dictionary('", diffnames, "', set = TRUE)\n\n",
-                  "Type ?epivars for details")
+                  "\tset_dictionary('", diffnames, "')\n\n",
+                  "Type ?set_dictionary for details")
     stop(msg, call. = FALSE)
   }
   out
