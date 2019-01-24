@@ -23,6 +23,8 @@ set_epivars.linelist <- function(x, ...) {
   }
   evars <- if (length(evars) > 0) evars else list()
   attr(x, "epivars")$vars <- evars
+  meta <- list_epivars(x, epivars_only = TRUE)
+  attr(x, "epivars")$vars <- evars[unique(meta$epivar)]
   x
 }
 
