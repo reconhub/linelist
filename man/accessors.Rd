@@ -49,9 +49,8 @@ set_epivars(x, name) <- value
 or logical; integers and logicals are to be matched against the vector of
 epi variables returned by \code{list_epivars(x, simple = TRUE)}.}
 
-\item{simplify}{if \code{TRUE} (default) and if the result is a single column,
-then this variable will be returned as a \code{vector}; otherwise (\code{FALSE}), a
-\code{data.frame} is returned.}
+\item{simplify}{if \code{TRUE} (default) and a single epivar is specified, it will
+be converted to a \code{vector}. Otherwise, a data frame is returned.}
 
 \item{name}{the name of the variable in \code{\link[=get_dictionary]{get_dictionary()}} to assign}
 
@@ -64,6 +63,11 @@ frame otherwise (e.g. a location column).
 \description{
 This set of fucntions defines helper functions for accessing pre-defined
 epivars in your linelist object.
+}
+\note{
+For the "geo" epivar, which necessarily contains two columns for
+longitude and latitude data, when \code{simplify = TRUE}, a matrix will be
+returned.
 }
 \examples{
 
@@ -78,15 +82,14 @@ ll <- as_linelist(cleaned_data,
 
 ## general purpose accessor
 list_epivars(ll, simple = TRUE)
-get_epivars(ll) # no epi variable
-get_epivars(ll, 1:3) # first 3 epi variables
+get_epivars(ll) # all epi variable
 get_epivars(ll, "id", "date_onset", "gender") # named epi variables
-get_epivars(ll, TRUE) # all epi variables
 date_of_onset(ll)
 id(ll)
 gender(ll)
-geo(ll)
-get_epivars(ll, "geo", vector = FALSE)
+geo(ll) # a matrix with two columns
+get_epivars(ll, "geo", simplify = FALSE) # a data frame with two columns
+
 # epivars that haven't been defined for the data set will return an error
 try(date_report(ll))
 }

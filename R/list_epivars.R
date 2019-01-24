@@ -22,7 +22,7 @@
 #'                   geo = c("lon", "lat")
 #'                  )
 #' list_epivars(ll)
-#' list_epivars(ll, TRUE)
+#' list_epivars(ll, simple = TRUE)
 #' list_epivars(ll, epivars_only = TRUE)
 #' list_epivars(ll, dictionary = FALSE)
 
