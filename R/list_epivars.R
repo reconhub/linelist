@@ -32,20 +32,23 @@
 #' list_epivars(ll, epivars_only = TRUE)
 #' list_epivars(ll, dictionary = FALSE)
 
-list_epivars <- function(x, simple = FALSE, epivars_only = FALSE, dictionary = TRUE) {
+list_epivars <- function(x, simple = FALSE, epivars_only = FALSE) {
   stopifnot(inherits(x, "linelist"))
+  content <- attr(x, "epivars")
+  if (length(content) == 0L ) {
+    return(NULL)
+  }
   if (simple) {
-    out <- names(attr(x, "epivars")$vars)
+    out <- names(attr(x, "epivars"))
     return(out)
   }
-  out <- attr(x, "epivars")$meta
-  if (!dictionary) {
-    return(out)
-  }
-  dict <- stack(attr(x, "epivars")$vars, stringsAsFactors = FALSE)
-  names(dict) <- c("column", "epivar")
+  current_dict <- get_dictionary()
+  
+  epivars <- stack(attr(x, "epivars")$vars, stringsAsFactors = FALSE)
+  names(epivars) <- c("column", "epivar")
   dict$epivar <- as.character(dict$epivar)
-  out <- merge(dict, out, all = TRUE, sort = FALSE, stringsAsFactors = FALSE, drop = FALSE)
+  out <- merge(epivars, current_dict, all = TRUE, sort = FALSE,
+               stringsAsFactors = FALSE, drop = FALSE)
   out <- out[match(names(x), out$column), ]
   rownames(out) <- NULL
   if (epivars_only) {
