@@ -3,7 +3,7 @@ context("get_epivars() tests")
 
 oev <- get_dictionary()
 invisible(set_dictionary("date_discharge", "case"))
-ll <- as_linelist(clean_data(messy_data()),
+ll <- as_linelist(tibble::as_tibble(clean_data(messy_data())),
                   id = "id", 
                   date_onset = "date_of_onset",
                   date_discharge = "discharge",

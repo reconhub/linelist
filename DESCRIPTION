@@ -15,6 +15,7 @@ Suggests:
     knitr,
     roxygen2,
     covr,
+    tibble,
     magrittr
 RoxygenNote: 6.1.1
 Imports:
