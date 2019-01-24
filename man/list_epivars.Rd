@@ -2,7 +2,7 @@
 % Please edit documentation in R/list_epivars.R
 \name{list_epivars}
 \alias{list_epivars}
-\title{Retrieve metadata from a linelist object}
+\title{List registred epivars in a linelist object}
 \usage{
 list_epivars(x, simple = FALSE, epivars_only = FALSE,
   dictionary = TRUE)
@@ -27,7 +27,7 @@ available \code{epivariables}; otherwise, a \code{data.frame} giving more inform
 about these variables
 }
 \description{
-Retrieve metadata from a linelist object
+List registred epivars in a linelist object
 }
 \examples{
 dat <- clean_data(messy_data())

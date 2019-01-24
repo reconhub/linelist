@@ -10,7 +10,7 @@ valid_dots <- function(dots) {
   current_dict <- get_dictionary()
   
   # These names can be expanded
-  out <- dots[names(dots) %in% current_dict$epivar)]
+  out <- dots[names(dots) %in% current_dict$epivar]
   #
   # TODO: Throw error if there are any unnamed arguments
   #

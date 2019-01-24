@@ -7,20 +7,18 @@
 \alias{[.linelist}
 \title{Create a linelist object}
 \usage{
-as_linelist(dat, ...)
+as_linelist(x, ...)
 
-\method{as_linelist}{default}(dat, ...)
+\method{as_linelist}{default}(x, ...)
 
-\method{as_linelist}{data.frame}(dat, ...)
+\method{as_linelist}{data.frame}(x, ...)
 
 \method{[}{linelist}(x, i, j, drop = FALSE)
 }
 \arguments{
-\item{dat}{a data frame}
+\item{x}{a data frame}
 
 \item{...}{options passed to \code{\link[=set_epivars]{set_epivars()}}}
-
-\item{x}{a linelist object}
 
 \item{i}{indicator for rows}
 
@@ -28,6 +26,8 @@ as_linelist(dat, ...)
 
 \item{drop}{indicator for whether the data frame should be dropped if reduced
 to one column (defaults to FALSE)}
+
+\item{x}{a linelist object}
 }
 \description{
 Create a linelist object

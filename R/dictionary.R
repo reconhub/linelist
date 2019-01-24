@@ -38,8 +38,8 @@
 default_dictionary <- function() {
   file <- system.file("default_dictionary.txt",
                       package = "linelist",
-                      stringsAsFactors = FALSE)
-  read.delim(file, sep = "\t")
+                      mustWork = TRUE)
+  read.delim(file, sep = "\t", stringsAsFactors = FALSE)
 }
 
 
