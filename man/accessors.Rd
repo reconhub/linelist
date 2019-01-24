@@ -2,11 +2,13 @@
 % Please edit documentation in R/get_epivars.R
 \name{get_epivars}
 \alias{get_epivars}
-\alias{date_of_onset}
-\alias{date_onset}
 \alias{id}
-\alias{gender}
+\alias{date_onset}
 \alias{date_report}
+\alias{date_outcome}
+\alias{case_definition}
+\alias{outcome}
+\alias{gender}
 \alias{age}
 \alias{age_group}
 \alias{geo}
@@ -14,15 +16,19 @@
 \usage{
 get_epivars(x, ..., simplify = TRUE)
 
-date_of_onset(x)
+id(x)
 
 date_onset(x)
 
-id(x)
+date_report(x)
+
+date_outcome(x)
+
+case_definition(x)
+
+outcome(x)
 
 gender(x)
-
-date_report(x)
 
 age(x)
 
@@ -33,9 +39,10 @@ geo(x)
 \arguments{
 \item{x}{a linelist object}
 
-\item{...}{epi variables to be used; can be provided as characters, integers,
+\item{...}{\emph{epivars} to be used; can be provided as characters, integers,
 or logical; integers and logicals are to be matched against the vector of
-epi variables returned by \code{list_epivars(x, simple = TRUE)}.}
+epi variables returned by \code{list_epivars(x, simple = TRUE)}. If nothing is
+provided, all \emph{epivars} are returned.}
 
 \item{simplify}{if \code{TRUE} (default) and a single epivar is specified, it will
 be converted to a \code{vector}. Otherwise, a data frame is returned.}

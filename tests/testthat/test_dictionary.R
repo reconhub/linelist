@@ -15,6 +15,6 @@ test_that("epivars will return the default epivars", {
 ## })
 
 test_that("epivars can be reset", {
-  expect_identical(oev, reset_dictionary())
-  expect_identical(oev, get_dictionary())
+  reset_dictionary()
+  expect_identical(default_dictionary(), get_dictionary())
 })

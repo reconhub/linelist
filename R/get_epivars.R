@@ -79,16 +79,6 @@ get_epivars <- function(x, ..., simplify = TRUE) {
 
 
 
-#' @rdname accessors
-#' @export
-date_of_onset <- function(x) {
-  get_epivars(x, "date_onset")
-}
-
-
-#' @rdname accessors
-#' @export
-date_onset <- date_of_onset
 
 
 #' @rdname accessors
@@ -100,8 +90,8 @@ id <- function(x) {
 
 #' @rdname accessors
 #' @export
-gender <- function(x) {
-  get_epivars(x, "gender")
+date_onset <- function(x) {
+  get_epivars(x, "date_onset")
 }
 
 
@@ -109,6 +99,34 @@ gender <- function(x) {
 #' @export
 date_report <- function(x) {
   get_epivars(x, "date_report")
+}
+
+
+#' @rdname accessors
+#' @export
+date_outcome <- function(x) {
+  get_epivars(x, "date_outcome")
+}
+
+
+#' @rdname accessors
+#' @export
+case_definition <- function(x) {
+  get_epivars(x, "case_definition")
+}
+
+
+#' @rdname accessors
+#' @export
+outcome <- function(x) {
+  get_epivars(x, "outcome")
+}
+
+
+#' @rdname accessors
+#' @export
+gender <- function(x) {
+  get_epivars(x, "gender")
 }
 
 

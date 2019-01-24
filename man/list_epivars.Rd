@@ -4,8 +4,7 @@
 \alias{list_epivars}
 \title{List registred epivars in a linelist object}
 \usage{
-list_epivars(x, simple = FALSE, epivars_only = FALSE,
-  dictionary = TRUE)
+list_epivars(x, simple = FALSE, all_dictionary = FALSE)
 }
 \arguments{
 \item{x}{a \code{linelist} object}
@@ -14,12 +13,9 @@ list_epivars(x, simple = FALSE, epivars_only = FALSE,
 \code{epivars} should be returned (\code{TRUE}); otherwise the output will contain
 more information as a \code{data.frame} (\code{FALSE}, default)}
 
-\item{epivars_only}{a \code{logical} indicating if columns which are not registers
-\code{epivars} should be removed from the output}
-
-\item{dictionary}{if \code{TRUE}, a column called "\emph{epivar}" is appended to the
-metadata table, indicating which standard epi variable columns correspond
-to; of \code{FALSE}, the class of the column replaces it}
+\item{all_dictionary}{if \code{FALSE} (default), only the \emph{epivars} present in the
+object are documented; otherwise, all the available dictionary is appended
+to the output}
 }
 \value{
 if \code{simple} is \code{TRUE}, a vector of characters giving the names of
@@ -39,6 +35,5 @@ ll  <- as_linelist(dat,
                  )
 list_epivars(ll)
 list_epivars(ll, simple = TRUE)
-list_epivars(ll, epivars_only = TRUE)
-list_epivars(ll, dictionary = FALSE)
+list_epivars(ll, all_dictionary = TRUE)
 }
