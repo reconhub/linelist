@@ -43,8 +43,31 @@ test_that("get_epivars() will return only the defined epivars if provided nothin
   expect_identical(get_epivars(ll[noll]), dfll[ev])
 })
 
+test_that("get_epivars() allows character vectors", {
+  the_sub <- c("id", "geo")
+  idgeo   <- get_epivars(ll, the_sub)
+  expect_named(idgeo, c("id", "lon", "lat"))
+  expect_is(idgeo, "data.frame") 
+})
+
 test_that("get_epivars() throws an error if an invalid epivar is used", {
   expect_error(get_epivars(ll, "id", "date_onset", "one", "two"),
     "set_dictionary\\('one'\\, 'two'\\)"
   )
 })
+
+test_that("get_epivars() throws an error if unused (but valid) epivar is used", {
+  expect_error(get_epivars(ll, "age", "date_report"),
+    "The following epivars were not found in the data..age, date_report"
+  )
+})
+
+test_that("get_epivars() throws an error if passed to a non-linelist object", {
+  expect_error(get_epivars(dfll), "This object has no 'epivars' attribute")
+})
+
+test_that("get_epivars() throws an error if passed non-characters", {
+  expect_error(get_epivars(ll, "id", vector = TRUE, 2), "all variables must be characters")
+})
+
+invisible(reset_dictionary())
