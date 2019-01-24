@@ -11,17 +11,20 @@ valid_dots <- function(dots) {
   
   # These names can be expanded
   out <- dots[names(dots) %in% current_dict$epivar]
-  #
-  # TODO: Throw error if there are any unnamed arguments
-  #
-  if (length(out) < length(dots)) {
-    diffnames <- paste(setdiff(names(dots), names(out)), collapse = "', '")
-    msg <- paste0("Unknown variables were found: '", diffnames, "'\n\n",
-                  "Please inspect them to make sure they are correct.",
-                  "If they are correct, please add them using:\n\n",
-                  "\tset_dictionary('", diffnames, "')\n\n",
-                  "Type ?set_dictionary for details")
-    stop(msg, call. = FALSE)
-  }
+
+  ## TODO: FIX THIS PART
+  ## #
+  ## # TODO: Throw error if there are any unnamed arguments
+  ## #
+  ## if (length(out) < length(dots)) {
+  ##   diffnames <- paste(setdiff(names(dots), names(out)), collapse = "', '")
+  ##   msg <- paste0("Unknown variables were found: '", diffnames, "'\n\n",
+  ##                 "Please inspect them to make sure they are correct.",
+  ##                 "If they are correct, please add them using:\n\n",
+  ##                 "\tset_dictionary('", diffnames, "')\n\n",
+  ##                 "Type ?set_dictionary for details")
+  ##   stop(msg, call. = FALSE)
+  ## }
+
   out
 }
