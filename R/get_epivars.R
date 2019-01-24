@@ -75,7 +75,7 @@ get_epivars <- function(x, ..., simplify = TRUE) {
   to_keep <- unlist(epivars[names(vars)], use.names = FALSE)
   out <- as.data.frame(x[to_keep])
   if (simplify && length(vars) == 1L) {
-    out <- drop(as.matrix(out))
+    out <- if (ncol(out) == 1L) out[[1L]] else as.matrix(out)
   }
   out
 }
