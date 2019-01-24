@@ -46,7 +46,8 @@ list_epivars <- function(x, simple = FALSE, all_dictionary = FALSE) {
   current_dict$epivar <- as.character(current_dict$epivar)
   
   out <- merge(epivars, current_dict, by.x = "epivar",
-               all.x = TRUE, all.y = all_dictionary)
+               all.x = TRUE, all.y = all_dictionary,
+               sort = FALSE)
   out[3] <- NULL # remove duplicate column
   rownames(out) <- NULL
   out
