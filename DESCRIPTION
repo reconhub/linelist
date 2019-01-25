@@ -19,6 +19,7 @@ Suggests:
     magrittr
 RoxygenNote: 6.1.1
 Imports:
+  rio,
   epitrix,
   utils,
   stats

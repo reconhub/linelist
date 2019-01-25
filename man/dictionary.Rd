@@ -2,6 +2,7 @@
 % Please edit documentation in R/dictionary.R
 \name{default_dictionary}
 \alias{default_dictionary}
+\alias{default_dictionary_path}
 \alias{get_dictionary}
 \alias{set_dictionary}
 \alias{reset_dictionary}
@@ -9,16 +10,18 @@
 \usage{
 default_dictionary()
 
+default_dictionary_path()
+
 get_dictionary()
 
-set_dictionary(x)
+set_dictionary(x, ...)
 
 reset_dictionary()
 }
 \arguments{
-\item{x}{a \code{data.frame} with 3 columns 'epivar', 'hxl' and 'description',
-representing the new dictionary to be used; see \code{default_dictionary} for a
-template}
+\item{x}{either a data frame or the path to a that can produce a data frame.}
+
+\item{...}{parameters passed on to \code{\link[rio:import]{rio::import()}}.}
 }
 \description{
 These functions let the user define variables that are important
@@ -38,16 +41,37 @@ is a wrapper for \code{options(linelist_epivars = ...)}.
 }
 \details{
 This defines the legal variables that linelist will recognise.
+
+The expected format for these data is a\code{data.frame} with 3 columns
+'epivar', 'hxl' and 'description', representing the new dictionary to be
+used; A template example can be found by using \code{\link[=default_dictionary]{default_dictionary()}}.
 }
 \examples{
 # see the default varaibles
 get_dictionary()
 
 # Equivalent
-getOption("linelist_epivars")
+getOption("linelist_dictionary")
 
 
-# You can also reset the variables
+# Set a new, one-column dictionary 
+hosp <- data.frame(
+  epivar = "date_hospital",
+  hxl    = "#date +start",
+  description = "date at which patient was hospitalized",
+  stringsAsFactors = FALSE
+)
+
+set_dictionary(hosp)
+get_dictionary()
+
+# Use the default_dictionary_path() to read in the default dictionary from
+# disk
+default_dictionary_path()
+set_dictionary(default_dictionary_path())
+get_dictionary()
+
+# You can also reset the variables automatically
 reset_dictionary()
 
 }

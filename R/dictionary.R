@@ -24,17 +24,38 @@
 #' get_dictionary()
 #' 
 #' # Equivalent
-#' getOption("linelist_epivars")
+#' getOption("linelist_dictionary")
 #' 
 #' 
-#' # You can also reset the variables
+#' # Set a new, one-column dictionary 
+#' hosp <- data.frame(
+#'   epivar = "date_hospital",
+#'   hxl    = "#date +start",
+#'   description = "date at which patient was hospitalized",
+#'   stringsAsFactors = FALSE
+#' )
+#'
+#' set_dictionary(hosp)
+#' get_dictionary()
+#'
+#' # Use the default_dictionary_path() to read in the default dictionary from
+#' # disk
+#' default_dictionary_path()
+#' set_dictionary(default_dictionary_path())
+#' get_dictionary()
+#'
+#' # You can also reset the variables automatically
 #' reset_dictionary()
 #' 
 default_dictionary <- function() {
-  file <- system.file("default_dictionary.txt",
-                      package = "linelist",
-                      mustWork = TRUE)
+  file <- default_dictionary_path()
   utils::read.delim(file, sep = "\t", stringsAsFactors = FALSE)
+}
+
+#' @export
+#' @rdname dictionary
+default_dictionary_path <- function() {
+  system.file("default_dictionary.txt", package = "linelist", mustWork = TRUE)
 }
 
 
@@ -53,13 +74,24 @@ get_dictionary <- function() {
 
 #' @export
 #' @rdname dictionary
-#' @param x a `data.frame` with 3 columns 'epivar', 'hxl' and 'description',
-#'   representing the new dictionary to be used; see `default_dictionary` for a
-#'   template
-set_dictionary <- function(x) {
+#' @param x either a data frame or the path to a that can produce a data frame.
+#' @param ... parameters passed on to [rio::import()].
+#' @details The expected format for these data is a`data.frame` with 3 columns
+#' 'epivar', 'hxl' and 'description', representing the new dictionary to be
+#' used; A template example can be found by using [default_dictionary()]. 
+#' @importFrom rio import
+set_dictionary <- function(x, ...) {
+  if (is.character(x)) {
+    if (!file.exists(x)) {
+      msg <- paste("The linelist dictionary must be either a data frame or a",
+                   "path to a file. The file '%s' does not appear to exist.")
+      stop(sprintf(msg, x))
+    }
+    x <- rio::import(x, ...)
+  }
   check_dictionary(x)
   for (i in seq_len(ncol(x))) {
-    x[i] <- as.character(x[i])
+    x[[i]] <- as.character(x[[i]])
   }
   options(linelist_dictionary = x)
 }
