@@ -5,13 +5,16 @@
 #' @return a named list
 #' @noRd
 valid_dots <- function(dots) {
+  if (length(dots) == 0) {
+    return(dots)
+  }
+
   if (is.null(dots[[length(dots)]])) {
     dots <- dots[-length(dots)]
   }
-  if (length(dots) == 0) return(dots)
 
   current_dict <- get_dictionary()
-  
+
   # These names can be expanded
   out <- dots[names(dots) %in% current_dict$epivar]
 
