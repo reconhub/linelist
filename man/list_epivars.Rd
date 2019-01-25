@@ -29,8 +29,8 @@ List registred epivars in a linelist object
 dat <- clean_data(messy_data())
 ll  <- as_linelist(dat,
                   id = "id", 
-                  date_onset = "date_of_onset", 
                   gender = "gender",
+                  date_onset = "date_of_onset", 
                   geo = c("lon", "lat")
                  )
 list_epivars(ll)

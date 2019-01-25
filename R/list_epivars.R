@@ -20,8 +20,8 @@
 #' dat <- clean_data(messy_data())
 #' ll  <- as_linelist(dat,
 #'                   id = "id", 
-#'                   date_onset = "date_of_onset", 
 #'                   gender = "gender",
+#'                   date_onset = "date_of_onset", 
 #'                   geo = c("lon", "lat")
 #'                  )
 #' list_epivars(ll)
@@ -39,12 +39,9 @@ list_epivars <- function(x, simple = FALSE, all_dictionary = FALSE) {
     return(out)
   }
   current_dict <- get_dictionary()
-  
-  epivars <- stack(content, stringsAsFactors = FALSE)
-  
+  epivars      <- stack(order_epivars(x, content))
   names(epivars) <- c("column", "epivar")
   current_dict$epivar <- as.character(current_dict$epivar)
-  
   out <- merge(epivars, current_dict, by.x = "epivar",
                all.x = TRUE, all.y = all_dictionary,
                sort = FALSE)

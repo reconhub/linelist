@@ -46,6 +46,7 @@ test_that("get_epivars() will return only the defined epivars if provided nothin
   llev <- get_epivars(ll[noll])
   class(llev) <- class(dfll)
   expect_identical(llev, dfll[names(dfll) %in% ev])
+  expect_identical(dfll[ev], dfll[names(dfll) %in% ev])
 })
 
 test_that("get_epivars() allows character vectors", {
