@@ -14,8 +14,11 @@
 #'   `epivars` are only shown if present
 #'
 #' @examples
-#' x <- messy_data() %>%  clean_data() %>%
-#'   as_linelist(id = "id", gender = "gender", geo = c("lon", "lat"))
+#'
+#' x <- messy_data()
+#' x <- clean_data(x)
+#' x <- as_linelist(x, id = "id", gender = "gender",
+#'                  geo = c("lon", "lat"))
 #' x
 #' print(x, show_epivars = FALSE)
 
