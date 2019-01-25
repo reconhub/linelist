@@ -1,4 +1,4 @@
-epivars	hxl	description
+epivar	hxl	description
 id	#respondee	unique individual identifier
 date_onset	#date +start	date at which symptoms started
 date_report	#date +reported	date at which case was reported

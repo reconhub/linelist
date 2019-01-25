@@ -96,7 +96,7 @@ reset_epivars.data.frame <- function(x, ...) {
 #' @return a reorderd list of epivars 
 #' @keywords internal
 #' @noRd
-#' @importFrom utils unstack
+#' @importFrom utils stack unstack
 #' @examples
 #' dat <- clean_data(messy_data())
 #' names(dat) # notice the order of the data

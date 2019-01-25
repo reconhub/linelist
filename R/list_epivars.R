@@ -6,7 +6,7 @@
 #'   `epivars` should be returned (`TRUE`); otherwise the output will contain
 #'   more information as a `data.frame` (`FALSE`, default)
 #' 
-#' @param all_dictionary if `FALSE` (default), only the *epivars* present in the
+#' @param full_dict if `FALSE` (default), only the *epivars* present in the
 #'   object are documented; otherwise, all the available dictionary is appended
 #'   to the output
 #' 
@@ -26,9 +26,9 @@
 #'                  )
 #' list_epivars(ll)
 #' list_epivars(ll, simple = TRUE)
-#' list_epivars(ll, all_dictionary = TRUE)
+#' list_epivars(ll, full_dict = TRUE)
 
-list_epivars <- function(x, simple = FALSE, all_dictionary = FALSE) {
+list_epivars <- function(x, simple = FALSE, full_dict = FALSE) {
   stopifnot(inherits(x, "linelist"))
   content <- attr(x, "epivars")
   if (length(content) == 0L ) {
@@ -38,14 +38,20 @@ list_epivars <- function(x, simple = FALSE, all_dictionary = FALSE) {
     out <- names(content)
     return(out)
   }
-  current_dict <- get_dictionary()
-  epivars      <- stack(order_epivars(x, content))
+
+  epivars        <- stack(order_epivars(x, content))
   names(epivars) <- c("column", "epivar")
+
+  current_dict        <- get_dictionary()
   current_dict$epivar <- as.character(current_dict$epivar)
-  out <- merge(epivars, current_dict, by.x = "epivar",
-               all.x = TRUE, all.y = all_dictionary,
+ 
+  # merge, retaining the order of the data 
+  out <- merge(x = epivars, 
+               y = current_dict, 
+               by.x = "epivar",
+               all.x = TRUE, 
+               all.y = full_dict,
                sort = FALSE)
-  out[3] <- NULL # remove duplicate column
   rownames(out) <- NULL
   out
 }

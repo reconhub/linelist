@@ -5,7 +5,7 @@
 
 check_dictionary <- function(x) {
   if (!is.data.frame(x)) {
-    msg <- sprintf("x is not a data.frame but a %s",
+    msg <- sprintf("x is not a data frame but a %s",
                    class(x))
     stop(msg)
   }
@@ -28,4 +28,5 @@ check_dictionary <- function(x) {
         )
     stop(msg)
   }
+  invisible(NULL)
 }
