@@ -72,7 +72,6 @@ library('linelist')
 ll <- as_linelist(outbreaks::fluH7N9_china_2013,
   "outcome"              = "outcome", 
   "date_outcome"         = "date_of_outcome", 
-  "date_hospitalisation" = "date_of_hospitalisation",
   "id"                   = "case_id",
   "date_onset"           = "date_of_onset",
   "gender"               = "gender",
