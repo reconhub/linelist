@@ -68,15 +68,18 @@ library('linelist')
 ##   "date_hospitalisation" 
 ##   )
 
+# generate a template linelist with `template_linelist()`
+template_linelist(outbreaks::fluH7N9_china_2013)
 # convert the data set to a linelist and define the variables
 ll <- as_linelist(outbreaks::fluH7N9_china_2013,
-  "outcome"              = "outcome", 
-  "date_outcome"         = "date_of_outcome", 
-  "id"                   = "case_id",
-  "date_onset"           = "date_of_onset",
-  "gender"               = "gender",
-  "age"                  = "age"
-  )
+  outcome      = "outcome", 
+  date_outcome = "date_of_outcome", 
+  id           = "case_id",
+  date_onset   = "date_of_onset",
+  gender       = "gender",
+  age          = "age",
+  NULL  # don't delete me
+)
 ```
 
 The resulting linelist object acts the same as a data frame in every way, but
