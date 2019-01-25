@@ -6,7 +6,9 @@ ll <- as_linelist(clean_data(messy_data()),
                   date_onset = "date_of_onset",
                   case_definition = "epi_case_definition",
                   gender = "gender",
-                  geo = c("lon", "lat"))
+                  geo = c("lon", "lat"),
+                  NULL
+)
                   
 
 test_that("a linelist is a data frame", {

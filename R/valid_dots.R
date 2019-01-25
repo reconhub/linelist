@@ -5,6 +5,9 @@
 #' @return a named list
 #' @noRd
 valid_dots <- function(dots) {
+  if (is.null(dots[[length(dots)]])) {
+    dots <- dots[-length(dots)]
+  }
   if (length(dots) == 0) return(dots)
 
   current_dict <- get_dictionary()
