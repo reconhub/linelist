@@ -44,8 +44,8 @@ test_that("get_epivars() will return only the defined epivars if provided nothin
   noll <- !names(dfll) %in% c("lon", "lat")
   ev <- list_epivars(ll[noll])$column
   llev <- get_epivars(ll[noll])
-  class(llev) <- class(dfll[ev])
-  expect_identical(llev, dfll[ev])
+  class(llev) <- class(dfll)
+  expect_identical(llev, dfll[names(dfll) %in% ev])
 })
 
 test_that("get_epivars() allows character vectors", {
