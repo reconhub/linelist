@@ -59,7 +59,7 @@ get_dictionary <- function() {
 set_dictionary <- function(x) {
   check_dictionary(x)
   for (i in seq_len(ncol(x))) {
-    x[i] <- as.character(x[i])
+    x[[i]] <- as.character(x[[i]])
   }
   options(linelist_dictionary = x)
 }
