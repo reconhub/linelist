@@ -129,7 +129,7 @@
 <ul>
 <li><p><code><a href="reference/list_epivars.html">list_epivars()</a></code>: lists the <code>epivars</code> of a dataset, with options to have more or less information</p></li>
 <li><p><code><a href="reference/accessors.html">get_epivars()</a></code>: extract columns of a dataset corresponding to <code>epivars</code></p></li>
-<li><p><code><a href="reference/accessors.html">set_epivars()</a></code>: set the <code>epivars</code> of a dataset</p></li>
+<li><p><code><a href="reference/set_epivars.html">set_epivars()</a></code>: set the <code>epivars</code> of a dataset</p></li>
 <li><p><code><a href="reference/as_linelist.html">as_linelist()</a></code>: creates a new <code>linelist</code> object, and can define <code>epivars</code> as extra arguments</p></li>
 </ul>
 <p>In addition, several functions allow to interact with the dictionary of recognised <code>epivars</code>, including:</p>
@@ -165,83 +165,80 @@ toy_data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdo
                        <span class="st">"messy/dates"</span> =<span class="st"> </span>messy_dates)
 ## show data
 toy_data
-<span class="co">#&gt;    Date.of.Onset. DisCharge..  SeX_. Épi.Case_définition</span>
-<span class="co">#&gt; 1      2018-01-02  12/01/2018 female          not a case</span>
-<span class="co">#&gt; 2      2018-01-07  17/01/2018 female         suspected  </span>
-<span class="co">#&gt; 3      2018-01-03  13/01/2018 Female         suspected  </span>
-<span class="co">#&gt; 4      2018-01-05  15/01/2018 FEMALE          not a case</span>
-<span class="co">#&gt; 5      2018-01-03  13/01/2018 FEMALE            probable</span>
-<span class="co">#&gt; 6      2018-01-03  13/01/2018 FEMALE           Confirmed</span>
-<span class="co">#&gt; 7      2018-01-06  16/01/2018 Female         suspected  </span>
-<span class="co">#&gt; 8      2018-01-05  15/01/2018   male          Not.a.Case</span>
-<span class="co">#&gt; 9      2018-01-02  12/01/2018 female            probable</span>
-<span class="co">#&gt; 10     2018-01-03  13/01/2018   MALE          not a case</span>
-<span class="co">#&gt; 11     2018-01-09  19/01/2018 FEMALE            probable</span>
-<span class="co">#&gt; 12     2018-01-10  20/01/2018   MALE            probable</span>
-<span class="co">#&gt; 13     2018-01-03  13/01/2018   Male          Not.a.Case</span>
-<span class="co">#&gt; 14     2018-01-11  21/01/2018   Male          Not.a.Case</span>
-<span class="co">#&gt; 15     2018-01-10  20/01/2018   Male         suspected  </span>
-<span class="co">#&gt; 16     2018-01-04  14/01/2018 female         suspected  </span>
-<span class="co">#&gt; 17     2018-01-04  14/01/2018   male            probable</span>
-<span class="co">#&gt; 18     2018-01-11  21/01/2018   Male           confirmed</span>
-<span class="co">#&gt; 19     2018-01-11  21/01/2018 Female            PROBABLE</span>
-<span class="co">#&gt; 20     2018-01-09  19/01/2018   male            probable</span>
-<span class="co">#&gt;           messy.dates</span>
-<span class="co">#&gt; 1                &lt;NA&gt;</span>
-<span class="co">#&gt; 2              female</span>
-<span class="co">#&gt; 3  that's 24/12/1989!</span>
-<span class="co">#&gt; 4          2018-10-18</span>
-<span class="co">#&gt; 5          2018_10_17</span>
-<span class="co">#&gt; 6     // 24//12//1989</span>
-<span class="co">#&gt; 7  that's 24/12/1989!</span>
-<span class="co">#&gt; 8  that's 24/12/1989!</span>
-<span class="co">#&gt; 9          2018 10 19</span>
-<span class="co">#&gt; 10    // 24//12//1989</span>
-<span class="co">#&gt; 11               &lt;NA&gt;</span>
-<span class="co">#&gt; 12               male</span>
-<span class="co">#&gt; 13         2018 10 19</span>
-<span class="co">#&gt; 14             female</span>
-<span class="co">#&gt; 15         2018 10 19</span>
-<span class="co">#&gt; 16             female</span>
-<span class="co">#&gt; 17               &lt;NA&gt;</span>
-<span class="co">#&gt; 18         2018_10_17</span>
-<span class="co">#&gt; 19         2018_10_17</span>
-<span class="co">#&gt; 20 that's 24/12/1989!</span></code></pre></div>
+<span class="co">#&gt;    Date.of.Onset. DisCharge..  SeX_. Épi.Case_définition     messy.dates</span>
+<span class="co">#&gt; 1      2018-01-09  19/01/2018 Female          Not.a.Case      2018 10 19</span>
+<span class="co">#&gt; 2      2018-01-09  19/01/2018   MALE           confirmed      2018-10-18</span>
+<span class="co">#&gt; 3      2018-01-09  19/01/2018 Female            PROBABLE      01-12-2001</span>
+<span class="co">#&gt; 4      2018-01-11  21/01/2018 female           confirmed            &lt;NA&gt;</span>
+<span class="co">#&gt; 5      2018-01-10  20/01/2018   Male           confirmed // 24//12//1989</span>
+<span class="co">#&gt; 6      2018-01-07  17/01/2018 female            PROBABLE // 24//12//1989</span>
+<span class="co">#&gt; 7      2018-01-02  12/01/2018 female           Confirmed          female</span>
+<span class="co">#&gt; 8      2018-01-02  12/01/2018 Female           suspected            &lt;NA&gt;</span>
+<span class="co">#&gt; 9      2018-01-06  16/01/2018 Female           suspected      2018 10 19</span>
+<span class="co">#&gt; 10     2018-01-10  20/01/2018 female           Confirmed      01-12-2001</span>
+<span class="co">#&gt; 11     2018-01-10  20/01/2018 Female          Not.a.Case      2018-10-18</span>
+<span class="co">#&gt; 12     2018-01-06  16/01/2018 FEMALE            PROBABLE      01-12-2001</span>
+<span class="co">#&gt; 13     2018-01-06  16/01/2018   MALE            probable      01-12-2001</span>
+<span class="co">#&gt; 14     2018-01-06  16/01/2018 female            probable            male</span>
+<span class="co">#&gt; 15     2018-01-07  17/01/2018   male           Confirmed      01-12-2001</span>
+<span class="co">#&gt; 16     2018-01-03  13/01/2018 FEMALE           suspected      2018-10-18</span>
+<span class="co">#&gt; 17     2018-01-06  16/01/2018 FEMALE           suspected            &lt;NA&gt;</span>
+<span class="co">#&gt; 18     2018-01-10  20/01/2018 FEMALE           confirmed      2018 10 19</span>
+<span class="co">#&gt; 19     2018-01-10  20/01/2018 female           suspected          female</span>
+<span class="co">#&gt; 20     2018-01-09  19/01/2018 FEMALE         suspected            female</span></code></pre></div>
 <p>We start by cleaning these data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## load library
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(linelist)
-<span class="co">#&gt; linelist is loaded with the following global variables in `get_dictionary()`:</span>
-<span class="co">#&gt; id, date_onset, date_report, gender, age, age_group, geo</span>
 
 ## clean data with defaults
 x &lt;-<span class="st"> </span><span class="kw"><a href="reference/clean_data.html">clean_data</a></span>(toy_data)
 x
 <span class="co">#&gt;    date_of_onset  discharge    sex epi_case_definition messy_dates</span>
-<span class="co">#&gt; 1     2018-01-02 2018-01-12 female          not_a_case        &lt;NA&gt;</span>
-<span class="co">#&gt; 2     2018-01-07 2018-01-17 female           suspected        &lt;NA&gt;</span>
-<span class="co">#&gt; 3     2018-01-03 2018-01-13 female           suspected  1989-12-24</span>
-<span class="co">#&gt; 4     2018-01-05 2018-01-15 female          not_a_case  2018-10-18</span>
-<span class="co">#&gt; 5     2018-01-03 2018-01-13 female            probable  2018-10-17</span>
-<span class="co">#&gt; 6     2018-01-03 2018-01-13 female           confirmed  1989-12-24</span>
-<span class="co">#&gt; 7     2018-01-06 2018-01-16 female           suspected  1989-12-24</span>
-<span class="co">#&gt; 8     2018-01-05 2018-01-15   male          not_a_case  1989-12-24</span>
-<span class="co">#&gt; 9     2018-01-02 2018-01-12 female            probable  2018-10-19</span>
-<span class="co">#&gt; 10    2018-01-03 2018-01-13   male          not_a_case  1989-12-24</span>
-<span class="co">#&gt; 11    2018-01-09 2018-01-19 female            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 12    2018-01-10 2018-01-20   male            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 13    2018-01-03 2018-01-13   male          not_a_case  2018-10-19</span>
-<span class="co">#&gt; 14    2018-01-11 2018-01-21   male          not_a_case        &lt;NA&gt;</span>
-<span class="co">#&gt; 15    2018-01-10 2018-01-20   male           suspected  2018-10-19</span>
-<span class="co">#&gt; 16    2018-01-04 2018-01-14 female           suspected        &lt;NA&gt;</span>
-<span class="co">#&gt; 17    2018-01-04 2018-01-14   male            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 18    2018-01-11 2018-01-21   male           confirmed  2018-10-17</span>
-<span class="co">#&gt; 19    2018-01-11 2018-01-21 female            probable  2018-10-17</span>
-<span class="co">#&gt; 20    2018-01-09 2018-01-19   male            probable  1989-12-24</span></code></pre></div>
+<span class="co">#&gt; 1     2018-01-09 2018-01-19 female          not_a_case  2018-10-19</span>
+<span class="co">#&gt; 2     2018-01-09 2018-01-19   male           confirmed  2018-10-18</span>
+<span class="co">#&gt; 3     2018-01-09 2018-01-19 female            probable  2001-12-01</span>
+<span class="co">#&gt; 4     2018-01-11 2018-01-21 female           confirmed        &lt;NA&gt;</span>
+<span class="co">#&gt; 5     2018-01-10 2018-01-20   male           confirmed  1989-12-24</span>
+<span class="co">#&gt; 6     2018-01-07 2018-01-17 female            probable  1989-12-24</span>
+<span class="co">#&gt; 7     2018-01-02 2018-01-12 female           confirmed        &lt;NA&gt;</span>
+<span class="co">#&gt; 8     2018-01-02 2018-01-12 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 9     2018-01-06 2018-01-16 female           suspected  2018-10-19</span>
+<span class="co">#&gt; 10    2018-01-10 2018-01-20 female           confirmed  2001-12-01</span>
+<span class="co">#&gt; 11    2018-01-10 2018-01-20 female          not_a_case  2018-10-18</span>
+<span class="co">#&gt; 12    2018-01-06 2018-01-16 female            probable  2001-12-01</span>
+<span class="co">#&gt; 13    2018-01-06 2018-01-16   male            probable  2001-12-01</span>
+<span class="co">#&gt; 14    2018-01-06 2018-01-16 female            probable        &lt;NA&gt;</span>
+<span class="co">#&gt; 15    2018-01-07 2018-01-17   male           confirmed  2001-12-01</span>
+<span class="co">#&gt; 16    2018-01-03 2018-01-13 female           suspected  2018-10-18</span>
+<span class="co">#&gt; 17    2018-01-06 2018-01-16 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 18    2018-01-10 2018-01-20 female           confirmed  2018-10-19</span>
+<span class="co">#&gt; 19    2018-01-10 2018-01-20 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 20    2018-01-09 2018-01-19 female           suspected        &lt;NA&gt;</span></code></pre></div>
 <p>We can now define some <code>epivars</code> for <code>x</code>, i.e. identify which columns correspond to typical epidemiological variables:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## see what the dictionary is
 <span class="kw"><a href="reference/dictionary.html">get_dictionary</a></span>()
-<span class="co">#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        </span>
-<span class="co">#&gt; [6] "age_group"   "geo"</span>
+<span class="co">#&gt;             epivar              hxl</span>
+<span class="co">#&gt; 1               id       #respondee</span>
+<span class="co">#&gt; 2       date_onset     #date +start</span>
+<span class="co">#&gt; 3      date_report  #date +reported</span>
+<span class="co">#&gt; 4     date_outcome       #date +end</span>
+<span class="co">#&gt; 5  case_definition #indicator +name</span>
+<span class="co">#&gt; 6          outcome #indicator +type</span>
+<span class="co">#&gt; 7           gender #indicator +type</span>
+<span class="co">#&gt; 8              age  #indicator +num</span>
+<span class="co">#&gt; 9        age_group #indicator +type</span>
+<span class="co">#&gt; 10             geo   #geo +lon +lat</span>
+<span class="co">#&gt;                                            description</span>
+<span class="co">#&gt; 1                         unique individual identifier</span>
+<span class="co">#&gt; 2                       date at which symptoms started</span>
+<span class="co">#&gt; 3                      date at which case was reported</span>
+<span class="co">#&gt; 4              date of the outcome (recovery or death)</span>
+<span class="co">#&gt; 5  case type: suspected, probable, confirmed, negative</span>
+<span class="co">#&gt; 6                                    recovery or death</span>
+<span class="co">#&gt; 7                             gender of the individual</span>
+<span class="co">#&gt; 8                       age of the individual in years</span>
+<span class="co">#&gt; 9                 age group of the individual in years</span>
+<span class="co">#&gt; 10          geographic coordinate: longitude, latitude</span>
 
 ## see current names of variables
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(x)
@@ -252,110 +249,100 @@ x
 ## this information at the same time
 x &lt;-<span class="st"> </span><span class="kw"><a href="reference/as_linelist.html">as_linelist</a></span>(x, <span class="dt">date_onset =</span> <span class="st">"date_of_onset"</span>, <span class="dt">gender =</span> <span class="st">"sex"</span>)
 x
+<span class="co">#&gt; &lt;linelist object&gt;</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt;    date_of_onset  discharge    sex epi_case_definition messy_dates</span>
-<span class="co">#&gt; 1     2018-01-02 2018-01-12 female          not_a_case        &lt;NA&gt;</span>
-<span class="co">#&gt; 2     2018-01-07 2018-01-17 female           suspected        &lt;NA&gt;</span>
-<span class="co">#&gt; 3     2018-01-03 2018-01-13 female           suspected  1989-12-24</span>
-<span class="co">#&gt; 4     2018-01-05 2018-01-15 female          not_a_case  2018-10-18</span>
-<span class="co">#&gt; 5     2018-01-03 2018-01-13 female            probable  2018-10-17</span>
-<span class="co">#&gt; 6     2018-01-03 2018-01-13 female           confirmed  1989-12-24</span>
-<span class="co">#&gt; 7     2018-01-06 2018-01-16 female           suspected  1989-12-24</span>
-<span class="co">#&gt; 8     2018-01-05 2018-01-15   male          not_a_case  1989-12-24</span>
-<span class="co">#&gt; 9     2018-01-02 2018-01-12 female            probable  2018-10-19</span>
-<span class="co">#&gt; 10    2018-01-03 2018-01-13   male          not_a_case  1989-12-24</span>
-<span class="co">#&gt; 11    2018-01-09 2018-01-19 female            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 12    2018-01-10 2018-01-20   male            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 13    2018-01-03 2018-01-13   male          not_a_case  2018-10-19</span>
-<span class="co">#&gt; 14    2018-01-11 2018-01-21   male          not_a_case        &lt;NA&gt;</span>
-<span class="co">#&gt; 15    2018-01-10 2018-01-20   male           suspected  2018-10-19</span>
-<span class="co">#&gt; 16    2018-01-04 2018-01-14 female           suspected        &lt;NA&gt;</span>
-<span class="co">#&gt; 17    2018-01-04 2018-01-14   male            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 18    2018-01-11 2018-01-21   male           confirmed  2018-10-17</span>
-<span class="co">#&gt; 19    2018-01-11 2018-01-21 female            probable  2018-10-17</span>
-<span class="co">#&gt; 20    2018-01-09 2018-01-19   male            probable  1989-12-24</span></code></pre></div>
+<span class="co">#&gt; 1     2018-01-09 2018-01-19 female          not_a_case  2018-10-19</span>
+<span class="co">#&gt; 2     2018-01-09 2018-01-19   male           confirmed  2018-10-18</span>
+<span class="co">#&gt; 3     2018-01-09 2018-01-19 female            probable  2001-12-01</span>
+<span class="co">#&gt; 4     2018-01-11 2018-01-21 female           confirmed        &lt;NA&gt;</span>
+<span class="co">#&gt; 5     2018-01-10 2018-01-20   male           confirmed  1989-12-24</span>
+<span class="co">#&gt; 6     2018-01-07 2018-01-17 female            probable  1989-12-24</span>
+<span class="co">#&gt; 7     2018-01-02 2018-01-12 female           confirmed        &lt;NA&gt;</span>
+<span class="co">#&gt; 8     2018-01-02 2018-01-12 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 9     2018-01-06 2018-01-16 female           suspected  2018-10-19</span>
+<span class="co">#&gt; 10    2018-01-10 2018-01-20 female           confirmed  2001-12-01</span>
+<span class="co">#&gt; 11    2018-01-10 2018-01-20 female          not_a_case  2018-10-18</span>
+<span class="co">#&gt; 12    2018-01-06 2018-01-16 female            probable  2001-12-01</span>
+<span class="co">#&gt; 13    2018-01-06 2018-01-16   male            probable  2001-12-01</span>
+<span class="co">#&gt; 14    2018-01-06 2018-01-16 female            probable        &lt;NA&gt;</span>
+<span class="co">#&gt; 15    2018-01-07 2018-01-17   male           confirmed  2001-12-01</span>
+<span class="co">#&gt; 16    2018-01-03 2018-01-13 female           suspected  2018-10-18</span>
+<span class="co">#&gt; 17    2018-01-06 2018-01-16 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 18    2018-01-10 2018-01-20 female           confirmed  2018-10-19</span>
+<span class="co">#&gt; 19    2018-01-10 2018-01-20 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 20    2018-01-09 2018-01-19 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  // epivars:</span>
+<span class="co">#&gt;       epivar        column              hxl                    description</span>
+<span class="co">#&gt; 1 date_onset date_of_onset     #date +start date at which symptoms started</span>
+<span class="co">#&gt; 2     gender           sex #indicator +type       gender of the individual</span></code></pre></div>
 <p>Note that the equivalent can be done using piping:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)
 x &lt;-<span class="st"> </span>toy_data %&gt;%
 <span class="st">  </span>clean_data %&gt;%
 <span class="st">  </span><span class="kw"><a href="reference/as_linelist.html">as_linelist</a></span>(<span class="dt">date_onset =</span> <span class="st">"date_of_onset"</span>, <span class="dt">gender =</span> <span class="st">"sex"</span>)
 x
+<span class="co">#&gt; &lt;linelist object&gt;</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt;    date_of_onset  discharge    sex epi_case_definition messy_dates</span>
-<span class="co">#&gt; 1     2018-01-02 2018-01-12 female          not_a_case        &lt;NA&gt;</span>
-<span class="co">#&gt; 2     2018-01-07 2018-01-17 female           suspected        &lt;NA&gt;</span>
-<span class="co">#&gt; 3     2018-01-03 2018-01-13 female           suspected  1989-12-24</span>
-<span class="co">#&gt; 4     2018-01-05 2018-01-15 female          not_a_case  2018-10-18</span>
-<span class="co">#&gt; 5     2018-01-03 2018-01-13 female            probable  2018-10-17</span>
-<span class="co">#&gt; 6     2018-01-03 2018-01-13 female           confirmed  1989-12-24</span>
-<span class="co">#&gt; 7     2018-01-06 2018-01-16 female           suspected  1989-12-24</span>
-<span class="co">#&gt; 8     2018-01-05 2018-01-15   male          not_a_case  1989-12-24</span>
-<span class="co">#&gt; 9     2018-01-02 2018-01-12 female            probable  2018-10-19</span>
-<span class="co">#&gt; 10    2018-01-03 2018-01-13   male          not_a_case  1989-12-24</span>
-<span class="co">#&gt; 11    2018-01-09 2018-01-19 female            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 12    2018-01-10 2018-01-20   male            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 13    2018-01-03 2018-01-13   male          not_a_case  2018-10-19</span>
-<span class="co">#&gt; 14    2018-01-11 2018-01-21   male          not_a_case        &lt;NA&gt;</span>
-<span class="co">#&gt; 15    2018-01-10 2018-01-20   male           suspected  2018-10-19</span>
-<span class="co">#&gt; 16    2018-01-04 2018-01-14 female           suspected        &lt;NA&gt;</span>
-<span class="co">#&gt; 17    2018-01-04 2018-01-14   male            probable        &lt;NA&gt;</span>
-<span class="co">#&gt; 18    2018-01-11 2018-01-21   male           confirmed  2018-10-17</span>
-<span class="co">#&gt; 19    2018-01-11 2018-01-21 female            probable  2018-10-17</span>
-<span class="co">#&gt; 20    2018-01-09 2018-01-19   male            probable  1989-12-24</span></code></pre></div>
+<span class="co">#&gt; 1     2018-01-09 2018-01-19 female          not_a_case  2018-10-19</span>
+<span class="co">#&gt; 2     2018-01-09 2018-01-19   male           confirmed  2018-10-18</span>
+<span class="co">#&gt; 3     2018-01-09 2018-01-19 female            probable  2001-12-01</span>
+<span class="co">#&gt; 4     2018-01-11 2018-01-21 female           confirmed        &lt;NA&gt;</span>
+<span class="co">#&gt; 5     2018-01-10 2018-01-20   male           confirmed  1989-12-24</span>
+<span class="co">#&gt; 6     2018-01-07 2018-01-17 female            probable  1989-12-24</span>
+<span class="co">#&gt; 7     2018-01-02 2018-01-12 female           confirmed        &lt;NA&gt;</span>
+<span class="co">#&gt; 8     2018-01-02 2018-01-12 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 9     2018-01-06 2018-01-16 female           suspected  2018-10-19</span>
+<span class="co">#&gt; 10    2018-01-10 2018-01-20 female           confirmed  2001-12-01</span>
+<span class="co">#&gt; 11    2018-01-10 2018-01-20 female          not_a_case  2018-10-18</span>
+<span class="co">#&gt; 12    2018-01-06 2018-01-16 female            probable  2001-12-01</span>
+<span class="co">#&gt; 13    2018-01-06 2018-01-16   male            probable  2001-12-01</span>
+<span class="co">#&gt; 14    2018-01-06 2018-01-16 female            probable        &lt;NA&gt;</span>
+<span class="co">#&gt; 15    2018-01-07 2018-01-17   male           confirmed  2001-12-01</span>
+<span class="co">#&gt; 16    2018-01-03 2018-01-13 female           suspected  2018-10-18</span>
+<span class="co">#&gt; 17    2018-01-06 2018-01-16 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 18    2018-01-10 2018-01-20 female           confirmed  2018-10-19</span>
+<span class="co">#&gt; 19    2018-01-10 2018-01-20 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; 20    2018-01-09 2018-01-19 female           suspected        &lt;NA&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  // epivars:</span>
+<span class="co">#&gt;       epivar        column              hxl                    description</span>
+<span class="co">#&gt; 1 date_onset date_of_onset     #date +start date at which symptoms started</span>
+<span class="co">#&gt; 2     gender           sex #indicator +type       gender of the individual</span></code></pre></div>
 <p>We now handle a clean dataset, with standardised labels and variable names, and dates of onset and gender are now formally identifier:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## check available epivars
 <span class="kw"><a href="reference/list_epivars.html">list_epivars</a></span>(x, <span class="dt">simple =</span> <span class="ot">TRUE</span>) <span class="co"># simple</span>
 <span class="co">#&gt; [1] "date_onset" "gender"</span>
-<span class="kw"><a href="reference/list_epivars.html">list_epivars</a></span>(x, <span class="dt">epivars_only =</span> <span class="ot">TRUE</span>) <span class="co"># more info</span>
-<span class="co">#&gt;          column     epivar     class hxl</span>
-<span class="co">#&gt; 1 date_of_onset date_onset      Date    </span>
-<span class="co">#&gt; 3           sex     gender character</span>
+<span class="kw"><a href="reference/list_epivars.html">list_epivars</a></span>(x) <span class="co"># more info</span>
+<span class="co">#&gt;       epivar        column              hxl                    description</span>
+<span class="co">#&gt; 1 date_onset date_of_onset     #date +start date at which symptoms started</span>
+<span class="co">#&gt; 2     gender           sex #indicator +type       gender of the individual</span>
 
 
 <span class="kw"><a href="reference/accessors.html">get_epivars</a></span>(x, <span class="st">"gender"</span>, <span class="st">"date_onset"</span>)
 <span class="co">#&gt;       sex date_of_onset</span>
-<span class="co">#&gt; 1  female    2018-01-02</span>
-<span class="co">#&gt; 2  female    2018-01-07</span>
-<span class="co">#&gt; 3  female    2018-01-03</span>
-<span class="co">#&gt; 4  female    2018-01-05</span>
-<span class="co">#&gt; 5  female    2018-01-03</span>
-<span class="co">#&gt; 6  female    2018-01-03</span>
-<span class="co">#&gt; 7  female    2018-01-06</span>
-<span class="co">#&gt; 8    male    2018-01-05</span>
-<span class="co">#&gt; 9  female    2018-01-02</span>
-<span class="co">#&gt; 10   male    2018-01-03</span>
-<span class="co">#&gt; 11 female    2018-01-09</span>
-<span class="co">#&gt; 12   male    2018-01-10</span>
-<span class="co">#&gt; 13   male    2018-01-03</span>
-<span class="co">#&gt; 14   male    2018-01-11</span>
-<span class="co">#&gt; 15   male    2018-01-10</span>
-<span class="co">#&gt; 16 female    2018-01-04</span>
-<span class="co">#&gt; 17   male    2018-01-04</span>
-<span class="co">#&gt; 18   male    2018-01-11</span>
-<span class="co">#&gt; 19 female    2018-01-11</span>
-<span class="co">#&gt; 20   male    2018-01-09</span>
-
-## or equivalent:
-<span class="kw"><a href="reference/accessors.html">get_epivars</a></span>(x, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">1</span>))
-<span class="co">#&gt;       sex date_of_onset</span>
-<span class="co">#&gt; 1  female    2018-01-02</span>
-<span class="co">#&gt; 2  female    2018-01-07</span>
-<span class="co">#&gt; 3  female    2018-01-03</span>
-<span class="co">#&gt; 4  female    2018-01-05</span>
-<span class="co">#&gt; 5  female    2018-01-03</span>
-<span class="co">#&gt; 6  female    2018-01-03</span>
-<span class="co">#&gt; 7  female    2018-01-06</span>
-<span class="co">#&gt; 8    male    2018-01-05</span>
-<span class="co">#&gt; 9  female    2018-01-02</span>
-<span class="co">#&gt; 10   male    2018-01-03</span>
-<span class="co">#&gt; 11 female    2018-01-09</span>
-<span class="co">#&gt; 12   male    2018-01-10</span>
-<span class="co">#&gt; 13   male    2018-01-03</span>
-<span class="co">#&gt; 14   male    2018-01-11</span>
-<span class="co">#&gt; 15   male    2018-01-10</span>
-<span class="co">#&gt; 16 female    2018-01-04</span>
-<span class="co">#&gt; 17   male    2018-01-04</span>
-<span class="co">#&gt; 18   male    2018-01-11</span>
-<span class="co">#&gt; 19 female    2018-01-11</span>
-<span class="co">#&gt; 20   male    2018-01-09</span></code></pre></div>
+<span class="co">#&gt; 1  female    2018-01-09</span>
+<span class="co">#&gt; 2    male    2018-01-09</span>
+<span class="co">#&gt; 3  female    2018-01-09</span>
+<span class="co">#&gt; 4  female    2018-01-11</span>
+<span class="co">#&gt; 5    male    2018-01-10</span>
+<span class="co">#&gt; 6  female    2018-01-07</span>
+<span class="co">#&gt; 7  female    2018-01-02</span>
+<span class="co">#&gt; 8  female    2018-01-02</span>
+<span class="co">#&gt; 9  female    2018-01-06</span>
+<span class="co">#&gt; 10 female    2018-01-10</span>
+<span class="co">#&gt; 11 female    2018-01-10</span>
+<span class="co">#&gt; 12 female    2018-01-06</span>
+<span class="co">#&gt; 13   male    2018-01-06</span>
+<span class="co">#&gt; 14 female    2018-01-06</span>
+<span class="co">#&gt; 15   male    2018-01-07</span>
+<span class="co">#&gt; 16 female    2018-01-03</span>
+<span class="co">#&gt; 17 female    2018-01-06</span>
+<span class="co">#&gt; 18 female    2018-01-10</span>
+<span class="co">#&gt; 19 female    2018-01-10</span>
+<span class="co">#&gt; 20 female    2018-01-09</span></code></pre></div>
 <div id="getting-help-online" class="section level2">
 <h2 class="hasAnchor">
 <a href="#getting-help-online" class="anchor"></a>Getting help online</h2>

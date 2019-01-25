@@ -32,7 +32,19 @@
 
 <meta property="og:title" content="Linelist Global Variables — default_dictionary" />
 
-<meta property="og:description" content="This defines the legal variables that linelist will recognise." />
+<meta property="og:description" content="These functions let the user define variables that are important
+to a given analysis script. These functions add to or reset variables
+contained in getOption(&quot;linelist_epivars&quot;).
+set_dictionary()  will add variables to the current defined epivars.
+Use this function at the beginning of your analysis script or Rmd file.
+get_dictionary() shows the current defined epivars that linelist will
+recognise.
+reset_dictionary() will reset the dictionary to those in
+default_dictionary().
+" />
+
+<meta property="og:description" content="All of these functions are wrappers for linelist_options(), which itself
+is a wrapper for options(linelist_epivars = ...)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,71 +127,158 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Linelist Global Variables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/default_dictionary.R'><code>R/default_dictionary.R</code></a>, <a href='https://github.com/reconhub/linelist/blob/master/R/dictionary.R'><code>R/dictionary.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/dictionary.R'><code>R/dictionary.R</code></a></small>
     <div class="hidden name"><code>dictionary.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This defines the legal variables that linelist will recognise.</p>
+    <p>These functions let the user define variables that are important
+to a given analysis script. These functions add to or reset variables
+contained in <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption("linelist_epivars")</a></code>.</p><ul>
+<li><p><code>set_dictionary()</code>  will <strong>add</strong> variables to the current defined epivars.
+<strong>Use this function at the beginning of your analysis script or Rmd file.</strong></p></li>
+<li><p><code>get_dictionary()</code> shows the current defined epivars that linelist will
+recognise.</p></li>
+<li><p><code>reset_dictionary()</code> will reset the dictionary to those in
+<code>default_dictionary()</code>.</p></li>
+</ul>
+
+    <p>All of these functions are wrappers for <code>linelist_options()</code>, which itself
+is a wrapper for <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(linelist_epivars = ...)</a></code>.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>default_dictionary</span>()
 
-<span class='fu'>linelist_options</span>(<span class='no'>...</span>, <span class='kw'>set</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>default_dictionary_path</span>()
 
-<span class='fu'>get_dictionary</span>(<span class='no'>...</span>)
+<span class='fu'>get_dictionary</span>()
 
-<span class='fu'>set_dictionary</span>(<span class='no'>...</span>, <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>set_dictionary</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>reset_dictionary</span>(<span class='no'>...</span>)</pre>
+<span class='fu'>reset_dictionary</span>()</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>x</th>
+      <td><p>either a data frame or the path to a that can produce a data frame.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>quoted varaibles to add to the default variables</p></td>
-    </tr>
-    <tr>
-      <th>set</th>
-      <td><p>when <code>TRUE</code>, the variables provided in <code>...</code> will be added to the
-global variables. Defaults to `FALSE``</p></td>
-    </tr>
-    <tr>
-      <th>reset</th>
-      <td><p>when <code>TRUE</code>, the global variables are reset to the default
-variables listed above. Defaults to <code>FALSE</code></p></td>
+      <td><p>parameters passed on to <code><a href='https://www.rdocumentation.org/packages/rio/topics/import'>rio::import()</a></code>.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This defines the legal variables that linelist will recognise.</p>
+<p>The expected format for these data is a<code>data.frame</code> with 3 columns
+'epivar', 'hxl' and 'description', representing the new dictionary to be
+used; A template example can be found by using <code>default_dictionary()</code>.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># see the default varaibles</span>
-<span class='fu'>get_dictionary</span>()</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
-#&gt; [6] "age_group"   "geo"        </div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># see the default varaibles</span>
+<span class='fu'>get_dictionary</span>()</div><div class='output co'>#&gt;             epivar              hxl
+#&gt; 1               id       #respondee
+#&gt; 2       date_onset     #date +start
+#&gt; 3      date_report  #date +reported
+#&gt; 4     date_outcome       #date +end
+#&gt; 5  case_definition #indicator +name
+#&gt; 6          outcome #indicator +type
+#&gt; 7           gender #indicator +type
+#&gt; 8              age  #indicator +num
+#&gt; 9        age_group #indicator +type
+#&gt; 10             geo   #geo +lon +lat
+#&gt;                                            description
+#&gt; 1                         unique individual identifier
+#&gt; 2                       date at which symptoms started
+#&gt; 3                      date at which case was reported
+#&gt; 4              date of the outcome (recovery or death)
+#&gt; 5  case type: suspected, probable, confirmed, negative
+#&gt; 6                                    recovery or death
+#&gt; 7                             gender of the individual
+#&gt; 8                       age of the individual in years
+#&gt; 9                 age group of the individual in years
+#&gt; 10          geographic coordinate: longitude, latitude</div><div class='input'>
 <span class='co'># Equivalent</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_epivars"</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
-#&gt; [6] "age_group"   "geo"        </div><div class='input'>
-<span class='co'># If you create a new method and need other varaibles, or just want a shorter</span>
-<span class='co'># representation, they can be added to your options:</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_dictionary"</span>)</div><div class='output co'>#&gt;             epivar              hxl
+#&gt; 1               id       #respondee
+#&gt; 2       date_onset     #date +start
+#&gt; 3      date_report  #date +reported
+#&gt; 4     date_outcome       #date +end
+#&gt; 5  case_definition #indicator +name
+#&gt; 6          outcome #indicator +type
+#&gt; 7           gender #indicator +type
+#&gt; 8              age  #indicator +num
+#&gt; 9        age_group #indicator +type
+#&gt; 10             geo   #geo +lon +lat
+#&gt;                                            description
+#&gt; 1                         unique individual identifier
+#&gt; 2                       date at which symptoms started
+#&gt; 3                      date at which case was reported
+#&gt; 4              date of the outcome (recovery or death)
+#&gt; 5  case type: suspected, probable, confirmed, negative
+#&gt; 6                                    recovery or death
+#&gt; 7                             gender of the individual
+#&gt; 8                       age of the individual in years
+#&gt; 9                 age group of the individual in years
+#&gt; 10          geographic coordinate: longitude, latitude</div><div class='input'>
 
-<span class='fu'>get_dictionary</span>(<span class='st'>"random"</span>, <span class='kw'>set</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
-#&gt; [6] "age_group"   "geo"         "random"     </div><div class='input'>
-<span class='co'># You can also reset the variables</span>
-<span class='fu'>get_dictionary</span>(<span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"          "date_onset"  "date_report" "gender"      "age"        
-#&gt; [6] "age_group"   "geo"        </div></pre>
+<span class='co'># Set a new, one-column dictionary </span>
+<span class='no'>hosp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>epivar</span> <span class='kw'>=</span> <span class='st'>"date_hospital"</span>,
+  <span class='kw'>hxl</span>    <span class='kw'>=</span> <span class='st'>"#date +start"</span>,
+  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"date at which patient was hospitalized"</span>,
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
+
+<span class='fu'>set_dictionary</span>(<span class='no'>hosp</span>)
+<span class='fu'>get_dictionary</span>()</div><div class='output co'>#&gt;          epivar          hxl                            description
+#&gt; 1 date_hospital #date +start date at which patient was hospitalized</div><div class='input'>
+<span class='co'># Use the default_dictionary_path() to read in the default dictionary from</span>
+<span class='co'># disk</span>
+<span class='fu'>default_dictionary_path</span>()</div><div class='output co'>#&gt; [1] "/home/thibaut/dev/recon/linelist/inst/default_dictionary.txt"</div><div class='input'><span class='fu'>set_dictionary</span>(<span class='fu'>default_dictionary_path</span>())
+<span class='fu'>get_dictionary</span>()</div><div class='output co'>#&gt;             epivar              hxl
+#&gt; 1               id       #respondee
+#&gt; 2       date_onset     #date +start
+#&gt; 3      date_report  #date +reported
+#&gt; 4     date_outcome       #date +end
+#&gt; 5  case_definition #indicator +name
+#&gt; 6          outcome #indicator +type
+#&gt; 7           gender #indicator +type
+#&gt; 8              age  #indicator +num
+#&gt; 9        age_group #indicator +type
+#&gt; 10             geo   #geo +lon +lat
+#&gt;                                            description
+#&gt; 1                         unique individual identifier
+#&gt; 2                       date at which symptoms started
+#&gt; 3                      date at which case was reported
+#&gt; 4              date of the outcome (recovery or death)
+#&gt; 5  case type: suspected, probable, confirmed, negative
+#&gt; 6                                    recovery or death
+#&gt; 7                             gender of the individual
+#&gt; 8                       age of the individual in years
+#&gt; 9                 age group of the individual in years
+#&gt; 10          geographic coordinate: longitude, latitude</div><div class='input'>
+<span class='co'># You can also reset the variables automatically</span>
+<span class='fu'>reset_dictionary</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
+    <h2>Author</h2>
+    <p>Zhian N. Kamvar, Thibaut Jombart</p>
   </div>
 </div>
 

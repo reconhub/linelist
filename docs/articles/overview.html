@@ -82,7 +82,7 @@
     <div class="page-header toc-ignore">
       <h1>linelist: package overview</h1>
             
-            <h4 class="date">2019-01-23</h4>
+            <h4 class="date">2019-01-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/reconhub/linelist/blob/master/vignettes/overview.Rmd"><code>vignettes/overview.Rmd</code></a></small>
       <div class="hidden name"><code>overview.Rmd</code></div>
@@ -111,47 +111,61 @@
 <li>
 <code><a href="../reference/as_linelist.html">as_linelist()</a></code> will convert a data frame to a linelist object, allowing the user to define a data dictionary.</li>
 <li>
-<code><a href="../reference/dictionary.html">get_dictionary()</a></code> defines valid variables to be used in the data dictionary</li>
+<code><a href="../reference/dictionary.html">set_dictionary()</a></code> defines valid variables to be used in the data dictionary</li>
+<li>
+<code><a href="../reference/dictionary.html">get_dictionary()</a></code> accesses valid variables to be used in the data dictionary</li>
 <li>
 <code><a href="../reference/accessors.html">get_epivars()</a></code> accesses a variable from the linelist</li>
 <li>
-<code><a href="../reference/accessors.html">set_epivars()</a></code> adds new dictionary definitions to the linelist</li>
+<code><a href="../reference/set_epivars.html">set_epivars()</a></code> adds new dictionary definitions to the linelist</li>
 </ul>
 <p>The linelist data class allows you to define variables that are important to your analysis that make it easy to create situation report templates no matter what the data class is.</p>
 <p>As an example, we can use data from the <a href="https://cran.r-project.org/package=outbreaks">outbreaks package</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'outbreaks'</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'incidence'</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'linelist'</span>)</code></pre></div>
-<pre><code>## linelist is loaded with the following global variables in `get_dictionary()`:
-## id, date_onset, date_report, gender, age, age_group, geo</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># define the important variables</span>
-<span class="kw"><a href="../reference/dictionary.html">get_dictionary</a></span>(
-        <span class="st">"id"</span>,
-        <span class="st">"date_onset"</span>,
-        <span class="st">"gender"</span>,
-        <span class="st">"age"</span>,
-        <span class="st">"outcome"</span>, 
-        <span class="st">"date_outcome"</span>, 
-        <span class="st">"date_hospitalisation"</span>, 
-        <span class="dt">set =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>##  [1] "id"                   "date_onset"           "date_report"         
-##  [4] "gender"               "age"                  "age_group"           
-##  [7] "geo"                  "outcome"              "date_outcome"        
-## [10] "date_hospitalisation"</code></pre>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'linelist'</span>)
+<span class="co"># define the important variables</span>
+## set_dictionary(
+##   "id",
+##   "date_onset",
+##   "gender",
+##   "age",
+##   "outcome", 
+##   "date_outcome", 
+##   "date_hospitalisation" 
+##   )
+
+<span class="co"># generate a template linelist with `template_linelist()`</span>
+<span class="kw"><a href="../reference/template_linelist.html">template_linelist</a></span>(outbreaks::fluH7N9_china_2013)</code></pre></div>
+<pre><code>## ll &lt;- as_linelist(x = outbreaks::fluH7N9_china_2013,
+##   id              =    ,
+##   date_onset      =    ,
+##   date_report     =    ,
+##   date_outcome    =    ,
+##   case_definition =    ,
+##   outcome         =    ,
+##   gender          =    ,
+##   age             =    ,
+##   age_group       =    ,
+##   geo             =    ,
+##   NULL  # don't delete me
+## )</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># convert the data set to a linelist and define the variables</span>
 ll &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as_linelist.html">as_linelist</a></span>(outbreaks::fluH7N9_china_2013,
-  <span class="st">"outcome"</span> =<span class="st"> "outcome"</span>, 
-  <span class="st">"date_outcome"</span> =<span class="st"> "date_of_outcome"</span>, 
-  <span class="st">"date_hospitalisation"</span> =<span class="st"> "date_of_hospitalisation"</span>,
-  <span class="st">"id"</span> =<span class="st"> "case_id"</span>,
-  <span class="st">"date_onset"</span> =<span class="st"> "date_of_onset"</span>,
-  <span class="st">"gender"</span> =<span class="st"> "gender"</span>,
-  <span class="st">"age"</span> =<span class="st"> "age"</span>
-  )</code></pre></div>
+  <span class="dt">outcome      =</span> <span class="st">"outcome"</span>, 
+  <span class="dt">date_outcome =</span> <span class="st">"date_of_outcome"</span>, 
+  <span class="dt">id           =</span> <span class="st">"case_id"</span>,
+  <span class="dt">date_onset   =</span> <span class="st">"date_of_onset"</span>,
+  <span class="dt">gender       =</span> <span class="st">"gender"</span>,
+  <span class="dt">age          =</span> <span class="st">"age"</span>,
+  <span class="ot">NULL</span>  <span class="co"># don't delete me</span>
+)</code></pre></div>
 <p>The resulting linelist object acts the same as a data frame in every way, but it contains a data dictionary in the metadata:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># These are the same</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ll)</code></pre></div>
-<pre><code>##   case_id date_of_onset date_of_hospitalisation date_of_outcome outcome
+<pre><code>## &lt;linelist object&gt;
+## 
+##   case_id date_of_onset date_of_hospitalisation date_of_outcome outcome
 ## 1       1    2013-02-19                    &lt;NA&gt;      2013-03-04   Death
 ## 2       2    2013-02-27              2013-03-03      2013-03-10   Death
 ## 3       3    2013-03-09              2013-03-19      2013-04-09   Death
@@ -164,7 +178,23 @@ ll &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as_linel
 ## 3      f  35    Anhui
 ## 4      f  45  Jiangsu
 ## 5      f  48  Jiangsu
-## 6      f  32  Jiangsu</code></pre>
+## 6      f  32  Jiangsu
+## 
+##  // epivars:
+##         epivar          column              hxl
+## 1           id         case_id       #respondee
+## 2   date_onset   date_of_onset     #date +start
+## 3 date_outcome date_of_outcome       #date +end
+## 4      outcome         outcome #indicator +type
+## 5       gender          gender #indicator +type
+## 6          age             age  #indicator +num
+##                               description
+## 1            unique individual identifier
+## 2          date at which symptoms started
+## 3 date of the outcome (recovery or death)
+## 4                       recovery or death
+## 5                gender of the individual
+## 6          age of the individual in years</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(outbreaks::fluH7N9_china_2013)</code></pre></div>
 <pre><code>##   case_id date_of_onset date_of_hospitalisation date_of_outcome outcome
 ## 1       1    2013-02-19                    &lt;NA&gt;      2013-03-04   Death
@@ -181,28 +211,46 @@ ll &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as_linel
 ## 5      f  48  Jiangsu
 ## 6      f  32  Jiangsu</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_epivars.html">list_epivars</a></span>(ll) <span class="co"># show available epivars</span></code></pre></div>
-<pre><code>##                    column               epivar  class hxl
-## 1                 case_id                   id factor    
-## 2           date_of_onset           date_onset   Date    
-## 3 date_of_hospitalisation date_hospitalisation   Date    
-## 4         date_of_outcome         date_outcome   Date    
-## 5                 outcome              outcome factor    
-## 6                  gender               gender factor    
-## 7                     age                  age factor    
-## 8                province                 &lt;NA&gt; factor</code></pre>
+<pre><code>##         epivar          column              hxl
+## 1           id         case_id       #respondee
+## 2   date_onset   date_of_onset     #date +start
+## 3 date_outcome date_of_outcome       #date +end
+## 4      outcome         outcome #indicator +type
+## 5       gender          gender #indicator +type
+## 6          age             age  #indicator +num
+##                               description
+## 1            unique individual identifier
+## 2          date at which symptoms started
+## 3 date of the outcome (recovery or death)
+## 4                       recovery or death
+## 5                gender of the individual
+## 6          age of the individual in years</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_epivars.html">list_epivars</a></span>(ll, <span class="dt">simple =</span> <span class="ot">TRUE</span>) <span class="co"># only names of available epivars</span></code></pre></div>
-<pre><code>## [1] "outcome"              "date_outcome"         "date_hospitalisation"
-## [4] "id"                   "date_onset"           "gender"              
-## [7] "age"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_epivars.html">list_epivars</a></span>(ll, <span class="dt">epivars_only =</span> <span class="ot">TRUE</span>) <span class="co"># ignore non-epivars columns</span></code></pre></div>
-<pre><code>##                    column               epivar  class hxl
-## 1                 case_id                   id factor    
-## 2           date_of_onset           date_onset   Date    
-## 3 date_of_hospitalisation date_hospitalisation   Date    
-## 4         date_of_outcome         date_outcome   Date    
-## 5                 outcome              outcome factor    
-## 6                  gender               gender factor    
-## 7                     age                  age factor</code></pre>
+<pre><code>## [1] "id"           "date_onset"   "date_outcome" "outcome"     
+## [5] "gender"       "age"</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/list_epivars.html">list_epivars</a></span>(ll, <span class="dt">full_dict =</span> <span class="ot">TRUE</span>) <span class="co"># ignore non-epivars columns</span></code></pre></div>
+<pre><code>##             epivar          column              hxl
+## 1               id         case_id       #respondee
+## 2       date_onset   date_of_onset     #date +start
+## 3     date_outcome date_of_outcome       #date +end
+## 4          outcome         outcome #indicator +type
+## 5           gender          gender #indicator +type
+## 6              age             age  #indicator +num
+## 7  case_definition            &lt;NA&gt; #indicator +name
+## 8              geo            &lt;NA&gt;   #geo +lon +lat
+## 9      date_report            &lt;NA&gt;  #date +reported
+## 10       age_group            &lt;NA&gt; #indicator +type
+##                                            description
+## 1                         unique individual identifier
+## 2                       date at which symptoms started
+## 3              date of the outcome (recovery or death)
+## 4                                    recovery or death
+## 5                             gender of the individual
+## 6                       age of the individual in years
+## 7  case type: suspected, probable, confirmed, negative
+## 8           geographic coordinate: longitude, latitude
+## 9                      date at which case was reported
+## 10                age group of the individual in years</code></pre>
 <p>You can use this data dictionary to access variables:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/accessors.html">gender</a></span>(ll))</code></pre></div>
 <pre><code>## [1] m m f f f f
@@ -210,14 +258,6 @@ ll &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as_linel
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/accessors.html">get_epivars</a></span>(ll, <span class="st">"outcome"</span>)) <span class="co"># only "outcome"</span></code></pre></div>
 <pre><code>## [1] Death   Death   Death   &lt;NA&gt;    Recover Death  
 ## Levels: Death Recover</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/accessors.html">get_epivars</a></span>(ll, <span class="dv">1</span>:<span class="dv">3</span>)) <span class="co"># first 3 epivars</span></code></pre></div>
-<pre><code>##   outcome date_of_outcome date_of_hospitalisation
-## 1   Death      2013-03-04                    &lt;NA&gt;
-## 2   Death      2013-03-10              2013-03-03
-## 3   Death      2013-04-09              2013-03-19
-## 4    &lt;NA&gt;            &lt;NA&gt;              2013-03-27
-## 5 Recover      2013-05-15              2013-03-30
-## 6   Death      2013-04-26              2013-03-28</code></pre>
 <p>This becomes useful in generating templates where the columns from the incoming data may not be standardised. For example, if you want to generate an incidence curve for the data stratified by gender, you could write something like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ic &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/incidence/topics/incidence">incidence</a></span>(<span class="kw"><a href="../reference/accessors.html">date_onset</a></span>(ll), <span class="dt">interval =</span> <span class="st">"week"</span>, <span class="dt">groups =</span> <span class="kw"><a href="../reference/accessors.html">gender</a></span>(ll))</code></pre></div>
 <pre><code>## 10 missing observations were removed.</code></pre>
@@ -226,11 +266,11 @@ ll &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as_linel
 <p>Now, if you had a new data set coming into the template, you are prepared:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">old_ll &lt;-<span class="st"> </span>ll
 ll &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as_linelist.html">as_linelist</a></span>(outbreaks::mers_korea_2015$linelist,
-               <span class="st">"id"</span> =<span class="st"> "id"</span>,
-               <span class="st">"age"</span> =<span class="st"> "age"</span>,
-               <span class="st">"gender"</span> =<span class="st"> "sex"</span>,
-               <span class="st">"date_onset"</span> =<span class="st"> "dt_onset"</span>
-              )
+  <span class="st">"id"</span>         =<span class="st"> "id"</span>,
+  <span class="st">"age"</span>        =<span class="st"> "age"</span>,
+  <span class="st">"gender"</span>     =<span class="st"> "sex"</span>,
+  <span class="st">"date_onset"</span> =<span class="st"> "dt_onset"</span>
+  )
 ic &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/incidence/topics/incidence">incidence</a></span>(<span class="kw"><a href="../reference/accessors.html">date_onset</a></span>(ll), <span class="dt">interval =</span> <span class="st">"week"</span>, <span class="dt">groups =</span> <span class="kw"><a href="../reference/accessors.html">gender</a></span>(ll))</code></pre></div>
 <pre><code>## 27 missing observations were removed.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(ic)</code></pre></div>

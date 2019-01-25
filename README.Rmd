@@ -185,13 +185,10 @@ dates of onset and gender are now formally identifier:
 ```{r epivars}
 ## check available epivars
 list_epivars(x, simple = TRUE) # simple
-list_epivars(x, epivars_only = TRUE) # more info
+list_epivars(x) # more info
 
 
 get_epivars(x, "gender", "date_onset")
-
-## or equivalent:
-get_epivars(x, c(2,1))
 
 ```
 
