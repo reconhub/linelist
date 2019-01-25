@@ -53,21 +53,47 @@ get_epivars <- function(x, ..., simplify = TRUE) {
   if (is.null(attr(x, "epivars"))) {
     stop("This object has no 'epivars' attribute")
   }
+  # Collect data epivars and user-supplied epivars -----------------
+  vars    <- list(...)
+  epivars <- attr(x, "epivars")
 
-  to_keep <- unlist(list(...))
-
-  ## If no further argument, return all epivars
-  all_epivars <- list_epivars(x)
-
-  if (length(to_keep) == 0) {
-    to_keep <- TRUE
-  } 
-
-  to_keep <- unlist(attr(x, "epivars")[to_keep])
+  # Check for empty set --------------------------------------------
+  # No variables were defined, so return the subset of the data frame with the
+  # defined epivars
+  if (length(vars) == 0) {
+    return(as.data.frame(x[unlist(attr(x, "epivars"), use.names = FALSE)]))
+  }
   
+  # Check for a vector----------------------------------------------
+  # A vector of variables was passed: turn it into a list
+  if (length(vars) == 1 && is.character(vars[[1]])) {
+    vars <- as.list(vars[[1]])
+  }
 
-  ## TODO: add validation of the dots here
-  
+  # Make sure the list is not nested -------------------------------
+  if (any(lengths(vars) > 1)) {
+    stop("All variables must be of length 1.")
+  }
+
+  # Make sure that all the inputs are characters -------------------
+  are_characters <- vapply(vars, is.character, logical(1))
+  if (!all(are_characters)) {
+    stop("all variables must be characters.")
+  }
+
+  # validate the list -----------------------------------------------
+  vars       <- valid_dots(setNames(vars, unlist(vars, use.names = FALSE)))
+  valid_vars <- names(vars) %in% names(epivars)
+  if (!all(valid_vars)) {
+    invalids <- paste(names(vars)[!valid_vars], collapse = ", ")
+    stop(sprintf("The following epivars were not found in the data:\n%s", 
+                 invalids))
+  }
+
+  # Keep only the vars that pass the above tests --------------------
+  to_keep <- unlist(epivars[names(vars)], use.names = FALSE)
+  # Note: subsetting first and then converting is needed to prevent 
+  # as.data.frame from changing the column names 
   out <- as.data.frame(x[to_keep])
   if (simplify && ncol(out) == 1L) {
     out <- out[, 1, drop = TRUE]
