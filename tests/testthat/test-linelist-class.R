@@ -23,4 +23,9 @@ test_that("a linelist class will be the same subsetting by nothing", {
   expect_identical(ll, ll[])
 })
 
+test_that("the epivars attribute will reflect the order of the linelist class", {
+  rll <- rev(ll)
+  evll <- unlist(attr(rll, "epivars"), use.names = FALSE)
+  expect_identical(evll, names(rll)[names(rll) %in% evll])
+})
 reset_dictionary()
