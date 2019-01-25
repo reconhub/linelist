@@ -89,7 +89,7 @@ head(outbreaks::fluH7N9_china_2013)
 
 list_epivars(ll) # show available epivars
 list_epivars(ll, simple = TRUE) # only names of available epivars
-list_epivars(ll, all_dictionary = TRUE) # ignore non-epivars columns
+list_epivars(ll, full_dict = TRUE) # ignore non-epivars columns
 
 
 ```

@@ -4,7 +4,7 @@
 \alias{list_epivars}
 \title{List registred epivars in a linelist object}
 \usage{
-list_epivars(x, simple = FALSE, all_dictionary = FALSE)
+list_epivars(x, simple = FALSE, full_dict = FALSE)
 }
 \arguments{
 \item{x}{a \code{linelist} object}
@@ -13,7 +13,7 @@ list_epivars(x, simple = FALSE, all_dictionary = FALSE)
 \code{epivars} should be returned (\code{TRUE}); otherwise the output will contain
 more information as a \code{data.frame} (\code{FALSE}, default)}
 
-\item{all_dictionary}{if \code{FALSE} (default), only the \emph{epivars} present in the
+\item{full_dict}{if \code{FALSE} (default), only the \emph{epivars} present in the
 object are documented; otherwise, all the available dictionary is appended
 to the output}
 }
@@ -35,5 +35,5 @@ ll  <- as_linelist(dat,
                  )
 list_epivars(ll)
 list_epivars(ll, simple = TRUE)
-list_epivars(ll, all_dictionary = TRUE)
+list_epivars(ll, full_dict = TRUE)
 }
