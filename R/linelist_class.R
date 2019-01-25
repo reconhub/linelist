@@ -60,15 +60,13 @@ as_linelist.data.frame <- function(x, ...) {
   ## TODO: check that I haven't messed the code too much here, I did simplify it
   ## a bit (Tibo)
   
-  new_epivars <- epivars <- attr(x, "epivars")
-  
+  new_epivars <- attr(x, "epivars") -> epivars
   x  <- NextMethod()
   for (i in seq_along(epivars)) {
     if (!all(epivars[[i]] %in% names(x))) {
       new_epivars[[i]] <- NULL
     }
   }
-  
-  attr(x, "epivars") <- new_epivars
+  attr(x, "epivars") <- order_epivars(x, new_epivars)
   x
 }

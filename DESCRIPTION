@@ -19,7 +19,9 @@ Suggests:
     magrittr
 RoxygenNote: 6.1.1
 Imports:
-  epitrix
+  epitrix,
+  utils,
+  stats
 URL: https://github.com/reconhub/linelist
 BugReports: https://github.com/reconhub/linelist/issues
 VignetteBuilder: knitr
