@@ -1,11 +1,9 @@
 context("linelist class tests")
 
 oev <- get_dictionary()
-## invisible(set_dictionary("date_discharge", "case"))
 ll <- as_linelist(clean_data(messy_data()),
                   id = "id", 
                   date_onset = "date_of_onset",
-                  # date_discharge = "discharge", 
                   case_definition = "epi_case_definition",
                   gender = "gender",
                   geo = c("lon", "lat"))

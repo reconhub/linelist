@@ -128,6 +128,9 @@ order_epivars <- function(x, content) {
 }
 
 update_epivars <- function(epivars, new_epivars) {
+  if (is.null(epivars)){
+    epivars <- list()
+  }
   for (i in names(new_epivars)) {
     epivars[[i]] <- new_epivars[[i]]
   }
