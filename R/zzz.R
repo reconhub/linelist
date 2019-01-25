@@ -1,10 +1,9 @@
 .onLoad <- function(...) {
   op <- options()
-  if (!"epiflows.vars" %in% names(op)) {
+  if (!"linelist_dictionary" %in% names(op)) {
     invisible(reset_dictionary())
-  } else {
-    invisible(set_dictionary())
   }
+  ## TODO: do something if the user has pre-loaded a custom dictionary
 }
 
 .onAttach <- function(...) {
