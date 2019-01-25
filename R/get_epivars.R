@@ -68,7 +68,7 @@ get_epivars <- function(x, ..., simplify = TRUE) {
 
   ## TODO: add validation of the dots here
   
-  out <- as.data.frame(x)[to_keep]
+  out <- as.data.frame(x[to_keep])
   if (simplify && ncol(out) == 1L) {
     out <- out[, 1, drop = TRUE]
   }
