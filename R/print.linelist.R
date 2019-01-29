@@ -20,12 +20,12 @@
 #' x <- as_linelist(x, id = "id", gender = "gender",
 #'                  geo = c("lon", "lat"))
 #' x
-#' print(x, show_epivars = FALSE)
+#' print(x, show_epivars = TRUE)
 
-print.linelist <- function(x, ..., show_epivars = TRUE) {
+print.linelist <- function(x, ..., show_epivars = FALSE) {
   cat("<linelist object>\n\n")
   epivars <- list_epivars(x)
-  print(as.data.frame(x), ...)
+  NextMethod(x, ...)
 
   if (!is.null(epivars) && show_epivars) {
     cat("\n // epivars:\n")
