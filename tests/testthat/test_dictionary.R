@@ -14,6 +14,9 @@ gdf <- data.frame(
   description = c("longitude in degrees", "latitude in degrees"),
   stringsAsFactors = FALSE
 )
+
+# The tests ---------------------------------------------------------
+
 test_that("epivars will return the default epivars", {
   expect_identical(get_dictionary(), getOption("linelist_dictionary"))
   expect_identical(get_dictionary(), default_dictionary())
@@ -27,6 +30,15 @@ test_that("a new epivar can be added", {
   expect_identical(get_dictionary(), getOption("linelist_dictionary"))
   expect_error(add_epivar(hosp), 
                "The following epivars already exist in the dictionary:  date_hospital") 
+})
+
+# Errors and such ---------------------------------------------------
+
+test_that("check_dictionary() will thwart attempts to import incorrect epivars", {
+  expect_error(set_dictionary(pi), "is not a data frame but a numeric")
+  expect_error(set_dictionary("non/existant/file.txt"), "The file 'non/existant/file.txt' does not appear to exist")
+  expect_error(set_dictionary(iris), "x does not have 3 columns but 5")
+  expect_error(set_dictionary(iris[1:3]), "dictionary does not have the expected column names")
 })
 
 test_that("attempts to add existing epivars will be thwarted", {
@@ -53,7 +65,7 @@ test_that("there can be no description for a non-existant epivar", {
                "add_definition\\(epivar = \\\"what\\\", description = \\\"the hell\\\", hxl = \\\"\\\"\\)")
 })
 
-test_that("set_epivars() can take file input", {
+test_that("set_dictionary() can take file input", {
   set_dictionary(system.file("example_dict.xlsx", package = "linelist"))
   expect_identical(get_dictionary(), rbind(default_dictionary(), gdf))
 })

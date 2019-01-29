@@ -95,11 +95,13 @@ set_dictionary <- function(x, epivar = "epivar", hxl = "hxl", description = "des
     }
     x <- rio::import(x, ...)
   }
-  x <- x[c(epivar, hxl, description)]
+  check_dictionary_is_df(x)
+  check_dictionary_has_three_cols(x)
+  check_dictionary_has_right_names(x, c(epivar, hxl, description), ordered = FALSE) 
   names(x)[names(x) == epivar]      <- "epivar"
   names(x)[names(x) == hxl]         <- "hxl"
   names(x)[names(x) == description] <- "description"
-  check_dictionary(x)
+  x <- x[c("epivar", "hxl", "description")]
   for (i in seq_len(ncol(x))) {
     x[[i]] <- as.character(x[[i]])
   }
@@ -121,26 +123,30 @@ reset_dictionary <- function() {
 ## data.frame with 3 columns named 'epivar', 'hxl', and 'description', in this
 ## order.
 
-check_dictionary <- function(x) {
+check_dictionary_is_df <- function(x) {
   if (!is.data.frame(x)) {
     msg <- sprintf("x is not a data frame but a %s",
-                   class(x))
+                   paste(class(x), collapse = ", "))
     stop(msg)
   }
-
+  return(invisible(NULL))
+}
+check_dictionary_has_three_cols <- function(x) {
   if (ncol(x) != 3L) {
     msg <- sprintf("x does not have 3 columns but %d",
                    ncol(x))
     stop(msg)
   }
-
-  expected_names <- c("epivar", "hxl", "description")
+  return(invisible(NULL))
+}
+check_dictionary_has_right_names <- function(x, expected_names = c("epivar", "hxl", "description"), ordered = TRUE) {
   if (!identical(names(x), expected_names)) {
+    if (!ordered && length(setdiff(names(x), expected_names)) == 0) return(NULL)
     msg <- sprintf(
         paste0(
             "dictionary does not have the expected column names;",
             "\nexpected: %s",
-            "\nfound: %s"),
+            "\nfound:    %s"),
         paste(expected_names, collapse = ", "),
         paste(names(x), collapse = ", ")
         )
@@ -194,7 +200,8 @@ add_epivar <- function(epivar = NULL, hxl = "", description = "") {
   }
   the_dictionary <- get_dictionary()
   if (is.data.frame(epivar)) {
-    check_dictionary(epivar)
+    check_dictionary_has_three_cols(epivar)
+    check_dictionary_has_right_names(epivar)
     res <- vector(mode = "character", length = nrow(epivar))
     names(res) <- epivar$epivar
     for (e in seq(nrow(epivar))) {

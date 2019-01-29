@@ -21,8 +21,8 @@ the variables.
 }
 \examples{
 
-x <- messy_data()
-x <- clean_data(x)
+x <- messy_data(5)
+x <- tibble::as_tibble(clean_data(x))
 x <- as_linelist(x, id = "id", gender = "gender",
                  geo = c("lon", "lat"))
 x
