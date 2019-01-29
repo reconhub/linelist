@@ -1,6 +1,6 @@
 context("dictionary tests")
 
-oev <- get_dictionary()
+reset_dictionary()
 hosp <- data.frame(
   epivar = "date_hospital",
   hxl    = "#date +start",
@@ -8,28 +8,62 @@ hosp <- data.frame(
   stringsAsFactors = FALSE
 )
 
+gdf <- data.frame(
+  epivar = c("geo_lon", "geo_lat"),
+  hxl    = c("#geo +lon", "#geo +lat"),
+  description = c("longitude in degrees", "latitude in degrees"),
+  stringsAsFactors = FALSE
+)
 test_that("epivars will return the default epivars", {
   expect_identical(get_dictionary(), getOption("linelist_dictionary"))
   expect_identical(get_dictionary(), default_dictionary())
 })
 
-## TODO add test for changing dictionary
-## test_that("users can add new valid epivars", {
-##   set_dictionary("diddle", "fastidious", "ridiculous")
-##   expect_true(all(oev %in% get_dictionary()))
-##   expect_equal(length(get_dictionary()) - length(oev), 3)
-## })
 
-test_that("a new dictionary can be added", {
+test_that("a new epivar can be added", {
   allhosp <- rbind(default_dictionary(), hosp)
-  set_dictionary(hosp)
-  expect_identical(get_dictionary(), hosp)
-  expect_identical(get_dictionary(), getOption("linelist_dictionary"))
-  set_dictionary(allhosp)
+  add_epivar(hosp)
   expect_identical(get_dictionary(), allhosp)
   expect_identical(get_dictionary(), getOption("linelist_dictionary"))
+  expect_error(add_epivar(hosp), 
+               "The following epivars already exist in the dictionary:  date_hospital") 
 })
 
+test_that("attempts to add existing epivars will be thwarted", {
+  # works with character input
+  expect_error(add_epivar("geo", "#geo +lon +lat", "whoops"),
+               "geo already exists in the dictionary")
+  # and data frame input
+  gdf <- data.frame(epivar = "geo",
+                    hxl = "#geo +lon +lat", 
+                    description = "whoops", 
+                    stringsAsFactors = FALSE)
+  expect_error(add_epivar(rbind(gdf, hosp)),
+               "The following epivars already exist in the dictionary:  geo, date_hospital")
+})
+
+test_that("a description can be updated", {
+  add_description("date_hospital", "what")
+  dict <- get_dictionary()
+  expect_identical(dict$description[dict$epivar == "date_hospital"], "what")
+})
+
+test_that("there can be no description for a non-existant epivar", {
+  expect_error(add_description("what", "the hell"),
+               "add_definition\\(epivar = \\\"what\\\", description = \\\"the hell\\\", hxl = \\\"\\\"\\)")
+})
+
+test_that("set_epivars() can take file input", {
+  set_dictionary(system.file("example_dict.xlsx", package = "linelist"))
+  expect_identical(get_dictionary(), rbind(default_dictionary(), gdf))
+})
+
+test_that("set_epivars() will allow different column names", {
+  names(gdf) <- c("this", "is", "it")
+  set_dictionary(gdf, epivar = "this", hxl = "is", description = "it")
+  names(gdf) <- names(default_dictionary())
+  expect_identical(get_dictionary(), gdf)
+})
 
 test_that("epivars can be reset", {
   reset_dictionary()
