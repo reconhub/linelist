@@ -16,6 +16,7 @@ Suggests:
     roxygen2,
     covr,
     tibble,
+    dplyr,
     magrittr
 RoxygenNote: 6.1.1
 Imports:
