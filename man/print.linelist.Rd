@@ -4,7 +4,7 @@
 \alias{print.linelist}
 \title{Function for printing linelist objects}
 \usage{
-\method{print}{linelist}(x, ..., show_epivars = TRUE)
+\method{print}{linelist}(x, ..., show_epivars = FALSE)
 }
 \arguments{
 \item{x}{a \code{linelist} object}
@@ -12,7 +12,7 @@
 \item{...}{further arguments passed to \code{print.data.frame}}
 
 \item{show_epivars}{a logical indicating whether \code{epivars} should be shown
-after the \code{data.frame} (\code{TRUE}, default), or not (\code{FALSE}); note that
+after the \code{data.frame} (\code{TRUE}), or not (\code{FALSE}, default); note that
 \code{epivars} are only shown if present}
 }
 \description{
@@ -26,5 +26,5 @@ x <- tibble::as_tibble(clean_data(x))
 x <- as_linelist(x, id = "id", gender = "gender",
                  geo = c("lon", "lat"))
 x
-print(x, show_epivars = FALSE)
+print(x, show_epivars = TRUE)
 }
