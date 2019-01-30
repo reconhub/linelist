@@ -4,15 +4,18 @@
 \alias{lookup}
 \title{Lookup a column name defined by an epivar}
 \usage{
-lookup(x, epivar = NULL)
+lookup(x, epivar = NULL, symbol = TRUE)
 }
 \arguments{
 \item{x}{a \link[=as_linelist]{linelist} object.}
 
 \item{epivar}{the name of an epivar defined in the \link[=get_dictionary]{dictionary}.}
+
+\item{symbol}{when \code{TRUE}, the column name will be converted to a symbol
+for use in non-standard evaulation}
 }
 \value{
-a character vector of the column name
+a symbol or character vector of the column name
 }
 \description{
 For use in dplyr pipelines and other functions that need to know the names
@@ -24,8 +27,44 @@ dat <- clean_data(messy_data())
 ll  <- as_linelist(dat,
                    id = "id", 
                    gender = "gender",
+                   case_definition = "epi_case_definition",
                    date_onset = "date_of_onset", 
                    geo = c("lon", "lat")
                   )
+# Lookup a column name, and return a character
+lookup(ll, "gender", symbol = FALSE)
 
+# If there are two columns, and `symbol = TRUE`, they are returned as a list
+# of symbols.
+lookup(ll, "geo")
+
+# Using dplyr ---------------------------------------------------
+
+if (require("dplyr")) { withAutoprint({
+
+  # Two ways to use lookup with dplyr ---------------------------
+  #
+  # -- 1. Lookup in the pipe using the . replacement
+  ll \%>\% 
+    group_by(!!lookup(., "gender")) \%>\%  
+    count(!!lookup(., "case_definition"))
+
+  # -- 2. define temporary variables to lookup
+  (CASEDEF <- lookup(ll, "case_definition")) 
+  (GEO <- lookup(ll, "geo", symbol = FALSE))
+  ll \%>\%
+    group_by(!!CASEDEF) \%>\%
+    summarise_at(GEO, mean) # note, summarise_at uses characters
+
+  # Note: the linelist class is removed by dplyr verbs ----------
+  #
+  ll \%>\% group_by(!!CASEDEF) \%>\% class()
+
+  # The epivars are retained, so you can use as_linelist() to refresh
+  # (this even works for summarized data)
+  ll \%>\% 
+    group_by(!!CASEDEF) \%>\%
+    as_linelist() \%>\%
+    class()
+})}
 }
