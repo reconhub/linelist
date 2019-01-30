@@ -14,12 +14,19 @@ default_dictionary_path()
 
 get_dictionary()
 
-set_dictionary(x, ...)
+set_dictionary(x, epivar = "epivar", hxl = "hxl",
+  description = "description", ...)
 
 reset_dictionary()
 }
 \arguments{
 \item{x}{either a data frame or the path to a that can produce a data frame.}
+
+\item{epivar}{the name of the column to use as the epivar column}
+
+\item{hxl}{the name of the column to use as the hxl column}
+
+\item{description}{the name of the column to use as the comment column}
 
 \item{...}{parameters passed on to \code{\link[rio:import]{rio::import()}}.}
 }
@@ -48,7 +55,7 @@ used; A template example can be found by using \code{\link[=default_dictionary]{
 }
 \examples{
 # see the default varaibles
-get_dictionary()
+print(od <- get_dictionary())
 
 # Equivalent
 getOption("linelist_dictionary")
@@ -56,13 +63,13 @@ getOption("linelist_dictionary")
 
 # Set a new, one-column dictionary 
 hosp <- data.frame(
-  epivar = "date_hospital",
-  hxl    = "#date +start",
-  description = "date at which patient was hospitalized",
+  var  = "date_hospital",
+  HXL  = "#date +start",
+  desc = "date at which patient was hospitalized",
   stringsAsFactors = FALSE
 )
 
-set_dictionary(hosp)
+set_dictionary(hosp, epivar = "var", hxl = "HXL", description = "desc")
 get_dictionary()
 
 # Use the default_dictionary_path() to read in the default dictionary from
@@ -74,6 +81,11 @@ get_dictionary()
 # You can also reset the variables automatically
 reset_dictionary()
 
+# reset dictionary to user's dictionary
+set_dictionary(od)
+}
+\seealso{
+\code{\link[=add_epivar]{add_epivar()}}, \code{\link[=add_description]{add_description()}}
 }
 \author{
 Zhian N. Kamvar, Thibaut Jombart
