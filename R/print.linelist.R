@@ -10,7 +10,7 @@
 #' @param ... further arguments passed to `print.data.frame`
 #'
 #' @param show_epivars a logical indicating whether `epivars` should be shown
-#'   after the `data.frame` (`TRUE`, default), or not (`FALSE`); note that
+#'   after the `data.frame` (`TRUE`), or not (`FALSE`, default); note that
 #'   `epivars` are only shown if present
 #'
 #' @examples
