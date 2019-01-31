@@ -46,6 +46,10 @@
 #'     proportion is exceeded, the original vector is returned, and a message is
 #'     issued; defaults to 0.1 (10 percent)
 #'
+#' @param orders this parameter specifies the valid orders for the dates. These
+#'   can be specified in unambiguous codes or letters. By default, the following
+#'   orders are used: ymd, mdy, dmy, which will capture all three combinations 
+#'   of month, day, and year. This is passed on to [lubridate::parse_date_time()]
 #' @param quiet a logical indicating if messages should be displayed to the
 #'     console (`TRUE`, default); set to `FALSE` to silence messages
 #'
@@ -53,11 +57,11 @@
 #' 
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
 #'       "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
-#'       "RECON NGO: 19 Sep 2018 :)")
+#'       "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
 #' guess_dates(x, error_tolerance = 1) # forced conversion
 #' guess_dates(x, error_tolerance = 0.15) # 15 percent errors allowed 
 
-guess_dates <- function(x, error_tolerance = 0.1, quiet = TRUE) {
+guess_dates <- function(x, error_tolerance = 0.1, orders = c("Ymd", "dmy", "dBy", "mdy", "Bdy", "ymd"), quiet = TRUE) {
 
   ## This function tries converting a single character string into a
   ## well-formatted date, but still returning a character. If it can't convert
@@ -69,7 +73,7 @@ guess_dates <- function(x, error_tolerance = 0.1, quiet = TRUE) {
   }
 
   ## convert all entries to character strings
-  new_x <- vapply(x, i_extract_date_string, character(1))
+  suppressWarnings(new_x <- lubridate::parse_date_time(x, orders = orders))
 
   ## check how successful we were
   na_before <- sum(is.na(x))
