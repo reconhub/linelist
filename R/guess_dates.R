@@ -68,7 +68,8 @@
 #' guess_dates(x, error_tolerance = 1, first_date = FIRST_DATE) # forced conversion
 #' guess_dates(x, error_tolerance = 0.15, first_date = FIRST_DATE) # only 15% errors allowed
 
-guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL, last_date = Sys.Date(), orders = NULL, quiet = TRUE) {
+guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL, 
+                        last_date = Sys.Date(), orders = NULL, quiet = TRUE) {
 
   ## This function tries converting a single character string into a
   ## well-formatted date, but still returning a character. If it can't convert
@@ -81,6 +82,9 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL, last_date =
   if (is.null(first_date)) {
     first_date <- min(seq.Date(last_date, length.out = 2, by = "-1 year"))
   } 
+  if (!inherits(first_date, "Date") || !inherits(last_date, "Date")) {
+    stop("first_date and last_date must be Date objects.")
+  }
   stopifnot(inherits(first_date, "Date"), inherits(last_date, "Date"))
 
   if (is.null(orders)) {

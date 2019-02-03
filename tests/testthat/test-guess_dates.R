@@ -44,3 +44,7 @@ test_that("passing a non-data frame throws an error", {
   expect_is(res$date, "Date")
 
 })
+
+test_that("passing a non-date as first_date throws an error", {
+  expect_error(guess_dates(x, first_date = "2018-01-01"), "first_date and last_date must be Date objects.")
+})
