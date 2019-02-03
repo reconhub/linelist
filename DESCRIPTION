@@ -20,6 +20,7 @@ Suggests:
     magrittr
 RoxygenNote: 6.1.1
 Imports:
+  lubridate,
   rio,
   epitrix,
   utils,
