@@ -38,7 +38,7 @@ test_that("passing a non-data frame throws an error", {
   x <- structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L, 4L, 1L, 2L, 3L), .Label = c("", 
     "04-Jul-1985", "12-Sep-1987", "27-Jun-1975"), class = "factor")
   expect_error(clean_dates(x), "x must be a data frame")
-  res <- clean_dates(data.frame(date = x), error_tol = 1)
+  res <- clean_dates(data.frame(date = x), error_tol = 1, first_date = as.Date("1969-4-20"))
   expect_is(res, "data.frame")
   expect_length(res, 1)
   expect_is(res$date, "Date")

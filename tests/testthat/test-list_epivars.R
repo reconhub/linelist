@@ -1,6 +1,6 @@
 context("list_epivars tests")
 
-ll <- as_linelist(clean_data(messy_data()),
+ll <- as_linelist(clean_data(messy_data(), first_date = as.Date("1969-4-20")),
                   id = "id", 
                   date_onset = "date_of_onset",
                   case_definition = "epi_case_definition",

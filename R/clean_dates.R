@@ -25,6 +25,8 @@
 #'   experimental; see [guess_dates()] for more information.
 #'
 #' @inheritParams guess_dates
+#' 
+#' @param ... further arguments passed on to [guess_dates()]
 #'
 #' @seealso  [guess_dates()] to extract dates from a messy input vector
 #' 
@@ -67,10 +69,10 @@
 #'
 #' ## clean variable names, store in new object, show results
 #' clean_data <- clean_variable_names(toy_data)
-#' clean_data <- clean_dates(clean_data)
+#' clean_data <- clean_dates(clean_data, first_date = as.Date("1950-01-01"))
 #' clean_data
 
-clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_tolerance = 0.5) {
+clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_tolerance = 0.5, ... ) {
   if (!is.data.frame(x)) {
     stop("x must be a data frame or linelist object")
   }
@@ -87,7 +89,7 @@ clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_toleranc
 
   if (guess_dates) {
     for (i in c(are_characters, are_factors)) {
-      x[[i]] <- guess_dates(x[[i]], error_tolerance)
+      x[[i]] <- guess_dates(x[[i]], error_tolerance = error_tolerance, ...)
     }
   }
 
