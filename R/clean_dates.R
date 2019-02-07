@@ -15,14 +15,15 @@
 #'
 #' @param x a `data.frame`
 #'
-#' @param force_Date a `logical` indicating if `POSIXct` and `POSIXlt` objects
-#'   should be converted to `Date` objects; defaults to `TRUE`; you should use
-#'   this if your dates are only precise to the day (i.e. no time information
-#'   within days).
+#' @param force_Date a `logical` or `integer` vector indicating the columns . If `logical`, indicating if `POSIXct` and `POSIXlt` objects should be converted to `Date` objects; defaults to `TRUE`; you should use this if your dates are only precise to the day (i.e. no time information within days).
 #'
 #' @param guess_dates a `logical` indicating if dates should be guessed in
 #'   columns storing character strings or `factors`; this feature is
 #'   experimental; see [guess_dates()] for more information.
+#'
+#' @param classes a vector of class definitions for each of the columns. If this
+#'   is not provided, the classes will be read from the columns themselves. 
+#'   Practically, this is used in [clean_data()] to mark columns as protected.
 #'
 #' @inheritParams guess_dates
 #' 
@@ -37,7 +38,9 @@
 #' @examples
 #'
 #' ## make toy data
-#' onsets <- as.POSIXct("2018-01-01") + sample(1:10, 20, replace = TRUE)
+#' onsets <- as.POSIXct("2018-01-01", tz = "UTC")
+#' onsets <- seq(onsets, by = "1 day", length.out = 10)
+#' onsets <- sample(onsets, 20, replace = TRUE)
 #' onsets2 <- format(as.Date(onsets), "%d/%m/%Y")
 #' onsets3 <- format(as.Date(onsets), "%d %m %Y")
 #' outcomes <- onsets + 1e7
@@ -72,14 +75,16 @@
 #' clean_data <- clean_dates(clean_data, first_date = as.Date("1950-01-01"))
 #' clean_data
 
-clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_tolerance = 0.5, ... ) {
+clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_tolerance = 0.5, ..., classes = NULL) {
   if (!is.data.frame(x)) {
     stop("x must be a data frame or linelist object")
   }
-  classes <- i_find_classes(x)
-  are_POSIX <- i_find_POSIX(x)
+  if (is.null(classes)) {
+    classes <- i_find_classes(x)
+  }
+  are_POSIX      <- grep("^POSIX", classes)
   are_characters <- which(classes == "character")
-  are_factors <- which(classes == "factor")
+  are_factors    <- which(classes == "factor")
 
   if (force_Date) {
     for (i in are_POSIX) {

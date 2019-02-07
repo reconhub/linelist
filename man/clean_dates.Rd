@@ -5,15 +5,12 @@
 \title{Handle dates data}
 \usage{
 clean_dates(x, force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, ...)
+  error_tolerance = 0.5, ..., classes = NULL)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
 
-\item{force_Date}{a \code{logical} indicating if \code{POSIXct} and \code{POSIXlt} objects
-should be converted to \code{Date} objects; defaults to \code{TRUE}; you should use
-this if your dates are only precise to the day (i.e. no time information
-within days).}
+\item{force_Date}{a \code{logical} or \code{integer} vector indicating the columns . If \code{logical}, indicating if \code{POSIXct} and \code{POSIXlt} objects should be converted to \code{Date} objects; defaults to \code{TRUE}; you should use this if your dates are only precise to the day (i.e. no time information within days).}
 
 \item{guess_dates}{a \code{logical} indicating if dates should be guessed in
 columns storing character strings or \code{factors}; this feature is
@@ -25,6 +22,10 @@ proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
 
 \item{...}{further arguments passed on to \code{\link[=guess_dates]{guess_dates()}}}
+
+\item{classes}{a vector of class definitions for each of the columns. If this
+is not provided, the classes will be read from the columns themselves.
+Practically, this is used in \code{\link[=clean_data]{clean_data()}} to mark columns as protected.}
 }
 \value{
 A \code{data.frame} with standardised dates.
@@ -44,7 +45,9 @@ to be a date, and left untouched.
 \examples{
 
 ## make toy data
-onsets <- as.POSIXct("2018-01-01") + sample(1:10, 20, replace = TRUE)
+onsets <- as.POSIXct("2018-01-01", tz = "UTC")
+onsets <- seq(onsets, by = "1 day", length.out = 10)
+onsets <- sample(onsets, 20, replace = TRUE)
 onsets2 <- format(as.Date(onsets), "\%d/\%m/\%Y")
 onsets3 <- format(as.Date(onsets), "\%d \%m \%Y")
 outcomes <- onsets + 1e7

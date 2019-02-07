@@ -13,6 +13,9 @@
 #' @param sep The separator used between words, and defaults to the underscore
 #'   `_`.
 #'
+#' @param protect a logical or numeric vector defining the columns to protect
+#'   from any manipulation. 
+#'   
 #' @inheritParams clean_dates
 #' 
 #' @export
@@ -23,22 +26,8 @@
 #' @examples
 #'
 #' ## make toy data
-#' onsets <- as.Date("2018-01-01") + sample(1:10, 20, replace = TRUE)
-#' discharge <- format(as.Date(onsets) + 10, "%d/%m/%Y")
-#' genders <- c("male", "female", "FEMALE", "Male", "Female", "MALE")
-#' gender <- sample(genders, 20, replace = TRUE)
-#' case_types <- c("confirmed", "probable", "suspected", "not a case",
-#'                 "Confirmed", "PROBABLE", "suspected  ", "Not.a.Case")
-#' messy_dates <- sample(
-#'                  c("01-12-2001", "male", "female", "2018-10-18", "2018_10_17",
-#'                    "2018 10 19", "// 24//12//1989", NA, "that's 24/12/1989!"),
-#'                  20, replace = TRUE)
-#' case <- factor(sample(case_types, 20, replace = TRUE))
-#' toy_data <- data.frame("Date of Onset." = onsets,
-#'                        "DisCharge.." = discharge,
-#'                        "GENDER_ " = gender,
-#'                        "Épi.Case_définition" = case,
-#'                        "messy/dates" = messy_dates)
+#' toy_data <- messy_data()
+#' 
 #' ## show data
 #' toy_data
 #'
@@ -49,10 +38,18 @@
 #'
 #' clean_data2 <- clean_data(toy_data, error_tolerance = 0.8)
 #' clean_data2
+#' 
+#' ## clean variable names, but keep our "messy/dates" column
+#' to_protect <- names(toy_data) %in% "messy/dates"
+#' clean_data3 <- clean_data(toy_data, 
+#'                           error_tolerance = 0.8,
+#'                           protect = to_protect
+#'                          )
+#' clean_data3
 
 
 clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
-                       error_tolerance = 0.5, ...) {
+                       error_tolerance = 0.5, protect = NULL, ...) {
 
   if (!is.data.frame(x)) {
     stop("x is not a data.frame")
@@ -62,13 +59,25 @@ clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
     stop("x has no columns")
   }
 
-  out <- clean_variable_names(x, sep = sep)
-  out <- clean_variable_labels(out, sep = sep)
+  # Find classes and protect the ones that should not be manipulated -----------
+  classes <- i_find_classes(x)
+  protect <- if (is.null(protect)) FALSE else protect
+  classes[protect] <- "protected"
+
+  # Cleaning column names ------------------------------------------------------
+  out <- clean_variable_names(x, protect = protect, sep = sep)
+
+  # Cleaning variables ---------------------------------------------------------
+  out <- clean_variable_labels(out, sep = sep, classes = classes)
+  
+  # Cleaning and guessing dates ------------------------------------------------
   out <- clean_dates(out,
                      force_Date = force_Date,
                      guess_dates = guess_dates,
                      error_tolerance = error_tolerance,
-                     ...)
+                     ...,
+                     classes = classes
+                    )
   out
 }
 

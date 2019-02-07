@@ -4,10 +4,14 @@
 \alias{clean_variable_labels}
 \title{Clean variable labels}
 \usage{
-clean_variable_labels(x, ...)
+clean_variable_labels(x, classes = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
+
+\item{classes}{a vector of class definitions for each of the columns. If this
+is not provided, the classes will be read from the columns themselves.
+Practically, this is used in \code{\link[=clean_data]{clean_data()}} to mark columns as protected.}
 
 \item{...}{further arguments passed to \code{\link[epitrix:clean_labels]{epitrix::clean_labels()}}; the most
 important is \code{sep}, which refers to the separator used between words,
