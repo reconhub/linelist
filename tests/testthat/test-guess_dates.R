@@ -22,9 +22,9 @@ test_that("American dates also work", {
 })
 
 
-test_that("The first date defaults to on year prior", {
-  last_date <- as.Date("2012-11-05")
-  first_date <- as.Date("2011-11-05")
+test_that("The first date defaults to fifty years prior", {
+  last_date <-as.Date("2012-11-05")
+  first_date <- as.Date("1962-11-05")
   er <- expected_result
   er[er < first_date | er > last_date] <- NA
   expect_warning(res <- guess_dates(x, error_tolerance = 1, last_date = last_date),
@@ -46,5 +46,8 @@ test_that("passing a non-data frame throws an error", {
 })
 
 test_that("passing a non-date as first_date throws an error", {
-  expect_error(guess_dates(x, first_date = "2018-01-01"), "first_date and last_date must be Date objects.")
+  expect_error(guess_dates(x, first_date = "18-01-01"), "first_date and last_date must be Date objects.")
+  expect_failure(expect_error(guess_dates(x, first_date = "1918-01-01"), "first_date and last_date must be Date objects."))
+  expect_error(guess_dates(x, last_date = "18-01-01"), "first_date and last_date must be Date objects.")
+  expect_failure(expect_error(guess_dates(x, last_date = "2019-01-01"), "first_date and last_date must be Date objects."))
 })

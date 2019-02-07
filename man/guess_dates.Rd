@@ -5,7 +5,8 @@
 \title{Try and guess dates from a characters}
 \usage{
 guess_dates(x, error_tolerance = 0.1, first_date = NULL,
-  last_date = Sys.Date(), orders = NULL, quiet = TRUE)
+  last_date = Sys.Date(), orders = list(world = c("dby", "dmy", "Ybd",
+  "Ymd"), US = c("Omdy", "YOmd")), quiet = TRUE)
 }
 \arguments{
 \item{x}{a \code{character} vector or a \code{factor}}
@@ -16,7 +17,7 @@ proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
 
 \item{first_date}{a Date object specifying the first valid date. Defaults to
-one year before the \code{last_date}.}
+fifty years before the \code{last_date}.}
 
 \item{last_date}{a Date object specifying the last valid date. Defaults to the
 current date.}
@@ -24,7 +25,8 @@ current date.}
 \item{orders}{date codes for fine-grained parsing of dates. This allows for
 parsing of mixed dates. If a list is supplied, that list will be used for
 successive tries in parsing.  This is passed on to
-\code{\link[lubridate:parse_date_time]{lubridate::parse_date_time()}}}
+\code{\link[lubridate:parse_date_time]{lubridate::parse_date_time()}}. Default orders parse World dmy/dby dates
+before US mdy/bdy dates.}
 
 \item{quiet}{a logical indicating if messages should be displayed to the
 console (\code{TRUE}, default); set to \code{FALSE} to silence messages}
