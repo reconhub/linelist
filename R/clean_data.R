@@ -13,9 +13,6 @@
 #' @param sep The separator used between words, and defaults to the underscore
 #'   `_`.
 #'
-#' @param quiet a logical indicating if messages should be displayed to the
-#'     console (`TRUE`, default); set to `FALSE` to silence messages
-#' 
 #' @inheritParams clean_dates
 #' 
 #' @export
@@ -54,9 +51,8 @@
 #' clean_data2
 
 
-clean_data <- function(x, sep = "_", force_Date = TRUE,
-                                  guess_dates = TRUE, error_tolerance = 0.5,
-                                  quiet = FALSE) {
+clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
+                       error_tolerance = 0.5, ...) {
 
   if (!is.data.frame(x)) {
     stop("x is not a data.frame")
@@ -71,7 +67,8 @@ clean_data <- function(x, sep = "_", force_Date = TRUE,
   out <- clean_dates(out,
                      force_Date = force_Date,
                      guess_dates = guess_dates,
-                     error_tolerance = error_tolerance)
+                     error_tolerance = error_tolerance,
+                     ...)
   out
 }
 

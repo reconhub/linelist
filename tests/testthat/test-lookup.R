@@ -2,7 +2,7 @@ context("lookup tests")
 
 # Setup data ------------------------------------------------------------------
 #
-dat <- clean_data(messy_data(5))
+dat <- clean_data(messy_data(5), first_date = as.Date("1969-4-20"))
 ll  <- as_linelist(dat,
                    id = "id", 
                    gender = "gender",

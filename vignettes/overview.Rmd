@@ -57,17 +57,11 @@ package](https://cran.r-project.org/package=outbreaks).
 library('outbreaks')
 library('incidence')
 library('linelist')
-# define the important variables
-## set_dictionary(
-##   "id",
-##   "date_onset",
-##   "gender",
-##   "age",
-##   "outcome", 
-##   "date_outcome", 
-##   "date_hospitalisation" 
-##   )
 
+# define the data dictionary
+
+set_dictionary(default_dictionary())
+get_dictionary()
 # generate a template linelist with `template_linelist()`
 template_linelist(outbreaks::fluH7N9_china_2013)
 # convert the data set to a linelist and define the variables

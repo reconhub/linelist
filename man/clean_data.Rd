@@ -5,7 +5,7 @@
 \title{Clean a data.frame}
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, quiet = FALSE)
+  error_tolerance = 0.5, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -27,8 +27,7 @@ entries which cannot be identified as dates to be tolerated; if this
 proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
 
-\item{quiet}{a logical indicating if messages should be displayed to the
-console (\code{TRUE}, default); set to \code{FALSE} to silence messages}
+\item{...}{further arguments passed on to \code{\link[=guess_dates]{guess_dates()}}}
 }
 \value{
 A \code{data.frame} with standardised labels for characters and

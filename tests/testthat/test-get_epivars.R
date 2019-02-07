@@ -2,7 +2,7 @@ context("get_epivars() tests")
 
 # Setup data -------------------------------------------------------
 oev <- get_dictionary()
-dfll <- clean_data(messy_data())
+dfll <- clean_data(messy_data(), first_date = as.Date("1969-4-20"))
 if (requireNamespace("tibble")) {
   dfll <- tibble::as_tibble(dfll)
 }

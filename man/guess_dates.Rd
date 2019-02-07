@@ -4,7 +4,9 @@
 \alias{guess_dates}
 \title{Try and guess dates from a characters}
 \usage{
-guess_dates(x, error_tolerance = 0.1, quiet = TRUE)
+guess_dates(x, error_tolerance = 0.1, first_date = NULL,
+  last_date = Sys.Date(), orders = list(world = c("dby", "dmy", "Ybd",
+  "Ymd"), US = c("Omdy", "YOmd")), quiet = TRUE)
 }
 \arguments{
 \item{x}{a \code{character} vector or a \code{factor}}
@@ -13,6 +15,18 @@ guess_dates(x, error_tolerance = 0.1, quiet = TRUE)
 entries which cannot be identified as dates to be tolerated; if this
 proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
+
+\item{first_date}{a Date object specifying the first valid date. Defaults to
+fifty years before the \code{last_date}.}
+
+\item{last_date}{a Date object specifying the last valid date. Defaults to the
+current date.}
+
+\item{orders}{date codes for fine-grained parsing of dates. This allows for
+parsing of mixed dates. If a list is supplied, that list will be used for
+successive tries in parsing.  This is passed on to
+\code{\link[lubridate:parse_date_time]{lubridate::parse_date_time()}}. Default orders parse World dmy/dby dates
+before US mdy/bdy dates.}
 
 \item{quiet}{a logical indicating if messages should be displayed to the
 console (\code{TRUE}, default); set to \code{FALSE} to silence messages}
@@ -56,9 +70,10 @@ predict which date will be returned.
 
 x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
       "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
-      "RECON NGO: 19 Sep 2018 :)")
-guess_dates(x, error_tolerance = 1) # forced conversion
-guess_dates(x, error_tolerance = 0.15) # 15 percent errors allowed 
+      "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
+FIRST_DATE <- as.Date("1969-11-11")
+guess_dates(x, error_tolerance = 1, first_date = FIRST_DATE) # forced conversion
+guess_dates(x, error_tolerance = 0.15, first_date = FIRST_DATE) # only 15\% errors allowed
 }
 \author{
 Thibaut Jombart
