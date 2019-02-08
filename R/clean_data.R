@@ -14,7 +14,8 @@
 #'   `_`.
 #'
 #' @param protect a logical or numeric vector defining the columns to protect
-#'   from any manipulation. 
+#'   from any manipulation. Note: columns in `protect` will override any columns
+#'   in either `force_Date` or `guess_dates`.
 #'   
 #' @inheritParams clean_dates
 #' 

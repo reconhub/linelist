@@ -29,7 +29,8 @@ proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
 
 \item{protect}{a logical or numeric vector defining the columns to protect
-from any manipulation.}
+from any manipulation. Note: columns in \code{protect} will override any columns
+in either \code{force_Date} or \code{guess_dates}.}
 
 \item{...}{further arguments passed on to \code{\link[=guess_dates]{guess_dates()}}}
 }
