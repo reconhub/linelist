@@ -23,6 +23,7 @@ Imports:
   lubridate,
   rio,
   epitrix,
+  tidyselect,
   utils,
   stats
 URL: https://github.com/reconhub/linelist

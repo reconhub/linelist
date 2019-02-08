@@ -4,15 +4,15 @@
 \alias{lookup}
 \title{Lookup a column name defined by an epivar}
 \usage{
-lookup(x, epivar = NULL, symbol = TRUE)
+lookup(x, ..., symbol = TRUE)
 }
 \arguments{
 \item{x}{a \link[=as_linelist]{linelist} object.}
 
-\item{epivar}{the name of an epivar defined in the \link[=get_dictionary]{dictionary}.}
-
 \item{symbol}{when \code{TRUE}, the column name will be converted to a symbol
 for use in non-standard evaulation}
+
+\item{epivar}{the name of an epivar defined in the \link[=get_dictionary]{dictionary}.}
 }
 \value{
 a symbol or character vector of the column name
@@ -32,11 +32,11 @@ ll  <- as_linelist(dat,
                    geo = c("lon", "lat")
                   )
 # Lookup a column name, and return a character
-lookup(ll, "gender", symbol = FALSE)
+lookup(ll, gender, symbol = FALSE)
 
 # If there are two columns, and `symbol = TRUE`, they are returned as a list
 # of symbols.
-lookup(ll, "geo")
+lookup(ll, geo)
 
 # Using dplyr ---------------------------------------------------
 
@@ -46,12 +46,17 @@ if (require("dplyr")) { withAutoprint({
   #
   # -- 1. Lookup in the pipe using the . replacement
   ll \%>\% 
-    group_by(!!lookup(., "gender")) \%>\%  
-    count(!!lookup(., "case_definition"))
+    group_by(!!lookup(., gender)) \%>\%  
+    count(!!lookup(., case_definition))
 
+  # You can also just create an alias:
+  L <- linelist::lookup
+  ll \%>\%
+    group_by( !!L(., gender) ) \%>\%
+    count( !!L(., case_definition) )
   # -- 2. define temporary variables to lookup
-  (CASEDEF <- lookup(ll, "case_definition")) 
-  (GEO <- lookup(ll, "geo", symbol = FALSE))
+  (CASEDEF <- lookup(ll, case_definition)) 
+  (GEO <- lookup(ll, geo, symbol = FALSE))
   ll \%>\%
     group_by(!!CASEDEF) \%>\%
     summarise_at(GEO, mean) # note, summarise_at uses characters
