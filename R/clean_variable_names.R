@@ -13,6 +13,9 @@
 #'   important is `sep`, which refers to the separator used between words,
 #'   and defaults to the underscore `_`.
 #'
+#' @param protect a logical or numeric vector specifying which columns to 
+#'   protect from manipulation
+#'
 #' @export
 #'
 #' @return A `data.frame` with standardised variable names.
@@ -35,13 +38,17 @@
 #' clean_data <- clean_variable_names(toy_data)
 #' clean_data
 
-clean_variable_names <- function(x, ...) {
+clean_variable_names <- function(x, protect = FALSE, ...) {
   variable_names <- colnames(x)
   if (is.null(variable_names)) {
     stop('x has no column names')
   }
 
-  colnames(x) <- epitrix::clean_labels(variable_names, ...)
+  protect <- i_logical_from_int(protect, variable_names)
+  colnames(x)[!protect] <- epitrix::clean_labels(variable_names[!protect], ...)
+  # preserving the original variable names in a comment
+  names(variable_names) <- colnames(x)
+  comment(x) <- c(comment(x), variable_names)
   x
 }
 

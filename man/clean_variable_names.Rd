@@ -4,10 +4,13 @@
 \alias{clean_variable_names}
 \title{Clean variable names}
 \usage{
-clean_variable_names(x, ...)
+clean_variable_names(x, protect = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
+
+\item{protect}{a logical or numeric vector specifying which columns to
+protect from manipulation}
 
 \item{...}{further arguments passed to \code{\link[epitrix:clean_labels]{epitrix::clean_labels()}}; the most
 important is \code{sep}, which refers to the separator used between words,

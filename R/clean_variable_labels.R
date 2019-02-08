@@ -9,6 +9,10 @@
 #'
 #' @param x a `data.frame`
 #'
+#' @param classes a vector of class definitions for each of the columns. If this
+#'   is not provided, the classes will be read from the columns themselves. 
+#'   Practically, this is used in [clean_data()] to mark columns as protected.
+#'
 #' @param ... further arguments passed to [epitrix::clean_labels()]; the most
 #'   important is `sep`, which refers to the separator used between words,
 #'   and defaults to the underscore `_`.
@@ -38,15 +42,17 @@
 #' clean_data <- clean_variable_names(toy_data)
 #' clean_data
 
-clean_variable_labels <- function(x, ...) {
+clean_variable_labels <- function(x, classes = NULL, ...) {
 
   if (is.null(ncol(x)) || ncol(x)==0L) {
     stop("x has no columns")
   }
 
-  classes <- i_find_classes(x)
+  if (is.null(classes)) {
+    classes <- i_find_classes(x)
+  }
   are_characters <- which(classes == "character")
-  are_factors <- which(classes == "factor")
+  are_factors    <- which(classes == "factor")
 
   out <- x
   for(e in are_characters) {

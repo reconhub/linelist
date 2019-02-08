@@ -5,7 +5,7 @@
 \title{Clean a data.frame}
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, ...)
+  error_tolerance = 0.5, protect = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -13,19 +13,24 @@ clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
 \item{sep}{The separator used between words, and defaults to the underscore
 \code{_}.}
 
-\item{force_Date}{a \code{logical} indicating if \code{POSIXct} and \code{POSIXlt} objects
-should be converted to \code{Date} objects; defaults to \code{TRUE}; you should use
-this if your dates are only precise to the day (i.e. no time information
-within days).}
+\item{force_Date}{a \code{logical} or \code{integer} vector indicating the columns .
+If \code{logical}, indicating if \code{POSIXct} and \code{POSIXlt} objects should be
+converted to \code{Date} objects; defaults to \code{TRUE}; you should use this if your
+dates are only precise to the day (i.e. no time information within days).}
 
-\item{guess_dates}{a \code{logical} indicating if dates should be guessed in
-columns storing character strings or \code{factors}; this feature is
-experimental; see \code{\link[=guess_dates]{guess_dates()}} for more information.}
+\item{guess_dates}{a \code{logical} or \code{integer} vector indicating which columns
+should be guessed , assuming these columns store character strings or
+\code{factors}; this feature is experimental; see \code{\link[=guess_dates]{guess_dates()}} for more
+information.}
 
 \item{error_tolerance}{a number between 0 and 1 indicating the proportion of
 entries which cannot be identified as dates to be tolerated; if this
 proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
+
+\item{protect}{a logical or numeric vector defining the columns to protect
+from any manipulation. Note: columns in \code{protect} will override any columns
+in either \code{force_Date} or \code{guess_dates}.}
 
 \item{...}{further arguments passed on to \code{\link[=guess_dates]{guess_dates()}}}
 }
@@ -43,22 +48,8 @@ from various formats mixed with other text. See details for more information.
 \examples{
 
 ## make toy data
-onsets <- as.Date("2018-01-01") + sample(1:10, 20, replace = TRUE)
-discharge <- format(as.Date(onsets) + 10, "\%d/\%m/\%Y")
-genders <- c("male", "female", "FEMALE", "Male", "Female", "MALE")
-gender <- sample(genders, 20, replace = TRUE)
-case_types <- c("confirmed", "probable", "suspected", "not a case",
-                "Confirmed", "PROBABLE", "suspected  ", "Not.a.Case")
-messy_dates <- sample(
-                 c("01-12-2001", "male", "female", "2018-10-18", "2018_10_17",
-                   "2018 10 19", "// 24//12//1989", NA, "that's 24/12/1989!"),
-                 20, replace = TRUE)
-case <- factor(sample(case_types, 20, replace = TRUE))
-toy_data <- data.frame("Date of Onset." = onsets,
-                       "DisCharge.." = discharge,
-                       "GENDER_ " = gender,
-                       "Épi.Case_définition" = case,
-                       "messy/dates" = messy_dates)
+toy_data <- messy_data()
+
 ## show data
 toy_data
 
@@ -69,6 +60,14 @@ clean_data
 
 clean_data2 <- clean_data(toy_data, error_tolerance = 0.8)
 clean_data2
+
+## clean variable names, but keep our "messy/dates" column
+to_protect <- names(toy_data) \%in\% "messy/dates"
+clean_data3 <- clean_data(toy_data, 
+                          error_tolerance = 0.8,
+                          protect = to_protect
+                         )
+clean_data3
 }
 \author{
 Thibaut Jombart
