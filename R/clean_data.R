@@ -50,19 +50,20 @@
 
 
 clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
-                       error_tolerance = 0.5, protect = NULL, ...) {
+                       error_tolerance = 0.5, protect = FALSE, ...) {
 
+  xname <- deparse(substitute(x))
   if (!is.data.frame(x)) {
-    stop("x is not a data.frame")
+    stop(sprintf("%s is not a data frame", xname))
   } 
 
   if (ncol(x)==0L) {
-    stop("x has no columns")
+    stop(sprintf("%s has no columns", xname))
   }
 
   # Find classes and protect the ones that should not be manipulated -----------
   classes <- i_find_classes(x)
-  protect <- if (is.null(protect)) FALSE else protect
+  protect <- i_logical_from_int(protect, classes)
   classes[protect] <- "protected"
 
   # Cleaning column names ------------------------------------------------------

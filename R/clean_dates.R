@@ -115,8 +115,8 @@ clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_toleranc
   if (is.null(classes)) {
     classes <- i_find_classes(x)
   }
-  guess_dates    <- logical_from_int(guess_dates, classes)
-  force_Date     <- logical_from_int(force_Date, classes)
+  guess_dates    <- i_logical_from_int(guess_dates, classes)
+  force_Date     <- i_logical_from_int(force_Date, classes)
   GUESS          <- any(guess_dates)
   FORCE          <- any(force_Date)
   are_POSIX      <- which(grepl("^POSIX", classes) & force_Date)
@@ -138,13 +138,3 @@ clean_dates <- function(x, force_Date = TRUE, guess_dates = TRUE, error_toleranc
   x
 }
 
-logical_from_int <- function(x, classes) {
-  the_thing <- deparse(substitute(x))
-  if (is.numeric(x)) {
-    x <- seq_along(classes) %in% x
-  } 
-  if (!is.logical(x)) {
-    stop(sprintf("%s must be a logical or integer vector.", the_thing))
-  } 
-  x
-}

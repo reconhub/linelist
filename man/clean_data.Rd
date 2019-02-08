@@ -5,7 +5,7 @@
 \title{Clean a data.frame}
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, protect = NULL, ...)
+  error_tolerance = 0.5, protect = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}

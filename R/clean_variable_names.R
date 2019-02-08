@@ -38,13 +38,13 @@
 #' clean_data <- clean_variable_names(toy_data)
 #' clean_data
 
-clean_variable_names <- function(x, protect = NULL, ...) {
+clean_variable_names <- function(x, protect = FALSE, ...) {
   variable_names <- colnames(x)
   if (is.null(variable_names)) {
     stop('x has no column names')
   }
 
-  protect <- if (is.null(protect)) FALSE else protect
+  protect <- i_logical_from_int(protect, variable_names)
   colnames(x)[!protect] <- epitrix::clean_labels(variable_names[!protect], ...)
   # preserving the original variable names in a comment
   names(variable_names) <- colnames(x)

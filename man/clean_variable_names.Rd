@@ -4,7 +4,7 @@
 \alias{clean_variable_names}
 \title{Clean variable names}
 \usage{
-clean_variable_names(x, protect = NULL, ...)
+clean_variable_names(x, protect = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
