@@ -13,11 +13,15 @@ clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
 \item{sep}{The separator used between words, and defaults to the underscore
 \code{_}.}
 
-\item{force_Date}{a \code{logical} or \code{integer} vector indicating the columns . If \code{logical}, indicating if \code{POSIXct} and \code{POSIXlt} objects should be converted to \code{Date} objects; defaults to \code{TRUE}; you should use this if your dates are only precise to the day (i.e. no time information within days).}
+\item{force_Date}{a \code{logical} or \code{integer} vector indicating the columns .
+If \code{logical}, indicating if \code{POSIXct} and \code{POSIXlt} objects should be
+converted to \code{Date} objects; defaults to \code{TRUE}; you should use this if your
+dates are only precise to the day (i.e. no time information within days).}
 
-\item{guess_dates}{a \code{logical} indicating if dates should be guessed in
-columns storing character strings or \code{factors}; this feature is
-experimental; see \code{\link[=guess_dates]{guess_dates()}} for more information.}
+\item{guess_dates}{a \code{logical} or \code{integer} vector indicating which columns
+should be guessed , assuming these columns store character strings or
+\code{factors}; this feature is experimental; see \code{\link[=guess_dates]{guess_dates()}} for more
+information.}
 
 \item{error_tolerance}{a number between 0 and 1 indicating the proportion of
 entries which cannot be identified as dates to be tolerated; if this
