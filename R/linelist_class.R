@@ -59,6 +59,7 @@ as_linelist.data.frame <- function(x, ...) {
 "[.linelist" <- function(x, i, j, drop = FALSE) {
 
   new_epivars <- attr(x, "epivars") -> epivars
+  the_mask    <- attr(x, "masked-linelist")
   x  <- NextMethod()
   for (i in seq_along(epivars)) {
     if (!all(epivars[[i]] %in% names(x))) {
@@ -66,5 +67,6 @@ as_linelist.data.frame <- function(x, ...) {
     }
   }
   attr(x, "epivars") <- order_epivars(x, new_epivars)
+  attr(x, "masked-linelist") <- the_mask
   x
 }
