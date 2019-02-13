@@ -24,6 +24,7 @@ Imports:
   rio,
   epitrix,
   tidyselect,
+  rlang,
   utils,
   stats
 URL: https://github.com/reconhub/linelist
