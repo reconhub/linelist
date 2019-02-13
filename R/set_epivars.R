@@ -19,7 +19,8 @@
 #' ll <- as_linelist(cd,
 #'   "gender"          = "gender",
 #'   "id"              = "id",
-#'   "geo"             = c("lon", "lat"),
+#'   "geo_lon"         = "lon",
+#'   "geo_lat"         = "lat",
 #'   "case_definition" = "epi_case_definition"
 #' )
 #' list_epivars(ll)
@@ -103,7 +104,8 @@ reset_epivars.data.frame <- function(x, ...) {
 #' ev <- list(
 #'   "gender" = "gender",
 #'   "id" = "id",
-#'   "geo" = c("lon", "lat")
+#'   "geo_lon" = "lon",
+#'   "geo_lat" = "lat"
 #' )
 #' order_epivars(dat, ev)
 order_epivars <- function(x, content) {

@@ -17,8 +17,12 @@
 #'
 #' x <- messy_data(5)
 #' x <- tibble::as_tibble(clean_data(x))
-#' x <- as_linelist(x, id = "id", gender = "gender",
-#'                  geo = c("lon", "lat"))
+#' x <- as_linelist(x, 
+#'                  id = "id", 
+#'                  gender = "gender",
+#'                  geo_lon = "lon",
+#'                  geo_lat = "lat"
+#'                 )
 #' x
 #' print(x, show_epivars = TRUE)
 

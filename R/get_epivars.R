@@ -16,7 +16,7 @@
 #' @return a vector if the epivar can be represented by a single column, a data
 #'   frame otherwise (e.g. a location column).
 #'
-#' @note For the "geo" epivar, which necessarily contains two columns for
+#' @note For the `geo()` accessor, which necessarily contains two columns for
 #'   longitude and latitude data, when `simplify = TRUE`, a matrix will be
 #'   returned.
 #'
@@ -31,7 +31,9 @@
 #'                   id = "id", 
 #'                   date_onset = "date_of_onset",
 #'                   gender = "gender",
-#'                   geo = c("lon", "lat"))
+#'                   geo_lon = "lon",
+#'                   geo_lat = "lat"
+#'                  ) 
 #'
 #' ## general purpose accessor
 #' list_epivars(ll, simple = TRUE)
@@ -41,7 +43,7 @@
 #' id(ll)
 #' gender(ll)
 #' geo(ll) # a matrix with two columns
-#' get_epivars(ll, "geo", simplify = FALSE) # a data frame with two columns
+#' get_epivars(ll, "geo_lon", "geo_lat", simplify = FALSE) # a data frame with two columns
 #'
 #' # epivars that haven't been defined for the data set will return an error
 #' try(date_report(ll))
@@ -173,5 +175,5 @@ age_group <- function(x) {
 #' @rdname accessors
 #' @export
 geo <- function(x) {
-  get_epivars(x, "geo")
+  get_epivars(x, c("geo_lon", "geo_lat"))
 }
