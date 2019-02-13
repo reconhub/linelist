@@ -12,7 +12,8 @@
 #'                   id = "id", 
 #'                   date_onset = "date_of_onset", 
 #'                   gender = "gender",
-#'                   geo = c("lon", "lat")
+#'                   geo_lon = "lon",
+#'                   geo_lat = "lat" 
 #'                  )
 #' identical(cd, as.data.frame(ll))
 as.data.frame.linelist <- function(x, ...) {

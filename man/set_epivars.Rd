@@ -47,7 +47,8 @@ cd <- clean_data(messy_data())
 ll <- as_linelist(cd,
   "gender"          = "gender",
   "id"              = "id",
-  "geo"             = c("lon", "lat"),
+  "geo_lon"         = "lon",
+  "geo_lat"         = "lat",
   "case_definition" = "epi_case_definition"
 )
 list_epivars(ll)

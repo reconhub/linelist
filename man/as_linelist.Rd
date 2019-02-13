@@ -37,7 +37,8 @@ ll <- as_linelist(cd,
                   id = "id", 
                   date_onset = "date_of_onset", 
                   gender = "gender",
-                  geo = c("lon", "lat")
+                  geo_lon = "lon",
+                  geo_lat = "lat"
                  )
 ll
 class(ll)

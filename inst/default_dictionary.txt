@@ -8,4 +8,5 @@ outcome	#indicator +type	recovery or death
 gender	#indicator +type	gender of the individual
 age	#indicator +num	age of the individual in years
 age_group	#indicator +type	age group of the individual in years
-geo	#geo +lon +lat	geographic coordinate: longitude, latitude
+geo_lon	#geo +lon	geographic coordinate: longitude
+geo_lat	#geo +lat	geographic coordinate: latitude
