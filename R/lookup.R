@@ -61,14 +61,20 @@
 #'     class()
 #' })}
 lookup <- function(x, ..., symbol = TRUE) {
+
   ev <- attr(x, "epivars")
+  
   if (is.null(ev)) {
     stop("This object does not contain an epivars attribute.")
   }
+
   .vars <- rlang::quos(...)
+  
   if (length(.vars) == 0) return(ev)
+
   vars <- tidyselect::vars_select(names(ev), !!!.vars)
   res <- unlist(ev[vars], use.names = FALSE)
+
   if (symbol) {
     res <- if (length(res) == 1) as.symbol(res) else lapply(res, as.symbol)
   }
