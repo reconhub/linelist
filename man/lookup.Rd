@@ -9,10 +9,10 @@ lookup(x, ..., symbol = TRUE)
 \arguments{
 \item{x}{a \link[=as_linelist]{linelist} object.}
 
+\item{...}{the names of epivar defined in the \link[=get_dictionary]{dictionary}.}
+
 \item{symbol}{when \code{TRUE}, the column name will be converted to a symbol
 for use in non-standard evaulation}
-
-\item{epivar}{the name of an epivar defined in the \link[=get_dictionary]{dictionary}.}
 }
 \value{
 a symbol or character vector of the column name
@@ -37,7 +37,7 @@ lookup(ll, gender, symbol = FALSE)
 
 # If there are two columns, and `symbol = TRUE`, they are returned as a list
 # of symbols.
-lookup(ll, geo)
+lookup(ll, geo_lon, geo_lat)
 
 # Using dplyr ---------------------------------------------------
 
@@ -57,7 +57,7 @@ if (require("dplyr")) { withAutoprint({
     count( !!L(., case_definition) )
   # -- 2. define temporary variables to lookup
   (CASEDEF <- lookup(ll, case_definition)) 
-  (GEO <- lookup(ll, geo, symbol = FALSE))
+  (GEO <- lookup(ll, geo_lon, geo_lat, symbol = FALSE))
   ll \%>\%
     group_by(!!CASEDEF) \%>\%
     summarise_at(GEO, mean) # note, summarise_at uses characters
