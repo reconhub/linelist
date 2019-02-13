@@ -11,7 +11,8 @@ ll_output <- "ll <- as_linelist\\(x =
   gender          =    ,
   age             =    ,
   age_group       =    ,
-  geo             =    ,
+  geo_lon         =    ,
+  geo_lat         =    ,
   NULL  # don't delete me
 \\)"
   

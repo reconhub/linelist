@@ -11,7 +11,9 @@ ll <- as_linelist(dfll,
                   id = "id", 
                   date_onset = "date_of_onset",
                   gender = "gender",
-                  geo = c("lon", "lat"))
+                  geo_lon = "lon",
+                  geo_lat = "lat"
+                 ) 
 
 # Run all the tests ------------------------------------------------
 test_that("id() works as expected", {
@@ -42,7 +44,7 @@ test_that("geo() works as expected", {
 
 test_that("geo() returns the columns in the specified order", {
   expect_named(geo(ll), c("lon", "lat"))
-  expect_false(identical(get_epivars(ll, "geo", simplify = FALSE), ll[names(ll) %in% c("lon", "lat")]))
+  expect_false(identical(get_epivars(ll, "geo_lon", "geo_lat", simplify = FALSE), ll[names(ll) %in% c("lon", "lat")]))
 })
 
 
@@ -57,7 +59,7 @@ test_that("get_epivars() will return only the defined epivars if provided nothin
 
 
 test_that("get_epivars() allows character vectors", {
-  the_sub <- c("id", "geo")
+  the_sub <- c("id", "geo_lon", "geo_lat")
   idgeo   <- get_epivars(ll, the_sub)
   expect_named(idgeo, c("id", "lon", "lat"))
   expect_is(idgeo, "data.frame") 

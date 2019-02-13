@@ -17,7 +17,8 @@
 #'                    gender = "gender",
 #'                    case_definition = "epi_case_definition",
 #'                    date_onset = "date_of_onset", 
-#'                    geo = c("lon", "lat")
+#'                    geo_lon = "lon",
+#'                    geo_lat = "lat"
 #'                   )
 #' # Lookup a column name, and return a character
 #' lookup(ll, "gender", symbol = FALSE)

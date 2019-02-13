@@ -5,7 +5,9 @@ ll <- as_linelist(clean_data(messy_data(), first_date = as.Date("1969-4-20")),
                   date_onset = "date_of_onset",
                   case_definition = "epi_case_definition",
                   gender = "gender",
-                  geo = c("lon", "lat"))
+                  geo_lon = "lon",
+                  geo_lat = "lat"
+)
 
 test_that("list_epivars() returns a data frame", {
   expect_is(list_epivars(ll), "data.frame")

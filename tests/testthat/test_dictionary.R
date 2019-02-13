@@ -40,15 +40,15 @@ test_that("a new epivar can be added", {
 
 test_that("attempts to add existing epivars will be thwarted", {
   # works with character input
-  expect_error(add_epivar("geo", "#geo +lon +lat", "whoops"),
-               "geo already exists in the dictionary")
+  expect_error(add_epivar("geo_lat", "#geo +lat", "whoops"),
+               "geo_lat already exists in the dictionary")
   # and data frame input
-  gdf <- data.frame(epivar = "geo",
-                    hxl = "#geo +lon +lat", 
+  gdf <- data.frame(epivar = "geo_lat",
+                    hxl = "#geo +lat", 
                     description = "whoops", 
                     stringsAsFactors = FALSE)
   expect_error(add_epivar(rbind(gdf, hosp)),
-               "The following epivars already exist in the dictionary:  geo, date_hospital")
+               "The following epivars already exist in the dictionary:  geo_lat, date_hospital")
 })
 
 
@@ -94,8 +94,9 @@ test_that("there can be no description for a non-existant epivar", {
 # Resetting -----------------------------------------------------------
 
 test_that("set_dictionary() can take file input", {
+  expect_failure(expect_identical(get_dictionary(), default_dictionary()))
   set_dictionary(system.file("example_dict.xlsx", package = "linelist"))
-  expect_identical(get_dictionary(), rbind(default_dictionary(), gdf))
+  expect_identical(get_dictionary(), default_dictionary())
 })
 
 

@@ -131,6 +131,9 @@ check_dictionary_is_df <- function(x) {
   }
   return(invisible(NULL))
 }
+
+
+
 check_dictionary_has_three_cols <- function(x) {
   if (ncol(x) != 3L) {
     msg <- sprintf("x does not have 3 columns but %d",
@@ -139,6 +142,9 @@ check_dictionary_has_three_cols <- function(x) {
   }
   return(invisible(NULL))
 }
+
+
+
 check_dictionary_has_right_names <- function(x, expected_names = c("epivar", "hxl", "description"), ordered = TRUE) {
   if (!identical(names(x), expected_names)) {
     if (!ordered && length(setdiff(names(x), expected_names)) == 0) return(NULL)

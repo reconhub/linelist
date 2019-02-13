@@ -56,7 +56,7 @@ This set of fucntions defines helper functions for accessing pre-defined
 epivars in your linelist object.
 }
 \note{
-For the "geo" epivar, which necessarily contains two columns for
+For the \code{geo()} accessor, which necessarily contains two columns for
 longitude and latitude data, when \code{simplify = TRUE}, a matrix will be
 returned.
 }
@@ -69,7 +69,9 @@ ll <- as_linelist(cleaned_data,
                   id = "id", 
                   date_onset = "date_of_onset",
                   gender = "gender",
-                  geo = c("lon", "lat"))
+                  geo_lon = "lon",
+                  geo_lat = "lat"
+                 ) 
 
 ## general purpose accessor
 list_epivars(ll, simple = TRUE)
@@ -79,7 +81,7 @@ date_onset(ll)
 id(ll)
 gender(ll)
 geo(ll) # a matrix with two columns
-get_epivars(ll, "geo", simplify = FALSE) # a data frame with two columns
+get_epivars(ll, "geo_lon", "geo_lat", simplify = FALSE) # a data frame with two columns
 
 # epivars that haven't been defined for the data set will return an error
 try(date_report(ll))

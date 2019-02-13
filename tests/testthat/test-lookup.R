@@ -8,8 +8,9 @@ ll  <- as_linelist(dat,
                    gender = "gender",
                    case_definition = "epi_case_definition",
                    date_onset = "date_of_onset", 
-                   geo = c("lon", "lat")
-                  )
+                  geo_lon = "lon",
+                  geo_lat = "lat"
+)
 tmp <- ll
 class(tmp) <- class(tmp)[-1]
 
@@ -19,7 +20,7 @@ test_that("Lookup a column name and return a character works", {
   expect_identical(lookup(ll, "gender", symbol = FALSE), "gender")
   expect_identical(lookup(ll, "case_definition", symbol = FALSE), "epi_case_definition")
   expect_identical(lookup(ll, "date_onset", symbol = FALSE), "date_of_onset")
-  expect_identical(lookup(ll, "geo", symbol = FALSE), c("lon", "lat"))
+  expect_identical(lookup(ll, "geo_lon", symbol = FALSE), "lon")
 })
 
 test_that("a non-epivars-containing object will return an informative error", {
@@ -28,7 +29,7 @@ test_that("a non-epivars-containing object will return an informative error", {
 
 test_that("Lookup will return a symbol or list of symbols by default", {
   expect_identical(lookup(ll, "date_onset"), as.symbol("date_of_onset"))
-  expect_identical(lookup(ll, "geo"), list(as.symbol("lon"), as.symbol("lat")))
+  expect_identical(lookup(ll, "geo_lon"), as.symbol("lon")) #, as.symbol("lat")))
 })
 
 test_that("A null lookup will return the entire list", {
@@ -58,12 +59,12 @@ test_that("dplyr works with lookup references", {
   skip_if_not_installed("dplyr")
   require("dplyr", quietly = TRUE, warn.conflicts = FALSE)
   CASEDEF <- lookup(ll, "case_definition") 
-  GEO <- lookup(ll, "geo", symbol = FALSE)
+  GEO <- lookup(ll, "geo_lon", symbol = FALSE)
   res <- ll %>%
     group_by(!!CASEDEF) %>%
     summarise_at(GEO, mean) # note, summarise_at uses characters
   expect_is(res, "tbl_df")
-  expect_named(res, c("epi_case_definition", "lon", "lat"))
+  expect_named(res, c("epi_case_definition", "lon"))
   expect_identical(lookup(res), lookup(ll))
   expect_is(as_linelist(res), "linelist")
 })

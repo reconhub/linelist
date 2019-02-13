@@ -24,7 +24,8 @@
 #'                   id = "id", 
 #'                   date_onset = "date_of_onset", 
 #'                   gender = "gender",
-#'                   geo = c("lon", "lat")
+#'                   geo_lon = "lon",
+#'                   geo_lat = "lat"
 #'                  )
 #' ll
 #' class(ll)
@@ -57,9 +58,6 @@ as_linelist.data.frame <- function(x, ...) {
 #'   to one column (defaults to FALSE)
 "[.linelist" <- function(x, i, j, drop = FALSE) {
 
-  ## TODO: check that I haven't messed the code too much here, I did simplify it
-  ## a bit (Tibo)
-  
   new_epivars <- attr(x, "epivars") -> epivars
   x  <- NextMethod()
   for (i in seq_along(epivars)) {

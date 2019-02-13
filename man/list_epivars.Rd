@@ -31,7 +31,8 @@ ll  <- as_linelist(dat,
                   id = "id", 
                   gender = "gender",
                   date_onset = "date_of_onset", 
-                  geo = c("lon", "lat")
+                  geo_lon = "lon",
+                  geo_lat = "lat" 
                  )
 list_epivars(ll)
 list_epivars(ll, simple = TRUE)
