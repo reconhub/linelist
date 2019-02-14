@@ -1,4 +1,4 @@
-#' Reversibly rename columns in your data frame with epivars
+#' Reversibly rename columns in your linelist with epivars
 #'
 #' @param x a linelist object
 #' @return
@@ -7,7 +7,7 @@
 #'    a vector of the original column names named by their corresponding epivars
 #'  - `unmask_epivars()` a linelist object
 #'
-#' @rdname mask_epivars
+#' @rdname mask
 #' @export
 #' @author Zhian N. Kamvar
 #' @examples
@@ -24,14 +24,28 @@
 #' ll
 #' 
 #' # masking epivars changes the column names
-#' print(llm <- mask_epivars(ll))
+#' print(llm <- mask(ll))
 #' 
 #' # unmasking reverses the operation
-#' unmask_epivars(llm)
+#' unmask(llm)
 #' 
 #' # you can safely drop columns
-#' unmask_epivars(llm[grepl("gender|geo", names(llm))])
-mask_epivars <- function(x) {
+#' unmask(llm[grepl("gender|geo", names(llm))])
+mask <- function(x) {
+  UseMethod("mask")
+}
+
+#' @export
+#' @rdname mask
+mask.default <- function(x) {
+  cls <- class(x)
+  stop(sprintf("There is no mask method defined for an object of class %s", cls))
+}
+
+#' @export
+#' @rdname mask
+mask.linelist <- function(x) {
+  if (!is.null(attr(x, "masked-linelist"))) return(x)
   ev <- list_epivars(x)
   ev$epivar <- as.character(ev$epivar)
   if (any(duplicated(ev$epivars))) {
@@ -51,9 +65,23 @@ mask_epivars <- function(x) {
   x
 }
 
-#' @rdname mask_epivars
+
 #' @export
-unmask_epivars <- function(x) {
+#' @rdname mask
+unmask <- function(x) {
+  UseMethod("unmask")
+}
+
+#' @export
+#' @rdname mask
+unmask.default <- function(x) {
+  cls <- class(x)
+  stop(sprintf("There is no unmask method defined for an object of class %s", cls))
+}
+
+#' @rdname mask
+#' @export
+unmask.linelist <- function(x) {
   ml <- attr(x, "masked-linelist")
   if (is.null(ml)) {
     stop(sprintf("%s has not been masked!", deparse(substitute(x))))
