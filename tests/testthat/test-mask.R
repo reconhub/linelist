@@ -38,7 +38,7 @@ test_that("unmask will trim epivars", {
   
   case_area      <- dplyr::select(ll, epi_case_definition, lat, lon)
   mask_case_area <- dplyr::select(llm, case_definition, geo_lat, geo_lon)
-  expect_identical(case_area, unmask(mask_case_area))
+  expect_failure(expect_identical(case_area, unmask(mask_case_area)))
 
 })
 
