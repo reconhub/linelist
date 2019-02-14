@@ -30,7 +30,9 @@
 #' list_epivars(ll, full_dict = TRUE)
 
 list_epivars <- function(x, simple = FALSE, full_dict = FALSE) {
-  stopifnot(inherits(x, "linelist"))
+  if (!inherits(x, "linelist")) {
+    stop("the data must be a linelist object")
+  }
   content <- attr(x, "epivars")
   if (length(content) == 0L ) {
     return(NULL)

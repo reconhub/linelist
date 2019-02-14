@@ -26,10 +26,10 @@ unmask(x)
 }
 \value{
 \itemize{
-\item \code{mask_epivars()} a linelist object with columns renamed by their
+\item \code{mask()} a linelist object with columns renamed by their
 corresponding epivars and an attribute called "masked-linelist" containing
 a vector of the original column names named by their corresponding epivars
-\item \code{unmask_epivars()} a linelist object
+\item \code{unmask()} a linelist object
 }
 }
 \description{

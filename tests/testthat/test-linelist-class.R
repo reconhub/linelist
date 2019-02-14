@@ -13,22 +13,41 @@ ll <- as_linelist(clean_data(messy_data(), first_date = as.Date("1969-4-20")),
                   
 
 test_that("a linelist is a data frame", {
+
   expect_is(ll, "data.frame")
   expect_is(ll, "linelist")
+
 })
 
 test_that("a linelist contains the epivars attribute", {
+
   expect_true("epivars" %in% names(attributes(ll)))
   expect_is(attr(ll, "epivars"), "list")
+  
 })
+
 
 test_that("a linelist class will be the same subsetting by nothing", {
+
   expect_identical(ll, ll[])
+
 })
 
+
 test_that("the epivars attribute will reflect the order of the linelist class", {
+
   rll <- rev(ll)
   evll <- unlist(attr(rll, "epivars"), use.names = FALSE)
   expect_identical(evll, names(rll)[names(rll) %in% evll])
+
 })
+
+
+test_that("epivars will be subset along with the linelist", {
+  
+  llsub <- ll[, c("epi_case_definition", "lon", "lat")]
+  expect_named(attr(ll, "epivars"), c("case_definition", "geo_lon", "geo_lat"))
+
+})
+
 reset_dictionary()

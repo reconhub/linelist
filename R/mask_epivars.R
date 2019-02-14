@@ -2,10 +2,10 @@
 #'
 #' @param x a linelist object
 #' @return
-#'  - `mask_epivars()` a linelist object with columns renamed by their 
+#'  - `mask()` a linelist object with columns renamed by their 
 #'    corresponding epivars and an attribute called "masked-linelist" containing
 #'    a vector of the original column names named by their corresponding epivars
-#'  - `unmask_epivars()` a linelist object
+#'  - `unmask()` a linelist object
 #'
 #' @rdname mask
 #' @export
@@ -94,4 +94,14 @@ unmask.linelist <- function(x) {
   names(x) <- xnam
   attr(x, "masked-linelist") <- NULL
   x
+}
+
+unmask.data.frame <- function(x) {
+  if (!is.null(attr(x, "masked-linelist")) && !is.null(attr(x, "epivars"))) {
+    class(x) <- c("linelist", oldClass(x))
+    return(unmask.linelist(x))
+  } else {
+    warning("Only masked linelist objects can be unmasked")
+    return(x) 
+  }
 }
