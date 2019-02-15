@@ -52,13 +52,15 @@ mask.linelist <- function(x) {
     dups <- duplicated(ev$epivar) & duplicated(ev$epivar, fromLast = TRUE)
     culprits <- ev$columns[dups]
     the_evs  <- ev$epivars[dups]
+    bad_thng <- "mask only works if each epivar has a unique column. These epivars had multiple matching columns"
     msg      <- sprintf("(%s, %s)", format(the_evs), format(culprits))
     msg      <- paste(msg, collapse = ", ")
+    msg      <- paste(bad_thng, msg)
     stop(msg)
   }
   xnam <- names(x)
   matches <- match(ev$column, xnam, nomatch = 0)
-  attr(x, "masked-linelist") <- setNames(ev$epivar, xnam[matches])
+  attr(x, "masked-linelist") <- setNames(xnam[matches], ev$epivar)
   attr(x, "epivars") <- as.list(setNames(ev$epivar, ev$epivar))
   xnam[matches] <- ev$epivar
   names(x) <- xnam
@@ -86,12 +88,25 @@ unmask.linelist <- function(x) {
   if (is.null(ml)) {
     stop(sprintf("%s has not been masked!", deparse(substitute(x))))
   }
+  # get the current names 
   xnam <- names(x)
-  matches <- match(ml, xnam, nomatch = 0)
-  new_epivars <- ml[ml %in% xnam]
-  attr(x, "epivars") <- as.list(setNames(names(new_epivars), new_epivars))
-  xnam[matches] <- names(ml[ml %in% xnam])
-  names(x) <- xnam
+  
+  # Find out where the original names should be
+  matches    <- match(names(ml), xnam, nomatch = 0)
+  ev_matches <- names(ml) %in% xnam
+  
+  # Trim out any missing columns
+  new_epivars <- names(ml[ev_matches])
+
+  # return the original names to their rightful palce
+  xnam[matches] <- ml[ev_matches]
+  names(x)      <- xnam
+
+  # create the new epivars 
+  attr(x, "epivars") <- as.list(setNames(ml[ev_matches], new_epivars))
+  attr(x, "epivars") <- order_epivars(x, content = attr(x, "epivars"))
+
+  # banish the mask
   attr(x, "masked-linelist") <- NULL
   x
 }

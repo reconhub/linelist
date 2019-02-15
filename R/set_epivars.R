@@ -57,7 +57,7 @@ set_epivars.linelist <- function(x, ...) {
   epivars     <- update_epivars(attr(x, "epivars"), dots)
   new_epivars <- order_epivars(x, epivars)
   attr(x, "epivars") <- new_epivars
-  x
+  update_mask(x)
 }
 
 #' @export
@@ -129,12 +129,63 @@ order_epivars <- function(x, content) {
   res
 }
 
+#' Update the epivars with a new set
+#'
+#' @param epivars a list of epivars
+#' @param new_epivars a list of new epivars to either update or append
+#' @noRd
 update_epivars <- function(epivars, new_epivars) {
-  if (is.null(epivars)){
+  if (is.null(epivars)) {
     epivars <- list()
   }
   for (i in names(new_epivars)) {
     epivars[[i]] <- new_epivars[[i]]
   }
   epivars
+}
+
+#' Update the mask from an object that just had its epivars updated
+#'
+#' Because a user can either add, replace, or remove epivars, 
+#' if the data are masked, then the mask needs to be updated. 
+#'
+#' If the user removes an epivar, the mask needs to be removed
+#' If the user adds an epivar, the mask needs to be applied to that column
+#'
+#' This
+#' @noRd
+update_mask <- function(x) {
+  # Return unharmed if there is no mask
+  if (is.null(attr(x, "masked-linelist"))) return(x)
+  ev <- attr(x, "epivars")
+  # return unharmed if the epivars have not changed
+  if (identical(names(ev), unname(ev))) return(x)
+
+  ml <- attr(x, "masked-linelist")
+
+  for (i in names(ev)) {
+    if (all(ev[[i]] == i)) next 
+    if (any(names(x) == i)) {
+      # if there was a previously named epivar,
+      # it needs to be unmasked
+      names(x)[names(x) == i] <- ml[i]
+    }
+    # update mask with new epivar
+    ml[i] <- ev[[i]]
+    # update data to refelect masking
+    names(x)[names(x) == ml[i]] <- i
+    # update epivars to reflect masking 
+    ev[[i]] <- i
+  }
+
+  # if an epivar was removed
+  epivars_present <- names(ml) %in% names(ev)
+  if (!all(epivars_present)) {
+    to_unmask <- ml[!epivars_present]
+    names(x)[names(x) %in% names(to_unmask)] <- to_unmask
+  }
+
+  attr(x, "epivars") <- ev
+  attr(x, "masked-linelist") <- ml[names(ev)]
+  x
 }

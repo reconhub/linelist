@@ -60,7 +60,7 @@ as_linelist.data.frame <- function(x, ...) {
   
   new_epivars <- attr(x, "epivars") -> epivars
   the_mask    <- attr(x, "masked-linelist")
-  x  <- NextMethod()
+  x <- NextMethod()
   enames <- names(epivars)
   for (i in seq_along(epivars)) {
     # Trimming the epivars

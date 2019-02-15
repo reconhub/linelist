@@ -46,8 +46,16 @@ test_that("the epivars attribute will reflect the order of the linelist class", 
 test_that("epivars will be subset along with the linelist", {
   
   llsub <- ll[, c("epi_case_definition", "lon", "lat")]
-  expect_named(attr(ll, "epivars"), c("case_definition", "geo_lon", "geo_lat"))
+  expect_named(attr(llsub, "epivars"), c("case_definition", "geo_lon", "geo_lat"))
 
+})
+
+
+test_that("epivars can be removed", {
+  
+   llnocase <- set_epivars(ll, case_definition = NULL, id = NULL)
+   expect_false("case_definition" %in% attr(llnocase, "epivars"))
+   expect_false("id" %in% attr(llnocase, "epivars"))
 })
 
 reset_dictionary()

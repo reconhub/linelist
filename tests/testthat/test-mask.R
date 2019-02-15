@@ -46,9 +46,33 @@ test_that("adding new epivars to a masked linelist will add to the mask", {
 
   llmd <- set_epivars(llm, date_report = "messy_dates")
   expect_failure(expect_true("messy_dates" %in% names(llmd)))
+  expect_true("date_report" %in% names(llmd))
   expect_true("messy_dates" %in% names(ll))
   expect_true("messy_dates" %in% names(unmask(llmd)))
 
+})
+
+
+test_that("updating epivars to a masked linelist will update the columns and mask", {
+
+  
+  expect_false("date_of_onset" %in% names(llm))
+  llmd <- set_epivars(llm, date_onset = "messy_dates")
+  expect_false("messy_dates" %in% names(llmd))
+  expect_true("date_of_onset" %in% names(llmd))
+  expect_true("date_onset" %in% names(llmd))
+  expect_true("messy_dates" %in% names(ll))
+  expect_true("messy_dates" %in% names(unmask(llmd)))
+
+})
+
+test_that("removing epivars to a masked linelist will remove that mask", {
+
+  llmd <- set_epivars(llm, case_definition = NULL)
+  expect_failure(expect_true("case_definition" %in% names(llmd)))
+  expect_true("epi_case_definition" %in% names(llmd))
+  expect_true("epi_case_definition" %in% names(unmask(llmd)))
+  
 })
 
 test_that("mask will not mask a data set that has no epivars attribute", {
