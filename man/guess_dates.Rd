@@ -77,5 +77,5 @@ guess_dates(x, error_tolerance = 1, first_date = FIRST_DATE) # forced conversion
 guess_dates(x, error_tolerance = 0.15, first_date = FIRST_DATE) # only 15\% errors allowed
 }
 \author{
-Thibaut Jombart
+Thibaut Jombart, Zhian N. Kamvar
 }

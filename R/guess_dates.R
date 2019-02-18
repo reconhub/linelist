@@ -11,7 +11,7 @@
 #' threshold is exceeded, the original vector is returned.
 #'
 #'
-#' @author Thibaut Jombart
+#' @author Thibaut Jombart, Zhian N. Kamvar
 #'
 #' @export
 #'
@@ -84,36 +84,46 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   if (is.factor(x)) {
     x <- as.character(x)
   }
+
   iso_8601 <- "[0-9]{4}-(0|1(?=[0-2]))[0-9]-([0-2]|3(?=[0-1]))[0-9]"
+  
   if (is.character(first_date) && 
       length(first_date) == 1 && 
       grepl(iso_8601, first_date, perl = TRUE)) {
     first_date <- as.Date(first_date, "%Y-%m-%d")
   }
+  
   if (is.character(last_date) && 
       length(last_date) == 1 && 
       grepl(iso_8601, last_date, perl = TRUE)) {
     last_date <- as.Date(last_date, "%Y-%m-%d")
   }
+  
   if (is.null(first_date) && inherits(last_date, "Date")) {
     first_date <- min(seq.Date(last_date, length.out = 2, by = "-50 years"))
   } 
+  
   if (!inherits(first_date, "Date") || !inherits(last_date, "Date")) {
     stop("first_date and last_date must be Date objects or characters in yyyy-mm-dd format.")
   }
+  
   stopifnot(inherits(first_date, "Date"), inherits(last_date, "Date"))
 
   if (!is.list(orders) && is.character(orders)) {
     orders <- list(orders)
   } 
+  
   if (!is.list(orders)) {
     stop("orders must be a list of character vectors")
   }
+  
   ## convert all entries to character strings
   x_test <- data.frame(lapply(orders, find_and_constrain_date, x), stringsAsFactors = FALSE)
+  
   good_and_bad <- constrain_date(x_test, first_date, last_date, x)
   bad_dates    <- good_and_bad$bad_dates
   bd <- do.call("c", unname(bad_dates))
+  
   if (!all(is.na(bd))) {
     bd <- utils::stack(bd)
     bd$ind <- as.character(bd$ind)
@@ -129,11 +139,12 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
                    )
     warning(sprintf(msg, first_date, last_date))
   }
-  new_x        <- choose_first_good_date(good_and_bad$good_dates)
+  
+  new_x <- choose_first_good_date(good_and_bad$good_dates)
 
   ## check how successful we were
-  na_before <- sum(is.na(x))
-  na_after <- sum(is.na(new_x))
+  na_before       <- sum(is.na(x))
+  na_after        <- sum(is.na(new_x))
   prop_successful <- (length(x) - na_after) / (length(x) - na_before)
 
   ## shape result depending on whether conversion was successful
@@ -144,10 +155,27 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   }
 }
 
+
+#' lappy-friendly wrapper of parse_date_time
+#'
+#' @param orders, a vector of orders to consider
+#' @param x the data
+#' @keywords internal
+#' @noRd
 find_and_constrain_date <- function(orders = NULL, x) {
   suppressWarnings(as.Date(lubridate::parse_date_time(x, orders = orders)))
 }
 
+
+#' Trim dates outside of the defined boundaries
+#'
+#' @param date_a_frame a data frame where each column represents several
+#'   different parsings of the original date vector.
+#' @param dmin the minimum date
+#' @param dmax the maximum date
+#' @param original_dates the vector of original dates (to be collected for errors)
+#' @keywords internal
+#' @noRd
 constrain_date <- function(date_a_frame, dmin, dmax, original_dates) {
   bad_date_list <- lapply(date_a_frame, function(i) setNames(original_dates, as.character(i))[i < dmin | i > dmax])
   for (i in names(date_a_frame)) {
@@ -157,6 +185,13 @@ constrain_date <- function(date_a_frame, dmin, dmax, original_dates) {
   list(good_dates = date_a_frame, bad_dates = bad_date_list)
 }
 
+
+#' Choose the first non-missing date from a data frame of dates
+#'
+#' @param date_a_frame a data frame where each column contains a different
+#'   parsing of the same date vector
+#' @keywords internal
+#' @noRd
 choose_first_good_date <- function(date_a_frame) {
   res <- rep(as.Date(NA), length = nrow(date_a_frame))
   for (i in seq_len(nrow(date_a_frame))) {
