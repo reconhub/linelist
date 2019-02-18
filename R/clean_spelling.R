@@ -1,8 +1,14 @@
 #' Rename values in a vector based on a dictionary
 #'
-#' @param x a character vector
+#' This function provides an interface for [forcats::fct_recode()] and 
+#' [forcats::fct_explicit_na()] in such a way that a data dictionary can be
+#' imported from a data frame. 
+#'
+#' @param x a character or factor vector
 #' @param dictionary a two-column matrix or data frame defining mis-spelled words in
 #'   the first column and replacements in the second column
+#' 
+#' @return a vector of the same type as `x` with mis-spelled labels cleaned.
 #'
 #' @author Zhian N. Kamvar
 #' @export

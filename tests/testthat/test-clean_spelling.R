@@ -44,6 +44,18 @@ test_that("clean_spelling will be silent if the data are already cleaned", {
 
 test_that("clean_spelling will throw a warning for completely unknown data", {
 
-  expect_warning(clean_spelling(letters[1:4], corrections), "None of the variables in letters\\[1:4\\] were found in corrections. Did you use the correct dictionary?")
+  expect_warning(clean_spelling(letters[1:4], corrections), 
+                 "None of the variables in letters\\[1:4\\] were found in corrections. Did you use the correct dictionary?")
 
+})
+
+test_that("clean_spelling maintains order of original data", {
+
+  abc_dict <- data.frame(c(letters, "zz"), c(LETTERS, "Z"), stringsAsFactors = FALSE)
+  lfac <- sample(c("zz", sample(letters, 19, replace = TRUE)))
+  upps <- clean_spelling(factor(lfac, c("zz", rev(letters))), abc_dict)
+  expect_true(all(upps %in% LETTERS))
+  expect_identical(levels(upps), rev(LETTERS))
+  expect_false("zz" %in% upps)
+  
 })
