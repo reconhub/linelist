@@ -26,6 +26,43 @@ test_that("a linelist contains the epivars attribute", {
   
 })
 
+test_that("set_epivars() will return the original linelist unharmed", {
+
+  expect_identical(ll, set_epivars(ll))
+
+})
+
+test_that("[re]set_epivars() will create a linelist", {
+
+  ll2 <- set_epivars(as.data.frame(ll), 
+                     id = "id", 
+                     date_onset = "date_of_onset",
+                     case_definition = "epi_case_definition",
+                     gender = "gender",
+                     geo_lon = "lon",
+                     geo_lat = "lat",
+                     NULL
+  )
+
+  ll3 <- reset_epivars(as.data.frame(ll), 
+                       id = "id", 
+                       date_onset = "date_of_onset",
+                       case_definition = "epi_case_definition",
+                       gender = "gender",
+                       geo_lon = "lon",
+                       geo_lat = "lat",
+                       NULL
+  )
+  expect_identical(ll, ll2)
+  expect_identical(ll, ll3)
+
+})
+
+test_that("reset_epivars() will return nothing if given nothing", {
+
+  expect_length(attr(reset_epivars(ll), "epivars"), 0)
+
+})
 
 test_that("a linelist class will be the same subsetting by nothing", {
 

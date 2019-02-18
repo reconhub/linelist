@@ -12,7 +12,7 @@ ll <- as_linelist(clean_data(messy_data(), first_date = as.Date("1969-4-20")),
                   NULL
 )
 llm <- mask(ll)
-                  
+
 test_that("mask and unmask return the same data", {
 
   expect_identical(unmask(mask(ll)), ll)
@@ -82,3 +82,18 @@ test_that("mask will not mask a data set that has no epivars attribute", {
   expect_identical(miris, iris) 
   
 })
+
+test_that("mask will throw an error if there are duplicated epivars", {
+
+  add_epivar("geo", "#geo", "this is a test")  
+  err_test <- ll
+  err_test$lon1 <- ll$lon
+  err_test$lat1 <- ll$lat
+  err_test <- set_epivars(err_test, geo = c("lon1", "lat1"))
+  the_error <- "multiple matching columns: \\(epivar:geo, column:lon1\\), \\(epivar:geo, column:lat1\\)"
+  expect_error(mask(err_test), the_error)
+  set_dictionary(oev)
+
+
+})
+

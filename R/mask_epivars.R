@@ -48,12 +48,12 @@ mask.linelist <- function(x) {
   if (!is.null(attr(x, "masked-linelist"))) return(x)
   ev <- list_epivars(x)
   ev$epivar <- as.character(ev$epivar)
-  if (any(duplicated(ev$epivars))) {
-    dups <- duplicated(ev$epivar) & duplicated(ev$epivar, fromLast = TRUE)
-    culprits <- ev$columns[dups]
-    the_evs  <- ev$epivars[dups]
-    bad_thng <- "mask only works if each epivar has a unique column. These epivars had multiple matching columns"
-    msg      <- sprintf("(%s, %s)", format(the_evs), format(culprits))
+  if (any(duplicated(ev$epivar))) {
+    dups <- duplicated(ev$epivar) | duplicated(ev$epivar, fromLast = TRUE)
+    culprits <- ev$column[dups]
+    the_evs  <- ev$epivar[dups]
+    bad_thng <- "mask only works if each epivar has a unique column. These epivars had multiple matching columns:"
+    msg      <- sprintf("(epivar:%s, column:%s)", format(the_evs), format(culprits))
     msg      <- paste(msg, collapse = ", ")
     msg      <- paste(bad_thng, msg)
     stop(msg)
