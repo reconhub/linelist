@@ -111,6 +111,8 @@ unmask.linelist <- function(x) {
   x
 }
 
+#' @rdname mask
+#' @export
 unmask.data.frame <- function(x) {
   if (!is.null(attr(x, "masked-linelist")) && !is.null(attr(x, "epivars"))) {
     class(x) <- c("linelist", oldClass(x))

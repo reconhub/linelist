@@ -7,6 +7,7 @@
 \alias{unmask}
 \alias{unmask.default}
 \alias{unmask.linelist}
+\alias{unmask.data.frame}
 \title{Reversibly rename columns in your linelist with epivars}
 \usage{
 mask(x)
@@ -20,6 +21,8 @@ unmask(x)
 \method{unmask}{default}(x)
 
 \method{unmask}{linelist}(x)
+
+\method{unmask}{data.frame}(x)
 }
 \arguments{
 \item{x}{a linelist object}
