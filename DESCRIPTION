@@ -25,6 +25,7 @@ Imports:
   epitrix,
   tidyselect,
   rlang,
+  forcats,
   utils,
   stats
 URL: https://github.com/reconhub/linelist
