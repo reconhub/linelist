@@ -71,8 +71,9 @@
 
 guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL, 
                         last_date = Sys.Date(), 
-                        orders = list(world = c("dby", "dmy", "Ybd", "Ymd"), 
-                                      US = c("Omdy", "YOmd")),
+                        orders = list(world_named_months = c("Ybd", "dby"),
+                                      world_digit_months = c("dmy", "Ymd"), 
+                                      US_formats = c("Omdy", "YOmd")),
                         quiet = TRUE) {
 
   ## This function tries converting a single character string into a
