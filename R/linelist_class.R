@@ -57,14 +57,19 @@ as_linelist.data.frame <- function(x, ...) {
 #' @param drop indicator for whether the data frame should be dropped if reduced
 #'   to one column (defaults to FALSE)
 "[.linelist" <- function(x, i, j, drop = FALSE) {
-
+  
   new_epivars <- attr(x, "epivars") -> epivars
-  x  <- NextMethod()
+  the_mask    <- attr(x, "masked-linelist")
+  x <- NextMethod()
+  enames <- names(epivars)
   for (i in seq_along(epivars)) {
+    # Trimming the epivars
     if (!all(epivars[[i]] %in% names(x))) {
-      new_epivars[[i]] <- NULL
+      new_epivars[[enames[i]]] <- NULL
     }
   }
   attr(x, "epivars") <- order_epivars(x, new_epivars)
+  attr(x, "masked-linelist") <- the_mask
   x
+
 }

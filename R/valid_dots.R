@@ -9,7 +9,9 @@ valid_dots <- function(dots) {
     return(dots)
   }
 
-  if (is.null(dots[[length(dots)]])) {
+  last_is_null <- is.null(dots[[length(dots)]])
+  no_last_name <- names(dots)[length(dots)] == ""
+  if (length(dots) > 1 && last_is_null && no_last_name) {
     dots <- dots[-length(dots)]
   }
 

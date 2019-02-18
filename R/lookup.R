@@ -5,7 +5,7 @@
 #' in your data set.
 #'
 #' @param x a [linelist][as_linelist] object. 
-#' @param epivar the name of an epivar defined in the [dictionary][get_dictionary()].
+#' @param ... the names of epivar defined in the [dictionary][get_dictionary()].
 #' @param symbol when `TRUE`, the column name will be converted to a symbol
 #'   for use in non-standard evaulation
 #' @return a symbol or character vector of the column name
@@ -21,11 +21,11 @@
 #'                    geo_lat = "lat"
 #'                   )
 #' # Lookup a column name, and return a character
-#' lookup(ll, "gender", symbol = FALSE)
+#' lookup(ll, gender, symbol = FALSE)
 #' 
 #' # If there are two columns, and `symbol = TRUE`, they are returned as a list
 #' # of symbols.
-#' lookup(ll, "geo")
+#' lookup(ll, geo_lon, geo_lat)
 #' 
 #' # Using dplyr ---------------------------------------------------
 #'
@@ -35,12 +35,17 @@
 #'   #
 #'   # -- 1. Lookup in the pipe using the . replacement
 #'   ll %>% 
-#'     group_by(!!lookup(., "gender")) %>%  
-#'     count(!!lookup(., "case_definition"))
+#'     group_by(!!lookup(., gender)) %>%  
+#'     count(!!lookup(., case_definition))
 #'
+#'   # You can also just create an alias:
+#'   L <- linelist::lookup
+#'   ll %>%
+#'     group_by( !!L(., gender) ) %>%
+#'     count( !!L(., case_definition) )
 #'   # -- 2. define temporary variables to lookup
-#'   (CASEDEF <- lookup(ll, "case_definition")) 
-#'   (GEO <- lookup(ll, "geo", symbol = FALSE))
+#'   (CASEDEF <- lookup(ll, case_definition)) 
+#'   (GEO <- lookup(ll, geo_lon, geo_lat, symbol = FALSE))
 #'   ll %>%
 #'     group_by(!!CASEDEF) %>%
 #'     summarise_at(GEO, mean) # note, summarise_at uses characters
@@ -56,16 +61,21 @@
 #'     as_linelist() %>%
 #'     class()
 #' })}
-lookup <- function(x, epivar = NULL, symbol = TRUE) {
+lookup <- function(x, ..., symbol = TRUE) {
+
   ev <- attr(x, "epivars")
+  
   if (is.null(ev)) {
     stop("This object does not contain an epivars attribute.")
   }
-  if (is.null(epivar)) {
-    return(ev)
-  }
-  stopifnot(is.character(epivar))
-  res <- ev[[epivar]]
+
+  .vars <- rlang::quos(...)
+  
+  if (length(.vars) == 0) return(ev)
+
+  vars <- tidyselect::vars_select(names(ev), !!!.vars)
+  res <- unlist(ev[vars], use.names = FALSE)
+
   if (symbol) {
     res <- if (length(res) == 1) as.symbol(res) else lapply(res, as.symbol)
   }
