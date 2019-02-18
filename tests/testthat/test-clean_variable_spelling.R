@@ -37,7 +37,7 @@ test_that("a list of data frames is needed for the second part", {
 
   expect_error(clean_variable_spelling(my_data_frame),
                "dicts must be a list of data frames")
-  expect_error(clean_variable_spelling(my_data_frame, corrections),
+  expect_error(clean_variable_spelling(my_data_frame, list(1:10)),
                "everything in dicts must be a data frame")
   expect_error(clean_variable_spelling(my_data_frame, c(clist, list(corrections))),
                "all dictionaries must be named")
@@ -50,6 +50,11 @@ test_that("a list of data frames is needed for the second part", {
 test_that("spelling cleaning works as expected", {
 
   test_cleaned <- clean_variable_spelling(my_data_frame, clist)
-  expect_identical(test_cleaned, cleaned_data)
+  expect_identical(test_cleaned$raboof, cleaned_data$raboof)
+  print(fct_recode(my_data_frame$treatment, yes = "Yes", yes = "Y", no = "No", no = "N"))
+  print(test_cleaned$treatment)
+  print(cleaned_data$treatment)
+  expect_identical(test_cleaned$treatment, cleaned_data$treatment)
+  expect_identical(test_cleaned$region, cleaned_data$region)
 
 })

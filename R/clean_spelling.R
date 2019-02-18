@@ -11,6 +11,8 @@
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned.
 #'
 #' @author Zhian N. Kamvar
+#' @seealso [clean_variable_spelling()] for an implementation that acts across
+#'   multiple variables in a data frame.
 #' @export
 #' @examples
 #'
@@ -26,6 +28,15 @@
 #' # The function will give you a warning if the dictionary does not
 #' # match the data
 #' clean_spelling(letters, corrections)
+#'
+#' # The can be used for translating survey output
+#'
+#' dict <- data.frame(
+#'   option_code = c("Y", "N", "U", NA),
+#'   option_name = c("Yes", "No", "Unknown", "Missing"),
+#'   stringsAsFactors = FALSE
+#' )
+#' clean_spelling(c("Y", "Y", NA, "N", "U", "U", "N"), dict)
 #'
 #' @importFrom forcats fct_recode
 #' @importFrom rlang "!!!"

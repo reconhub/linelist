@@ -7,13 +7,18 @@
 clean_spelling(x = character(), dictionary = data.frame())
 }
 \arguments{
-\item{x}{a character vector}
+\item{x}{a character or factor vector}
 
 \item{dictionary}{a two-column matrix or data frame defining mis-spelled words in
 the first column and replacements in the second column}
 }
+\value{
+a vector of the same type as \code{x} with mis-spelled labels cleaned.
+}
 \description{
-Rename values in a vector based on a dictionary
+This function provides an interface for \code{\link[forcats:fct_recode]{forcats::fct_recode()}} and
+\code{\link[forcats:fct_explicit_na]{forcats::fct_explicit_na()}} in such a way that a data dictionary can be
+imported from a data frame.
 }
 \examples{
 
@@ -30,6 +35,19 @@ clean_spelling(my_data, corrections)
 # match the data
 clean_spelling(letters, corrections)
 
+# The can be used for translating survey output
+
+dict <- data.frame(
+  option_code = c("Y", "N", "U", NA),
+  option_name = c("Yes", "No", "Unknown", "Missing"),
+  stringsAsFactors = FALSE
+)
+clean_spelling(c("Y", "Y", NA, "N", "U", "U", "N"), dict)
+
+}
+\seealso{
+\code{\link[=clean_variable_spelling]{clean_variable_spelling()}} for an implementation that acts across
+multiple variables in a data frame.
 }
 \author{
 Zhian N. Kamvar
