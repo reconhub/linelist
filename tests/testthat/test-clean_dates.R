@@ -80,3 +80,53 @@ test_that("clean_dates() will be able to parse mixed logical and integer", {
     expect_is(cd4[[i]], "Date", info = i)
   }
 })
+
+
+
+mysteries <- c(# dd-mm-yyyy
+               "21/11/2021",
+               "21 11 2021",
+               "21_11_2021",
+               "21.11.2021",
+               "21/11/2021 /bla/bla",
+               "it's 21 11 2021 a",
+               "date 21_11_2021:) ",
+               "... here 21.11.2021",
+               # yyyy-0m-dd
+               "2001/Jan/01",
+               "2001 Jan 01",
+               "2001_Jan_01",
+               "2001.Jan.01",
+               "this is 2001/Jan/01",
+               "2001 Jan 01 a date 02-02-02",
+               "mixing-2001-Jan_01 separators-_",
+               "c'est ca: 2001.Jan.01 //../.",
+               # dd-Om-YYYY
+               "21/Nov/2021",
+               "21 Nov 2021",
+               "21_Nov_2021",
+               "21.Nov.2021",
+               "21/Nov/2021 /bla/bla",
+               "it's 21 Nov 2021 a",
+               "date 21_Nov_2021:) ",
+               "... here 21.Nov.2021",
+               NULL
+)
+
+
+solutions <- c(
+  rep("2021-11-21", 8),
+  rep("2001-01-01", 8),
+  rep("2021-11-21", 8)
+)
+
+
+test_that("clean dates will clean what was previously tested", {
+
+  skip_on_cran()
+  mclean <- clean_dates(data.frame(mys = mysteries), last_date = "2022-01-01")
+  dats <- as.Date(solutions)
+  dats[14] <- NA
+  expect_identical(mclean[[1]], dats)
+
+}) 
