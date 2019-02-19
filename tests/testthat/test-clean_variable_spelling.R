@@ -5,6 +5,7 @@ corrections <- data.frame(
   bad = c("foubar", "foobr", "fubar", NA, "unknown", "Yes", "Y", "No", "N", NA),
   good = c("foobar", "foobar", "foobar", "missing", "missing", "yes", "yes", "no", "no", "missing"),
   column = c(rep("raboof", 5), rep("treatment", 5)),
+  orders = c(1:5, 5:1),
   stringsAsFactors = FALSE
 )
 
@@ -17,9 +18,10 @@ my_data_frame <- data.frame(
 )
 
 cleaned_data <- data.frame(
-   raboof    = c(letters[1:5], "foobar", "foobar", "foobar", "missing", "missing", "fumar"),
+   raboof    = factor(c(letters[1:5], "foobar", "foobar", "foobar", "missing", "missing", "fumar"),
+                      levels = c("foobar", "missing", letters[1:5], "fumar")),
    treatment = factor(c(letters[5:1], "yes", "yes", "no", "missing", "no", "yes"),
-                      levels = c(letters[1:5], "no", "yes", "missing")),
+                      levels = c("yes", "no", "missing", letters[1:5])),
    region    = state.name[1:11]
 )
 
@@ -36,9 +38,9 @@ test_that("a data frame is needed for the first part", {
 test_that("a list of data frames is needed for the second part", {
 
   expect_error(clean_variable_spelling(my_data_frame),
-               "dicts must be a list of data frames")
+               "wordlists must be a list of data frames")
   expect_error(clean_variable_spelling(my_data_frame, list(1:10)),
-               "everything in dicts must be a data frame")
+               "everything in wordlists must be a data frame")
   expect_error(clean_variable_spelling(my_data_frame, c(clist, list(corrections))),
                "all dictionaries must be named")
   expect_error(clean_variable_spelling(my_data_frame, c(clist, funkytime = list(corrections))),
@@ -51,10 +53,44 @@ test_that("spelling cleaning works as expected", {
 
   test_cleaned <- clean_variable_spelling(my_data_frame, clist)
   expect_identical(test_cleaned$raboof, cleaned_data$raboof)
-  print(fct_recode(my_data_frame$treatment, yes = "Yes", yes = "Y", no = "No", no = "N"))
-  print(test_cleaned$treatment)
-  print(cleaned_data$treatment)
+  # Uncomment if this is mis-behaving. <3, Zhian
+  # print(fct_recode(my_data_frame$treatment, yes = "Yes", yes = "Y", no = "No", no = "N"))
+  # print(test_cleaned$treatment)
+  # print(cleaned_data$treatment)
   expect_identical(test_cleaned$treatment, cleaned_data$treatment)
   expect_identical(test_cleaned$region, cleaned_data$region)
+
+})
+
+
+test_that("sorting works as expected", {
+
+  # sorting by data.frame 
+  test_sorted_df <- clean_variable_spelling(my_data_frame, 
+                                             corrections,
+                                             group = "column",
+                                             sort_by = "orders"
+  )
+
+  # sorting by list
+  test_sorted_ls <- clean_variable_spelling(my_data_frame, 
+                                             clist,
+                                             sort_by = "orders"
+  )
+  resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, c("missing", "no", "yes"))
+  expect_identical(test_sorted_df, test_sorted_ls)
+  expect_identical(test_sorted_df$raboof, cleaned_data$raboof)
+  expect_identical(test_sorted_df$treatment, resorted_trt)
+
+})
+
+test_that("global data frame works", { 
+
+  expect_warning({
+    global_test <- clean_variable_spelling(my_data_frame, corrections)
+  }, "None of the variables in x\\[\\[i\\]\\] were found in d")
+  resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "missing") 
+  expect_identical(global_test$raboof, cleaned_data$raboof) 
+  expect_identical(global_test$treatment, resorted_trt)
 
 })

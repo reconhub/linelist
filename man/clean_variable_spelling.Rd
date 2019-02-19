@@ -4,19 +4,19 @@
 \alias{clean_variable_spelling}
 \title{Check and clean spelling or codes of multiple variables in a data frame}
 \usage{
-clean_variable_spelling(x = data.frame(), dicts = list(),
+clean_variable_spelling(x = data.frame(), wordlists = list(),
   group = NULL, sort_by = NULL, classes = NULL)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
 
-\item{dicts}{a named list of dictionaries that define dictionaries for
+\item{wordlists}{a named list of dictionaries that define dictionaries for
 specific columns.}
 
-\item{group}{a character if \code{dicts} is a data frame, this defines the column
+\item{group}{a character if \code{wordlists} is a data frame, this defines the column
 to be used for splitting the data frame into groups.}
 
-\item{sort_by}{a character if \code{dicts} is a data frame, this defines the column
+\item{sort_by}{a character if \code{wordlists} is a data frame, this defines the column
 to be used for sorting the values.}
 
 \item{classes}{a vector of class definitions for each of the columns. If this
@@ -31,6 +31,7 @@ Check and clean spelling or codes of multiple variables in a data frame
 }
 \examples{
 
+# Set up wordlist ------------------------------------------------ 
 yesno <- c("Y", "N", "U", NA)
 dyesno <- c("Yes", "No", "Unknown", "missing")
 treatment_administered <- c(0:1, NA)
@@ -40,24 +41,37 @@ dfacility <- sprintf("Facility \%s", format(1:10))
 age_group <- c(0, 10, 20, 30, 40, 50)
 dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
 
-dict <- data.frame(
+wordlist <- data.frame(
   options = c(yesno, treatment_administered, facility, age_group),
   values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
+  orders  = c(1:4, 1:3, 1:10, 1:6),
   stringsAsFactors = FALSE
 )
-dict$grp <- rep(c("readmission", "treatment_administered", "facility", "age_group"),
+wordlist$grp <- rep(c("readmission", "treatment_administered", "facility", "age_group"),
                 c(4, 3, 10, 6))
 
-
+# Generate example data ------------------------------------------
 dat <- data.frame(
-  readmission = sample(yesno, 20, replace = TRUE),
-  treatment_administered = sample(treatment_administered, 20, replace = TRUE),
-  facility = sample(facility, 20, replace = TRUE),
-  age_group = sample(age_group, 20, replace = TRUE),
+  readmission = sample(yesno, 50, replace = TRUE),
+  treatment_administered = sample(treatment_administered, 50, replace = TRUE),
+  facility = sample(facility, 50, replace = TRUE),
+  age_group = sample(age_group, 50, replace = TRUE),
   stringsAsFactors = FALSE
 )
 
-clean_variable_spelling(dat, dicts = dict, group = "grp")
+# Clean spelling based on wordlist ------------------------------ 
+wordlist # show the wordlist
+head(dat) # show the data
+
+head(clean_variable_spelling(dat, wordlists = wordlist, group = "grp"))
+
+# You can ensure the order of the factors are correct by specifying 
+# a column that defines order.
+dat[] <- lapply(dat, as.factor)
+as.list(head(dat))
+res <- clean_variable_spelling(dat, wordlists = wordlist, group = "grp", sort_by = "orders")
+head(res)
+as.list(head(res))
 }
 \author{
 Zhian N. Kamvar

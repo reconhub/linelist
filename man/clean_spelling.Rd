@@ -2,22 +2,24 @@
 % Please edit documentation in R/clean_spelling.R
 \name{clean_spelling}
 \alias{clean_spelling}
-\title{Rename values in a vector based on a dictionary}
+\title{Rename values in a vector based on a wordlist}
 \usage{
-clean_spelling(x = character(), dictionary = data.frame())
+clean_spelling(x = character(), wordlist = data.frame())
 }
 \arguments{
 \item{x}{a character or factor vector}
 
-\item{dictionary}{a two-column matrix or data frame defining mis-spelled words in
-the first column and replacements in the second column}
+\item{wordlist}{a two-column matrix or data frame defining mis-spelled
+words in the first column and replacements in the second column.}
 }
 \value{
 a vector of the same type as \code{x} with mis-spelled labels cleaned.
+Note that factors will be arranged by the order presented in the data
+wordlist.
 }
 \description{
 This function provides an interface for \code{\link[forcats:fct_recode]{forcats::fct_recode()}} and
-\code{\link[forcats:fct_explicit_na]{forcats::fct_explicit_na()}} in such a way that a data dictionary can be
+\code{\link[forcats:fct_explicit_na]{forcats::fct_explicit_na()}} in such a way that a data wordlist can be
 imported from a data frame.
 }
 \examples{
@@ -31,7 +33,7 @@ head(corrections)
 my_data <- c(letters[1:5], sample(corrections$bad, 10, replace = TRUE))
 clean_spelling(my_data, corrections)
 
-# The function will give you a warning if the dictionary does not
+# The function will give you a warning if the wordlist does not
 # match the data
 clean_spelling(letters, corrections)
 

@@ -1,10 +1,10 @@
 #' Check and clean spelling or codes of multiple variables in a data frame
 #'
-#' @param dicts a named list of dictionaries that define dictionaries for
+#' @param wordlists a named list of dictionaries that define dictionaries for
 #' specific columns.
-#' @param group a character if `dicts` is a data frame, this defines the column
+#' @param group a character if `wordlists` is a data frame, this defines the column
 #' to be used for splitting the data frame into groups.
-#' @param sort_by a character if `dicts` is a data frame, this defines the column
+#' @param sort_by a character if `wordlists` is a data frame, this defines the column
 #' to be used for sorting the values. 
 #' @inheritParams clean_variable_labels
 #'
@@ -13,6 +13,7 @@
 #' @export
 #' @examples
 #' 
+#' # Set up wordlist ------------------------------------------------ 
 #' yesno <- c("Y", "N", "U", NA)
 #' dyesno <- c("Yes", "No", "Unknown", "missing")
 #' treatment_administered <- c(0:1, NA)
@@ -22,26 +23,39 @@
 #' age_group <- c(0, 10, 20, 30, 40, 50)
 #' dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
 #' 
-#' dict <- data.frame(
+#' wordlist <- data.frame(
 #'   options = c(yesno, treatment_administered, facility, age_group),
 #'   values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
+#'   orders  = c(1:4, 1:3, 1:10, 1:6),
 #'   stringsAsFactors = FALSE
 #' )
-#' dict$grp <- rep(c("readmission", "treatment_administered", "facility", "age_group"),
+#' wordlist$grp <- rep(c("readmission", "treatment_administered", "facility", "age_group"),
 #'                 c(4, 3, 10, 6))
 #'
-#' 
+#' # Generate example data ------------------------------------------
 #' dat <- data.frame(
-#'   readmission = sample(yesno, 20, replace = TRUE),
-#'   treatment_administered = sample(treatment_administered, 20, replace = TRUE),
-#'   facility = sample(facility, 20, replace = TRUE),
-#'   age_group = sample(age_group, 20, replace = TRUE),
+#'   readmission = sample(yesno, 50, replace = TRUE),
+#'   treatment_administered = sample(treatment_administered, 50, replace = TRUE),
+#'   facility = sample(facility, 50, replace = TRUE),
+#'   age_group = sample(age_group, 50, replace = TRUE),
 #'   stringsAsFactors = FALSE
 #' )
+#'
+#' # Clean spelling based on wordlist ------------------------------ 
+#' wordlist # show the wordlist
+#' head(dat) # show the data
 #' 
-#' clean_variable_spelling(dat, dicts = dict, group = "grp")
+#' head(clean_variable_spelling(dat, wordlists = wordlist, group = "grp"))
+#' 
+#' # You can ensure the order of the factors are correct by specifying 
+#' # a column that defines order.
+#' dat[] <- lapply(dat, as.factor)
+#' as.list(head(dat))
+#' res <- clean_variable_spelling(dat, wordlists = wordlist, group = "grp", sort_by = "orders")
+#' head(res)
+#' as.list(head(res))
 
-clean_variable_spelling <- function(x = data.frame(), dicts = list(), group = NULL, sort_by = NULL, classes = NULL) {
+clean_variable_spelling <- function(x = data.frame(), wordlists = list(), group = NULL, sort_by = NULL, classes = NULL) {
 
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
@@ -51,51 +65,66 @@ clean_variable_spelling <- function(x = data.frame(), dicts = list(), group = NU
     classes <- i_find_classes(x)
   }
 
-  if (length(dicts) == 0 || !is.list(dicts)) {
-    stop("dicts must be a list of data frames")
+  # Define columns viable for manipulation ------------------------------------
+  unprotected <- names(x)[classes != "protected"]
+
+  if (length(wordlists) == 0 || !is.list(wordlists)) {
+    stop("wordlists must be a list of data frames")
   } 
 
   # There is one big dictionary with groups -----------------------------------
-  if (is.data.frame(dicts)) {
+  if (is.data.frame(wordlists)) {
 
-    # There is a grouping column ----------------------------------------------
-    if (!is.null(group) && group %in% names(dicts)) {
-      dicts <- split(dicts, dicts[[group]])
+    # There is a grouping column ----------------------------------------
+    if (!is.null(group) && group %in% names(wordlists)) {
+      wordlists <- split(wordlists, wordlists[[group]])
     }
 
-    # There is a column to sort by --------------------------------------------
-    if (!is.null(sort_by) && sort_by %in% names(dicts)) {
-      if (!is.null(group)) {
-        for (i in names(dicts)) {
-          dicts[[i]] <- dicts[[i]][order(dicts[[i]]), ]
-        }
-      } else {
-        dicts <- dicts[order(dicts[[sort_by]]), ]
-      }
-    }
   } else {
     # Not everything is a data frame :( ---------------------------------------
-    if (!all(vapply(dicts, is.data.frame, logical(1)))) {
-      stop("everything in dicts must be a data frame")
+    if (!all(vapply(wordlists, is.data.frame, logical(1)))) {
+      stop("everything in wordlists must be a data frame")
     }
 
-    # Not all dictionaries are named ------------------------------------------
-    if (any(names(dicts) == "")) {
+    # Not all dictionaries are named ------------------------------------
+    if (any(names(wordlists) == "")) {
       stop("all dictionaries must be named")
     }
 
-    # Some dictionaries aren't in the data ------------------------------------
-    if (!all(names(dicts) %in% names(x))) {
+    # Some dictionaries aren't in the data ------------------------------
+    if (!all(names(wordlists) %in% unprotected)) {
       stop("all dictionaries must match a column in the data")
     }
   }
-  ddf <- is.data.frame(dicts)
-  to_iterate <- if (ddf) names(x) else names(dicts) 
 
+  ddf            <- is.data.frame(wordlists)
+  exists_sort_by <- !is.null(sort_by)
+
+  if (ddf) {
+    # If there is one big dictionary ------------------------------------
+    if (exists_sort_by && sort_by %in% names(wordlists)) {
+      wordlists <- wordlists[order(wordlists[[sort_by]]), , drop = FALSE]
+    }
+    # Iterate over the names of the data -------------------
+    to_iterate <- unprotected
+  } else {
+    # If there is a list of dictionaries --------------------------------
+    if (exists_sort_by) {
+      for (i in names(wordlists)) {
+        di <- wordlists[[i]]
+        # Only sort if there is something to sort by -------
+        the_sorts  <- if (any(names(di) == sort_by)) order(di[[sort_by]]) else TRUE
+        wordlists[[i]] <- wordlists[[i]][the_sorts, , drop = FALSE]
+      }
+    }
+    # Iterate over the names of the dictionaries -----------
+    to_iterate <- names(wordlists)
+  }
+
+  # Loop over the variables and clean spelling --------------------------------
   for (i in to_iterate) {
-    d <- if (ddf) dicts else dicts[[i]] 
-    tmp <- if (!inherits(x[[i]], c("character", "factor"))) as.character(x[[i]]) else x[[i]]
-    try(x[[i]] <- clean_spelling(tmp, d))
+    d <- if (ddf) wordlists else wordlists[[i]] 
+    try(x[[i]] <- clean_spelling(x[[i]], d))
   }
 
   x
