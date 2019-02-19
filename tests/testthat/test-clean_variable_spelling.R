@@ -84,11 +84,16 @@ test_that("sorting works as expected", {
 
 })
 
-test_that("global data frame works", { 
+test_that("global data frame works if group = NULL", { 
+
+  expect_error({
+    global_test <- clean_variable_spelling(my_data_frame, corrections, group = 69)
+  }, "group must be the name or position of a column in the wordlist")
 
   expect_warning({
-    global_test <- clean_variable_spelling(my_data_frame, corrections)
-  }, "None of the variables in x\\[\\[i\\]\\] were found in d")
+    global_test <- clean_variable_spelling(my_data_frame, corrections, group = NULL)
+  }, "Using wordlist globally across all character/factor columns.")
+
   resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "missing") 
   expect_identical(global_test$raboof, cleaned_data$raboof) 
   expect_identical(global_test$treatment, resorted_trt)

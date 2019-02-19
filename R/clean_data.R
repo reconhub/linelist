@@ -69,7 +69,7 @@
 
 
 clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
-                       error_tolerance = 0.5, wordlists = NULL, group = NULL, 
+                       error_tolerance = 0.5, wordlists = NULL, group = 3, 
                        sort_by = NULL, protect = FALSE, ...) {
 
   xname <- deparse(substitute(x))

@@ -5,18 +5,22 @@
 \title{Check and clean spelling or codes of multiple variables in a data frame}
 \usage{
 clean_variable_spelling(x = data.frame(), wordlists = list(),
-  group = NULL, sort_by = NULL, classes = NULL)
+  group = 3, sort_by = NULL, classes = NULL)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
 
 \item{wordlists}{a data frame with at least two columns defining the word
-list to be used. This data frame should have a \code{group} column, ideally (see below).}
+list to be used. This data frame should have a \code{group} column, ideally (see
+below).}
 
-\item{group}{a character if \code{wordlists} is a data frame, this defines the column
-to be used for splitting the data frame into groups.}
+\item{group}{a character or integer if \code{wordlists} is a data frame, this
+defines the column to be used for splitting the data frame into groups. The
+default column is the third column of  \code{wordlists}. \emph{If you want to use a
+global dictionary}, set \code{group = NULL}.}
 
-\item{sort_by}{a character the column to be used for sorting the values in each data frame}
+\item{sort_by}{a character the column to be used for sorting the values in
+each data frame}
 
 \item{classes}{a vector of class definitions for each of the columns. If this
 is not provided, the classes will be read from the columns themselves.
@@ -53,7 +57,7 @@ wordlist <- data.frame(
   stringsAsFactors = FALSE
 )
 wordlist$grp <- rep(c("readmission", "treatment_administered", "facility", "age_group"),
-                c(4, 3, 10, 6))
+                    c(4, 3, 10, 6))
 
 # Generate example data ------------------------------------------
 dat <- data.frame(

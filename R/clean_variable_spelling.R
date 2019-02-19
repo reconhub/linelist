@@ -1,10 +1,14 @@
 #' Check and clean spelling or codes of multiple variables in a data frame
 #'
 #' @param wordlists a data frame with at least two columns defining the word
-#'   list to be used. This data frame should have a `group` column, ideally (see below).
-#' @param group a character if `wordlists` is a data frame, this defines the column
-#' to be used for splitting the data frame into groups.
-#' @param sort_by a character the column to be used for sorting the values in each data frame
+#' list to be used. This data frame should have a `group` column, ideally (see
+#' below).
+#' @param group a character or integer if `wordlists` is a data frame, this
+#' defines the column to be used for splitting the data frame into groups. The
+#' default column is the third column of  `wordlists`. *If you want to use a
+#' global dictionary*, set `group = NULL`.
+#' @param sort_by a character the column to be used for sorting the values in
+#' each data frame
 #' @inheritParams clean_variable_labels
 #'
 #' @note This function will only parse character and factor columns to protect
@@ -34,7 +38,7 @@
 #'   stringsAsFactors = FALSE
 #' )
 #' wordlist$grp <- rep(c("readmission", "treatment_administered", "facility", "age_group"),
-#'                 c(4, 3, 10, 6))
+#'                     c(4, 3, 10, 6))
 #'
 #' # Generate example data ------------------------------------------
 #' dat <- data.frame(
@@ -59,7 +63,7 @@
 #' head(res)
 #' as.list(head(res))
 
-clean_variable_spelling <- function(x = data.frame(), wordlists = list(), group = NULL, sort_by = NULL, classes = NULL) {
+clean_variable_spelling <- function(x = data.frame(), wordlists = list(), group = 3, sort_by = NULL, classes = NULL) {
 
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
@@ -81,10 +85,17 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), group 
   if (is.data.frame(wordlists)) {
 
     # There is a grouping column ----------------------------------------
-    if (!is.null(group) && group %in% names(wordlists)) {
-      wordlists <- split(wordlists, wordlists[[group]])
+    if (!is.null(group) && length(group) == 1) {
+      is_number <- is.numeric(group) && as.integer(group) == group && group < ncol(x)
+      is_name   <- is.character(group)
+      if (is_number || is_name) {
+        wordlists <- split(wordlists, wordlists[[group]])
+      } else {
+        stop("group must be the name or position of a column in the wordlist")
+      }
+    } else {
+      warning("Using wordlist globally across all character/factor columns.")
     }
-
   } else {
     # Not everything is a data frame :( ---------------------------------------
     if (!all(vapply(wordlists, is.data.frame, logical(1)))) {

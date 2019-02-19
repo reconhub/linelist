@@ -42,7 +42,7 @@
 #'                 wordlists = wordlist,
 #'                 group     = "var_shortname"
 #'                )
-clean_variables <- function(x, sep = "_", wordlists = NULL, group = NULL, sort_by = NULL, protect = FALSE, classes = NULL) {
+clean_variables <- function(x, sep = "_", wordlists = NULL, group = 3, sort_by = NULL, protect = FALSE, classes = NULL) {
 
   xname <- deparse(substitute(x))
   if (!is.data.frame(x)) {

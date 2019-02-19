@@ -4,7 +4,7 @@
 \alias{clean_variables}
 \title{Clean variable labels and fix spelling according to a wordlist}
 \usage{
-clean_variables(x, sep = "_", wordlists = NULL, group = NULL,
+clean_variables(x, sep = "_", wordlists = NULL, group = 3,
   sort_by = NULL, protect = FALSE, classes = NULL)
 }
 \arguments{
@@ -14,12 +14,16 @@ clean_variables(x, sep = "_", wordlists = NULL, group = NULL,
 \code{_}.}
 
 \item{wordlists}{a data frame with at least two columns defining the word
-list to be used. This data frame should have a \code{group} column, ideally (see below).}
+list to be used. This data frame should have a \code{group} column, ideally (see
+below).}
 
-\item{group}{a character if \code{wordlists} is a data frame, this defines the column
-to be used for splitting the data frame into groups.}
+\item{group}{a character or integer if \code{wordlists} is a data frame, this
+defines the column to be used for splitting the data frame into groups. The
+default column is the third column of  \code{wordlists}. \emph{If you want to use a
+global dictionary}, set \code{group = NULL}.}
 
-\item{sort_by}{a character the column to be used for sorting the values in each data frame}
+\item{sort_by}{a character the column to be used for sorting the values in
+each data frame}
 
 \item{protect}{a logical or numeric vector defining the columns to protect
 from any manipulation. Note: columns in \code{protect} will override any columns

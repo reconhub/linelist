@@ -5,7 +5,7 @@
 \title{Clean a data.frame}
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, wordlists = NULL, group = NULL,
+  error_tolerance = 0.5, wordlists = NULL, group = 3,
   sort_by = NULL, protect = FALSE, ...)
 }
 \arguments{
@@ -30,12 +30,16 @@ proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
 
 \item{wordlists}{a data frame with at least two columns defining the word
-list to be used. This data frame should have a \code{group} column, ideally (see below).}
+list to be used. This data frame should have a \code{group} column, ideally (see
+below).}
 
-\item{group}{a character if \code{wordlists} is a data frame, this defines the column
-to be used for splitting the data frame into groups.}
+\item{group}{a character or integer if \code{wordlists} is a data frame, this
+defines the column to be used for splitting the data frame into groups. The
+default column is the third column of  \code{wordlists}. \emph{If you want to use a
+global dictionary}, set \code{group = NULL}.}
 
-\item{sort_by}{a character the column to be used for sorting the values in each data frame}
+\item{sort_by}{a character the column to be used for sorting the values in
+each data frame}
 
 \item{protect}{a logical or numeric vector defining the columns to protect
 from any manipulation. Note: columns in \code{protect} will override any columns
