@@ -79,10 +79,13 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   ## well-formatted date, but still returning a character. If it can't convert
   ## it, it returns NA.
 
-  
+  # save the original x for later if nothing is converted
+  ox <- x
+
   if (is.factor(x)) {
     x <- as.character(x)
   }
+
   iso_8601 <- "[0-9]{4}-(0|1(?=[0-2]))[0-9]-([0-2]|3(?=[0-1]))[0-9]"
   if (is.character(first_date) && 
       length(first_date) == 1 && 
@@ -137,7 +140,7 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
 
   ## shape result depending on whether conversion was successful
   if (prop_successful < (1 - error_tolerance)) {
-    return(x)
+    return(ox)
   } else {
     return(as.Date(new_x))
   }

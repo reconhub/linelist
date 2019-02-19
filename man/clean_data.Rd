@@ -5,7 +5,8 @@
 \title{Clean a data.frame}
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, protect = FALSE, ...)
+  error_tolerance = 0.5, wordlists = NULL, group = NULL,
+  sort_by = NULL, protect = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -28,6 +29,14 @@ entries which cannot be identified as dates to be tolerated; if this
 proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
 
+\item{wordlists}{a data frame with at least two columns defining the word
+list to be used. This data frame should have a \code{group} column, ideally (see below).}
+
+\item{group}{a character if \code{wordlists} is a data frame, this defines the column
+to be used for splitting the data frame into groups.}
+
+\item{sort_by}{a character the column to be used for sorting the values in each data frame}
+
 \item{protect}{a logical or numeric vector defining the columns to protect
 from any manipulation. Note: columns in \code{protect} will override any columns
 in either \code{force_Date} or \code{guess_dates}.}
@@ -48,7 +57,7 @@ from various formats mixed with other text. See details for more information.
 \examples{
 
 ## make toy data
-toy_data <- messy_data()
+toy_data <- messy_data(20)
 
 ## show data
 toy_data
@@ -68,7 +77,34 @@ clean_data3 <- clean_data(toy_data,
                           protect = to_protect
                          )
 clean_data3
+
+## Using a wordlist  -------------------------------
+
+# location data with mis-spellings, French, and English.
+messy_locations <- c("hopsital", "h\\u00f4pital", "hospital", 
+                     "m\\u00e9dical", "clinic", 
+                     "feild", "field")
+toy_data$location <- factor(sample(messy_locations, 20, replace = TRUE))
+
+# show data 
+toy_data$location
+
+
+# add a wordlist
+wordlist <- data.frame(
+  from  = c("hopsital", "hopital",  "medical", "feild"),
+  to    = c("hospital", "hospital", "clinic",  "field"),
+  var_shortname = rep("location", 4),
+  stringsAsFactors = FALSE
+)
+
+clean_data4 <- clean_data(toy_data, 
+                          wordlists = wordlist,
+                          group     = "var_shortname"
+                         )
+clean_data4
+clean_data4$location
 }
 \author{
-Thibaut Jombart
+Thibaut Jombart, Zhian N. Kamvar
 }

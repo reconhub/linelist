@@ -5,14 +5,31 @@ DAT <- seq(as.Date("2018-01-01"), length.out = 10, by = "1 day")
 POS <- as.POSIXlt(DAT, tz = "UTC")
 POS2 <- POS + (86400 * sample(10, 10, replace = TRUE)) + sample(86400, 10)
 md  <- messy_data(10)
+md$`'ID` <- as.character(md$`'ID`)
 md$`!!Date of Admission` <- DAT
 md$`Time of admission`   <- POS
 md$`Time of   discharge` <- POS2
 
+
+# location data with mis-spellings, French, and English.
+messy_locations <- c("hopsital", "h\u00f4pital", "hospital", 
+                     "m\u00e9dical", "clinic", 
+                     "feild", "field", "hopsital", 
+                     "home", "m\u00e9dical")
+md$location <- factor(messy_locations)
+
+# add a wordlist
+wordlist <- data.frame(
+  from  = c("hopsital", "hopital",  "medical", "feild"),
+  to    = c("hospital", "hospital", "clinic",  "field"),
+  var_shortname = rep("location", 4),
+  stringsAsFactors = FALSE
+)
+
 expected_colnames <- c("id", "date_of_onset", "discharge", "gender",
                        "epi_case_definition", "messy_dates", "lat", "lon",
                        "date_of_admission", "time_of_admission",
-                       "time_of_discharge")
+                       "time_of_discharge", "location")
 expected_comment <- setNames(names(md), expected_colnames)
 
 test_that("clean_data() needs a data frame with columns and/or rows", {
@@ -29,14 +46,15 @@ test_that("messy data will be clean", {
   expect_is(cd$id, "character")
   expect_is(cd$date_of_onset, "Date")
   expect_is(cd$discharge, "Date")
-  expect_is(cd$gender, "character")
-  expect_is(cd$epi_case_definition, "character")
+  expect_is(cd$gender, "factor")
+  expect_is(cd$epi_case_definition, "factor")
   expect_is(cd$messy_dates, "Date")
   expect_is(cd$lat, "numeric")
   expect_is(cd$lon, "numeric")
   expect_is(cd$date_of_admission, "Date")
   expect_is(cd$time_of_admission, "Date")
   expect_is(cd$time_of_discharge, "Date")
+  expect_is(cd$location, "factor")
 })
 
 
@@ -60,14 +78,15 @@ test_that("Dates won't be forced", {
   expect_is(cdd$id, "character")
   expect_is(cdd$date_of_onset, "Date")
   expect_is(cdd$discharge, "Date")
-  expect_is(cdd$gender, "character")
-  expect_is(cdd$epi_case_definition, "character")
+  expect_is(cdd$gender, "factor")
+  expect_is(cdd$epi_case_definition, "factor")
   expect_is(cdd$messy_dates, "Date")
   expect_is(cdd$lat, "numeric")
   expect_is(cdd$lon, "numeric")
   expect_is(cdd$date_of_admission, "Date")
   expect_is(cdd$time_of_admission, "POSIXt")
   expect_is(cdd$time_of_discharge, "POSIXt")
+  expect_is(cdd$location, "factor")
 
 })
 
@@ -76,3 +95,21 @@ test_that("protect overrides columns specified in force_Date and guess_dates", {
   expect_identical(md[6], cdf[6])
   expect_identical(md[11], cdf[11])
 })
+
+
+test_that("A wordlist can be implemented", {
+  
+  cdwl <- clean_data(md, wordlists = wordlist, group = "var_shortname")
+  expect_is(cdwl$location, "factor")
+  expect_identical(levels(cdwl$location), c("hospital", "clinic", "field", "home"))
+
+})
+
+
+test_that("clean_variables and clean_data will return the same thing if no dates", {
+
+  cdcd <- clean_data(md, wordlists = wordlist, group = "var_shortname", guess_dates = FALSE, force_Date = FALSE)
+  cdcv <- clean_variables(clean_variable_names(md), wordlists = wordlist, group = "var_shortname")
+  expect_identical(cdcd, cdcv)
+})
+
