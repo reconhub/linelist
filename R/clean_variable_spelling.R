@@ -86,7 +86,9 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), group 
 
     # There is a grouping column ----------------------------------------
     if (!is.null(group) && length(group) == 1) {
-      is_number <- is.numeric(group) && as.integer(group) == group && group < ncol(x)
+      is_number <- is.numeric(group) &&          # group is a number
+                   as.integer(group) == group && # group is an integer
+                   group <= ncol(wordlist)       # group is within the bounds
       is_name   <- is.character(group)
       if (is_number || is_name) {
         wordlists <- split(wordlists, wordlists[[group]])
