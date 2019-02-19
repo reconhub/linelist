@@ -60,6 +60,8 @@
 #' @param quiet a logical indicating if messages should be displayed to the
 #'     console (`TRUE`, default); set to `FALSE` to silence messages
 #'
+#' @seealso [clean_dates()] for cleaning of data frames
+#' 
 #' @examples
 #' 
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",

@@ -82,6 +82,9 @@ res <- clean_variable_spelling(dat, wordlists = wordlist, group = "grp", sort_by
 head(res)
 as.list(head(res))
 }
+\seealso{
+\code{\link[=clean_spelling]{clean_spelling()}}, which this function wraps.
+}
 \author{
 Zhian N. Kamvar
 }

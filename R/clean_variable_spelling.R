@@ -17,6 +17,7 @@
 #'   specifying the columns in the data to work on.
 #'
 #' @return a data frame with re-defined data based on the dictionary 
+#' @seealso [clean_spelling()], which this function wraps.
 #' @author Zhian N. Kamvar
 #' @export
 #' @examples

@@ -11,6 +11,8 @@
 #'
 #' @export 
 #' @author Zhian N. Kamvar
+#' @seealso [clean_variable_labels()] to standardise text, 
+#'   [clean_variable_spelling()] to correct spelling with a wordlist.
 #' @inheritParams clean_variable_spelling
 #'
 #' @examples

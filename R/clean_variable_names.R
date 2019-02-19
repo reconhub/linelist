@@ -19,6 +19,8 @@
 #' @export
 #'
 #' @return A `data.frame` with standardised variable names.
+#' 
+#' @seealso [clean_data()] for a one-shot wrapper to clean your data
 #'
 #' @examples
 #'

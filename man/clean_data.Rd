@@ -109,6 +109,12 @@ clean_data4 <- clean_data(toy_data,
 clean_data4
 clean_data4$location
 }
+\seealso{
+This function wraps three other functions:
+\code{\link[=clean_variable_names]{clean_variable_names()}} - to handle variable names,
+\code{\link[=clean_variables]{clean_variables()}} - to handle character/factor variables,
+\code{\link[=clean_dates]{clean_dates()}} - to handle dates.
+}
 \author{
 Thibaut Jombart, Zhian N. Kamvar
 }

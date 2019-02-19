@@ -66,6 +66,10 @@ clean_variables(toy_data,
                 group     = "var_shortname"
                )
 }
+\seealso{
+\code{\link[=clean_variable_labels]{clean_variable_labels()}} to standardise text,
+\code{\link[=clean_variable_spelling]{clean_variable_spelling()}} to correct spelling with a wordlist.
+}
 \author{
 Zhian N. Kamvar
 }

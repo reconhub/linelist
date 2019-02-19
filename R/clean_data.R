@@ -15,6 +15,11 @@
 #'
 #' @return A `data.frame` with standardised labels for characters and
 #'   factors.
+#' 
+#' @seealso This function wraps three other functions: 
+#' [clean_variable_names()] - to handle variable names, 
+#' [clean_variables()] - to handle character/factor variables, 
+#' [clean_dates()] - to handle dates. 
 #'
 #' @examples
 #'
