@@ -1,8 +1,8 @@
 #' Rename values in a vector based on a wordlist
 #'
-#' This function provides an interface for [forcats::fct_recode()] and 
-#' [forcats::fct_explicit_na()] in such a way that a data wordlist can be
-#' imported from a data frame. 
+#' This function provides an interface for [forcats::fct_recode()], 
+#' [forcats::fct_explicit_na()], and [forcats::fct_relevel()] in such a way that
+#' a data wordlist can be imported from a data frame. 
 #'
 #' @param x a character or factor vector
 #' @param wordlist a two-column matrix or data frame defining mis-spelled
@@ -10,7 +10,7 @@
 #' 
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned. 
 #'   Note that factors will be arranged by the order presented in the data 
-#'   wordlist. 
+#'   wordlist; other levels will appear afterwards.  
 #'
 #' @author Zhian N. Kamvar
 #' @seealso [clean_variable_spelling()] for an implementation that acts across
@@ -40,7 +40,7 @@
 #' )
 #' clean_spelling(c("Y", "Y", NA, "N", "U", "U", "N"), dict)
 #'
-#' @importFrom forcats fct_recode
+#' @importFrom forcats fct_recode fct_explicit_na fct_relevel
 #' @importFrom rlang "!!!"
 
 clean_spelling <- function(x = character(), wordlist = data.frame()) {

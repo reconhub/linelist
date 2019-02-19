@@ -1,12 +1,16 @@
 #' Check and clean spelling or codes of multiple variables in a data frame
 #'
-#' @param wordlists a named list of dictionaries that define dictionaries for
-#' specific columns.
+#' @param wordlists a data frame with at least two columns defining the word
+#'   list to be used. This data frame should have a `group` column, ideally (see below).
 #' @param group a character if `wordlists` is a data frame, this defines the column
 #' to be used for splitting the data frame into groups.
-#' @param sort_by a character if `wordlists` is a data frame, this defines the column
-#' to be used for sorting the values. 
+#' @param sort_by a character the column to be used for sorting the values in each data frame
 #' @inheritParams clean_variable_labels
+#'
+#' @note This function will only parse character and factor columns to protect
+#'   numeric and Date columns from conversion to character. While it is possible,
+#'   it is not recommended to use a dictionary without a grouping column 
+#'   specifying the columns in the data to work on.
 #'
 #' @return a data frame with re-defined data based on the dictionary 
 #' @author Zhian N. Kamvar
@@ -66,7 +70,8 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), group 
   }
 
   # Define columns viable for manipulation ------------------------------------
-  unprotected <- names(x)[classes != "protected"]
+  # Because this is a global manipulator, only work on characters or factors
+  unprotected <- names(x)[classes %in% c("character", "factor")]
 
   if (length(wordlists) == 0 || !is.list(wordlists)) {
     stop("wordlists must be a list of data frames")

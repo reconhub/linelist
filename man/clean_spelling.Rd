@@ -15,12 +15,12 @@ words in the first column and replacements in the second column.}
 \value{
 a vector of the same type as \code{x} with mis-spelled labels cleaned.
 Note that factors will be arranged by the order presented in the data
-wordlist.
+wordlist; other levels will appear afterwards.
 }
 \description{
-This function provides an interface for \code{\link[forcats:fct_recode]{forcats::fct_recode()}} and
-\code{\link[forcats:fct_explicit_na]{forcats::fct_explicit_na()}} in such a way that a data wordlist can be
-imported from a data frame.
+This function provides an interface for \code{\link[forcats:fct_recode]{forcats::fct_recode()}},
+\code{\link[forcats:fct_explicit_na]{forcats::fct_explicit_na()}}, and \code{\link[forcats:fct_relevel]{forcats::fct_relevel()}} in such a way that
+a data wordlist can be imported from a data frame.
 }
 \examples{
 

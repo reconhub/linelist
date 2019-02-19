@@ -10,14 +10,13 @@ clean_variable_spelling(x = data.frame(), wordlists = list(),
 \arguments{
 \item{x}{a \code{data.frame}}
 
-\item{wordlists}{a named list of dictionaries that define dictionaries for
-specific columns.}
+\item{wordlists}{a data frame with at least two columns defining the word
+list to be used. This data frame should have a \code{group} column, ideally (see below).}
 
 \item{group}{a character if \code{wordlists} is a data frame, this defines the column
 to be used for splitting the data frame into groups.}
 
-\item{sort_by}{a character if \code{wordlists} is a data frame, this defines the column
-to be used for sorting the values.}
+\item{sort_by}{a character the column to be used for sorting the values in each data frame}
 
 \item{classes}{a vector of class definitions for each of the columns. If this
 is not provided, the classes will be read from the columns themselves.
@@ -28,6 +27,12 @@ a data frame with re-defined data based on the dictionary
 }
 \description{
 Check and clean spelling or codes of multiple variables in a data frame
+}
+\note{
+This function will only parse character and factor columns to protect
+numeric and Date columns from conversion to character. While it is possible,
+it is not recommended to use a dictionary without a grouping column
+specifying the columns in the data to work on.
 }
 \examples{
 
