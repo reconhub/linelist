@@ -4,7 +4,8 @@
 \alias{clean_spelling}
 \title{Rename values in a vector based on a wordlist}
 \usage{
-clean_spelling(x = character(), wordlist = data.frame())
+clean_spelling(x = character(), wordlist = data.frame(),
+  quiet = FALSE)
 }
 \arguments{
 \item{x}{a character or factor vector}
@@ -14,6 +15,9 @@ words in the first column and replacements in the second column. If there
 is a ".default" value in the first column, then this will be used to
 change all other spellings/values to a default value in the second column.
 See examples.}
+
+\item{quiet}{a \code{logical} indicating if warnings should be issued if no
+replacement is made; if \code{FALSE}, these warnings will be disabled}
 }
 \value{
 a vector of the same type as \code{x} with mis-spelled labels cleaned.

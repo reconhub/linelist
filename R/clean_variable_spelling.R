@@ -132,7 +132,6 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
   }
-
   if (is.null(classes)) {
     classes <- i_find_classes(x)
   }
@@ -215,17 +214,16 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
       }
     }
     # Iterate over the names of the dictionaries -----------
-    to_iterate <- names(wordlists)
+    to_iterate <- intersect(names(wordlists), names(x))
     if (has_global) {
       to_iterate <- unique(c(to_iterate, unprotected))
     }
   }
-
   # Loop over the variables and clean spelling --------------------------------
   for (i in to_iterate) {
     d <- if (ddf) wordlists else wordlists[[i]] 
     d <- if (is.null(d)) global_words else d
-    try(x[[i]] <- clean_spelling(x[[i]], d))
+    try(x[[i]] <- clean_spelling(x[[i]], d, quiet = TRUE))
   }
 
   x

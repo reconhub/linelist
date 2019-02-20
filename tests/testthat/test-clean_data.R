@@ -141,9 +141,9 @@ test_that("A global wordlist can be implemented alongside the wordlist", {
 test_that("A global wordlist can be implemented as-is", {
 
   
-  expect_warning({
-    clean_global <- clean_data(md, wordlists = global_words)
-  }, "Did you use the correct wordlist?")
+  ## expect_warning({
+  clean_global <- clean_data(md, wordlists = global_words)
+  ## }, "Did you use the correct wordlist?")
 
   expect_true("HOSPITAL" %in% clean_global$location)
   expect_true("medical" %in% clean_global$location)

@@ -11,6 +11,9 @@
 #'   is a ".default" value in the first column, then this will be used to 
 #'   change all other spellings/values to a default value in the second column.
 #'   See examples.
+#'
+#' @param quiet a `logical` indicating if warnings should be issued if no
+#'   replacement is made; if `FALSE`, these warnings will be disabled
 #' 
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned. 
 #'   Note that factors will be arranged by the order presented in the data 
@@ -56,7 +59,8 @@
 #' @importFrom forcats fct_recode fct_explicit_na fct_relevel
 #' @importFrom rlang "!!!"
 
-clean_spelling <- function(x = character(), wordlist = data.frame()) {
+clean_spelling <- function(x = character(), wordlist = data.frame(),
+                           quiet = FALSE) {
 
   if (length(x) == 0 || !is.atomic(x)) {
     stop("x must be coerceable to a character")
@@ -87,14 +91,16 @@ clean_spelling <- function(x = character(), wordlist = data.frame()) {
 
   x_is_factor <- is.factor(x)
 
-  no_keys   <- !any(x %in% wordlist[[1]], na.rm = TRUE)
-  no_values <- !any(x %in% wordlist[[2]], na.rm = TRUE)
+  if (!quiet) {
+    no_keys   <- !any(x %in% wordlist[[1]], na.rm = TRUE)
+    no_values <- !any(x %in% wordlist[[2]], na.rm = TRUE)
 
-  if (no_keys && no_values) {
-    the_call <- match.call()
-    msg <- "None of the variables in %s were found in %s. Did you use the correct wordlist?" 
-    msg <- sprintf(msg, deparse(the_call[["x"]]), deparse(the_call[["wordlist"]]))
-    warning(msg)
+    if (no_keys && no_values) {
+      the_call <- match.call()
+      msg <- "None of the variables in %s were found in %s. Did you use the correct wordlist?" 
+      msg <- sprintf(msg, deparse(the_call[["x"]]), deparse(the_call[["wordlist"]]))
+      warning(msg)
+    }
   }
 
   dict <- stats::setNames(wordlist[[1]], wordlist[[2]])
