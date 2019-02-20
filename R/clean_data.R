@@ -6,28 +6,25 @@
 #' intelligent date search can be used on character strings to extract dates
 #' from various formats mixed with other text. See details for more information.
 #'
-#' @author Thibaut Jombart
+#' @author Thibaut Jombart, Zhian N. Kamvar
 #'
-#' @param x a `data.frame`
-#'
-#' @param sep The separator used between words, and defaults to the underscore
-#'   `_`.
-#'
-#' @param protect a logical or numeric vector defining the columns to protect
-#'   from any manipulation. Note: columns in `protect` will override any columns
-#'   in either `force_Date` or `guess_dates`.
-#'   
+#' @inheritParams clean_variables
 #' @inheritParams clean_dates
 #' 
 #' @export
 #'
 #' @return A `data.frame` with standardised labels for characters and
 #'   factors.
+#' 
+#' @seealso This function wraps three other functions: 
+#' [clean_variable_names()] - to handle variable names, 
+#' [clean_variables()] - to handle character/factor variables, 
+#' [clean_dates()] - to handle dates. 
 #'
 #' @examples
 #'
 #' ## make toy data
-#' toy_data <- messy_data()
+#' toy_data <- messy_data(20)
 #' 
 #' ## show data
 #' toy_data
@@ -47,10 +44,38 @@
 #'                           protect = to_protect
 #'                          )
 #' clean_data3
+#'
+#' ## Using a wordlist  -------------------------------
+#'
+#' # location data with mis-spellings, French, and English.
+#' messy_locations <- c("hopsital", "h\u00f4pital", "hospital", 
+#'                      "m\u00e9dical", "clinic", 
+#'                      "feild", "field")
+#' toy_data$location <- factor(sample(messy_locations, 20, replace = TRUE))
+#'
+#' # show data 
+#' toy_data$location
+#'
+#'
+#' # add a wordlist
+#' wordlist <- data.frame(
+#'   from  = c("hopsital", "hopital",  "medical", "feild"),
+#'   to    = c("hospital", "hospital", "clinic",  "field"),
+#'   variables = rep("location", 4),
+#'   stringsAsFactors = FALSE
+#' )
+#' 
+#' clean_data4 <- clean_data(toy_data, 
+#'                           wordlists     = wordlist,
+#'                           spelling_vars = "variables"
+#'                          )
+#' clean_data4
+#' clean_data4$location
 
 
 clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
-                       error_tolerance = 0.5, protect = FALSE, ...) {
+                       error_tolerance = 0.5, wordlists = NULL, spelling_vars = 3, 
+                       sort_by = NULL, protect = FALSE, ...) {
 
   xname <- deparse(substitute(x))
   if (!is.data.frame(x)) {
@@ -70,7 +95,12 @@ clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
   out <- clean_variable_names(x, protect = protect, sep = sep)
 
   # Cleaning variables ---------------------------------------------------------
-  out <- clean_variable_labels(out, sep = sep, classes = classes)
+  out <- clean_variables(out, 
+                         sep = sep, 
+                         wordlists = wordlists,
+                         spelling_vars = spelling_vars,
+                         sort_by = sort_by,
+                         classes = classes)
   
   # Cleaning and guessing dates ------------------------------------------------
   out <- clean_dates(out,

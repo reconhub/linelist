@@ -43,6 +43,9 @@ toy_data
 clean_data <- clean_variable_names(toy_data)
 clean_data
 }
+\seealso{
+\code{\link[=clean_data]{clean_data()}} for a one-shot wrapper to clean your data
+}
 \author{
 Thibaut Jombart
 }

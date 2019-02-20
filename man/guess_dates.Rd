@@ -76,6 +76,9 @@ FIRST_DATE <- as.Date("1969-11-11")
 guess_dates(x, error_tolerance = 1, first_date = FIRST_DATE) # forced conversion
 guess_dates(x, error_tolerance = 0.15, first_date = FIRST_DATE) # only 15\% errors allowed
 }
+\seealso{
+\code{\link[=clean_dates]{clean_dates()}} for cleaning of data frames
+}
 \author{
 Thibaut Jombart, Zhian N. Kamvar
 }

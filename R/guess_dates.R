@@ -60,6 +60,8 @@
 #' @param quiet a logical indicating if messages should be displayed to the
 #'     console (`TRUE`, default); set to `FALSE` to silence messages
 #'
+#' @seealso [clean_dates()] for cleaning of data frames
+#' 
 #' @examples
 #' 
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
@@ -80,7 +82,9 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   ## well-formatted date, but still returning a character. If it can't convert
   ## it, it returns NA.
 
-  
+  # save the original x for later if nothing is converted
+  ox <- x
+
   if (is.factor(x)) {
     x <- as.character(x)
   }
@@ -149,7 +153,7 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
 
   ## shape result depending on whether conversion was successful
   if (prop_successful < (1 - error_tolerance)) {
-    return(x)
+    return(ox)
   } else {
     return(as.Date(new_x))
   }

@@ -5,7 +5,8 @@
 \title{Clean a data.frame}
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, protect = FALSE, ...)
+  error_tolerance = 0.5, wordlists = NULL, spelling_vars = 3,
+  sort_by = NULL, protect = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -28,6 +29,20 @@ entries which cannot be identified as dates to be tolerated; if this
 proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
 
+\item{wordlists}{a data frame or named list of data frames with at least two
+columns defining the word list to be used. If this is a data frame, a third
+column must be present to split the wordlists by column in \code{x} (see
+\code{spelling_vars}).}
+
+\item{spelling_vars}{character or integer. If \code{wordlists} is a data frame,
+then this column in defines the columns in \code{x} corresponding to each
+section of the \code{wordlists} data frame. This defaults to \code{3}, indicating the
+third column is to be used.}
+
+\item{sort_by}{a character the column to be used for sorting the values in
+each data frame. If the incoming variables are factors, this determines how
+the resulting factors will be sorted.}
+
 \item{protect}{a logical or numeric vector defining the columns to protect
 from any manipulation. Note: columns in \code{protect} will override any columns
 in either \code{force_Date} or \code{guess_dates}.}
@@ -48,7 +63,7 @@ from various formats mixed with other text. See details for more information.
 \examples{
 
 ## make toy data
-toy_data <- messy_data()
+toy_data <- messy_data(20)
 
 ## show data
 toy_data
@@ -68,7 +83,40 @@ clean_data3 <- clean_data(toy_data,
                           protect = to_protect
                          )
 clean_data3
+
+## Using a wordlist  -------------------------------
+
+# location data with mis-spellings, French, and English.
+messy_locations <- c("hopsital", "h\\u00f4pital", "hospital", 
+                     "m\\u00e9dical", "clinic", 
+                     "feild", "field")
+toy_data$location <- factor(sample(messy_locations, 20, replace = TRUE))
+
+# show data 
+toy_data$location
+
+
+# add a wordlist
+wordlist <- data.frame(
+  from  = c("hopsital", "hopital",  "medical", "feild"),
+  to    = c("hospital", "hospital", "clinic",  "field"),
+  variables = rep("location", 4),
+  stringsAsFactors = FALSE
+)
+
+clean_data4 <- clean_data(toy_data, 
+                          wordlists     = wordlist,
+                          spelling_vars = "variables"
+                         )
+clean_data4
+clean_data4$location
+}
+\seealso{
+This function wraps three other functions:
+\code{\link[=clean_variable_names]{clean_variable_names()}} - to handle variable names,
+\code{\link[=clean_variables]{clean_variables()}} - to handle character/factor variables,
+\code{\link[=clean_dates]{clean_dates()}} - to handle dates.
 }
 \author{
-Thibaut Jombart
+Thibaut Jombart, Zhian N. Kamvar
 }
