@@ -7,7 +7,10 @@
 #' @param x a character or factor vector
 #'
 #' @param wordlist a two-column matrix or data frame defining mis-spelled
-#'   words in the first column and replacements in the second column.
+#'   words in the first column and replacements in the second column. If there
+#'   is a ".default" value in the first column, then this will be used to 
+#'   change all other spellings/values to a default value in the second column.
+#'   See examples.
 #' 
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned. 
 #'   Note that factors will be arranged by the order presented in the data 
@@ -27,9 +30,15 @@
 #'   good = c("foobar", "foobar", "foobar", "missing", "missing"),
 #'   stringsAsFactors = FALSE
 #' )
-#' head(corrections)
+#' corrections
 #' my_data <- c(letters[1:5], sample(corrections$bad, 10, replace = TRUE))
+#'
 #' clean_spelling(my_data, corrections)
+#'
+#' # You can also set a default value
+#' corrections_with_default <- rbind(corrections, c(bad = ".default", good = "unknown"))
+#' corrections_with_default
+#' clean_spelling(my_data, corrections_with_default)
 #'
 #' # The function will give you a warning if the wordlist does not
 #' # match the data
@@ -37,12 +46,12 @@
 #'
 #' # The can be used for translating survey output
 #'
-#' dict <- data.frame(
+#' words <- data.frame(
 #'   option_code = c("Y", "N", "U", NA),
 #'   option_name = c("Yes", "No", "Unknown", "Missing"),
 #'   stringsAsFactors = FALSE
 #' )
-#' clean_spelling(c("Y", "Y", NA, "N", "U", "U", "N"), dict)
+#' clean_spelling(c("Y", "Y", NA, "N", "U", "U", "N"), words)
 #'
 #' @importFrom forcats fct_recode fct_explicit_na fct_relevel
 #' @importFrom rlang "!!!"

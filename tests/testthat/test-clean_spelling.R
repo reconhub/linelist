@@ -44,11 +44,23 @@ test_that("clean_spelling will clean everything defined in the wordlist", {
 })
 
 
+
 test_that("clean_spelling will work with a matrix", {
 
   expect_identical(clean_spelling(my_data, as.matrix(corrections)), cleaned_data) 
 
 })
+
+
+test_that("clean_spelling will take in a default value", {
+
+  with_default <- rbind(corrections, c(bad = ".default", good = "unknown"))
+  cleaned_default <- cleaned_data
+  cleaned_default[!cleaned_default %in% with_default$good] <- "unknown"
+  expect_identical(clean_spelling(my_data, with_default), cleaned_default)
+
+})
+
 
 test_that("clean_spelling will be silent if the data are already cleaned", {
 
