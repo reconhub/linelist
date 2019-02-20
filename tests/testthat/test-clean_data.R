@@ -115,7 +115,7 @@ test_that("A wordlist can be implemented", {
 
 })
 
-test_that("A global wordlist can be implemented", {
+test_that("A global wordlist can be implemented alongside the wordlist", {
 
   wl <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
 
@@ -134,6 +134,20 @@ test_that("A global wordlist can be implemented", {
   expect_false("not_a_case" %in% clean_global$epi_case_definition)
   expect_true("masculine" %in% clean_global$gender)
   expect_true("feminine" %in% clean_global$gender)
+
+})
+
+
+test_that("A global wordlist can be implemented as-is", {
+
+  
+  expect_warning({
+    clean_global <- clean_data(md, wordlists = global_words)
+  }, "Did you use the correct wordlist?")
+
+  expect_true("HOSPITAL" %in% clean_global$location)
+  expect_true("medical" %in% clean_global$location)
+  expect_true("hopsital" %in% clean_global$location)
 
 })
 
