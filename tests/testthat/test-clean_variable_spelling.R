@@ -68,7 +68,7 @@ test_that("sorting works as expected", {
   # sorting by data.frame 
   test_sorted_df <- clean_variable_spelling(my_data_frame, 
                                              corrections,
-                                             group = "column",
+                                             spelling_vars = "column",
                                              sort_by = "orders"
   )
 
@@ -84,14 +84,14 @@ test_that("sorting works as expected", {
 
 })
 
-test_that("global data frame works if group = NULL", { 
+test_that("global data frame works if spelling_vars = NULL", { 
 
   expect_error({
-    global_test <- clean_variable_spelling(my_data_frame, corrections, group = 69)
-  }, "group must be the name or position of a column in the wordlist")
+    global_test <- clean_variable_spelling(my_data_frame, corrections, spelling_vars = 69)
+  }, "spelling_vars must be the name or position of a column in the wordlist")
 
   expect_warning({
-    global_test <- clean_variable_spelling(my_data_frame, corrections, group = NULL)
+    global_test <- clean_variable_spelling(my_data_frame, corrections, spelling_vars = NULL)
   }, "Using wordlist globally across all character/factor columns.")
 
   resorted_trt <- forcats::fct_relevel(cleaned_data$treatment, "missing") 

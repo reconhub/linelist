@@ -36,15 +36,16 @@
 #' wordlist <- data.frame(
 #'   from  = c("hopsital", "hopital",  "medical", "feild"),
 #'   to    = c("hospital", "hospital", "clinic",  "field"),
-#'   var_shortname = rep("location", 4),
+#'   variable = rep("location", 4),
 #'   stringsAsFactors = FALSE
 #' )
 #' 
 #' clean_variables(toy_data, 
-#'                 wordlists = wordlist,
-#'                 group     = "var_shortname"
+#'                 wordlists     = wordlist,
+#'                 spelling_vars = "variable"
 #'                )
-clean_variables <- function(x, sep = "_", wordlists = NULL, group = 3, sort_by = NULL, protect = FALSE, classes = NULL) {
+clean_variables <- function(x, sep = "_", wordlists = NULL, spelling_vars = 3, 
+                            sort_by = NULL, protect = FALSE, classes = NULL) {
 
   xname <- deparse(substitute(x))
   if (!is.data.frame(x)) {
@@ -68,7 +69,7 @@ clean_variables <- function(x, sep = "_", wordlists = NULL, group = 3, sort_by =
   if (!is.null(wordlists)) {
     out <- clean_variable_spelling(out, 
                                    wordlists = wordlists, 
-                                   group = group, 
+                                   spelling_vars = spelling_vars, 
                                    sort_by = sort_by,
                                    classes = classes)
   }

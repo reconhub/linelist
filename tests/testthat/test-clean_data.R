@@ -99,7 +99,7 @@ test_that("protect overrides columns specified in force_Date and guess_dates", {
 
 test_that("A wordlist can be implemented", {
   
-  cdwl <- clean_data(md, wordlists = wordlist, group = "var_shortname")
+  cdwl <- clean_data(md, wordlists = wordlist, spelling_vars = "var_shortname")
   expect_is(cdwl$location, "factor")
   expect_identical(levels(cdwl$location), c("hospital", "clinic", "field", "home"))
 
@@ -108,8 +108,8 @@ test_that("A wordlist can be implemented", {
 
 test_that("clean_variables and clean_data will return the same thing if no dates", {
 
-  cdcd <- clean_data(md, wordlists = wordlist, group = "var_shortname", guess_dates = FALSE, force_Date = FALSE)
-  cdcv <- clean_variables(clean_variable_names(md), wordlists = wordlist, group = "var_shortname")
+  cdcd <- clean_data(md, wordlists = wordlist, spelling_vars = "var_shortname", guess_dates = FALSE, force_Date = FALSE)
+  cdcv <- clean_variables(clean_variable_names(md), wordlists = wordlist, spelling_vars = "var_shortname")
   expect_identical(cdcd, cdcv)
 })
 

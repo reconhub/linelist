@@ -5,22 +5,26 @@
 \title{Check and clean spelling or codes of multiple variables in a data frame}
 \usage{
 clean_variable_spelling(x = data.frame(), wordlists = list(),
-  group = 3, sort_by = NULL, classes = NULL)
+  spelling_vars = 3, sort_by = NULL, classes = NULL)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
 
-\item{wordlists}{a data frame with at least two columns defining the word
-list to be used. This data frame should have a \code{group} column, ideally (see
-below).}
+\item{wordlists}{a data frame or list of named data frames with at least two
+columns defining the word list to be used. If this is a data frame, a third
+column must be present to split the wordlists by column in \code{x} (see
+\code{spelling_vars}).}
 
-\item{group}{a character or integer if \code{wordlists} is a data frame, this
-defines the column to be used for splitting the data frame into groups. The
-default column is the third column of  \code{wordlists}. \emph{If you want to use a
-global dictionary}, set \code{group = NULL}.}
+\item{spelling_vars}{character or integer. If \code{wordlists} is a data frame,
+then this column in defines the columns in \code{x} corresponding to each
+section of the \code{wordlists} data frame. This defaults to \code{3}, indicating the
+third column is to be used. \emph{If you want to use a global dictionary,
+use \code{spelling_vars = NULL}}, but be aware that you may end up with several
+warnings if variables do not appear in some columns of \code{x}.}
 
 \item{sort_by}{a character the column to be used for sorting the values in
-each data frame}
+each data frame. If the incoming variables are factors, this determines how
+the resulting factors will be sorted.}
 
 \item{classes}{a vector of class definitions for each of the columns. If this
 is not provided, the classes will be read from the columns themselves.
@@ -34,9 +38,7 @@ Check and clean spelling or codes of multiple variables in a data frame
 }
 \note{
 This function will only parse character and factor columns to protect
-numeric and Date columns from conversion to character. While it is possible,
-it is not recommended to use a dictionary without a grouping column
-specifying the columns in the data to work on.
+numeric and Date columns from conversion to character.
 }
 \examples{
 
@@ -53,11 +55,11 @@ dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
 wordlist <- data.frame(
   options = c(yesno, treatment_administered, facility, age_group),
   values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
+  grp = rep(c("readmission", "treatment_administered", "facility", "age_group"),
+            c(4, 3, 10, 6)),
   orders  = c(1:4, 1:3, 1:10, 1:6),
   stringsAsFactors = FALSE
 )
-wordlist$grp <- rep(c("readmission", "treatment_administered", "facility", "age_group"),
-                    c(4, 3, 10, 6))
 
 # Generate example data ------------------------------------------
 dat <- data.frame(
@@ -69,16 +71,17 @@ dat <- data.frame(
 )
 
 # Clean spelling based on wordlist ------------------------------ 
+
 wordlist # show the wordlist
 head(dat) # show the data
 
-head(clean_variable_spelling(dat, wordlists = wordlist, group = "grp"))
+head(clean_variable_spelling(dat, wordlists = wordlist, spelling_vars = "grp"))
 
 # You can ensure the order of the factors are correct by specifying 
 # a column that defines order.
 dat[] <- lapply(dat, as.factor)
 as.list(head(dat))
-res <- clean_variable_spelling(dat, wordlists = wordlist, group = "grp", sort_by = "orders")
+res <- clean_variable_spelling(dat, wordlists = wordlist, spelling_vars = "grp", sort_by = "orders")
 head(res)
 as.list(head(res))
 }

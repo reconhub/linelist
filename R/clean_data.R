@@ -61,20 +61,20 @@
 #' wordlist <- data.frame(
 #'   from  = c("hopsital", "hopital",  "medical", "feild"),
 #'   to    = c("hospital", "hospital", "clinic",  "field"),
-#'   var_shortname = rep("location", 4),
+#'   variables = rep("location", 4),
 #'   stringsAsFactors = FALSE
 #' )
 #' 
 #' clean_data4 <- clean_data(toy_data, 
-#'                           wordlists = wordlist,
-#'                           group     = "var_shortname"
+#'                           wordlists     = wordlist,
+#'                           spelling_vars = "variables"
 #'                          )
 #' clean_data4
 #' clean_data4$location
 
 
 clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
-                       error_tolerance = 0.5, wordlists = NULL, group = 3, 
+                       error_tolerance = 0.5, wordlists = NULL, spelling_vars = 3, 
                        sort_by = NULL, protect = FALSE, ...) {
 
   xname <- deparse(substitute(x))
@@ -98,7 +98,7 @@ clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
   out <- clean_variables(out, 
                          sep = sep, 
                          wordlists = wordlists,
-                         group = group,
+                         spelling_vars = spelling_vars,
                          sort_by = sort_by,
                          classes = classes)
   

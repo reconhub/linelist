@@ -1,25 +1,34 @@
 #' Check and clean spelling or codes of multiple variables in a data frame
 #'
-#' @param wordlists a data frame with at least two columns defining the word
-#' list to be used. This data frame should have a `group` column, ideally (see
-#' below).
-#' @param group a character or integer if `wordlists` is a data frame, this
-#' defines the column to be used for splitting the data frame into groups. The
-#' default column is the third column of  `wordlists`. *If you want to use a
-#' global dictionary*, set `group = NULL`.
+#' @param wordlists a data frame or list of named data frames with at least two
+#'   columns defining the word list to be used. If this is a data frame, a third
+#'   column must be present to split the wordlists by column in `x` (see
+#'   `spelling_vars`).
+#'
+#' @param spelling_vars character or integer. If `wordlists` is a data frame,
+#'   then this column in defines the columns in `x` corresponding to each
+#'   section of the `wordlists` data frame. This defaults to `3`, indicating the
+#'   third column is to be used. _If you want to use a global dictionary, 
+#'   use `spelling_vars = NULL`_, but be aware that you may end up with several
+#'   warnings if variables do not appear in some columns of `x`. 
+#'
 #' @param sort_by a character the column to be used for sorting the values in
-#' each data frame
+#'   each data frame. If the incoming variables are factors, this determines how
+#'   the resulting factors will be sorted.
+#' 
 #' @inheritParams clean_variable_labels
 #'
 #' @note This function will only parse character and factor columns to protect
-#'   numeric and Date columns from conversion to character. While it is possible,
-#'   it is not recommended to use a dictionary without a grouping column 
-#'   specifying the columns in the data to work on.
+#'   numeric and Date columns from conversion to character. 
 #'
 #' @return a data frame with re-defined data based on the dictionary 
+#'
 #' @seealso [clean_spelling()], which this function wraps.
+#'
 #' @author Zhian N. Kamvar
+#'
 #' @export
+#'
 #' @examples
 #' 
 #' # Set up wordlist ------------------------------------------------ 
@@ -35,11 +44,11 @@
 #' wordlist <- data.frame(
 #'   options = c(yesno, treatment_administered, facility, age_group),
 #'   values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
+#'   grp = rep(c("readmission", "treatment_administered", "facility", "age_group"),
+#'             c(4, 3, 10, 6)),
 #'   orders  = c(1:4, 1:3, 1:10, 1:6),
 #'   stringsAsFactors = FALSE
 #' )
-#' wordlist$grp <- rep(c("readmission", "treatment_administered", "facility", "age_group"),
-#'                     c(4, 3, 10, 6))
 #'
 #' # Generate example data ------------------------------------------
 #' dat <- data.frame(
@@ -51,20 +60,21 @@
 #' )
 #'
 #' # Clean spelling based on wordlist ------------------------------ 
+#'
 #' wordlist # show the wordlist
 #' head(dat) # show the data
 #' 
-#' head(clean_variable_spelling(dat, wordlists = wordlist, group = "grp"))
+#' head(clean_variable_spelling(dat, wordlists = wordlist, spelling_vars = "grp"))
 #' 
 #' # You can ensure the order of the factors are correct by specifying 
 #' # a column that defines order.
 #' dat[] <- lapply(dat, as.factor)
 #' as.list(head(dat))
-#' res <- clean_variable_spelling(dat, wordlists = wordlist, group = "grp", sort_by = "orders")
+#' res <- clean_variable_spelling(dat, wordlists = wordlist, spelling_vars = "grp", sort_by = "orders")
 #' head(res)
 #' as.list(head(res))
 
-clean_variable_spelling <- function(x = data.frame(), wordlists = list(), group = 3, sort_by = NULL, classes = NULL) {
+clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelling_vars = 3, sort_by = NULL, classes = NULL) {
 
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
@@ -82,21 +92,21 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), group 
     stop("wordlists must be a list of data frames")
   } 
 
-  # There is one big dictionary with groups -----------------------------------
+  # There is one big dictionary with spelling_varss -----------------------------------
   if (is.data.frame(wordlists)) {
 
-    # There is a grouping column ----------------------------------------
-    if (!is.null(group) && length(group) == 1) {
-      is_number <- is.numeric(group) &&          # group is a number
-                   as.integer(group) == group && # ... and an integer
-                   group <= ncol(wordlists)      # ... and is within the bounds
+    # There is a spelling_varsing column ----------------------------------------
+    if (!is.null(spelling_vars) && length(spelling_vars) == 1) {
+      is_number <- is.numeric(spelling_vars) &&          # spelling_vars is a number
+                   as.integer(spelling_vars) == spelling_vars && # ... and an integer
+                   spelling_vars <= ncol(wordlists)      # ... and is within the bounds
 
-      is_name   <- is.character(group) &&         # group is a name
-                   any(names(wordlists) == group) # ... in the wordlists
+      is_name   <- is.character(spelling_vars) &&         # spelling_vars is a name
+                   any(names(wordlists) == spelling_vars) # ... in the wordlists
       if (is_number || is_name) {
-        wordlists <- split(wordlists, wordlists[[group]])
+        wordlists <- split(wordlists, wordlists[[spelling_vars]])
       } else {
-        stop("group must be the name or position of a column in the wordlist")
+        stop("spelling_vars must be the name or position of a column in the wordlist")
       }
     } else {
       warning("Using wordlist globally across all character/factor columns.")

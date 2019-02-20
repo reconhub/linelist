@@ -5,7 +5,7 @@
 \title{Clean a data.frame}
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, wordlists = NULL, group = 3,
+  error_tolerance = 0.5, wordlists = NULL, spelling_vars = 3,
   sort_by = NULL, protect = FALSE, ...)
 }
 \arguments{
@@ -29,17 +29,21 @@ entries which cannot be identified as dates to be tolerated; if this
 proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)}
 
-\item{wordlists}{a data frame with at least two columns defining the word
-list to be used. This data frame should have a \code{group} column, ideally (see
-below).}
+\item{wordlists}{a data frame or list of named data frames with at least two
+columns defining the word list to be used. If this is a data frame, a third
+column must be present to split the wordlists by column in \code{x} (see
+\code{spelling_vars}).}
 
-\item{group}{a character or integer if \code{wordlists} is a data frame, this
-defines the column to be used for splitting the data frame into groups. The
-default column is the third column of  \code{wordlists}. \emph{If you want to use a
-global dictionary}, set \code{group = NULL}.}
+\item{spelling_vars}{character or integer. If \code{wordlists} is a data frame,
+then this column in defines the columns in \code{x} corresponding to each
+section of the \code{wordlists} data frame. This defaults to \code{3}, indicating the
+third column is to be used. \emph{If you want to use a global dictionary,
+use \code{spelling_vars = NULL}}, but be aware that you may end up with several
+warnings if variables do not appear in some columns of \code{x}.}
 
 \item{sort_by}{a character the column to be used for sorting the values in
-each data frame}
+each data frame. If the incoming variables are factors, this determines how
+the resulting factors will be sorted.}
 
 \item{protect}{a logical or numeric vector defining the columns to protect
 from any manipulation. Note: columns in \code{protect} will override any columns
@@ -98,13 +102,13 @@ toy_data$location
 wordlist <- data.frame(
   from  = c("hopsital", "hopital",  "medical", "feild"),
   to    = c("hospital", "hospital", "clinic",  "field"),
-  var_shortname = rep("location", 4),
+  variables = rep("location", 4),
   stringsAsFactors = FALSE
 )
 
 clean_data4 <- clean_data(toy_data, 
-                          wordlists = wordlist,
-                          group     = "var_shortname"
+                          wordlists     = wordlist,
+                          spelling_vars = "variables"
                          )
 clean_data4
 clean_data4$location
