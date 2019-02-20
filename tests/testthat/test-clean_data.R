@@ -23,6 +23,16 @@ wordlist <- data.frame(
   from  = c("hopsital", "hopital",  "medical", "feild"),
   to    = c("hospital", "hospital", "clinic",  "field"),
   var_shortname = rep("location", 4),
+  orders = 1:4,
+  stringsAsFactors = FALSE
+)
+
+# define a global wordlist to check for things that change and things that don't
+global_words <- data.frame(
+  from = c("not_a_case", "female", "male", "hopital"),
+  to  = c("not a case", "feminine", "masculine", "HOSPITAL"),
+  var_shortname     = ".global",
+  orders = Inf,
   stringsAsFactors = FALSE
 )
 
@@ -105,6 +115,27 @@ test_that("A wordlist can be implemented", {
 
 })
 
+test_that("A global wordlist can be implemented", {
+
+  wl <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
+
+  expect_warning({
+    clean_global <- clean_data(md, wordlists = wl)
+  }, "HOSPITAL") # warning from forcats
+
+  expect_is(clean_global$location, "factor")
+
+  # column-specific definitions aren't overwritten
+  expect_identical(levels(clean_global$location), c("hospital", "clinic", "field", "home"))
+  expect_false("HOSPITAL" %in% clean_global$location)
+
+  # global definitions are changed
+  expect_true("not a case" %in% clean_global$epi_case_definition)
+  expect_false("not_a_case" %in% clean_global$epi_case_definition)
+  expect_true("masculine" %in% clean_global$gender)
+  expect_true("feminine" %in% clean_global$gender)
+
+})
 
 test_that("clean_variables and clean_data will return the same thing if no dates", {
 
