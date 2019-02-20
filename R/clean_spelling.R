@@ -88,9 +88,14 @@ clean_spelling <- function(x = character(), wordlist = data.frame()) {
     warning(msg)
   }
 
-  dict <- setNames(wordlist[[1]], wordlist[[2]])
-  nas  <- dict[is.na(dict)]
-  dict <- dict[!is.na(dict)]
+  dict <- stats::setNames(wordlist[[1]], wordlist[[2]])
+  
+  na_posi      <- is.na(dict)
+  default_posi <- dict == ".default" 
+
+  default <- dict[!na_posi & default_posi]
+  nas     <- dict[na_posi]
+  dict    <- dict[!na_posi & !default_posi]
 
   # Recode data with forcats --------------------------------------------------
   suppressWarnings(x <- forcats::fct_recode(x, !!!dict))
@@ -98,6 +103,11 @@ clean_spelling <- function(x = character(), wordlist = data.frame()) {
   # Replace NAs if there are any ----------------------------------------------
   if (length(nas) > 0) {
     x <- forcats::fct_explicit_na(x, na_level = names(nas))
+  }
+
+  # Replace any untranslated variables if .default is defined -----------------
+  if (length(default) > 0) {
+    x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other = names(default))
   }
 
   # Make sure order is preserved if it's a factor -----------------------------
