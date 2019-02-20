@@ -33,11 +33,11 @@
 #' 
 #' # Set up wordlist ------------------------------------------------ 
 #' yesno <- c("Y", "N", "U", NA)
-#' dyesno <- c("Yes", "No", "Unknown", "missing")
+#' dyesno <- c("Yes", "No", "Unknown", "Missing")
 #' treatment_administered <- c(0:1, NA)
-#' dtreatment_administered <- c("Yes", "No", "missing")
-#' facility <- 1:10
-#' dfacility <- sprintf("Facility %s", format(1:10))
+#' dtreatment_administered <- c("Yes", "No", "Missing")
+#' facility <- c(1:10, ".default") # define a .default key
+#' dfacility <- c(sprintf("Facility %s", format(1:10)), "Unknown")
 #' age_group <- c(0, 10, 20, 30, 40, 50)
 #' dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
 #' 
@@ -45,8 +45,8 @@
 #'   options = c(yesno, treatment_administered, facility, age_group),
 #'   values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
 #'   grp = rep(c("readmission", "treatment_administered", "facility", "age_group"),
-#'             c(4, 3, 10, 6)),
-#'   orders  = c(1:4, 1:3, 1:10, 1:6),
+#'             c(4, 3, 11, 6)),
+#'   orders  = c(1:4, 1:3, 1:11, 1:6),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -54,7 +54,7 @@
 #' dat <- data.frame(
 #'   readmission = sample(yesno, 50, replace = TRUE),
 #'   treatment_administered = sample(treatment_administered, 50, replace = TRUE),
-#'   facility = sample(facility, 50, replace = TRUE),
+#'   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
 #'   age_group = sample(age_group, 50, replace = TRUE),
 #'   stringsAsFactors = FALSE
 #' )
@@ -70,7 +70,10 @@
 #' # a column that defines order.
 #' dat[] <- lapply(dat, as.factor)
 #' as.list(head(dat))
-#' res <- clean_variable_spelling(dat, wordlists = wordlist, spelling_vars = "grp", sort_by = "orders")
+#' res <- clean_variable_spelling(dat, 
+#'                                wordlists = wordlist, 
+#'                                spelling_vars = "grp", 
+#'                                sort_by = "orders")
 #' head(res)
 #' as.list(head(res))
 
