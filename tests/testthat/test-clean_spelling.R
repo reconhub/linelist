@@ -44,6 +44,12 @@ test_that("clean_spelling will clean everything defined in the wordlist", {
 })
 
 
+test_that("clean_spelling will work with a matrix", {
+
+  expect_identical(clean_spelling(my_data, as.matrix(corrections)), cleaned_data) 
+
+})
+
 test_that("clean_spelling will be silent if the data are already cleaned", {
 
   expect_failure(expect_warning(clean_spelling(cleaned_data, corrections)))

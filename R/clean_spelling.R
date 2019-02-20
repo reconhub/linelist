@@ -5,6 +5,7 @@
 #' a data wordlist can be imported from a data frame. 
 #'
 #' @param x a character or factor vector
+#'
 #' @param wordlist a two-column matrix or data frame defining mis-spelled
 #'   words in the first column and replacements in the second column.
 #' 
@@ -13,9 +14,12 @@
 #'   wordlist; other levels will appear afterwards.  
 #'
 #' @author Zhian N. Kamvar
+#'
 #' @seealso [clean_variable_spelling()] for an implementation that acts across
 #'   multiple variables in a data frame.
+#'
 #' @export
+#'
 #' @examples
 #'
 #' corrections <- data.frame(
@@ -51,15 +55,26 @@ clean_spelling <- function(x = character(), wordlist = data.frame()) {
     x <- as.character(x)
   }
 
-  if (length(wordlist) < 2 || !is.data.frame(wordlist)) {
+  wl_is_data_frame  <- is.data.frame(wordlist)
+  
+  wl_is_rectangular <- (wl_is_data_frame || is.matrix(wordlist)) &&
+                       ncol(wordlist) >= 2
+ 
+  if (!wl_is_rectangular) {
     stop("wordlist must be a data frame with at least two columns")
-  } else {
-    if (!is.atomic(wordlist[[1]]) || !is.atomic(wordlist[[2]])) {
-      stop("wordlist must have two columns coerceable to a character")
-    }
-    wordlist[[1]] <- as.character(wordlist[[1]])
-    wordlist[[2]] <- as.character(wordlist[[2]])
+  } 
+  
+  if (!wl_is_data_frame) {
+    wordlist <- as.data.frame(wordlist, stringsAsFactors = FALSE)
   }
+
+  if (!is.atomic(wordlist[[1]]) || !is.atomic(wordlist[[2]])) {
+    stop("wordlist must have two columns coerceable to a character")
+  }
+
+  wordlist[[1]] <- as.character(wordlist[[1]])
+  wordlist[[2]] <- as.character(wordlist[[2]])
+
 
   x_is_factor <- is.factor(x)
 
@@ -76,7 +91,7 @@ clean_spelling <- function(x = character(), wordlist = data.frame()) {
   dict <- setNames(wordlist[[1]], wordlist[[2]])
   nas  <- dict[is.na(dict)]
   dict <- dict[!is.na(dict)]
-  
+
   # Recode data with forcats --------------------------------------------------
   suppressWarnings(x <- forcats::fct_recode(x, !!!dict))
 
