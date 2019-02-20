@@ -8,9 +8,7 @@
 #' @param spelling_vars character or integer. If `wordlists` is a data frame,
 #'   then this column in defines the columns in `x` corresponding to each
 #'   section of the `wordlists` data frame. This defaults to `3`, indicating the
-#'   third column is to be used. _If you want to use a global dictionary, 
-#'   use `spelling_vars = NULL`_, but be aware that you may end up with several
-#'   warnings if variables do not appear in some columns of `x`. 
+#'   third column is to be used.  
 #'
 #' @param sort_by a character the column to be used for sorting the values in
 #'   each data frame. If the incoming variables are factors, this determines how
@@ -18,6 +16,7 @@
 #' 
 #' @inheritParams clean_variable_labels
 #'
+#' 
 #' @note This function will only parse character and factor columns to protect
 #'   numeric and Date columns from conversion to character. 
 #'
@@ -40,13 +39,16 @@
 #' dfacility <- c(sprintf("Facility %s", format(1:10)), "Unknown")
 #' age_group <- c(0, 10, 20, 30, 40, 50)
 #' dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
-#' 
+#' # you can assign global values
+#' global_keys <- c("Y", "N", "U", "unk", "oui", NA)
+#' global_values <- c("yes", "no", "unknown", "unknown", "yes", "missing")
+#'
 #' wordlist <- data.frame(
-#'   options = c(yesno, treatment_administered, facility, age_group),
-#'   values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
-#'   grp = rep(c("readmission", "treatment_administered", "facility", "age_group"),
-#'             c(4, 3, 11, 6)),
-#'   orders  = c(1:4, 1:3, 1:11, 1:6),
+#'   options = c(yesno, treatment_administered, facility, age_group, global_keys),
+#'   values  = c(dyesno, dtreatment_administered, dfacility, dage_group, global_values),
+#'   grp = rep(c("readmission", "treatment_administered", "facility", "age_group", ".global"),
+#'             c(4, 3, 11, 6, 6)),
+#'   orders  = c(1:4, 1:3, 1:11, 1:6, rep(Inf, 6)),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -56,6 +58,8 @@
 #'   treatment_administered = sample(treatment_administered, 50, replace = TRUE),
 #'   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
 #'   age_group = sample(age_group, 50, replace = TRUE),
+#'   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
+#'   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -151,13 +155,30 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
         wordlists[[i]] <- wordlists[[i]][the_sorts, , drop = FALSE]
       }
     }
+    global_words <- wordlists[[".global"]]
+    wordlists    <- wordlists[names(wordlists) != ".global"]
+    has_global   <- !is.null(global_words)
+    if (has_global) {
+      for (i in names(wordlists)) {
+        # Append the global dictionary to the specific one -
+        wordlists[[i]] <- rbind(wordlists[[i]], global_words, 
+                                stringsAsFactors = FALSE,
+                                make.row.names = FALSE)
+        # The specific values override the global values --
+        wordlists[[i]] <- wordlists[[i]][!duplicated(wordlists[[i]][1]), ,drop = FALSE]
+      }
+    }
     # Iterate over the names of the dictionaries -----------
     to_iterate <- names(wordlists)
+    if (has_global) {
+      to_iterate <- unique(c(to_iterate, unprotected))
+    }
   }
 
   # Loop over the variables and clean spelling --------------------------------
   for (i in to_iterate) {
     d <- if (ddf) wordlists else wordlists[[i]] 
+    d <- if (is.null(d)) global_words else d
     try(x[[i]] <- clean_spelling(x[[i]], d))
   }
 

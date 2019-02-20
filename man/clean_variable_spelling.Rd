@@ -51,13 +51,16 @@ facility <- c(1:10, ".default") # define a .default key
 dfacility <- c(sprintf("Facility \%s", format(1:10)), "Unknown")
 age_group <- c(0, 10, 20, 30, 40, 50)
 dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
+# you can assign global values
+global_keys <- c("Y", "N", "U", "unk", "oui", NA)
+global_values <- c("yes", "no", "unknown", "unknown", "yes", "missing")
 
 wordlist <- data.frame(
-  options = c(yesno, treatment_administered, facility, age_group),
-  values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
-  grp = rep(c("readmission", "treatment_administered", "facility", "age_group"),
-            c(4, 3, 11, 6)),
-  orders  = c(1:4, 1:3, 1:11, 1:6),
+  options = c(yesno, treatment_administered, facility, age_group, global_keys),
+  values  = c(dyesno, dtreatment_administered, dfacility, dage_group, global_values),
+  grp = rep(c("readmission", "treatment_administered", "facility", "age_group", ".global"),
+            c(4, 3, 11, 6, 6)),
+  orders  = c(1:4, 1:3, 1:11, 1:6, rep(Inf, 6)),
   stringsAsFactors = FALSE
 )
 
@@ -67,6 +70,8 @@ dat <- data.frame(
   treatment_administered = sample(treatment_administered, 50, replace = TRUE),
   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
   age_group = sample(age_group, 50, replace = TRUE),
+  has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
+  followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
   stringsAsFactors = FALSE
 )
 
