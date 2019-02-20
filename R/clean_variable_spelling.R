@@ -1,6 +1,6 @@
 #' Check and clean spelling or codes of multiple variables in a data frame
 #'
-#' @param wordlists a data frame or list of named data frames with at least two
+#' @param wordlists a data frame or named list of data frames with at least two
 #'   columns defining the word list to be used. If this is a data frame, a third
 #'   column must be present to split the wordlists by column in `x` (see
 #'   `spelling_vars`).
@@ -8,13 +8,43 @@
 #' @param spelling_vars character or integer. If `wordlists` is a data frame,
 #'   then this column in defines the columns in `x` corresponding to each
 #'   section of the `wordlists` data frame. This defaults to `3`, indicating the
-#'   third column is to be used.  
+#'   third column is to be used.
 #'
 #' @param sort_by a character the column to be used for sorting the values in
 #'   each data frame. If the incoming variables are factors, this determines how
 #'   the resulting factors will be sorted.
 #' 
 #' @inheritParams clean_variable_labels
+#' 
+#' @description This function allows you to clean your data according to 
+#' pre-defined rules encapsulated in either a data frame or list of data frames.
+#' It has application for addressing mis-spellings and recoding variables (e.g.
+#' from electronic survey data). 
+#'
+#' By default, this applies the function [clean_spelling()] to all columns 
+#' specified by the column names listed in `spelling_vars`, or, if a global
+#' dictionary is used, this includes all `character` and `factor` columns as
+#' well. 
+#'
+#' \subsection{Global wordlists}{
+#' 
+#' A global wordlist is a set of definitions applied to all valid columns of `x`
+#' indiscriminantly. When a global dictioary is used, you might see several
+#' warnings appear because some variables were not found in the data.
+#'
+#'  - **.global spelling_var**: If you want to apply a set of definitions to all
+#'     valid columns in addition to specified columns, then you can include a
+#'     `.global` group in the `spelling_var` column of your `wordlists` data
+#'     frame. *NOTE: specific variable definitions will override global
+#'     defintions.* For example: if you have a column for cardinal directions
+#'     and a definiton for `N = North`, then the global variable `N = no` will
+#'     not override that. See Example.
+#'
+#'  - **`spelling_var = NULL`**: If you want your data frame to be applied to
+#'    all character/factor columns indiscriminantly, then setting 
+#'    `spelling_var = NULL` will use that wordlist globally.
+#'
+#' }
 #'
 #' 
 #' @note This function will only parse character and factor columns to protect
@@ -31,33 +61,48 @@
 #' @examples
 #' 
 #' # Set up wordlist ------------------------------------------------ 
-#' yesno <- c("Y", "N", "U", NA)
+#'
+#' yesno  <- c("Y", "N", "U", NA)
 #' dyesno <- c("Yes", "No", "Unknown", "Missing")
-#' treatment_administered <- c(0:1, NA)
+#'
+#' treatment_administered  <- c(0:1, NA)
 #' dtreatment_administered <- c("Yes", "No", "Missing")
-#' facility <- c(1:10, ".default") # define a .default key
+#'
+#' facility  <- c(1:10, ".default") # define a .default key
 #' dfacility <- c(sprintf("Facility %s", format(1:10)), "Unknown")
-#' age_group <- c(0, 10, 20, 30, 40, 50)
+#'
+#' age_group  <- c(0, 10, 20, 30, 40, 50)
 #' dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
-#' # you can assign global values
-#' global_keys <- c("Y", "N", "U", "unk", "oui", NA)
-#' global_values <- c("yes", "no", "unknown", "unknown", "yes", "missing")
 #'
 #' wordlist <- data.frame(
-#'   options = c(yesno, treatment_administered, facility, age_group, global_keys),
-#'   values  = c(dyesno, dtreatment_administered, dfacility, dage_group, global_values),
-#'   grp = rep(c("readmission", "treatment_administered", "facility", "age_group", ".global"),
-#'             c(4, 3, 11, 6, 6)),
-#'   orders  = c(1:4, 1:3, 1:11, 1:6, rep(Inf, 6)),
+#'   options = c(yesno, treatment_administered, facility, age_group),
+#'   values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
+#'   grp = rep(c("readmission", "treatment_administered", "facility", "age_group"),
+#'             c(4, 3, 11, 6)),
+#'   orders  = c(1:4, 1:3, 1:11, 1:6),
 #'   stringsAsFactors = FALSE
 #' )
 #'
+#' # Assigning global values ----------------------------------------
+#'
+#' global_words <- data.frame(
+#'   options = c("Y", "N", "U", "unk", "oui", NA),
+#'   values  = c("yes", "no", "unknown", "unknown", "yes", "missing"),
+#'   grp     = rep(".global", 6),
+#'   orders  = rep(Inf, 6),
+#'   stringsAsFactors = FALSE
+#' )
+#' 
+#' wordlist <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
+#'
 #' # Generate example data ------------------------------------------
 #' dat <- data.frame(
+#'   # these have been defined
 #'   readmission = sample(yesno, 50, replace = TRUE),
 #'   treatment_administered = sample(treatment_administered, 50, replace = TRUE),
 #'   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
 #'   age_group = sample(age_group, 50, replace = TRUE),
+#'   # global values will catch these
 #'   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
 #'   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
 #'   stringsAsFactors = FALSE
@@ -72,6 +117,7 @@
 #' 
 #' # You can ensure the order of the factors are correct by specifying 
 #' # a column that defines order.
+#'
 #' dat[] <- lapply(dat, as.factor)
 #' as.list(head(dat))
 #' res <- clean_variable_spelling(dat, 

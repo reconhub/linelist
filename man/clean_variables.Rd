@@ -13,7 +13,7 @@ clean_variables(x, sep = "_", wordlists = NULL, spelling_vars = 3,
 \item{sep}{The separator used between words, and defaults to the underscore
 \code{_}.}
 
-\item{wordlists}{a data frame or list of named data frames with at least two
+\item{wordlists}{a data frame or named list of data frames with at least two
 columns defining the word list to be used. If this is a data frame, a third
 column must be present to split the wordlists by column in \code{x} (see
 \code{spelling_vars}).}
@@ -21,9 +21,7 @@ column must be present to split the wordlists by column in \code{x} (see
 \item{spelling_vars}{character or integer. If \code{wordlists} is a data frame,
 then this column in defines the columns in \code{x} corresponding to each
 section of the \code{wordlists} data frame. This defaults to \code{3}, indicating the
-third column is to be used. \emph{If you want to use a global dictionary,
-use \code{spelling_vars = NULL}}, but be aware that you may end up with several
-warnings if variables do not appear in some columns of \code{x}.}
+third column is to be used.}
 
 \item{sort_by}{a character the column to be used for sorting the values in
 each data frame. If the incoming variables are factors, this determines how
