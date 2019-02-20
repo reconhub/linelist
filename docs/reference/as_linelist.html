@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -174,7 +174,8 @@ to one column (defaults to FALSE)</p></td>
                   <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"id"</span>,
                   <span class='kw'>date_onset</span> <span class='kw'>=</span> <span class='st'>"date_of_onset"</span>,
                   <span class='kw'>gender</span> <span class='kw'>=</span> <span class='st'>"gender"</span>,
-                  <span class='kw'>geo</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"lon"</span>, <span class='st'>"lat"</span>)
+                  <span class='kw'>geo_lon</span> <span class='kw'>=</span> <span class='st'>"lon"</span>,
+                  <span class='kw'>geo_lat</span> <span class='kw'>=</span> <span class='st'>"lat"</span>
                  )
 <span class='no'>ll</span></div><div class='output co'>#&gt; &lt;linelist object&gt;
 #&gt; 
@@ -187,7 +188,7 @@ to one column (defaults to FALSE)</p></td>
 #&gt; 6  hpdqsp    2018-01-02 2018-01-12   male            probable  2001-12-01
 #&gt; 7  arqlnr    2018-01-08 2018-01-18   male            probable  1989-12-24
 #&gt; 8  wtkldl    2018-01-10 2018-01-20 female            probable  2018-10-17
-#&gt; 9  pbtoqd    2018-01-08 2018-01-18 female            probable  1989-12-24
+#&gt; 9  pbtoqd    2018-01-08 2018-01-18 female            probable        &lt;NA&gt;
 #&gt; 10 yqnfzc    2018-01-09 2018-01-19   male           suspected        &lt;NA&gt;
 #&gt;         lat      lon
 #&gt; 1  15.10431 47.76566
@@ -199,21 +200,7 @@ to one column (defaults to FALSE)</p></td>
 #&gt; 7  10.72931 47.91993
 #&gt; 8  10.73789 47.56272
 #&gt; 9  13.21999 47.88078
-#&gt; 10 14.70581 48.78646
-#&gt; 
-#&gt;  // epivars:
-#&gt;       epivar        column              hxl
-#&gt; 1         id            id       #respondee
-#&gt; 2 date_onset date_of_onset     #date +start
-#&gt; 3     gender        gender #indicator +type
-#&gt; 4        geo           lon   #geo +lon +lat
-#&gt; 5        geo           lat   #geo +lon +lat
-#&gt;                                  description
-#&gt; 1               unique individual identifier
-#&gt; 2             date at which symptoms started
-#&gt; 3                   gender of the individual
-#&gt; 4 geographic coordinate: longitude, latitude
-#&gt; 5 geographic coordinate: longitude, latitude</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt; [1] "linelist"   "data.frame"</div></pre>
+#&gt; 10 14.70581 48.78646</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt; [1] "linelist"   "data.frame"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

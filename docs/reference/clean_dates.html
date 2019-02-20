@@ -72,7 +72,7 @@ to be a date, and left untouched." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -144,7 +144,7 @@ to be a date, and left untouched.</p>
     </div>
 
     <pre class="usage"><span class='fu'>clean_dates</span>(<span class='no'>x</span>, <span class='kw'>force_Date</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>guess_dates</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</pre>
+  <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='no'>...</span>, <span class='kw'>classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,16 +155,17 @@ to be a date, and left untouched.</p>
     </tr>
     <tr>
       <th>force_Date</th>
-      <td><p>a <code>logical</code> indicating if <code>POSIXct</code> and <code>POSIXlt</code> objects
-should be converted to <code>Date</code> objects; defaults to <code>TRUE</code>; you should use
-this if your dates are only precise to the day (i.e. no time information
-within days).</p></td>
+      <td><p>a <code>logical</code> or <code>integer</code> vector indicating the columns .
+If <code>logical</code>, indicating if <code>POSIXct</code> and <code>POSIXlt</code> objects should be
+converted to <code>Date</code> objects; defaults to <code>TRUE</code>; you should use this if your
+dates are only precise to the day (i.e. no time information within days).</p></td>
     </tr>
     <tr>
       <th>guess_dates</th>
-      <td><p>a <code>logical</code> indicating if dates should be guessed in
-columns storing character strings or <code>factors</code>; this feature is
-experimental; see <code><a href='guess_dates.html'>guess_dates()</a></code> for more information.</p></td>
+      <td><p>a <code>logical</code> or <code>integer</code> vector indicating which columns
+should be guessed , assuming these columns store character strings or
+<code>factors</code>; this feature is experimental; see <code><a href='guess_dates.html'>guess_dates()</a></code> for more
+information.</p></td>
     </tr>
     <tr>
       <th>error_tolerance</th>
@@ -172,6 +173,16 @@ experimental; see <code><a href='guess_dates.html'>guess_dates()</a></code> for 
 entries which cannot be identified as dates to be tolerated; if this
 proportion is exceeded, the original vector is returned, and a message is
 issued; defaults to 0.1 (10 percent)</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>further arguments passed on to <code><a href='guess_dates.html'>guess_dates()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>classes</th>
+      <td><p>a vector of class definitions for each of the columns. If this
+is not provided, the classes will be read from the columns themselves.
+Practically, this is used in <code><a href='clean_data.html'>clean_data()</a></code> to mark columns as protected.</p></td>
     </tr>
     </table>
     
@@ -187,13 +198,15 @@ issued; defaults to 0.1 (10 percent)</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'>## make toy data</span>
-<span class='no'>onsets</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.POSIXlt'>as.POSIXct</a></span>(<span class='st'>"2018-01-01"</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>20</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>onsets</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.POSIXlt'>as.POSIXct</a></span>(<span class='st'>"2018-01-01"</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>)
+<span class='no'>onsets</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='no'>onsets</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"1 day"</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='no'>onsets</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>onsets</span>, <span class='fl'>20</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>onsets2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/format'>format</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='no'>onsets</span>), <span class='st'>"%d/%m/%Y"</span>)
 <span class='no'>onsets3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/format'>format</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='no'>onsets</span>), <span class='st'>"%d %m %Y"</span>)
 <span class='no'>outcomes</span> <span class='kw'>&lt;-</span> <span class='no'>onsets</span> + <span class='fl'>1e7</span>
-<span class='no'>admissions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='no'>onsets</span>) + <span class='fl'>1</span>)
+<span class='no'>admissions</span> <span class='kw'>&lt;-</span> <span class='no'>onsets</span> + <span class='fl'>86400</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>86400</span>, <span class='fl'>20</span>)
 <span class='no'>admissions</span>[<span class='fl'>1</span>:<span class='fl'>5</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
-<span class='no'>discharges</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='no'>admissions</span>) + <span class='fl'>1</span>)
+<span class='no'>discharges</span> <span class='kw'>&lt;-</span> <span class='no'>admissions</span> + (<span class='fl'>86400</span> * <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>5</span>, <span class='fl'>20</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)) + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>86400</span>, <span class='fl'>20</span>)
 <span class='no'>onset_with_errors</span> <span class='kw'>&lt;-</span> <span class='no'>onsets2</span>
 <span class='no'>onset_with_errors</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>20</span>)] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"male"</span>, <span class='st'>"confirmed"</span>)
 <span class='no'>mixed_info</span> <span class='kw'>&lt;-</span> <span class='no'>onsets3</span>
@@ -212,148 +225,330 @@ issued; defaults to 0.1 (10 percent)</p></td>
                        <span class='st'>"date of admission"</span> <span class='kw'>=</span> <span class='no'>admissions</span>,
                        <span class='st'>"Date-of_discharge"</span> <span class='kw'>=</span> <span class='no'>discharges</span>,
                        <span class='st'>"extra"</span> <span class='kw'>=</span> <span class='no'>mixed_info</span>,
-                       <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+                       <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+                       <span class='kw'>check.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='co'>## show data</span>
-<span class='no'>toy_data</span></div><div class='output co'>#&gt;         Date.of.Onset.    onset.2    ONSET.3    onset_4 date.admission
-#&gt; 1  2018-01-01 00:00:04 01/01/2018 01 01 2018       male           &lt;NA&gt;
-#&gt; 2  2018-01-01 00:00:07 01/01/2018 01 01 2018 01/01/2018           &lt;NA&gt;
-#&gt; 3  2018-01-01 00:00:09 01/01/2018 01 01 2018 01/01/2018           &lt;NA&gt;
-#&gt; 4  2018-01-01 00:00:02 01/01/2018 01 01 2018 01/01/2018           &lt;NA&gt;
-#&gt; 5  2018-01-01 00:00:10 01/01/2018 01 01 2018 01/01/2018           &lt;NA&gt;
-#&gt; 6  2018-01-01 00:00:01 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 7  2018-01-01 00:00:03 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 8  2018-01-01 00:00:07 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 9  2018-01-01 00:00:06 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 10 2018-01-01 00:00:03 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 11 2018-01-01 00:00:10 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 12 2018-01-01 00:00:07 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 13 2018-01-01 00:00:01 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 14 2018-01-01 00:00:07 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 15 2018-01-01 00:00:09 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 16 2018-01-01 00:00:10 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 17 2018-01-01 00:00:05 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 18 2018-01-01 00:00:05 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 19 2018-01-01 00:00:04 01/01/2018 01 01 2018 01/01/2018     2018-01-02
-#&gt; 20 2018-01-01 00:00:03 01/01/2018 01 01 2018  confirmed     2018-01-02
-#&gt;    DATE.of.DISCHARGE GENDER_. Épi.Case_définition date.of.admission
-#&gt; 1               &lt;NA&gt;     male           suspected              &lt;NA&gt;
-#&gt; 2               &lt;NA&gt;     male           suspected              &lt;NA&gt;
-#&gt; 3               &lt;NA&gt;   female           suspected              &lt;NA&gt;
-#&gt; 4               &lt;NA&gt;   female           suspected              &lt;NA&gt;
-#&gt; 5               &lt;NA&gt;   female           confirmed              &lt;NA&gt;
-#&gt; 6         2018-01-03     male            probable        2018-01-02
-#&gt; 7         2018-01-03     male          not a case        2018-01-02
-#&gt; 8         2018-01-03     male           suspected        2018-01-02
-#&gt; 9         2018-01-03     male           suspected        2018-01-02
-#&gt; 10        2018-01-03     male          not a case        2018-01-02
-#&gt; 11        2018-01-03     male           suspected        2018-01-02
-#&gt; 12        2018-01-03     male          not a case        2018-01-02
-#&gt; 13        2018-01-03     male            probable        2018-01-02
-#&gt; 14        2018-01-03   female            probable        2018-01-02
-#&gt; 15        2018-01-03     male          not a case        2018-01-02
-#&gt; 16        2018-01-03   female           suspected        2018-01-02
-#&gt; 17        2018-01-03     male           confirmed        2018-01-02
-#&gt; 18        2018-01-03   female            probable        2018-01-02
-#&gt; 19        2018-01-03   female           confirmed        2018-01-02
-#&gt; 20        2018-01-03     male            probable        2018-01-02
-#&gt;    Date.of_discharge      extra
-#&gt; 1               &lt;NA&gt;      fever
-#&gt; 2               &lt;NA&gt;   bleeding
-#&gt; 3               &lt;NA&gt;   bleeding
-#&gt; 4               &lt;NA&gt;      fever
-#&gt; 5               &lt;NA&gt;   bleeding
-#&gt; 6         2018-01-03   bleeding
-#&gt; 7         2018-01-03      fever
-#&gt; 8         2018-01-03   bleeding
-#&gt; 9         2018-01-03   bleeding
-#&gt; 10        2018-01-03   bleeding
-#&gt; 11        2018-01-03 01 01 2018
-#&gt; 12        2018-01-03 01 01 2018
-#&gt; 13        2018-01-03 01 01 2018
-#&gt; 14        2018-01-03 01 01 2018
-#&gt; 15        2018-01-03 01 01 2018
-#&gt; 16        2018-01-03 01 01 2018
-#&gt; 17        2018-01-03 01 01 2018
-#&gt; 18        2018-01-03 01 01 2018
-#&gt; 19        2018-01-03 01 01 2018
-#&gt; 20        2018-01-03 01 01 2018</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>toy_data</span>)</div><div class='output co'>#&gt; 'data.frame':	20 obs. of  11 variables:
-#&gt;  $ Date.of.Onset.     : POSIXct, format: "2018-01-01 00:00:04" "2018-01-01 00:00:07" ...
-#&gt;  $ onset.2            : chr  "01/01/2018" "01/01/2018" "01/01/2018" "01/01/2018" ...
-#&gt;  $ ONSET.3            : chr  "01 01 2018" "01 01 2018" "01 01 2018" "01 01 2018" ...
-#&gt;  $ onset_4            : chr  "male" "01/01/2018" "01/01/2018" "01/01/2018" ...
-#&gt;  $ date.admission     : chr  NA NA NA NA ...
-#&gt;  $ DATE.of.DISCHARGE  : Factor w/ 1 level "2018-01-03": NA NA NA NA NA 1 1 1 1 1 ...
-#&gt;  $ GENDER_.           : chr  "male" "male" "female" "female" ...
-#&gt;  $ Épi.Case_définition: chr  "suspected" "suspected" "suspected" "suspected" ...
-#&gt;  $ date.of.admission  : chr  NA NA NA NA ...
-#&gt;  $ Date.of_discharge  : Factor w/ 1 level "2018-01-03": NA NA NA NA NA 1 1 1 1 1 ...
-#&gt;  $ extra              : chr  "fever" "bleeding" "bleeding" "fever" ...</div><div class='input'>
+<span class='no'>toy_data</span></div><div class='output co'>#&gt;    Date of Onset.    onset 2    ONSET 3    onset_4      date admission
+#&gt; 1      2018-01-03 03/01/2018 03 01 2018       male                &lt;NA&gt;
+#&gt; 2      2018-01-05 05/01/2018 05 01 2018 05/01/2018                &lt;NA&gt;
+#&gt; 3      2018-01-08 08/01/2018 08 01 2018 08/01/2018                &lt;NA&gt;
+#&gt; 4      2018-01-08 08/01/2018 08 01 2018 08/01/2018                &lt;NA&gt;
+#&gt; 5      2018-01-07 07/01/2018 07 01 2018 07/01/2018                &lt;NA&gt;
+#&gt; 6      2018-01-05 05/01/2018 05 01 2018 05/01/2018 2018-01-06 07:50:02
+#&gt; 7      2018-01-06 06/01/2018 06 01 2018 06/01/2018 2018-01-07 08:03:46
+#&gt; 8      2018-01-03 03/01/2018 03 01 2018 03/01/2018 2018-01-04 05:44:32
+#&gt; 9      2018-01-02 02/01/2018 02 01 2018 02/01/2018 2018-01-03 10:06:44
+#&gt; 10     2018-01-03 03/01/2018 03 01 2018 03/01/2018 2018-01-04 12:17:25
+#&gt; 11     2018-01-05 05/01/2018 05 01 2018 05/01/2018 2018-01-06 04:27:01
+#&gt; 12     2018-01-06 06/01/2018 06 01 2018 06/01/2018 2018-01-07 07:49:58
+#&gt; 13     2018-01-08 08/01/2018 08 01 2018 08/01/2018 2018-01-09 19:36:26
+#&gt; 14     2018-01-06 06/01/2018 06 01 2018 06/01/2018 2018-01-07 17:58:02
+#&gt; 15     2018-01-08 08/01/2018 08 01 2018 08/01/2018 2018-01-09 12:45:36
+#&gt; 16     2018-01-03 03/01/2018 03 01 2018 03/01/2018 2018-01-04 23:04:26
+#&gt; 17     2018-01-09 09/01/2018 09 01 2018 09/01/2018 2018-01-10 02:29:48
+#&gt; 18     2018-01-05 05/01/2018 05 01 2018 05/01/2018 2018-01-06 17:41:15
+#&gt; 19     2018-01-09 09/01/2018 09 01 2018 09/01/2018 2018-01-10 20:20:08
+#&gt; 20     2018-01-09 09/01/2018 09 01 2018  confirmed 2018-01-10 15:26:47
+#&gt;      DATE.of.DISCHARGE GENDER_  Épi.Case_définition   date of admission
+#&gt; 1                 &lt;NA&gt;     male           confirmed                &lt;NA&gt;
+#&gt; 2                 &lt;NA&gt;   female           suspected                &lt;NA&gt;
+#&gt; 3                 &lt;NA&gt;     male           suspected                &lt;NA&gt;
+#&gt; 4                 &lt;NA&gt;   female           confirmed                &lt;NA&gt;
+#&gt; 5                 &lt;NA&gt;   female            probable                &lt;NA&gt;
+#&gt; 6  2018-01-12 05:04:43   female          not a case 2018-01-06 07:50:02
+#&gt; 7  2018-01-11 22:37:10   female          not a case 2018-01-07 08:03:46
+#&gt; 8  2018-01-08 02:53:06   female            probable 2018-01-04 05:44:32
+#&gt; 9  2018-01-08 02:25:44     male            probable 2018-01-03 10:06:44
+#&gt; 10 2018-01-06 15:43:15     male           confirmed 2018-01-04 12:17:25
+#&gt; 11 2018-01-08 22:49:10     male           suspected 2018-01-06 04:27:01
+#&gt; 12 2018-01-12 22:52:42     male          not a case 2018-01-07 07:49:58
+#&gt; 13 2018-01-13 13:07:59     male            probable 2018-01-09 19:36:26
+#&gt; 14 2018-01-12 04:08:05   female           suspected 2018-01-07 17:58:02
+#&gt; 15 2018-01-10 19:11:57   female           confirmed 2018-01-09 12:45:36
+#&gt; 16 2018-01-07 17:31:41   female          not a case 2018-01-04 23:04:26
+#&gt; 17 2018-01-11 16:35:26   female          not a case 2018-01-10 02:29:48
+#&gt; 18 2018-01-10 15:14:56     male           suspected 2018-01-06 17:41:15
+#&gt; 19 2018-01-13 17:13:09   female           confirmed 2018-01-10 20:20:08
+#&gt; 20 2018-01-12 01:01:40   female           suspected 2018-01-10 15:26:47
+#&gt;      Date-of_discharge      extra
+#&gt; 1                 &lt;NA&gt;      fever
+#&gt; 2                 &lt;NA&gt;   bleeding
+#&gt; 3                 &lt;NA&gt;   bleeding
+#&gt; 4                 &lt;NA&gt;   bleeding
+#&gt; 5                 &lt;NA&gt;      fever
+#&gt; 6  2018-01-12 05:04:43   bleeding
+#&gt; 7  2018-01-11 22:37:10   bleeding
+#&gt; 8  2018-01-08 02:53:06   bleeding
+#&gt; 9  2018-01-08 02:25:44   bleeding
+#&gt; 10 2018-01-06 15:43:15   bleeding
+#&gt; 11 2018-01-08 22:49:10 05 01 2018
+#&gt; 12 2018-01-12 22:52:42 06 01 2018
+#&gt; 13 2018-01-13 13:07:59 08 01 2018
+#&gt; 14 2018-01-12 04:08:05 06 01 2018
+#&gt; 15 2018-01-10 19:11:57 08 01 2018
+#&gt; 16 2018-01-07 17:31:41 03 01 2018
+#&gt; 17 2018-01-11 16:35:26 09 01 2018
+#&gt; 18 2018-01-10 15:14:56 05 01 2018
+#&gt; 19 2018-01-13 17:13:09 09 01 2018
+#&gt; 20 2018-01-12 01:01:40 09 01 2018</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>toy_data</span>)</div><div class='output co'>#&gt; 'data.frame':	20 obs. of  11 variables:
+#&gt;  $ Date of Onset.     : POSIXct, format: "2018-01-03" "2018-01-05" ...
+#&gt;  $ onset 2            : chr  "03/01/2018" "05/01/2018" "08/01/2018" "08/01/2018" ...
+#&gt;  $ ONSET 3            : chr  "03 01 2018" "05 01 2018" "08 01 2018" "08 01 2018" ...
+#&gt;  $ onset_4            : chr  "male" "05/01/2018" "08/01/2018" "08/01/2018" ...
+#&gt;  $ date admission     : POSIXct, format: NA NA ...
+#&gt;  $ DATE.of.DISCHARGE  : POSIXct, format: NA NA ...
+#&gt;  $ GENDER_            : chr  "male" "female" "male" "female" ...
+#&gt;  $ Épi.Case_définition: chr  "confirmed" "suspected" "suspected" "confirmed" ...
+#&gt;  $ date of admission  : POSIXct, format: NA NA ...
+#&gt;  $ Date-of_discharge  : POSIXct, format: NA NA ...
+#&gt;  $ extra              : chr  "fever" "bleeding" "bleeding" "bleeding" ...</div><div class='input'>
 <span class='co'>## clean variable names, store in new object, show results</span>
 <span class='no'>clean_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='clean_variable_names.html'>clean_variable_names</a></span>(<span class='no'>toy_data</span>)
-<span class='no'>clean_data</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_dates</span>(<span class='no'>clean_data</span>)
-<span class='no'>clean_data</span></div><div class='output co'>#&gt;    date_of_onset    onset_2    onset_3    onset_4 date_admission
-#&gt; 1     2018-01-01 2018-01-01 2018-01-01       &lt;NA&gt;           &lt;NA&gt;
-#&gt; 2     2018-01-01 2018-01-01 2018-01-01 2018-01-01           &lt;NA&gt;
-#&gt; 3     2018-01-01 2018-01-01 2018-01-01 2018-01-01           &lt;NA&gt;
-#&gt; 4     2018-01-01 2018-01-01 2018-01-01 2018-01-01           &lt;NA&gt;
-#&gt; 5     2018-01-01 2018-01-01 2018-01-01 2018-01-01           &lt;NA&gt;
-#&gt; 6     2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 7     2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 8     2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 9     2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 10    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 11    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 12    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 13    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 14    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 15    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 16    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 17    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 18    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 19    2018-01-01 2018-01-01 2018-01-01 2018-01-01     2018-01-02
-#&gt; 20    2018-01-01 2018-01-01 2018-01-01       &lt;NA&gt;     2018-01-02
+<span class='no'>clean_data1</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_dates</span>(<span class='no'>clean_data</span>, <span class='kw'>first_date</span> <span class='kw'>=</span> <span class='st'>"2018-01-01"</span>)
+<span class='no'>clean_data1</span></div><div class='output co'>#&gt;    date_of_onset    onset_2    onset_3    onset_4 date_admission
+#&gt; 1     2018-01-03 2018-01-03 2018-01-03       &lt;NA&gt;           &lt;NA&gt;
+#&gt; 2     2018-01-05 2018-01-05 2018-01-05 2018-01-05           &lt;NA&gt;
+#&gt; 3     2018-01-08 2018-01-08 2018-01-08 2018-01-08           &lt;NA&gt;
+#&gt; 4     2018-01-08 2018-01-08 2018-01-08 2018-01-08           &lt;NA&gt;
+#&gt; 5     2018-01-07 2018-01-07 2018-01-07 2018-01-07           &lt;NA&gt;
+#&gt; 6     2018-01-05 2018-01-05 2018-01-05 2018-01-05     2018-01-06
+#&gt; 7     2018-01-06 2018-01-06 2018-01-06 2018-01-06     2018-01-07
+#&gt; 8     2018-01-03 2018-01-03 2018-01-03 2018-01-03     2018-01-04
+#&gt; 9     2018-01-02 2018-01-02 2018-01-02 2018-01-02     2018-01-03
+#&gt; 10    2018-01-03 2018-01-03 2018-01-03 2018-01-03     2018-01-04
+#&gt; 11    2018-01-05 2018-01-05 2018-01-05 2018-01-05     2018-01-06
+#&gt; 12    2018-01-06 2018-01-06 2018-01-06 2018-01-06     2018-01-07
+#&gt; 13    2018-01-08 2018-01-08 2018-01-08 2018-01-08     2018-01-09
+#&gt; 14    2018-01-06 2018-01-06 2018-01-06 2018-01-06     2018-01-07
+#&gt; 15    2018-01-08 2018-01-08 2018-01-08 2018-01-08     2018-01-09
+#&gt; 16    2018-01-03 2018-01-03 2018-01-03 2018-01-03     2018-01-04
+#&gt; 17    2018-01-09 2018-01-09 2018-01-09 2018-01-09     2018-01-10
+#&gt; 18    2018-01-05 2018-01-05 2018-01-05 2018-01-05     2018-01-06
+#&gt; 19    2018-01-09 2018-01-09 2018-01-09 2018-01-09     2018-01-10
+#&gt; 20    2018-01-09 2018-01-09 2018-01-09       &lt;NA&gt;     2018-01-10
 #&gt;    date_of_discharge gender epi_case_definition date_of_admission
-#&gt; 1               &lt;NA&gt;   male           suspected              &lt;NA&gt;
-#&gt; 2               &lt;NA&gt;   male           suspected              &lt;NA&gt;
-#&gt; 3               &lt;NA&gt; female           suspected              &lt;NA&gt;
-#&gt; 4               &lt;NA&gt; female           suspected              &lt;NA&gt;
-#&gt; 5               &lt;NA&gt; female           confirmed              &lt;NA&gt;
-#&gt; 6         2018-01-03   male            probable        2018-01-02
-#&gt; 7         2018-01-03   male          not a case        2018-01-02
-#&gt; 8         2018-01-03   male           suspected        2018-01-02
-#&gt; 9         2018-01-03   male           suspected        2018-01-02
-#&gt; 10        2018-01-03   male          not a case        2018-01-02
-#&gt; 11        2018-01-03   male           suspected        2018-01-02
-#&gt; 12        2018-01-03   male          not a case        2018-01-02
-#&gt; 13        2018-01-03   male            probable        2018-01-02
-#&gt; 14        2018-01-03 female            probable        2018-01-02
-#&gt; 15        2018-01-03   male          not a case        2018-01-02
-#&gt; 16        2018-01-03 female           suspected        2018-01-02
-#&gt; 17        2018-01-03   male           confirmed        2018-01-02
-#&gt; 18        2018-01-03 female            probable        2018-01-02
-#&gt; 19        2018-01-03 female           confirmed        2018-01-02
-#&gt; 20        2018-01-03   male            probable        2018-01-02
+#&gt; 1               &lt;NA&gt;   male           confirmed              &lt;NA&gt;
+#&gt; 2               &lt;NA&gt; female           suspected              &lt;NA&gt;
+#&gt; 3               &lt;NA&gt;   male           suspected              &lt;NA&gt;
+#&gt; 4               &lt;NA&gt; female           confirmed              &lt;NA&gt;
+#&gt; 5               &lt;NA&gt; female            probable              &lt;NA&gt;
+#&gt; 6         2018-01-12 female          not a case        2018-01-06
+#&gt; 7         2018-01-11 female          not a case        2018-01-07
+#&gt; 8         2018-01-08 female            probable        2018-01-04
+#&gt; 9         2018-01-08   male            probable        2018-01-03
+#&gt; 10        2018-01-06   male           confirmed        2018-01-04
+#&gt; 11        2018-01-08   male           suspected        2018-01-06
+#&gt; 12        2018-01-12   male          not a case        2018-01-07
+#&gt; 13        2018-01-13   male            probable        2018-01-09
+#&gt; 14        2018-01-12 female           suspected        2018-01-07
+#&gt; 15        2018-01-10 female           confirmed        2018-01-09
+#&gt; 16        2018-01-07 female          not a case        2018-01-04
+#&gt; 17        2018-01-11 female          not a case        2018-01-10
+#&gt; 18        2018-01-10   male           suspected        2018-01-06
+#&gt; 19        2018-01-13 female           confirmed        2018-01-10
+#&gt; 20        2018-01-12 female           suspected        2018-01-10
 #&gt;    date_of_discharge      extra
 #&gt; 1               &lt;NA&gt;       &lt;NA&gt;
 #&gt; 2               &lt;NA&gt;       &lt;NA&gt;
 #&gt; 3               &lt;NA&gt;       &lt;NA&gt;
 #&gt; 4               &lt;NA&gt;       &lt;NA&gt;
 #&gt; 5               &lt;NA&gt;       &lt;NA&gt;
-#&gt; 6         2018-01-03       &lt;NA&gt;
-#&gt; 7         2018-01-03       &lt;NA&gt;
-#&gt; 8         2018-01-03       &lt;NA&gt;
-#&gt; 9         2018-01-03       &lt;NA&gt;
-#&gt; 10        2018-01-03       &lt;NA&gt;
-#&gt; 11        2018-01-03 2018-01-01
-#&gt; 12        2018-01-03 2018-01-01
-#&gt; 13        2018-01-03 2018-01-01
-#&gt; 14        2018-01-03 2018-01-01
-#&gt; 15        2018-01-03 2018-01-01
-#&gt; 16        2018-01-03 2018-01-01
-#&gt; 17        2018-01-03 2018-01-01
-#&gt; 18        2018-01-03 2018-01-01
-#&gt; 19        2018-01-03 2018-01-01
-#&gt; 20        2018-01-03 2018-01-01</div></pre>
+#&gt; 6         2018-01-12       &lt;NA&gt;
+#&gt; 7         2018-01-11       &lt;NA&gt;
+#&gt; 8         2018-01-08       &lt;NA&gt;
+#&gt; 9         2018-01-08       &lt;NA&gt;
+#&gt; 10        2018-01-06       &lt;NA&gt;
+#&gt; 11        2018-01-08 2018-01-05
+#&gt; 12        2018-01-12 2018-01-06
+#&gt; 13        2018-01-13 2018-01-08
+#&gt; 14        2018-01-12 2018-01-06
+#&gt; 15        2018-01-10 2018-01-08
+#&gt; 16        2018-01-07 2018-01-03
+#&gt; 17        2018-01-11 2018-01-09
+#&gt; 18        2018-01-10 2018-01-05
+#&gt; 19        2018-01-13 2018-01-09
+#&gt; 20        2018-01-12 2018-01-09</div><div class='input'>
+<span class='co'>## Only clean the columns that have the words "date" or "admission" in them</span>
+<span class='no'>the_date_cols</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"(date|admission)"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>clean_data</span>))
+<span class='no'>the_date_cols</span></div><div class='output co'>#&gt; [1]  1  5  6  9 10</div><div class='input'><span class='no'>clean_data2</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_dates</span>(<span class='no'>clean_data</span>,
+                           <span class='kw'>first_date</span>  <span class='kw'>=</span> <span class='st'>"2018-01-01"</span>,
+                           <span class='kw'>force_Date</span>  <span class='kw'>=</span> <span class='no'>the_date_cols</span>,
+                           <span class='kw'>guess_dates</span> <span class='kw'>=</span> <span class='no'>the_date_cols</span>)
+<span class='no'>clean_data2</span></div><div class='output co'>#&gt;    date_of_onset    onset_2    onset_3    onset_4 date_admission
+#&gt; 1     2018-01-03 03/01/2018 03 01 2018       male           &lt;NA&gt;
+#&gt; 2     2018-01-05 05/01/2018 05 01 2018 05/01/2018           &lt;NA&gt;
+#&gt; 3     2018-01-08 08/01/2018 08 01 2018 08/01/2018           &lt;NA&gt;
+#&gt; 4     2018-01-08 08/01/2018 08 01 2018 08/01/2018           &lt;NA&gt;
+#&gt; 5     2018-01-07 07/01/2018 07 01 2018 07/01/2018           &lt;NA&gt;
+#&gt; 6     2018-01-05 05/01/2018 05 01 2018 05/01/2018     2018-01-06
+#&gt; 7     2018-01-06 06/01/2018 06 01 2018 06/01/2018     2018-01-07
+#&gt; 8     2018-01-03 03/01/2018 03 01 2018 03/01/2018     2018-01-04
+#&gt; 9     2018-01-02 02/01/2018 02 01 2018 02/01/2018     2018-01-03
+#&gt; 10    2018-01-03 03/01/2018 03 01 2018 03/01/2018     2018-01-04
+#&gt; 11    2018-01-05 05/01/2018 05 01 2018 05/01/2018     2018-01-06
+#&gt; 12    2018-01-06 06/01/2018 06 01 2018 06/01/2018     2018-01-07
+#&gt; 13    2018-01-08 08/01/2018 08 01 2018 08/01/2018     2018-01-09
+#&gt; 14    2018-01-06 06/01/2018 06 01 2018 06/01/2018     2018-01-07
+#&gt; 15    2018-01-08 08/01/2018 08 01 2018 08/01/2018     2018-01-09
+#&gt; 16    2018-01-03 03/01/2018 03 01 2018 03/01/2018     2018-01-04
+#&gt; 17    2018-01-09 09/01/2018 09 01 2018 09/01/2018     2018-01-10
+#&gt; 18    2018-01-05 05/01/2018 05 01 2018 05/01/2018     2018-01-06
+#&gt; 19    2018-01-09 09/01/2018 09 01 2018 09/01/2018     2018-01-10
+#&gt; 20    2018-01-09 09/01/2018 09 01 2018  confirmed     2018-01-10
+#&gt;    date_of_discharge gender epi_case_definition date_of_admission
+#&gt; 1               &lt;NA&gt;   male           confirmed              &lt;NA&gt;
+#&gt; 2               &lt;NA&gt; female           suspected              &lt;NA&gt;
+#&gt; 3               &lt;NA&gt;   male           suspected              &lt;NA&gt;
+#&gt; 4               &lt;NA&gt; female           confirmed              &lt;NA&gt;
+#&gt; 5               &lt;NA&gt; female            probable              &lt;NA&gt;
+#&gt; 6         2018-01-12 female          not a case        2018-01-06
+#&gt; 7         2018-01-11 female          not a case        2018-01-07
+#&gt; 8         2018-01-08 female            probable        2018-01-04
+#&gt; 9         2018-01-08   male            probable        2018-01-03
+#&gt; 10        2018-01-06   male           confirmed        2018-01-04
+#&gt; 11        2018-01-08   male           suspected        2018-01-06
+#&gt; 12        2018-01-12   male          not a case        2018-01-07
+#&gt; 13        2018-01-13   male            probable        2018-01-09
+#&gt; 14        2018-01-12 female           suspected        2018-01-07
+#&gt; 15        2018-01-10 female           confirmed        2018-01-09
+#&gt; 16        2018-01-07 female          not a case        2018-01-04
+#&gt; 17        2018-01-11 female          not a case        2018-01-10
+#&gt; 18        2018-01-10   male           suspected        2018-01-06
+#&gt; 19        2018-01-13 female           confirmed        2018-01-10
+#&gt; 20        2018-01-12 female           suspected        2018-01-10
+#&gt;    date_of_discharge      extra
+#&gt; 1               &lt;NA&gt;      fever
+#&gt; 2               &lt;NA&gt;   bleeding
+#&gt; 3               &lt;NA&gt;   bleeding
+#&gt; 4               &lt;NA&gt;   bleeding
+#&gt; 5               &lt;NA&gt;      fever
+#&gt; 6         2018-01-12   bleeding
+#&gt; 7         2018-01-11   bleeding
+#&gt; 8         2018-01-08   bleeding
+#&gt; 9         2018-01-08   bleeding
+#&gt; 10        2018-01-06   bleeding
+#&gt; 11        2018-01-08 05 01 2018
+#&gt; 12        2018-01-12 06 01 2018
+#&gt; 13        2018-01-13 08 01 2018
+#&gt; 14        2018-01-12 06 01 2018
+#&gt; 15        2018-01-10 08 01 2018
+#&gt; 16        2018-01-07 03 01 2018
+#&gt; 17        2018-01-11 09 01 2018
+#&gt; 18        2018-01-10 05 01 2018
+#&gt; 19        2018-01-13 09 01 2018
+#&gt; 20        2018-01-12 09 01 2018</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>clean_data2</span>)</div><div class='output co'>#&gt; 'data.frame':	20 obs. of  11 variables:
+#&gt;  $ date_of_onset      : Date, format: "2018-01-03" "2018-01-05" ...
+#&gt;  $ onset_2            : chr  "03/01/2018" "05/01/2018" "08/01/2018" "08/01/2018" ...
+#&gt;  $ onset_3            : chr  "03 01 2018" "05 01 2018" "08 01 2018" "08 01 2018" ...
+#&gt;  $ onset_4            : chr  "male" "05/01/2018" "08/01/2018" "08/01/2018" ...
+#&gt;  $ date_admission     : Date, format: NA NA ...
+#&gt;  $ date_of_discharge  : Date, format: NA NA ...
+#&gt;  $ gender             : chr  "male" "female" "male" "female" ...
+#&gt;  $ epi_case_definition: chr  "confirmed" "suspected" "suspected" "confirmed" ...
+#&gt;  $ date_of_admission  : Date, format: NA NA ...
+#&gt;  $ date_of_discharge  : Date, format: NA NA ...
+#&gt;  $ extra              : chr  "fever" "bleeding" "bleeding" "bleeding" ...
+#&gt;  - attr(*, "comment")= Named chr  "Date of Onset." "onset 2" "ONSET 3" "onset_4" ...
+#&gt;   ..- attr(*, "names")= chr  "date_of_onset" "onset_2" "onset_3" "onset_4" ...</div><div class='input'>
+<span class='co'>## A more complex example: clean date and admissions, but avoid the discharge</span>
+<span class='co'>## column, since the timestamp is important</span>
+<span class='no'>the_date_cols</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grepl</a></span>(<span class='st'>"(date|admission)"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>clean_data</span>))
+<span class='no'>discharge</span>     <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grepl</a></span>(<span class='st'>"discharge"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>clean_data</span>))
+
+<span class='co'>## set names so that these are easier to track</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>the_date_cols</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>clean_data</span>) <span class='kw'>-&gt;</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>discharge</span>)
+
+<span class='no'>the_date_cols</span> <span class='co'># columns we want</span></div><div class='output co'>#&gt;       date_of_onset             onset_2             onset_3             onset_4 
+#&gt;                TRUE               FALSE               FALSE               FALSE 
+#&gt;      date_admission   date_of_discharge              gender epi_case_definition 
+#&gt;                TRUE                TRUE               FALSE               FALSE 
+#&gt;   date_of_admission   date_of_discharge               extra 
+#&gt;                TRUE                TRUE               FALSE </div><div class='input'>!<span class='no'>discharge</span>    <span class='co'># columns that are not the discharge columns ("!" means "not")</span></div><div class='output co'>#&gt;       date_of_onset             onset_2             onset_3             onset_4 
+#&gt;                TRUE                TRUE                TRUE                TRUE 
+#&gt;      date_admission   date_of_discharge              gender epi_case_definition 
+#&gt;                TRUE               FALSE                TRUE                TRUE 
+#&gt;   date_of_admission   date_of_discharge               extra 
+#&gt;                TRUE               FALSE                TRUE </div><div class='input'><span class='no'>to_keep</span>     <span class='kw'>&lt;-</span> <span class='no'>the_date_cols</span> <span class='kw'>&amp;</span> !<span class='no'>discharge</span> <span class='co'># removing the discharge column</span>
+<span class='no'>clean_data3</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_dates</span>(<span class='no'>clean_data</span>,
+                           <span class='kw'>first_date</span>  <span class='kw'>=</span> <span class='st'>"2018-01-01"</span>,
+                           <span class='kw'>force_Date</span>  <span class='kw'>=</span> <span class='no'>to_keep</span>,
+                           <span class='kw'>guess_dates</span> <span class='kw'>=</span> <span class='no'>to_keep</span>)
+<span class='no'>clean_data3</span></div><div class='output co'>#&gt;    date_of_onset    onset_2    onset_3    onset_4 date_admission
+#&gt; 1     2018-01-03 03/01/2018 03 01 2018       male           &lt;NA&gt;
+#&gt; 2     2018-01-05 05/01/2018 05 01 2018 05/01/2018           &lt;NA&gt;
+#&gt; 3     2018-01-08 08/01/2018 08 01 2018 08/01/2018           &lt;NA&gt;
+#&gt; 4     2018-01-08 08/01/2018 08 01 2018 08/01/2018           &lt;NA&gt;
+#&gt; 5     2018-01-07 07/01/2018 07 01 2018 07/01/2018           &lt;NA&gt;
+#&gt; 6     2018-01-05 05/01/2018 05 01 2018 05/01/2018     2018-01-06
+#&gt; 7     2018-01-06 06/01/2018 06 01 2018 06/01/2018     2018-01-07
+#&gt; 8     2018-01-03 03/01/2018 03 01 2018 03/01/2018     2018-01-04
+#&gt; 9     2018-01-02 02/01/2018 02 01 2018 02/01/2018     2018-01-03
+#&gt; 10    2018-01-03 03/01/2018 03 01 2018 03/01/2018     2018-01-04
+#&gt; 11    2018-01-05 05/01/2018 05 01 2018 05/01/2018     2018-01-06
+#&gt; 12    2018-01-06 06/01/2018 06 01 2018 06/01/2018     2018-01-07
+#&gt; 13    2018-01-08 08/01/2018 08 01 2018 08/01/2018     2018-01-09
+#&gt; 14    2018-01-06 06/01/2018 06 01 2018 06/01/2018     2018-01-07
+#&gt; 15    2018-01-08 08/01/2018 08 01 2018 08/01/2018     2018-01-09
+#&gt; 16    2018-01-03 03/01/2018 03 01 2018 03/01/2018     2018-01-04
+#&gt; 17    2018-01-09 09/01/2018 09 01 2018 09/01/2018     2018-01-10
+#&gt; 18    2018-01-05 05/01/2018 05 01 2018 05/01/2018     2018-01-06
+#&gt; 19    2018-01-09 09/01/2018 09 01 2018 09/01/2018     2018-01-10
+#&gt; 20    2018-01-09 09/01/2018 09 01 2018  confirmed     2018-01-10
+#&gt;      date_of_discharge gender epi_case_definition date_of_admission
+#&gt; 1                 &lt;NA&gt;   male           confirmed              &lt;NA&gt;
+#&gt; 2                 &lt;NA&gt; female           suspected              &lt;NA&gt;
+#&gt; 3                 &lt;NA&gt;   male           suspected              &lt;NA&gt;
+#&gt; 4                 &lt;NA&gt; female           confirmed              &lt;NA&gt;
+#&gt; 5                 &lt;NA&gt; female            probable              &lt;NA&gt;
+#&gt; 6  2018-01-12 05:04:43 female          not a case        2018-01-06
+#&gt; 7  2018-01-11 22:37:10 female          not a case        2018-01-07
+#&gt; 8  2018-01-08 02:53:06 female            probable        2018-01-04
+#&gt; 9  2018-01-08 02:25:44   male            probable        2018-01-03
+#&gt; 10 2018-01-06 15:43:15   male           confirmed        2018-01-04
+#&gt; 11 2018-01-08 22:49:10   male           suspected        2018-01-06
+#&gt; 12 2018-01-12 22:52:42   male          not a case        2018-01-07
+#&gt; 13 2018-01-13 13:07:59   male            probable        2018-01-09
+#&gt; 14 2018-01-12 04:08:05 female           suspected        2018-01-07
+#&gt; 15 2018-01-10 19:11:57 female           confirmed        2018-01-09
+#&gt; 16 2018-01-07 17:31:41 female          not a case        2018-01-04
+#&gt; 17 2018-01-11 16:35:26 female          not a case        2018-01-10
+#&gt; 18 2018-01-10 15:14:56   male           suspected        2018-01-06
+#&gt; 19 2018-01-13 17:13:09 female           confirmed        2018-01-10
+#&gt; 20 2018-01-12 01:01:40 female           suspected        2018-01-10
+#&gt;      date_of_discharge      extra
+#&gt; 1                 &lt;NA&gt;      fever
+#&gt; 2                 &lt;NA&gt;   bleeding
+#&gt; 3                 &lt;NA&gt;   bleeding
+#&gt; 4                 &lt;NA&gt;   bleeding
+#&gt; 5                 &lt;NA&gt;      fever
+#&gt; 6  2018-01-12 05:04:43   bleeding
+#&gt; 7  2018-01-11 22:37:10   bleeding
+#&gt; 8  2018-01-08 02:53:06   bleeding
+#&gt; 9  2018-01-08 02:25:44   bleeding
+#&gt; 10 2018-01-06 15:43:15   bleeding
+#&gt; 11 2018-01-08 22:49:10 05 01 2018
+#&gt; 12 2018-01-12 22:52:42 06 01 2018
+#&gt; 13 2018-01-13 13:07:59 08 01 2018
+#&gt; 14 2018-01-12 04:08:05 06 01 2018
+#&gt; 15 2018-01-10 19:11:57 08 01 2018
+#&gt; 16 2018-01-07 17:31:41 03 01 2018
+#&gt; 17 2018-01-11 16:35:26 09 01 2018
+#&gt; 18 2018-01-10 15:14:56 05 01 2018
+#&gt; 19 2018-01-13 17:13:09 09 01 2018
+#&gt; 20 2018-01-12 01:01:40 09 01 2018</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>clean_data3</span>)</div><div class='output co'>#&gt; 'data.frame':	20 obs. of  11 variables:
+#&gt;  $ date_of_onset      : Date, format: "2018-01-03" "2018-01-05" ...
+#&gt;  $ onset_2            : chr  "03/01/2018" "05/01/2018" "08/01/2018" "08/01/2018" ...
+#&gt;  $ onset_3            : chr  "03 01 2018" "05 01 2018" "08 01 2018" "08 01 2018" ...
+#&gt;  $ onset_4            : chr  "male" "05/01/2018" "08/01/2018" "08/01/2018" ...
+#&gt;  $ date_admission     : Date, format: NA NA ...
+#&gt;  $ date_of_discharge  : POSIXct, format: NA NA ...
+#&gt;  $ gender             : chr  "male" "female" "male" "female" ...
+#&gt;  $ epi_case_definition: chr  "confirmed" "suspected" "suspected" "confirmed" ...
+#&gt;  $ date_of_admission  : Date, format: NA NA ...
+#&gt;  $ date_of_discharge  : POSIXct, format: NA NA ...
+#&gt;  $ extra              : chr  "fever" "bleeding" "bleeding" "bleeding" ...
+#&gt;  - attr(*, "comment")= Named chr  "Date of Onset." "onset 2" "ONSET 3" "onset_4" ...
+#&gt;   ..- attr(*, "names")= chr  "date_of_onset" "onset_2" "onset_3" "onset_4" ...</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

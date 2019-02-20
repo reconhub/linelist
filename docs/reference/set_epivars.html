@@ -64,7 +64,7 @@ object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -176,21 +176,22 @@ object.</p>
 <span class='no'>ll</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='as_linelist.html'>as_linelist</a></span>(<span class='no'>cd</span>,
   <span class='st'>"gender"</span>          <span class='kw'>=</span> <span class='st'>"gender"</span>,
   <span class='st'>"id"</span>              <span class='kw'>=</span> <span class='st'>"id"</span>,
-  <span class='st'>"geo"</span>             <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"lon"</span>, <span class='st'>"lat"</span>),
+  <span class='st'>"geo_lon"</span>         <span class='kw'>=</span> <span class='st'>"lon"</span>,
+  <span class='st'>"geo_lat"</span>         <span class='kw'>=</span> <span class='st'>"lat"</span>,
   <span class='st'>"case_definition"</span> <span class='kw'>=</span> <span class='st'>"epi_case_definition"</span>
 )
 <span class='fu'><a href='list_epivars.html'>list_epivars</a></span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;            epivar              column              hxl
 #&gt; 1              id                  id       #respondee
 #&gt; 2          gender              gender #indicator +type
 #&gt; 3 case_definition epi_case_definition #indicator +name
-#&gt; 4             geo                 lon   #geo +lon +lat
-#&gt; 5             geo                 lat   #geo +lon +lat
+#&gt; 4         geo_lat                 lat        #geo +lat
+#&gt; 5         geo_lon                 lon        #geo +lon
 #&gt;                                           description
 #&gt; 1                        unique individual identifier
 #&gt; 2                            gender of the individual
 #&gt; 3 case type: suspected, probable, confirmed, negative
-#&gt; 4          geographic coordinate: longitude, latitude
-#&gt; 5          geographic coordinate: longitude, latitude</div><div class='input'>
+#&gt; 4                     geographic coordinate: latitude
+#&gt; 5                    geographic coordinate: longitude</div><div class='input'>
 <span class='co'># add a new epivar -------------------------------------------</span>
 <span class='no'>ll</span> <span class='kw'>&lt;-</span> <span class='fu'>set_epivars</span>(<span class='no'>ll</span>, <span class='st'>"date_onset"</span> <span class='kw'>=</span> <span class='st'>"date_of_onset"</span>)
 <span class='fu'><a href='list_epivars.html'>list_epivars</a></span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;            epivar              column              hxl
@@ -198,15 +199,15 @@ object.</p>
 #&gt; 2      date_onset       date_of_onset     #date +start
 #&gt; 3          gender              gender #indicator +type
 #&gt; 4 case_definition epi_case_definition #indicator +name
-#&gt; 5             geo                 lon   #geo +lon +lat
-#&gt; 6             geo                 lat   #geo +lon +lat
+#&gt; 5         geo_lat                 lat        #geo +lat
+#&gt; 6         geo_lon                 lon        #geo +lon
 #&gt;                                           description
 #&gt; 1                        unique individual identifier
 #&gt; 2                      date at which symptoms started
 #&gt; 3                            gender of the individual
 #&gt; 4 case type: suspected, probable, confirmed, negative
-#&gt; 5          geographic coordinate: longitude, latitude
-#&gt; 6          geographic coordinate: longitude, latitude</div><div class='input'>
+#&gt; 5                     geographic coordinate: latitude
+#&gt; 6                    geographic coordinate: longitude</div><div class='input'>
 <span class='co'># change an epivar column ------------------------------------</span>
 <span class='co'># </span>
 <span class='co'># in this case, we want to update the date of onset to reflect the number</span>
@@ -217,15 +218,15 @@ object.</p>
 #&gt; 1              id                  id       #respondee
 #&gt; 2          gender              gender #indicator +type
 #&gt; 3 case_definition epi_case_definition #indicator +name
-#&gt; 4             geo                 lon   #geo +lon +lat
-#&gt; 5             geo                 lat   #geo +lon +lat
+#&gt; 4         geo_lat                 lat        #geo +lat
+#&gt; 5         geo_lon                 lon        #geo +lon
 #&gt; 6      date_onset     days_from_start     #date +start
 #&gt;                                           description
 #&gt; 1                        unique individual identifier
 #&gt; 2                            gender of the individual
 #&gt; 3 case type: suspected, probable, confirmed, negative
-#&gt; 4          geographic coordinate: longitude, latitude
-#&gt; 5          geographic coordinate: longitude, latitude
+#&gt; 4                     geographic coordinate: latitude
+#&gt; 5                    geographic coordinate: longitude
 #&gt; 6                      date at which symptoms started</div><div class='input'>
 <span class='co'># Remove an epivar label -------------------------------------</span>
 <span class='no'>ll</span> <span class='kw'>&lt;-</span> <span class='fu'>set_epivars</span>(<span class='no'>ll</span>, <span class='st'>"date_onset"</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
@@ -233,16 +234,14 @@ object.</p>
 #&gt; 1              id                  id       #respondee
 #&gt; 2          gender              gender #indicator +type
 #&gt; 3 case_definition epi_case_definition #indicator +name
-#&gt; 4             geo                 lon   #geo +lon +lat
-#&gt; 5             geo                 lat   #geo +lon +lat
-#&gt; 6      date_onset     days_from_start     #date +start
+#&gt; 4         geo_lat                 lat        #geo +lat
+#&gt; 5         geo_lon                 lon        #geo +lon
 #&gt;                                           description
 #&gt; 1                        unique individual identifier
 #&gt; 2                            gender of the individual
 #&gt; 3 case type: suspected, probable, confirmed, negative
-#&gt; 4          geographic coordinate: longitude, latitude
-#&gt; 5          geographic coordinate: longitude, latitude
-#&gt; 6                      date at which symptoms started</div></pre>
+#&gt; 4                     geographic coordinate: latitude
+#&gt; 5                    geographic coordinate: longitude</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

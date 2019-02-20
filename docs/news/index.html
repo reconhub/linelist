@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -118,6 +118,129 @@
     <div id="linelist-0-0-2-9000" class="section level1">
 <h1 class="page-header">
 <a href="#linelist-0-0-2-9000" class="anchor"></a>linelist 0.0.2.9000</h1>
+</div>
+    <div id="linelist-0-6-0-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-6-0-9000" class="anchor"></a>linelist 0.6.0.9000</h1>
+<ul>
+<li>
+<code><a href="../reference/clean_spelling.html">clean_spelling()</a></code> will check the spelling of a vector against a wordlist</li>
+<li>
+<code><a href="../reference/clean_variable_spelling.html">clean_variable_spelling()</a></code> will apply <code><a href="../reference/clean_spelling.html">clean_spelling()</a></code> to all specified columns in a data frame</li>
+<li>
+<code><a href="../reference/clean_variables.html">clean_variables()</a></code> wraps <code><a href="../reference/clean_variable_labels.html">clean_variable_labels()</a></code> and <code><a href="../reference/clean_variable_spelling.html">clean_variable_spelling()</a></code>
+</li>
+<li>
+<code><a href="../reference/clean_data.html">clean_data()</a></code> now can optionally check labels againt a wordlist.</li>
+</ul>
+<p>(see <a href='https://github.com/reconhub/linelist/issues/38'>#38</a> for details)</p>
+</div>
+    <div id="linelist-0-5-0-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-5-0-9000" class="anchor"></a>linelist 0.5.0.9000</h1>
+<ul>
+<li>add optional constraints for what columns can be manipulated and make clean_data() faster (see <a href='https://github.com/reconhub/linelist/issues/32'>#32</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-4-0-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-4-0-9000" class="anchor"></a>linelist 0.4.0.9000</h1>
+<ul>
+<li>use lubridate package to parse dates (see <a href='https://github.com/reconhub/linelist/issues/30'>#30</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-3-7-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-3-7-9000" class="anchor"></a>linelist 0.3.7.9000</h1>
+<ul>
+<li>
+<code><a href="../reference/lookup.html">lookup()</a></code> function can look up the column name corresponding to an epivar (see <a href='https://github.com/reconhub/linelist/issues/28'>#28</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-3-6-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-3-6-9000" class="anchor"></a>linelist 0.3.6.9000</h1>
+<ul>
+<li>
+<code>add_epivars()</code> adds epivars to the global dictionary</li>
+<li>
+<code><a href="../reference/add_epivar.html">add_description()</a></code> updates the description of one of the epivars (see <a href='https://github.com/reconhub/linelist/issues/26'>#26</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-3-5-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-3-5-9000" class="anchor"></a>linelist 0.3.5.9000</h1>
+<ul>
+<li>add <code><a href="../reference/template_linelist.html">template_linelist()</a></code> function (see <a href='https://github.com/reconhub/linelist/issues/24'>#24</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-3-4-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-3-4-9000" class="anchor"></a>linelist 0.3.4.9000</h1>
+<ul>
+<li>add rio to imports (see <a href='https://github.com/reconhub/linelist/issues/23'>#23</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-3-3-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-3-3-9000" class="anchor"></a>linelist 0.3.3.9000</h1>
+<ul>
+<li>rename all_dictionary argument to full_dict (see <a href='https://github.com/reconhub/linelist/issues/22'>#22</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-3-2-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-3-2-9000" class="anchor"></a>linelist 0.3.2.9000</h1>
+<ul>
+<li>re-instate validator of dots (see <a href='https://github.com/reconhub/linelist/issues/21'>#21</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-3-1-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-3-1-9000" class="anchor"></a>linelist 0.3.1.9000</h1>
+<ul>
+<li>re-instate data validation (see <a href='https://github.com/reconhub/linelist/issues/20'>#20</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-3-0-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-3-0-9000" class="anchor"></a>linelist 0.3.0.9000</h1>
+<ul>
+<li>restructure linelist class to make dictionary global (see <a href='https://github.com/reconhub/linelist/issues/19'>#19</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-2-1-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-2-1-9000" class="anchor"></a>linelist 0.2.1.9000</h1>
+<ul>
+<li>dictionary validation and tibble import (see <a href='https://github.com/reconhub/linelist/issues/17'>#17</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-2-0-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-2-0-9000" class="anchor"></a>linelist 0.2.0.9000</h1>
+<ul>
+<li>new functions to handle epivars (see <a href='https://github.com/reconhub/linelist/issues/16'>#16</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-1-1-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-1-1-9000" class="anchor"></a>linelist 0.1.1.9000</h1>
+<ul>
+<li>
+<code>get_vars()</code> can take multiple variables (see <a href='https://github.com/reconhub/linelist/issues/15'>#15</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-1-0-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-1-0-9000" class="anchor"></a>linelist 0.1.0.9000</h1>
+<ul>
+<li>adds linelist class (see <a href='https://github.com/reconhub/linelist/issues/9'>#9</a>)</li>
+</ul>
+</div>
+    <div id="linelist-0-0-2-9000-1" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-0-2-9000-1" class="anchor"></a>linelist 0.0.2.9000</h1>
 <ul>
 <li>
 <code><a href="../reference/guess_dates.html">guess_dates()</a></code> now throws an appropriate error if a vector is passed instead of a data frame. See <a href="https://github.com/reconhub/linelist/issues/4" class="uri">https://github.com/reconhub/linelist/issues/4</a> for details</li>
@@ -137,6 +260,22 @@
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
         <li><a href="#linelist-0-0-2-9000">0.0.2.9000</a></li>
+        <li><a href="#linelist-0-6-0-9000">0.6.0.9000</a></li>
+        <li><a href="#linelist-0-5-0-9000">0.5.0.9000</a></li>
+        <li><a href="#linelist-0-4-0-9000">0.4.0.9000</a></li>
+        <li><a href="#linelist-0-3-7-9000">0.3.7.9000</a></li>
+        <li><a href="#linelist-0-3-6-9000">0.3.6.9000</a></li>
+        <li><a href="#linelist-0-3-5-9000">0.3.5.9000</a></li>
+        <li><a href="#linelist-0-3-4-9000">0.3.4.9000</a></li>
+        <li><a href="#linelist-0-3-3-9000">0.3.3.9000</a></li>
+        <li><a href="#linelist-0-3-2-9000">0.3.2.9000</a></li>
+        <li><a href="#linelist-0-3-1-9000">0.3.1.9000</a></li>
+        <li><a href="#linelist-0-3-0-9000">0.3.0.9000</a></li>
+        <li><a href="#linelist-0-2-1-9000">0.2.1.9000</a></li>
+        <li><a href="#linelist-0-2-0-9000">0.2.0.9000</a></li>
+        <li><a href="#linelist-0-1-1-9000">0.1.1.9000</a></li>
+        <li><a href="#linelist-0-1-0-9000">0.1.0.9000</a></li>
+        <li><a href="#linelist-0-0-2-9000-1">0.0.2.9000</a></li>
         <li><a href="#linelist-0-0-1-9000">0.0.1.9000</a></li>
       </ul>
     </div>

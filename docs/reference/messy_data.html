@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -142,59 +142,59 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>messy_data</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt;      'ID Date of Onset. DisCharge.. GENDER_  Épi.Case_définition
-#&gt; 1 ypivxd     2018-01-03  13/01/2018   female         suspected  
-#&gt; 2 odqbhi     2018-01-10  20/01/2018   female           confirmed
-#&gt; 3 dueuml     2018-01-06  16/01/2018   FEMALE         suspected  
-#&gt; 4 osxfhv     2018-01-06  16/01/2018   Female            PROBABLE
-#&gt; 5 bngpzg     2018-01-09  19/01/2018   female            PROBABLE
-#&gt;       messy/dates      lat      lon
-#&gt; 1      2018-10-18 11.49798 48.72019
-#&gt; 2      2018-10-18 12.67577 47.38895
-#&gt; 3            male 13.70402 46.89309
-#&gt; 4 // 24//12//1989 12.42188 48.53480
-#&gt; 5            male 13.20932 48.73607</div><div class='input'><span class='fu'>messy_data</span>()</div><div class='output co'>#&gt;       'ID Date of Onset. DisCharge.. GENDER_  Épi.Case_définition
-#&gt; 1  fkgatt     2018-01-03  13/01/2018     male           Confirmed
-#&gt; 2  kqbdhw     2018-01-11  21/01/2018   female           Confirmed
-#&gt; 3  agrusb     2018-01-10  20/01/2018     Male            probable
-#&gt; 4  nfvqjp     2018-01-07  17/01/2018   FEMALE         suspected  
-#&gt; 5  szmfhs     2018-01-08  18/01/2018   FEMALE         suspected  
-#&gt; 6  gcgeob     2018-01-02  12/01/2018   Female            probable
-#&gt; 7  whrbzh     2018-01-09  19/01/2018   female            probable
-#&gt; 8  oxarid     2018-01-04  14/01/2018     MALE            probable
-#&gt; 9  jkxibr     2018-01-06  16/01/2018   FEMALE            PROBABLE
-#&gt; 10 jpmhao     2018-01-03  13/01/2018     Male          not a case
-#&gt; 11 vqbsrv     2018-01-03  13/01/2018     Male           Confirmed
-#&gt; 12 xrmqld     2018-01-03  13/01/2018   female         suspected  
-#&gt; 13 pvqvlu     2018-01-05  15/01/2018   female           Confirmed
-#&gt; 14 sblcff     2018-01-03  13/01/2018   female          not a case
-#&gt; 15 bosfym     2018-01-07  17/01/2018     MALE           confirmed
-#&gt; 16 smvaoy     2018-01-08  18/01/2018   Female           confirmed
-#&gt; 17 dsdvhj     2018-01-08  18/01/2018   FEMALE           Confirmed
-#&gt; 18 gikrym     2018-01-02  12/01/2018     male          not a case
-#&gt; 19 dxlumg     2018-01-11  21/01/2018     male            probable
-#&gt; 20 eermos     2018-01-08  18/01/2018   Female           Confirmed
+    <pre class="examples"><div class='input'><span class='fu'>messy_data</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt;      'ID Date of Onset. DisCharge.. GENDER_  Épi.Case_définition messy/dates
+#&gt; 1 olqztd     2018-01-08  18/01/2018   FEMALE           Confirmed        &lt;NA&gt;
+#&gt; 2 wkfewo     2018-01-09  19/01/2018   Female            probable  2018_10_17
+#&gt; 3 rfaszl     2018-01-07  17/01/2018     Male          Not.a.Case  01-12-2001
+#&gt; 4 nnqqom     2018-01-07  17/01/2018     male          Not.a.Case      female
+#&gt; 5 swwqtq     2018-01-02  12/01/2018     Male          not a case        &lt;NA&gt;
+#&gt;         lat      lon
+#&gt; 1 12.616913 47.92742
+#&gt; 2 13.544554 49.03229
+#&gt; 3 10.836682 48.21514
+#&gt; 4  8.341201 47.50566
+#&gt; 5 11.900748 49.51214</div><div class='input'><span class='fu'>messy_data</span>()</div><div class='output co'>#&gt;       'ID Date of Onset. DisCharge.. GENDER_  Épi.Case_définition
+#&gt; 1  jsmhbr     2018-01-04  14/01/2018   female           Confirmed
+#&gt; 2  evunsf     2018-01-09  19/01/2018     MALE          Not.a.Case
+#&gt; 3  vxuqrf     2018-01-11  21/01/2018     MALE           suspected
+#&gt; 4  gjsahe     2018-01-02  12/01/2018     MALE            PROBABLE
+#&gt; 5  lxfohb     2018-01-03  13/01/2018   Female            probable
+#&gt; 6  ynuaqq     2018-01-08  18/01/2018     MALE          not a case
+#&gt; 7  iyvzwp     2018-01-10  20/01/2018     male            PROBABLE
+#&gt; 8  mfudww     2018-01-11  21/01/2018     Male           Confirmed
+#&gt; 9  kvjbkp     2018-01-10  20/01/2018     Male          not a case
+#&gt; 10 famomp     2018-01-11  21/01/2018   Female           confirmed
+#&gt; 11 thomxu     2018-01-04  14/01/2018     MALE           Confirmed
+#&gt; 12 dlffbh     2018-01-07  17/01/2018     MALE            PROBABLE
+#&gt; 13 kcnimz     2018-01-08  18/01/2018   Female           suspected
+#&gt; 14 atnalm     2018-01-04  14/01/2018   FEMALE          Not.a.Case
+#&gt; 15 spiktr     2018-01-08  18/01/2018   female          not a case
+#&gt; 16 hnlxav     2018-01-03  13/01/2018   Female            PROBABLE
+#&gt; 17 bxdqyd     2018-01-11  21/01/2018   FEMALE         suspected  
+#&gt; 18 guywbx     2018-01-05  15/01/2018     Male            PROBABLE
+#&gt; 19 fihgrv     2018-01-10  20/01/2018   Female           confirmed
+#&gt; 20 vlhjyo     2018-01-02  12/01/2018     MALE            probable
 #&gt;           messy/dates       lat      lon
-#&gt; 1          01-12-2001 13.723390 47.46235
-#&gt; 2          01-12-2001 15.798009 47.54757
-#&gt; 3          01-12-2001 13.745398 47.56071
-#&gt; 4          2018-10-18  9.868711 47.38378
-#&gt; 5              female 12.896611 48.44163
-#&gt; 6          2018_10_17 14.028164 48.48260
-#&gt; 7          2018_10_17 14.099799 48.54214
-#&gt; 8     // 24//12//1989 14.735634 45.70922
-#&gt; 9                &lt;NA&gt; 14.368720 48.31035
-#&gt; 10         2018-10-18 12.674640 49.40408
-#&gt; 11 that's 24/12/1989!  9.431271 49.37712
-#&gt; 12 that's 24/12/1989! 10.925709 49.06040
-#&gt; 13 that's 24/12/1989! 14.660295 48.63217
-#&gt; 14         2018-10-18 14.214694 49.08493
-#&gt; 15               male 12.755627 49.35646
-#&gt; 16 that's 24/12/1989! 14.866250 48.36242
-#&gt; 17         2018_10_17 11.077447 50.16934
-#&gt; 18         2018_10_17 13.510163 48.13913
-#&gt; 19               male 11.909197 49.37633
-#&gt; 20               male 14.860721 47.50855</div></pre>
+#&gt; 1          2018 10 19 13.187003 48.35080
+#&gt; 2                &lt;NA&gt; 12.266101 48.04988
+#&gt; 3          01-12-2001 12.741182 48.83575
+#&gt; 4          2018_10_17 13.815591 47.71827
+#&gt; 5                &lt;NA&gt; 11.832062 47.20832
+#&gt; 6                &lt;NA&gt; 12.613100 48.00165
+#&gt; 7          2018 10 19 12.460907 46.81247
+#&gt; 8          2018_10_17 13.147316 48.36242
+#&gt; 9     // 24//12//1989 13.714472 47.45056
+#&gt; 10 that's 24/12/1989! 14.100857 48.69295
+#&gt; 11             female 13.076804 47.93916
+#&gt; 12    // 24//12//1989  9.780849 46.80646
+#&gt; 13 that's 24/12/1989! 10.900580 47.88009
+#&gt; 14             female 17.104068 47.29189
+#&gt; 15         01-12-2001 13.352873 46.38334
+#&gt; 16         2018_10_17 15.256615 48.49585
+#&gt; 17    // 24//12//1989 13.870003 49.29975
+#&gt; 18               male 14.097667 46.38401
+#&gt; 19               &lt;NA&gt; 14.294837 46.74963
+#&gt; 20         01-12-2001 14.756927 49.58213</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

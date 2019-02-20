@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -161,25 +161,20 @@ about these variables</p>
                   <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"id"</span>,
                   <span class='kw'>gender</span> <span class='kw'>=</span> <span class='st'>"gender"</span>,
                   <span class='kw'>date_onset</span> <span class='kw'>=</span> <span class='st'>"date_of_onset"</span>,
-                  <span class='kw'>geo</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"lon"</span>, <span class='st'>"lat"</span>)
+                  <span class='kw'>geo_lon</span> <span class='kw'>=</span> <span class='st'>"lon"</span>,
+                  <span class='kw'>geo_lat</span> <span class='kw'>=</span> <span class='st'>"lat"</span>
                  )
-<span class='fu'>list_epivars</span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;       epivar        column              hxl
-#&gt; 1         id            id       #respondee
-#&gt; 2 date_onset date_of_onset     #date +start
-#&gt; 3     gender        gender #indicator +type
-#&gt; 4        geo           lon   #geo +lon +lat
-#&gt; 5        geo           lat   #geo +lon +lat
-#&gt;                                  description
-#&gt; 1               unique individual identifier
-#&gt; 2             date at which symptoms started
-#&gt; 3                   gender of the individual
-#&gt; 4 geographic coordinate: longitude, latitude
-#&gt; 5 geographic coordinate: longitude, latitude</div><div class='input'><span class='fu'>list_epivars</span>(<span class='no'>ll</span>, <span class='kw'>simple</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"         "date_onset" "gender"     "geo"       </div><div class='input'><span class='fu'>list_epivars</span>(<span class='no'>ll</span>, <span class='kw'>full_dict</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;             epivar        column              hxl
+<span class='fu'>list_epivars</span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;       epivar        column              hxl                      description
+#&gt; 1         id            id       #respondee     unique individual identifier
+#&gt; 2 date_onset date_of_onset     #date +start   date at which symptoms started
+#&gt; 3     gender        gender #indicator +type         gender of the individual
+#&gt; 4    geo_lat           lat        #geo +lat  geographic coordinate: latitude
+#&gt; 5    geo_lon           lon        #geo +lon geographic coordinate: longitude</div><div class='input'><span class='fu'>list_epivars</span>(<span class='no'>ll</span>, <span class='kw'>simple</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"         "date_onset" "gender"     "geo_lat"    "geo_lon"   </div><div class='input'><span class='fu'>list_epivars</span>(<span class='no'>ll</span>, <span class='kw'>full_dict</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;             epivar        column              hxl
 #&gt; 1               id            id       #respondee
 #&gt; 2       date_onset date_of_onset     #date +start
 #&gt; 3           gender        gender #indicator +type
-#&gt; 4              geo           lon   #geo +lon +lat
-#&gt; 5              geo           lat   #geo +lon +lat
+#&gt; 4          geo_lat           lat        #geo +lat
+#&gt; 5          geo_lon           lon        #geo +lon
 #&gt; 6  case_definition          &lt;NA&gt; #indicator +name
 #&gt; 7          outcome          &lt;NA&gt; #indicator +type
 #&gt; 8      date_report          &lt;NA&gt;  #date +reported
@@ -190,8 +185,8 @@ about these variables</p>
 #&gt; 1                         unique individual identifier
 #&gt; 2                       date at which symptoms started
 #&gt; 3                             gender of the individual
-#&gt; 4           geographic coordinate: longitude, latitude
-#&gt; 5           geographic coordinate: longitude, latitude
+#&gt; 4                      geographic coordinate: latitude
+#&gt; 5                     geographic coordinate: longitude
 #&gt; 6  case type: suspected, probable, confirmed, negative
 #&gt; 7                                    recovery or death
 #&gt; 8                      date at which case was reported

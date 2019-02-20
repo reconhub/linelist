@@ -75,7 +75,7 @@ is a wrapper for options(linelist_epivars = ...)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -155,7 +155,8 @@ is a wrapper for <code><a href='https://www.rdocumentation.org/packages/base/top
 
 <span class='fu'>get_dictionary</span>()
 
-<span class='fu'>set_dictionary</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>set_dictionary</span>(<span class='no'>x</span>, <span class='kw'>epivar</span> <span class='kw'>=</span> <span class='st'>"epivar"</span>, <span class='kw'>hxl</span> <span class='kw'>=</span> <span class='st'>"hxl"</span>,
+  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"description"</span>, <span class='no'>...</span>)
 
 <span class='fu'>reset_dictionary</span>()</pre>
     
@@ -165,6 +166,18 @@ is a wrapper for <code><a href='https://www.rdocumentation.org/packages/base/top
     <tr>
       <th>x</th>
       <td><p>either a data frame or the path to a that can produce a data frame.</p></td>
+    </tr>
+    <tr>
+      <th>epivar</th>
+      <td><p>the name of the column to use as the epivar column</p></td>
+    </tr>
+    <tr>
+      <th>hxl</th>
+      <td><p>the name of the column to use as the hxl column</p></td>
+    </tr>
+    <tr>
+      <th>description</th>
+      <td><p>the name of the column to use as the comment column</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -179,10 +192,14 @@ is a wrapper for <code><a href='https://www.rdocumentation.org/packages/base/top
 'epivar', 'hxl' and 'description', representing the new dictionary to be
 used; A template example can be found by using <code>default_dictionary()</code>.</p>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='add_epivar.html'>add_epivar()</a></code>, <code><a href='add_epivar.html'>add_description()</a></code></p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># see the default varaibles</span>
-<span class='fu'>get_dictionary</span>()</div><div class='output co'>#&gt;             epivar              hxl
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>od</span> <span class='kw'>&lt;-</span> <span class='fu'>get_dictionary</span>())</div><div class='output co'>#&gt;             epivar              hxl
 #&gt; 1               id       #respondee
 #&gt; 2       date_onset     #date +start
 #&gt; 3      date_report  #date +reported
@@ -192,7 +209,8 @@ used; A template example can be found by using <code>default_dictionary()</code>
 #&gt; 7           gender #indicator +type
 #&gt; 8              age  #indicator +num
 #&gt; 9        age_group #indicator +type
-#&gt; 10             geo   #geo +lon +lat
+#&gt; 10         geo_lon        #geo +lon
+#&gt; 11         geo_lat        #geo +lat
 #&gt;                                            description
 #&gt; 1                         unique individual identifier
 #&gt; 2                       date at which symptoms started
@@ -203,7 +221,8 @@ used; A template example can be found by using <code>default_dictionary()</code>
 #&gt; 7                             gender of the individual
 #&gt; 8                       age of the individual in years
 #&gt; 9                 age group of the individual in years
-#&gt; 10          geographic coordinate: longitude, latitude</div><div class='input'>
+#&gt; 10                    geographic coordinate: longitude
+#&gt; 11                     geographic coordinate: latitude</div><div class='input'>
 <span class='co'># Equivalent</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_dictionary"</span>)</div><div class='output co'>#&gt;             epivar              hxl
 #&gt; 1               id       #respondee
@@ -215,7 +234,8 @@ used; A template example can be found by using <code>default_dictionary()</code>
 #&gt; 7           gender #indicator +type
 #&gt; 8              age  #indicator +num
 #&gt; 9        age_group #indicator +type
-#&gt; 10             geo   #geo +lon +lat
+#&gt; 10         geo_lon        #geo +lon
+#&gt; 11         geo_lat        #geo +lat
 #&gt;                                            description
 #&gt; 1                         unique individual identifier
 #&gt; 2                       date at which symptoms started
@@ -226,22 +246,23 @@ used; A template example can be found by using <code>default_dictionary()</code>
 #&gt; 7                             gender of the individual
 #&gt; 8                       age of the individual in years
 #&gt; 9                 age group of the individual in years
-#&gt; 10          geographic coordinate: longitude, latitude</div><div class='input'>
+#&gt; 10                    geographic coordinate: longitude
+#&gt; 11                     geographic coordinate: latitude</div><div class='input'>
 
 <span class='co'># Set a new, one-column dictionary </span>
 <span class='no'>hosp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='kw'>epivar</span> <span class='kw'>=</span> <span class='st'>"date_hospital"</span>,
-  <span class='kw'>hxl</span>    <span class='kw'>=</span> <span class='st'>"#date +start"</span>,
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"date at which patient was hospitalized"</span>,
+  <span class='kw'>var</span>  <span class='kw'>=</span> <span class='st'>"date_hospital"</span>,
+  <span class='kw'>HXL</span>  <span class='kw'>=</span> <span class='st'>"#date +start"</span>,
+  <span class='kw'>desc</span> <span class='kw'>=</span> <span class='st'>"date at which patient was hospitalized"</span>,
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
-<span class='fu'>set_dictionary</span>(<span class='no'>hosp</span>)
+<span class='fu'>set_dictionary</span>(<span class='no'>hosp</span>, <span class='kw'>epivar</span> <span class='kw'>=</span> <span class='st'>"var"</span>, <span class='kw'>hxl</span> <span class='kw'>=</span> <span class='st'>"HXL"</span>, <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"desc"</span>)
 <span class='fu'>get_dictionary</span>()</div><div class='output co'>#&gt;          epivar          hxl                            description
 #&gt; 1 date_hospital #date +start date at which patient was hospitalized</div><div class='input'>
 <span class='co'># Use the default_dictionary_path() to read in the default dictionary from</span>
 <span class='co'># disk</span>
-<span class='fu'>default_dictionary_path</span>()</div><div class='output co'>#&gt; [1] "/home/thibaut/dev/recon/linelist/inst/default_dictionary.txt"</div><div class='input'><span class='fu'>set_dictionary</span>(<span class='fu'>default_dictionary_path</span>())
+<span class='fu'>default_dictionary_path</span>()</div><div class='output co'>#&gt; [1] "/home/zkamvar/Documents/Projects/reconhub--linelist/inst/default_dictionary.txt"</div><div class='input'><span class='fu'>set_dictionary</span>(<span class='fu'>default_dictionary_path</span>())
 <span class='fu'>get_dictionary</span>()</div><div class='output co'>#&gt;             epivar              hxl
 #&gt; 1               id       #respondee
 #&gt; 2       date_onset     #date +start
@@ -252,7 +273,8 @@ used; A template example can be found by using <code>default_dictionary()</code>
 #&gt; 7           gender #indicator +type
 #&gt; 8              age  #indicator +num
 #&gt; 9        age_group #indicator +type
-#&gt; 10             geo   #geo +lon +lat
+#&gt; 10         geo_lon        #geo +lon
+#&gt; 11         geo_lat        #geo +lat
 #&gt;                                            description
 #&gt; 1                         unique individual identifier
 #&gt; 2                       date at which symptoms started
@@ -263,9 +285,13 @@ used; A template example can be found by using <code>default_dictionary()</code>
 #&gt; 7                             gender of the individual
 #&gt; 8                       age of the individual in years
 #&gt; 9                 age group of the individual in years
-#&gt; 10          geographic coordinate: longitude, latitude</div><div class='input'>
+#&gt; 10                    geographic coordinate: longitude
+#&gt; 11                     geographic coordinate: latitude</div><div class='input'>
 <span class='co'># You can also reset the variables automatically</span>
-<span class='fu'>reset_dictionary</span>()</div></pre>
+<span class='fu'>reset_dictionary</span>()
+
+<span class='co'># reset dictionary to user's dictionary</span>
+<span class='fu'>set_dictionary</span>(<span class='no'>od</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -273,6 +299,8 @@ used; A template example can be found by using <code>default_dictionary()</code>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
