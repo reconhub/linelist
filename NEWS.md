@@ -1,7 +1,7 @@
 # linelist 0.7.2.9000
 
 * `guess_dates()` can once again parse date formats that are file names: 
-  `example_format_2019-02-19.xlsx`.
+  `example_format_2019-02-19.xlsx`. (See #43 for details)
 
 # linelist 0.7.1.9000
 
