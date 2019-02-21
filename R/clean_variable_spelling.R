@@ -1,5 +1,11 @@
 #' Check and clean spelling or codes of multiple variables in a data frame
 #'
+#' @description This function allows you to clean your data according to 
+#' pre-defined rules encapsulated in either a data frame or list of data frames.
+#' It has application for addressing mis-spellings and recoding variables (e.g.
+#' from electronic survey data). 
+#'
+#'
 #' @param wordlists a data frame or named list of data frames with at least two
 #'   columns defining the word list to be used. If this is a data frame, a third
 #'   column must be present to split the wordlists by column in `x` (see
@@ -16,12 +22,8 @@
 #' 
 #' @inheritParams clean_variable_labels
 #' 
-#' @description This function allows you to clean your data according to 
-#' pre-defined rules encapsulated in either a data frame or list of data frames.
-#' It has application for addressing mis-spellings and recoding variables (e.g.
-#' from electronic survey data). 
 #'
-#' By default, this applies the function [clean_spelling()] to all columns 
+#' @details By default, this applies the function [clean_spelling()] to all columns 
 #' specified by the column names listed in `spelling_vars`, or, if a global
 #' dictionary is used, this includes all `character` and `factor` columns as
 #' well. 

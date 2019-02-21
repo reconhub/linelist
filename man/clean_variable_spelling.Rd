@@ -36,7 +36,8 @@ This function allows you to clean your data according to
 pre-defined rules encapsulated in either a data frame or list of data frames.
 It has application for addressing mis-spellings and recoding variables (e.g.
 from electronic survey data).
-
+}
+\details{
 By default, this applies the function \code{\link[=clean_spelling]{clean_spelling()}} to all columns
 specified by the column names listed in \code{spelling_vars}, or, if a global
 dictionary is used, this includes all \code{character} and \code{factor} columns as
