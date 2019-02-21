@@ -1,5 +1,15 @@
-# linelist 0.0.2.9000
-# linelist 0.6.0.9000
+# linelist 0.7.2.9000
+
+* `guess_dates()` can once again parse date formats that are file names: 
+  `example_format_2019-02-19.xlsx`. (See #43 for details)
+
+# linelist 0.7.1.9000
+
+* `clean_spelling()` gains a `quiet` argument to suppress warnings.
+* `clean_variable_spelling()` will no longer error if there are variable specifications that don't exist in the data. It will also suppress all warnings from `clean_spelling()`. 
+  (see #41 for details)
+
+# linelist 0.7.0.9000
 
 * `clean_spelling()` will check the spelling of a vector against a wordlist
 * `clean_variable_spelling()` will apply `clean_spelling()` to all specified
@@ -8,6 +18,17 @@
 * `clean_data()` now can optionally check labels againt a wordlist.
 
 (see #38 for details)
+
+# linelist 0.6.0.9000
+
+* `mask()` will temporarily replace column names with epivars
+* `unmask()` reverses the effect of mask.
+* New Imports: tidyselect and purrr
+  (see #37 for details)
+
+# linelist 0.5.1.9000
+
+* `geo` epivar was replaced with `geo_lat` and `geo_lon` (see #35)
 
 # linelist 0.5.0.9000
 

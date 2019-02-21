@@ -92,6 +92,7 @@ mysteries <- c(# dd-mm-yyyy
                "it's 21 11 2021 a",
                "date 21_11_2021:) ",
                "... here 21.11.2021",
+               "this_is_an_example_21-11-2021.xlsx",
                # yyyy-0m-dd
                "2001/Jan/01",
                "2001 Jan 01",
@@ -101,6 +102,7 @@ mysteries <- c(# dd-mm-yyyy
                "2001 Jan 01 a date 02-02-02",
                "mixing-2001-Jan_01 separators-_",
                "c'est ca: 2001.Jan.01 //../.",
+               "this_is_an_example_2001-Jan-01.xls",
                # dd-Om-YYYY
                "21/Nov/2021",
                "21 Nov 2021",
@@ -110,14 +112,15 @@ mysteries <- c(# dd-mm-yyyy
                "it's 21 Nov 2021 a",
                "date 21_Nov_2021:) ",
                "... here 21.Nov.2021",
+               "this_is_an_example_21-Nov-2021.xlsx",
                NULL
 )
 
 
 solutions <- c(
-  rep("2021-11-21", 8),
-  rep("2001-01-01", 8),
-  rep("2021-11-21", 8)
+  rep("2021-11-21", 9),
+  rep("2001-01-01", 9),
+  rep("2021-11-21", 9)
 )
 
 
@@ -126,7 +129,6 @@ test_that("clean dates will clean what was previously tested", {
   skip_on_cran()
   mclean <- clean_dates(data.frame(mys = mysteries), last_date = "2022-01-01")
   dats <- as.Date(solutions)
-  dats[14] <- NA
   expect_identical(mclean[[1]], dats)
 
 }) 

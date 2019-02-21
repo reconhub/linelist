@@ -122,9 +122,13 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   }
   
   ## convert all entries to character strings
-  x_test <- data.frame(lapply(orders, find_and_constrain_date, x), stringsAsFactors = FALSE)
+  x_test <- data.frame(lapply(orders, find_lubridate, x), stringsAsFactors = FALSE)
   
-  good_and_bad <- constrain_date(x_test, first_date, last_date, x)
+  ## if lubridate fails to do the job, then we should use thibaut's parser.  
+  first_constraint <- constrain_date(x_test, first_date, last_date)$good_dates
+  x_rescued        <- rescue_lubridate_failures(first_constraint, x)
+
+  good_and_bad <- constrain_date(x_rescued, first_date, last_date, x)
   bad_dates    <- good_and_bad$bad_dates
   bd <- do.call("c", unname(bad_dates))
   
@@ -166,7 +170,7 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
 #' @param x the data
 #' @keywords internal
 #' @noRd
-find_and_constrain_date <- function(orders = NULL, x) {
+find_lubridate <- function(orders = NULL, x) {
   suppressWarnings(as.Date(lubridate::parse_date_time(x, orders = orders)))
 }
 
@@ -180,8 +184,14 @@ find_and_constrain_date <- function(orders = NULL, x) {
 #' @param original_dates the vector of original dates (to be collected for errors)
 #' @keywords internal
 #' @noRd
-constrain_date <- function(date_a_frame, dmin, dmax, original_dates) {
-  bad_date_list <- lapply(date_a_frame, function(i) setNames(original_dates, as.character(i))[i < dmin | i > dmax])
+constrain_date <- function(date_a_frame, dmin, dmax, original_dates = NULL) {
+  if (!is.null(original_dates)) {
+    bad_date_list <- lapply(date_a_frame, function(i) {
+      setNames(original_dates, as.character(i))[i < dmin | i > dmax]
+    })
+  } else {
+    bad_date_list <- NULL
+  }
   for (i in names(date_a_frame)) {
     tmp <- date_a_frame[[i]]
     date_a_frame[[i]][tmp < dmin | tmp > dmax] <- NA 
@@ -196,11 +206,30 @@ constrain_date <- function(date_a_frame, dmin, dmax, original_dates) {
 #'   parsing of the same date vector
 #' @keywords internal
 #' @noRd
-choose_first_good_date <- function(date_a_frame) {
-  res <- rep(as.Date(NA), length = nrow(date_a_frame))
-  for (i in seq_len(nrow(date_a_frame))) {
+choose_first_good_date <- function(date_a_frame, original_dates) {
+  n   <- nrow(date_a_frame)
+  res <- rep(as.Date(NA), length = n)
+  for (i in seq_len(n)) {
     tmp <- date_a_frame[i, ]
     res[i] <- tmp[!is.na(tmp)][1]
   }
   res
+}
+
+#' Find the dates that lubridate couldn't
+#' 
+#' @param date_a_frame a data frame where each column contains a different
+#'   parsing of the same date vector
+#' @param original_dates the vector of original dates.
+#' @keywords internal
+#' @noRd
+rescue_lubridate_failures <- function(date_a_frame, original_dates) {
+  nas     <- is.na(date_a_frame)
+  # Find places where all rows are missing
+  all_nas <- which(apply(nas, 1, all))
+  # Use Thibaut's guesser instead
+  for (i in all_nas) {
+    date_a_frame[i, 1] <- i_extract_date_string(original_dates[i])
+  }
+  date_a_frame
 }
