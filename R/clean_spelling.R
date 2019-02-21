@@ -7,14 +7,37 @@
 #' @param x a character or factor vector
 #'
 #' @param wordlist a two-column matrix or data frame defining mis-spelled
-#'   words in the first column and replacements in the second column. If there
-#'   is a ".default" value in the first column, then this will be used to 
-#'   change all other spellings/values to a default value in the second column.
-#'   See examples.
+#'   words in the first column and replacements in the second column. There
+#'   are keywords that can be appended to the first column for cleaning missing
+#'   or default values.
 #'
 #' @param quiet a `logical` indicating if warnings should be issued if no
 #'   replacement is made; if `FALSE`, these warnings will be disabled
 #' 
+#'
+#' @details 
+#'
+#' \subsection{Keywords}{
+#'
+#' There are currently two keywords that can be placed in the first column of
+#' your wordlist:
+#'
+#'  - `.missing`: replaces any missing values
+#'  - `.default`: replaces **ALL** values that are not defined in the wordlist
+#'                and are not missing. 
+#'
+#' The `.missing` keyword is a synonym for `NA` (a _true_ missing value). This
+#' succinctly handles two potentially confusing situations:
+#'
+#'  1. You've imported your wordlist from excel and all the missing values 
+#'     (`NA`) render as `"NA"`.
+#'  2. You actually want to represent "NA" as a potential value, but you've
+#'     accidentally imported it as a missing value (`NA`)
+#'  
+#'  A warning will appear if you specify either `NA` or `"NA"` in your wordlist
+#'  without the `.missing` argument. 
+#' }
+#'
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned. 
 #'   Note that factors will be arranged by the order presented in the data 
 #'   wordlist; other levels will appear afterwards.  
@@ -29,12 +52,15 @@
 #' @examples
 #'
 #' corrections <- data.frame(
-#'   bad = c("foubar", "foobr", "fubar", NA, "unknown"),
+#'   bad = c("foubar", "foobr", "fubar", "unknown", NA), 
 #'   good = c("foobar", "foobar", "foobar", "missing", "missing"),
 #'   stringsAsFactors = FALSE
 #' )
 #' corrections
-#' my_data <- c(letters[1:5], sample(corrections$bad, 10, replace = TRUE))
+#' 
+#' # create some fake data
+#' my_data <- c(letters[1:5], sample(corrections$bad[-5], 10, replace = TRUE))
+#' my_data[sample(6:15, 2)] <- NA  # with missing elements
 #'
 #' clean_spelling(my_data, corrections)
 #'

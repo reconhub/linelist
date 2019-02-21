@@ -11,10 +11,9 @@ clean_spelling(x = character(), wordlist = data.frame(),
 \item{x}{a character or factor vector}
 
 \item{wordlist}{a two-column matrix or data frame defining mis-spelled
-words in the first column and replacements in the second column. If there
-is a ".default" value in the first column, then this will be used to
-change all other spellings/values to a default value in the second column.
-See examples.}
+words in the first column and replacements in the second column. There
+are keywords that can be appended to the first column for cleaning missing
+or default values.}
 
 \item{quiet}{a \code{logical} indicating if warnings should be issued if no
 replacement is made; if \code{FALSE}, these warnings will be disabled}
@@ -29,15 +28,42 @@ This function provides an interface for \code{\link[forcats:fct_recode]{forcats:
 \code{\link[forcats:fct_explicit_na]{forcats::fct_explicit_na()}}, and \code{\link[forcats:fct_relevel]{forcats::fct_relevel()}} in such a way that
 a data wordlist can be imported from a data frame.
 }
+\details{
+\subsection{Keywords}{
+
+There are currently two keywords that can be placed in the first column of
+your wordlist:
+\itemize{
+\item \code{.missing}: replaces any missing values
+\item \code{.default}: replaces \strong{ALL} values that are not defined in the wordlist
+and are not missing.
+}
+
+The \code{.missing} keyword is a synonym for \code{NA} (a \emph{true} missing value). This
+succinctly handles two potentially confusing situations:
+\enumerate{
+\item You've imported your wordlist from excel and all the missing values
+(\code{NA}) render as \code{"NA"}.
+\item You actually want to represent "NA" as a potential value, but you've
+accidentally imported it as a missing value (\code{NA})
+}
+
+A warning will appear if you specify either \code{NA} or \code{"NA"} in your wordlist
+without the \code{.missing} argument.
+}
+}
 \examples{
 
 corrections <- data.frame(
-  bad = c("foubar", "foobr", "fubar", NA, "unknown"),
+  bad = c("foubar", "foobr", "fubar", "unknown", NA), 
   good = c("foobar", "foobar", "foobar", "missing", "missing"),
   stringsAsFactors = FALSE
 )
 corrections
-my_data <- c(letters[1:5], sample(corrections$bad, 10, replace = TRUE))
+
+# create some fake data
+my_data <- c(letters[1:5], sample(corrections$bad[-5], 10, replace = TRUE))
+my_data[sample(6:15, 2)] <- NA  # with missing elements
 
 clean_spelling(my_data, corrections)
 
