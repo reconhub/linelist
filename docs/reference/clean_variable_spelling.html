@@ -35,28 +35,7 @@
 <meta property="og:description" content="This function allows you to clean your data according to
 pre-defined rules encapsulated in either a data frame or list of data frames.
 It has application for addressing mis-spellings and recoding variables (e.g.
-from electronic survey data).
-By default, this applies the function clean_spelling() to all columns
-specified by the column names listed in spelling_vars, or, if a global
-dictionary is used, this includes all character and factor columns as
-well.
-Global wordlists" />
-
-<meta property="og:description" content="A global wordlist is a set of definitions applied to all valid columns of x
-indiscriminantly. When a global dictioary is used, you might see several
-warnings appear because some variables were not found in the data.
-
-.global spelling_var: If you want to apply a set of definitions to all
-valid columns in addition to specified columns, then you can include a
-.global group in the spelling_var column of your wordlists data
-frame. NOTE: specific variable definitions will override global
-defintions. For example: if you have a column for cardinal directions
-and a definiton for N = North, then the global variable N = no will
-not override that. See Example.
-spelling_var = NULL: If you want your data frame to be applied to
-all character/factor columns indiscriminantly, then setting
-spelling_var = NULL will use that wordlist globally.
-" />
+from electronic survey data)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -87,7 +66,7 @@ spelling_var = NULL will use that wordlist globally.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2.9000</span>
       </span>
     </div>
 
@@ -149,27 +128,6 @@ spelling_var = NULL will use that wordlist globally.
 pre-defined rules encapsulated in either a data frame or list of data frames.
 It has application for addressing mis-spellings and recoding variables (e.g.
 from electronic survey data).</p>
-<p>By default, this applies the function <code><a href='clean_spelling.html'>clean_spelling()</a></code> to all columns
-specified by the column names listed in <code>spelling_vars</code>, or, if a global
-dictionary is used, this includes all <code>character</code> and <code>factor</code> columns as
-well.</p>
-<h3>Global wordlists</h3>
-
-    A global wordlist is a set of definitions applied to all valid columns of <code>x</code>
-indiscriminantly. When a global dictioary is used, you might see several
-warnings appear because some variables were not found in the data.
-<ul>
-<li><p><strong>.global spelling_var</strong>: If you want to apply a set of definitions to all
-valid columns in addition to specified columns, then you can include a
-<code>.global</code> group in the <code>spelling_var</code> column of your <code>wordlists</code> data
-frame. <em>NOTE: specific variable definitions will override global
-defintions.</em> For example: if you have a column for cardinal directions
-and a definiton for <code>N = North</code>, then the global variable <code>N = no</code> will
-not override that. See Example.</p></li>
-<li><p><strong><code>spelling_var = NULL</code></strong>: If you want your data frame to be applied to
-all character/factor columns indiscriminantly, then setting
-<code>spelling_var = NULL</code> will use that wordlist globally.</p></li>
-</ul>
     
     </div>
 
@@ -214,6 +172,29 @@ Practically, this is used in <code><a href='clean_data.html'>clean_data()</a></c
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a data frame with re-defined data based on the dictionary</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>By default, this applies the function <code><a href='clean_spelling.html'>clean_spelling()</a></code> to all columns
+specified by the column names listed in <code>spelling_vars</code>, or, if a global
+dictionary is used, this includes all <code>character</code> and <code>factor</code> columns as
+well.</p>
+<h3>Global wordlists</h3>
+    A global wordlist is a set of definitions applied to all valid columns of <code>x</code>
+indiscriminantly. When a global dictioary is used, you might see several
+warnings appear because some variables were not found in the data.
+<ul>
+<li><p><strong>.global spelling_var</strong>: If you want to apply a set of definitions to all
+valid columns in addition to specified columns, then you can include a
+<code>.global</code> group in the <code>spelling_var</code> column of your <code>wordlists</code> data
+frame. <em>NOTE: specific variable definitions will override global
+defintions.</em> For example: if you have a column for cardinal directions
+and a definiton for <code>N = North</code>, then the global variable <code>N = no</code> will
+not override that. See Example.</p></li>
+<li><p><strong><code>spelling_var = NULL</code></strong>: If you want your data frame to be applied to
+all character/factor columns indiscriminantly, then setting
+<code>spelling_var = NULL</code> will use that wordlist globally.</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -402,6 +383,8 @@ numeric and Date columns from conversion to character.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
 
       <li><a href="#note">Note</a></li>
 

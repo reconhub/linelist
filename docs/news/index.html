@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2.9000</span>
       </span>
     </div>
 
@@ -115,13 +115,27 @@
       <small>Source: <a href='https://github.com/reconhub/linelist/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="linelist-0-0-2-9000" class="section level1">
+    <div id="linelist-0-7-2-9000" class="section level1">
 <h1 class="page-header">
-<a href="#linelist-0-0-2-9000" class="anchor"></a>linelist 0.0.2.9000</h1>
+<a href="#linelist-0-7-2-9000" class="anchor"></a>linelist 0.7.2.9000</h1>
+<ul>
+<li>
+<code><a href="../reference/guess_dates.html">guess_dates()</a></code> can once again parse date formats that are file names: <code>example_format_2019-02-19.xlsx</code>. (See <a href='https://github.com/reconhub/linelist/issues/43'>#43</a> for details)</li>
+</ul>
 </div>
-    <div id="linelist-0-6-0-9000" class="section level1">
+    <div id="linelist-0-7-1-9000" class="section level1">
 <h1 class="page-header">
-<a href="#linelist-0-6-0-9000" class="anchor"></a>linelist 0.6.0.9000</h1>
+<a href="#linelist-0-7-1-9000" class="anchor"></a>linelist 0.7.1.9000</h1>
+<ul>
+<li>
+<code><a href="../reference/clean_spelling.html">clean_spelling()</a></code> gains a <code>quiet</code> argument to suppress warnings.</li>
+<li>
+<code><a href="../reference/clean_variable_spelling.html">clean_variable_spelling()</a></code> will no longer error if there are variable specifications that don’t exist in the data. It will also suppress all warnings from <code><a href="../reference/clean_spelling.html">clean_spelling()</a></code>. (see <a href='https://github.com/reconhub/linelist/issues/41'>#41</a> for details)</li>
+</ul>
+</div>
+    <div id="linelist-0-7-0-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-7-0-9000" class="anchor"></a>linelist 0.7.0.9000</h1>
 <ul>
 <li>
 <code><a href="../reference/clean_spelling.html">clean_spelling()</a></code> will check the spelling of a vector against a wordlist</li>
@@ -134,6 +148,25 @@
 <code><a href="../reference/clean_data.html">clean_data()</a></code> now can optionally check labels againt a wordlist.</li>
 </ul>
 <p>(see <a href='https://github.com/reconhub/linelist/issues/38'>#38</a> for details)</p>
+</div>
+    <div id="linelist-0-6-0-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-6-0-9000" class="anchor"></a>linelist 0.6.0.9000</h1>
+<ul>
+<li>
+<code><a href="../reference/mask.html">mask()</a></code> will temporarily replace column names with epivars</li>
+<li>
+<code><a href="../reference/mask.html">unmask()</a></code> reverses the effect of mask.</li>
+<li>New Imports: tidyselect and purrr (see <a href='https://github.com/reconhub/linelist/issues/37'>#37</a> for details)</li>
+</ul>
+</div>
+    <div id="linelist-0-5-1-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-5-1-9000" class="anchor"></a>linelist 0.5.1.9000</h1>
+<ul>
+<li>
+<code>geo</code> epivar was replaced with <code>geo_lat</code> and <code>geo_lon</code> (see <a href='https://github.com/reconhub/linelist/issues/35'>#35</a>)</li>
+</ul>
 </div>
     <div id="linelist-0-5-0-9000" class="section level1">
 <h1 class="page-header">
@@ -238,9 +271,9 @@
 <li>adds linelist class (see <a href='https://github.com/reconhub/linelist/issues/9'>#9</a>)</li>
 </ul>
 </div>
-    <div id="linelist-0-0-2-9000-1" class="section level1">
+    <div id="linelist-0-0-2-9000" class="section level1">
 <h1 class="page-header">
-<a href="#linelist-0-0-2-9000-1" class="anchor"></a>linelist 0.0.2.9000</h1>
+<a href="#linelist-0-0-2-9000" class="anchor"></a>linelist 0.0.2.9000</h1>
 <ul>
 <li>
 <code><a href="../reference/guess_dates.html">guess_dates()</a></code> now throws an appropriate error if a vector is passed instead of a data frame. See <a href="https://github.com/reconhub/linelist/issues/4" class="uri">https://github.com/reconhub/linelist/issues/4</a> for details</li>
@@ -259,8 +292,11 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#linelist-0-0-2-9000">0.0.2.9000</a></li>
+        <li><a href="#linelist-0-7-2-9000">0.7.2.9000</a></li>
+        <li><a href="#linelist-0-7-1-9000">0.7.1.9000</a></li>
+        <li><a href="#linelist-0-7-0-9000">0.7.0.9000</a></li>
         <li><a href="#linelist-0-6-0-9000">0.6.0.9000</a></li>
+        <li><a href="#linelist-0-5-1-9000">0.5.1.9000</a></li>
         <li><a href="#linelist-0-5-0-9000">0.5.0.9000</a></li>
         <li><a href="#linelist-0-4-0-9000">0.4.0.9000</a></li>
         <li><a href="#linelist-0-3-7-9000">0.3.7.9000</a></li>
@@ -275,7 +311,7 @@
         <li><a href="#linelist-0-2-0-9000">0.2.0.9000</a></li>
         <li><a href="#linelist-0-1-1-9000">0.1.1.9000</a></li>
         <li><a href="#linelist-0-1-0-9000">0.1.0.9000</a></li>
-        <li><a href="#linelist-0-0-2-9000-1">0.0.2.9000</a></li>
+        <li><a href="#linelist-0-0-2-9000">0.0.2.9000</a></li>
         <li><a href="#linelist-0-0-1-9000">0.0.1.9000</a></li>
       </ul>
     </div>

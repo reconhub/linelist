@@ -65,7 +65,7 @@ a data wordlist can be imported from a data frame." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2.9000</span>
       </span>
     </div>
 
@@ -129,7 +129,8 @@ a data wordlist can be imported from a data frame.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>clean_spelling</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>wordlist</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>())</pre>
+    <pre class="usage"><span class='fu'>clean_spelling</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>wordlist</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(),
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,6 +146,11 @@ words in the first column and replacements in the second column. If there
 is a ".default" value in the first column, then this will be used to
 change all other spellings/values to a default value in the second column.
 See examples.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>a <code>logical</code> indicating if warnings should be issued if no
+replacement is made; if <code>FALSE</code>, these warnings will be disabled</p></td>
     </tr>
     </table>
     
