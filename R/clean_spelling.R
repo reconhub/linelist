@@ -151,7 +151,6 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
       msg <- sprintf(msg, the_words, paste(dkeys, collapse = '", "'))
       warning(msg)
     }
-    
   }
 
   dict        <- keys
