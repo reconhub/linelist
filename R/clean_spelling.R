@@ -139,6 +139,9 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
 
     if (any(na_present)) {
       msg <- "NA was present in the first column of %s; replacing with the character 'NA'"
+      msg <- paste(msg, 
+                   "If you want to indicate missing data, use the '.missing' keyword.", 
+                   collapse = "\n")
       msg <- sprintf(msg, the_words)
       warning(msg)
     }
