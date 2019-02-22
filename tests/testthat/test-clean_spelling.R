@@ -2,13 +2,13 @@ context("clean spelling tests")
 
 
 corrections <- data.frame(
-  bad = c("foubar", "foobr", "fubar", NA, "unknown"),
+  bad = c("foubar", "foobr", "fubar", ".missing", "unknown"),
   good = c("foobar", "foobar", "foobar", "missing", "missing"),
   stringsAsFactors = FALSE
 )
 
-my_data <- c(letters[1:5], "foubar", "foobr", "fubar", NA, "unknown", "fumar")
-cleaned_data <- c(letters[1:5], "foobar", "foobar", "foobar", "missing", "missing", "fumar")
+my_data <- c(letters[1:5], "foubar", "foobr", "fubar", NA, "", "unknown", "fumar")
+cleaned_data <- c(letters[1:5], "foobar", "foobar", "foobar", "missing", "missing", "missing", "fumar")
 
 test_that("clean_spelling throws an error with no data or a data frame", {
 

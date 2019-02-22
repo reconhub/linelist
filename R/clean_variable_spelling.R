@@ -64,10 +64,10 @@
 #' 
 #' # Set up wordlist ------------------------------------------------ 
 #'
-#' yesno  <- c("Y", "N", "U", NA)
+#' yesno  <- c("Y", "N", "U", ".missing")
 #' dyesno <- c("Yes", "No", "Unknown", "Missing")
 #'
-#' treatment_administered  <- c(0:1, NA)
+#' treatment_administered  <- c(0:1, ".missing")
 #' dtreatment_administered <- c("Yes", "No", "Missing")
 #'
 #' facility  <- c(1:10, ".default") # define a .default key
@@ -88,7 +88,7 @@
 #' # Assigning global values ----------------------------------------
 #'
 #' global_words <- data.frame(
-#'   options = c("Y", "N", "U", "unk", "oui", NA),
+#'   options = c("Y", "N", "U", "unk", "oui", ".missing"),
 #'   values  = c("yes", "no", "unknown", "unknown", "yes", "missing"),
 #'   grp     = rep(".global", 6),
 #'   orders  = rep(Inf, 6),
@@ -109,6 +109,8 @@
 #'   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
 #'   stringsAsFactors = FALSE
 #' )
+#' missing_data <- dat == ".missing"
+#' dat[missing_data] <- sample(c("", NA), sum(missing_data), prob = c(0.1, 0.9), replace = TRUE)
 #'
 #' # Clean spelling based on wordlist ------------------------------ 
 #'

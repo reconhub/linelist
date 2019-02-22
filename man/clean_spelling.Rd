@@ -39,23 +39,12 @@ your wordlist:
 and are not missing.
 }
 
-The \code{.missing} keyword is a synonym for \code{NA} (a \emph{true} missing value). This
-succinctly handles two potentially confusing situations:
-\enumerate{
-\item You've imported your wordlist from excel and all the missing values
-(\code{NA}) render as \code{"NA"}.
-\item You actually want to represent "NA" as a potential value, but you've
-accidentally imported it as a missing value (\code{NA})
-}
-
-A warning will appear if you specify either \code{NA} or \code{"NA"} in your wordlist
-without the \code{.missing} argument.
 }
 }
 \examples{
 
 corrections <- data.frame(
-  bad = c("foubar", "foobr", "fubar", "unknown", NA), 
+  bad = c("foubar", "foobr", "fubar", "unknown", ".missing"), 
   good = c("foobar", "foobar", "foobar", "missing", "missing"),
   stringsAsFactors = FALSE
 )
@@ -79,7 +68,7 @@ clean_spelling(letters, corrections)
 # The can be used for translating survey output
 
 words <- data.frame(
-  option_code = c("Y", "N", "U", NA),
+  option_code = c("Y", "N", "U", ".missing"),
   option_name = c("Yes", "No", "Unknown", "Missing"),
   stringsAsFactors = FALSE
 )
