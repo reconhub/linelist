@@ -65,7 +65,7 @@ a data wordlist can be imported from a data frame." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.9000</span>
       </span>
     </div>
 
@@ -142,10 +142,9 @@ a data wordlist can be imported from a data frame.</p>
     <tr>
       <th>wordlist</th>
       <td><p>a two-column matrix or data frame defining mis-spelled
-words in the first column and replacements in the second column. If there
-is a ".default" value in the first column, then this will be used to
-change all other spellings/values to a default value in the second column.
-See examples.</p></td>
+words in the first column and replacements in the second column. There
+are keywords that can be appended to the first column for cleaning missing
+or default values.</p></td>
     </tr>
     <tr>
       <th>quiet</th>
@@ -160,6 +159,17 @@ replacement is made; if <code>FALSE</code>, these warnings will be disabled</p><
 Note that factors will be arranged by the order presented in the data
 wordlist; other levels will appear afterwards.</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <h3>Keywords</h3>
+    There are currently two keywords that can be placed in the first column of
+your wordlist:
+<ul>
+<li><p><code>.missing</code>: replaces any missing values</p></li>
+<li><p><code>.default</code>: replaces <strong>ALL</strong> values that are not defined in the wordlist
+and are not missing.</p></li>
+</ul>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='clean_variable_spelling.html'>clean_variable_spelling()</a></code> for an implementation that acts across
@@ -169,19 +179,22 @@ multiple variables in a data frame.</p></div>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='no'>corrections</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='kw'>bad</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"foubar"</span>, <span class='st'>"foobr"</span>, <span class='st'>"fubar"</span>, <span class='fl'>NA</span>, <span class='st'>"unknown"</span>),
+  <span class='kw'>bad</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"foubar"</span>, <span class='st'>"foobr"</span>, <span class='st'>"fubar"</span>, <span class='st'>"unknown"</span>, <span class='st'>".missing"</span>),
   <span class='kw'>good</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"foobar"</span>, <span class='st'>"foobar"</span>, <span class='st'>"foobar"</span>, <span class='st'>"missing"</span>, <span class='st'>"missing"</span>),
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
-<span class='no'>corrections</span></div><div class='output co'>#&gt;       bad    good
-#&gt; 1  foubar  foobar
-#&gt; 2   foobr  foobar
-#&gt; 3   fubar  foobar
-#&gt; 4    &lt;NA&gt; missing
-#&gt; 5 unknown missing</div><div class='input'><span class='no'>my_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>], <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>corrections</span>$<span class='no'>bad</span>, <span class='fl'>10</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
+<span class='no'>corrections</span></div><div class='output co'>#&gt;        bad    good
+#&gt; 1   foubar  foobar
+#&gt; 2    foobr  foobar
+#&gt; 3    fubar  foobar
+#&gt; 4  unknown missing
+#&gt; 5 .missing missing</div><div class='input'>
+<span class='co'># create some fake data</span>
+<span class='no'>my_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>], <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>corrections</span>$<span class='no'>bad</span>[-<span class='fl'>5</span>], <span class='fl'>10</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
+<span class='no'>my_data</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>6</span>:<span class='fl'>15</span>, <span class='fl'>2</span>)] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>  <span class='co'># with missing elements</span>
 
 <span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt;  [1] "a"       "b"       "c"       "d"       "e"       "foobar"  "foobar" 
-#&gt;  [8] "foobar"  "missing" "foobar"  "foobar"  "missing" "foobar"  "foobar" 
+#&gt;  [8] "missing" "foobar"  "foobar"  "foobar"  "foobar"  "foobar"  "foobar" 
 #&gt; [15] "missing"</div><div class='input'>
 <span class='co'># You can also set a default value</span>
 <span class='no'>corrections_with_default</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>corrections</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>bad</span> <span class='kw'>=</span> <span class='st'>".default"</span>, <span class='kw'>good</span> <span class='kw'>=</span> <span class='st'>"unknown"</span>))
@@ -189,10 +202,10 @@ multiple variables in a data frame.</p></div>
 #&gt; 1   foubar  foobar
 #&gt; 2    foobr  foobar
 #&gt; 3    fubar  foobar
-#&gt; 4     &lt;NA&gt; missing
-#&gt; 5  unknown missing
+#&gt; 4  unknown missing
+#&gt; 5 .missing missing
 #&gt; 6 .default unknown</div><div class='input'><span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>)</div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "foobar"  "foobar" 
-#&gt;  [8] "foobar"  "missing" "foobar"  "foobar"  "missing" "foobar"  "foobar" 
+#&gt;  [8] "missing" "foobar"  "foobar"  "foobar"  "foobar"  "foobar"  "foobar" 
 #&gt; [15] "missing"</div><div class='input'>
 <span class='co'># The function will give you a warning if the wordlist does not</span>
 <span class='co'># match the data</span>
@@ -201,7 +214,7 @@ multiple variables in a data frame.</p></div>
 <span class='co'># The can be used for translating survey output</span>
 
 <span class='no'>words</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='kw'>option_code</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='fl'>NA</span>),
+  <span class='kw'>option_code</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='st'>".missing"</span>),
   <span class='kw'>option_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Yes"</span>, <span class='st'>"No"</span>, <span class='st'>"Unknown"</span>, <span class='st'>"Missing"</span>),
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
@@ -214,6 +227,8 @@ multiple variables in a data frame.</p></div>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

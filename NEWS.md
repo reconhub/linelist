@@ -1,3 +1,11 @@
+# linelist 0.7.3.9000
+
+* `clean_spelling()` wordlists now allow the optional `.missing` keyword to
+  replace both `NA` and blank ("") cells in the data. Values that are `NA` will
+  be converted to "NA" (character) with a warning. 
+  See https://github.com/reconhub/linelist/pull/44 and 
+  https://github.com/reconhub/linelist/pull/45 for details.
+
 # linelist 0.7.2.9000
 
 * `guess_dates()` can once again parse date formats that are file names: 

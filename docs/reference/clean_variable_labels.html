@@ -66,7 +66,7 @@ epitrix::clean_labels() in the epitrix package. See
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.9000</span>
       </span>
     </div>
 
@@ -167,48 +167,48 @@ factors.</p>
 
 <span class='co'>## clean variable labels, store in new object, show results</span>
 <span class='no'>clean_data</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_variable_labels</span>(<span class='no'>toy_data</span>)
-<span class='no'>clean_data</span></div><div class='output co'>#&gt;        id date_of_onset  discharge gender epi_case_definition       messy_dates
-#&gt; 1  prtlra    2018-01-04 14_01_2018 female           confirmed that_s_24_12_1989
-#&gt; 2  zfhtdc    2018-01-05 15_01_2018   male          not_a_case        24_12_1989
-#&gt; 3  eqrufu    2018-01-02 12_01_2018 female           suspected        2018_10_18
-#&gt; 4  ppcfay    2018-01-03 13_01_2018   male           confirmed        2018_10_19
-#&gt; 5  bdimeb    2018-01-04 14_01_2018   male            probable        2018_10_17
-#&gt; 6  ljxafr    2018-01-10 20_01_2018 female           confirmed        2018_10_19
-#&gt; 7  tqcpwt    2018-01-04 14_01_2018   male           suspected            female
-#&gt; 8  cvwstd    2018-01-11 21_01_2018   male            probable        24_12_1989
-#&gt; 9  fidwmm    2018-01-09 19_01_2018   male          not_a_case            female
-#&gt; 10 uiiivh    2018-01-10 20_01_2018 female            probable        2018_10_18
-#&gt; 11 lkdrey    2018-01-08 18_01_2018   male            probable        2018_10_17
-#&gt; 12 pivxdo    2018-01-06 16_01_2018 female            probable        24_12_1989
-#&gt; 13 dqbhid    2018-01-11 21_01_2018 female           suspected            female
-#&gt; 14 ueumlo    2018-01-03 13_01_2018 female            probable        24_12_1989
-#&gt; 15 sxfhvb    2018-01-03 13_01_2018   male           confirmed        2018_10_19
-#&gt; 16 ngpzgw    2018-01-08 18_01_2018   male            probable        01_12_2001
-#&gt; 17 curqfw    2018-01-06 16_01_2018 female            probable        24_12_1989
-#&gt; 18 lhqgkq    2018-01-05 15_01_2018 female           confirmed        01_12_2001
-#&gt; 19 omtyhs    2018-01-05 15_01_2018 female          not_a_case        01_12_2001
-#&gt; 20 dbsdte    2018-01-10 20_01_2018   male            probable        24_12_1989
+<span class='no'>clean_data</span></div><div class='output co'>#&gt;        id date_of_onset  discharge gender epi_case_definition messy_dates
+#&gt; 1  tlrazf    2018-01-02 12_01_2018 female           suspected  2018_10_18
+#&gt; 2  htdceq    2018-01-03 13_01_2018   male           confirmed  2018_10_19
+#&gt; 3  rufupp    2018-01-04 14_01_2018   male            probable  2018_10_17
+#&gt; 4  cfaybd    2018-01-10 20_01_2018 female           confirmed  2018_10_19
+#&gt; 5  imeblj    2018-01-04 14_01_2018   male           suspected      female
+#&gt; 6  xafrtq    2018-01-11 21_01_2018   male            probable  24_12_1989
+#&gt; 7  cpwtcv    2018-01-09 19_01_2018   male          not_a_case      female
+#&gt; 8  wstdfi    2018-01-10 20_01_2018 female            probable  2018_10_18
+#&gt; 9  dwmmui    2018-01-08 18_01_2018   male            probable  2018_10_17
+#&gt; 10 iivhlk    2018-01-06 16_01_2018 female            probable  24_12_1989
+#&gt; 11 dreypi    2018-01-11 21_01_2018 female           suspected      female
+#&gt; 12 vxdodq    2018-01-03 13_01_2018 female            probable  24_12_1989
+#&gt; 13 bhidue    2018-01-03 13_01_2018   male           confirmed  2018_10_19
+#&gt; 14 umlosx    2018-01-08 18_01_2018   male            probable  01_12_2001
+#&gt; 15 fhvbng    2018-01-06 16_01_2018 female            probable  24_12_1989
+#&gt; 16 pzgwcu    2018-01-05 15_01_2018 female           confirmed  01_12_2001
+#&gt; 17 rqfwlh    2018-01-05 15_01_2018 female          not_a_case  01_12_2001
+#&gt; 18 qgkqom    2018-01-10 20_01_2018   male            probable  24_12_1989
+#&gt; 19 tyhsdb    2018-01-04 14_01_2018   male           confirmed  2018_10_19
+#&gt; 20 sdtecy    2018-01-08 18_01_2018 female            probable  24_12_1989
 #&gt;          lat      lon
-#&gt; 1   8.640087 47.21476
-#&gt; 2  13.841749 47.27340
-#&gt; 3  12.284943 48.68188
-#&gt; 4  11.706277 47.77016
-#&gt; 5  12.899716 46.48940
-#&gt; 6  13.833886 47.41627
-#&gt; 7  11.734825 45.97708
-#&gt; 8  15.300293 48.40350
-#&gt; 9  12.529048 48.55002
-#&gt; 10  9.713785 48.02836
-#&gt; 11  9.993236 48.89317
-#&gt; 12  8.898830 47.62344
-#&gt; 13 11.493604 48.60588
-#&gt; 14 12.731716 47.99513
-#&gt; 15 15.011566 47.47920
-#&gt; 16 17.334374 47.36098
-#&gt; 17 17.645113 47.36411
-#&gt; 18 10.959153 48.10659
-#&gt; 19 13.097629 49.17691
-#&gt; 20 11.456223 48.44739</div></pre>
+#&gt; 1  13.841749 47.27340
+#&gt; 2  12.284943 48.68188
+#&gt; 3  11.706277 47.77016
+#&gt; 4  12.899716 46.48940
+#&gt; 5  13.833886 47.41627
+#&gt; 6  11.734825 45.97708
+#&gt; 7  15.300293 48.40350
+#&gt; 8  12.529048 48.55002
+#&gt; 9   9.713785 48.02836
+#&gt; 10  9.993236 48.89317
+#&gt; 11  8.898830 47.62344
+#&gt; 12 11.493604 48.60588
+#&gt; 13 12.731716 47.99513
+#&gt; 14 15.011566 47.47920
+#&gt; 15 17.334374 47.36098
+#&gt; 16 17.645113 47.36411
+#&gt; 17 10.959153 48.10659
+#&gt; 18 13.097629 49.17691
+#&gt; 19 11.456223 48.44739
+#&gt; 20 11.429530 50.27295</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

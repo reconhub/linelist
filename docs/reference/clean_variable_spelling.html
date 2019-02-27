@@ -66,7 +66,7 @@ from electronic survey data)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.9000</span>
       </span>
     </div>
 
@@ -210,10 +210,10 @@ numeric and Date columns from conversion to character.</p>
     <pre class="examples"><div class='input'>
 <span class='co'># Set up wordlist ------------------------------------------------ </span>
 
-<span class='no'>yesno</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='fl'>NA</span>)
+<span class='no'>yesno</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='st'>".missing"</span>)
 <span class='no'>dyesno</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Yes"</span>, <span class='st'>"No"</span>, <span class='st'>"Unknown"</span>, <span class='st'>"Missing"</span>)
 
-<span class='no'>treatment_administered</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='fl'>NA</span>)
+<span class='no'>treatment_administered</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='st'>".missing"</span>)
 <span class='no'>dtreatment_administered</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Yes"</span>, <span class='st'>"No"</span>, <span class='st'>"Missing"</span>)
 
 <span class='no'>facility</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='st'>".default"</span>) <span class='co'># define a .default key</span>
@@ -234,7 +234,7 @@ numeric and Date columns from conversion to character.</p>
 <span class='co'># Assigning global values ----------------------------------------</span>
 
 <span class='no'>global_words</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='st'>"unk"</span>, <span class='st'>"oui"</span>, <span class='fl'>NA</span>),
+  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='st'>"unk"</span>, <span class='st'>"oui"</span>, <span class='st'>".missing"</span>),
   <span class='kw'>values</span>  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"yes"</span>, <span class='st'>"no"</span>, <span class='st'>"unknown"</span>, <span class='st'>"unknown"</span>, <span class='st'>"yes"</span>, <span class='st'>"missing"</span>),
   <span class='kw'>grp</span>     <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='st'>".global"</span>, <span class='fl'>6</span>),
   <span class='kw'>orders</span>  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>Inf</span>, <span class='fl'>6</span>),
@@ -255,6 +255,8 @@ numeric and Date columns from conversion to character.</p>
   <span class='kw'>followup</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>yesno</span>, <span class='st'>"unk"</span>, <span class='st'>"oui"</span>), <span class='fl'>50</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
+<span class='no'>missing_data</span> <span class='kw'>&lt;-</span> <span class='no'>dat</span> <span class='kw'>==</span> <span class='st'>".missing"</span>
+<span class='no'>dat</span>[<span class='no'>missing_data</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>""</span>, <span class='fl'>NA</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>missing_data</span>), <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.9</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Clean spelling based on wordlist ------------------------------ </span>
 
@@ -262,10 +264,10 @@ numeric and Date columns from conversion to character.</p>
 #&gt; 1         Y         Yes            readmission      1
 #&gt; 2         N          No            readmission      2
 #&gt; 3         U     Unknown            readmission      3
-#&gt; 4      &lt;NA&gt;     Missing            readmission      4
+#&gt; 4  .missing     Missing            readmission      4
 #&gt; 5         0         Yes treatment_administered      1
 #&gt; 6         1          No treatment_administered      2
-#&gt; 7      &lt;NA&gt;     Missing treatment_administered      3
+#&gt; 7  .missing     Missing treatment_administered      3
 #&gt; 8         1 Facility  1               facility      1
 #&gt; 9         2 Facility  2               facility      2
 #&gt; 10        3 Facility  3               facility      3
@@ -288,92 +290,93 @@ numeric and Date columns from conversion to character.</p>
 #&gt; 27        U     unknown                .global    Inf
 #&gt; 28      unk     unknown                .global    Inf
 #&gt; 29      oui         yes                .global    Inf
-#&gt; 30     &lt;NA&gt;     missing                .global    Inf</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>) <span class='co'># show the data</span></div><div class='output co'>#&gt;   readmission treatment_administered facility age_group has_symptoms followup
-#&gt; 1           N                     NA        B        30            N        U
-#&gt; 2           N                     NA        2        50            U     &lt;NA&gt;
-#&gt; 3           Y                     NA        B         0          unk        N
-#&gt; 4           N                      1        4        20            N        Y
-#&gt; 5           N                     NA       10         0            Y        N
-#&gt; 6           U                      1        C        50            Y      unk</div><div class='input'>
+#&gt; 30 .missing     missing                .global    Inf</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>) <span class='co'># show the data</span></div><div class='output co'>#&gt;   readmission treatment_administered facility age_group has_symptoms followup
+#&gt; 1           Y                   &lt;NA&gt;        B         0          unk        N
+#&gt; 2           N                      1        4        20            N        Y
+#&gt; 3           N                   &lt;NA&gt;       10         0            Y        N
+#&gt; 4           U                      1        C        50            Y      unk
+#&gt; 5        &lt;NA&gt;                               B        20            Y     &lt;NA&gt;
+#&gt; 6           N                   &lt;NA&gt;        5        30            N        U</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>, <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>, <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>))</div><div class='output co'>#&gt;   readmission treatment_administered    facility age_group has_symptoms
-#&gt; 1          No                Missing     Unknown     30-39           no
-#&gt; 2          No                Missing Facility  2       50+      unknown
-#&gt; 3         Yes                Missing     Unknown       0-9      unknown
-#&gt; 4          No                     No Facility  4     20-29           no
-#&gt; 5          No                Missing Facility 10       0-9          yes
-#&gt; 6     Unknown                     No     Unknown       50+          yes
+#&gt; 1         Yes                Missing     Unknown       0-9      unknown
+#&gt; 2          No                     No Facility  4     20-29           no
+#&gt; 3          No                Missing Facility 10       0-9          yes
+#&gt; 4     Unknown                     No     Unknown       50+          yes
+#&gt; 5     Missing                Missing     Unknown     20-29          yes
+#&gt; 6          No                Missing Facility  5     30-39           no
 #&gt;   followup
-#&gt; 1  unknown
-#&gt; 2  missing
+#&gt; 1       no
+#&gt; 2      yes
 #&gt; 3       no
-#&gt; 4      yes
-#&gt; 5       no
+#&gt; 4  unknown
+#&gt; 5  missing
 #&gt; 6  unknown</div><div class='input'>
 <span class='co'># You can ensure the order of the factors are correct by specifying </span>
 <span class='co'># a column that defines order.</span>
 
 <span class='no'>dat</span>[] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='no'>dat</span>, <span class='no'>as.factor</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>as.list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>))</div><div class='output co'>#&gt; $readmission
-#&gt; [1] N N Y N N U
+#&gt; [1] Y    N    N    U    &lt;NA&gt; N   
 #&gt; Levels: N U Y
 #&gt; 
 #&gt; $treatment_administered
-#&gt; [1] &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; 1    &lt;NA&gt; 1   
-#&gt; Levels: 0 1
+#&gt; [1] &lt;NA&gt; 1    &lt;NA&gt; 1         &lt;NA&gt;
+#&gt; Levels:  0 1
 #&gt; 
 #&gt; $facility
-#&gt; [1] B  2  B  4  10 C 
+#&gt; [1] B  4  10 C  B  5 
 #&gt; Levels: 1 10 2 3 4 5 6 7 8 9 A B C
 #&gt; 
 #&gt; $age_group
-#&gt; [1] 30 50 0  20 0  50
+#&gt; [1] 0  20 0  50 20 30
 #&gt; Levels: 0 10 20 30 40 50
 #&gt; 
 #&gt; $has_symptoms
-#&gt; [1] N   U   unk N   Y   Y  
+#&gt; [1] unk N   Y   Y   Y   N  
 #&gt; Levels: N oui U unk Y
 #&gt; 
 #&gt; $followup
-#&gt; [1] U    &lt;NA&gt; N    Y    N    unk 
+#&gt; [1] N    Y    N    unk  &lt;NA&gt; U   
 #&gt; Levels: N oui U unk Y
 #&gt; </div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>,
                                <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>,
                                <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
-                               <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"orders"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown levels in `f`: yes, no, unknown, missing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown levels in `f`: yes, no, unknown, missing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown levels in `f`: unknown, yes</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown levels in `f`: yes, no, unknown</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt;   readmission treatment_administered    facility age_group has_symptoms
-#&gt; 1          No                Missing     Unknown     30-39           no
-#&gt; 2          No                Missing Facility  2       50+      unknown
-#&gt; 3         Yes                Missing     Unknown       0-9      unknown
-#&gt; 4          No                     No Facility  4     20-29           no
-#&gt; 5          No                Missing Facility 10       0-9          yes
-#&gt; 6     Unknown                     No     Unknown       50+          yes
+                               <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"orders"</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt;   readmission treatment_administered    facility age_group has_symptoms
+#&gt; 1         Yes                Missing     Unknown       0-9      unknown
+#&gt; 2          No                     No Facility  4     20-29           no
+#&gt; 3          No                Missing Facility 10       0-9          yes
+#&gt; 4     Unknown                     No     Unknown       50+          yes
+#&gt; 5     Missing                Missing     Unknown     20-29          yes
+#&gt; 6          No                Missing Facility  5     30-39           no
 #&gt;   followup
-#&gt; 1  unknown
-#&gt; 2  missing
+#&gt; 1       no
+#&gt; 2      yes
 #&gt; 3       no
-#&gt; 4      yes
-#&gt; 5       no
+#&gt; 4  unknown
+#&gt; 5  missing
 #&gt; 6  unknown</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>as.list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>res</span>))</div><div class='output co'>#&gt; $readmission
-#&gt; [1] No      No      Yes     No      No      Unknown
+#&gt; [1] Yes     No      No      Unknown Missing No     
 #&gt; Levels: Yes No Unknown Missing
 #&gt; 
 #&gt; $treatment_administered
-#&gt; [1] Missing Missing Missing No      Missing No     
+#&gt; [1] Missing No      Missing No      Missing Missing
 #&gt; Levels: Yes No Missing
 #&gt; 
 #&gt; $facility
-#&gt; [1] Unknown     Facility  2 Unknown     Facility  4 Facility 10 Unknown    
+#&gt; [1] Unknown     Facility  4 Facility 10 Unknown     Unknown     Facility  5
 #&gt; 11 Levels: Facility  1 Facility  2 Facility  3 Facility  4 ... Unknown
 #&gt; 
 #&gt; $age_group
-#&gt; [1] 30-39 50+   0-9   20-29 0-9   50+  
+#&gt; [1] 0-9   20-29 0-9   50+   20-29 30-39
 #&gt; Levels: 0-9 10-19 20-29 30-39 40-49 50+
 #&gt; 
 #&gt; $has_symptoms
-#&gt; [1] no      unknown unknown no      yes     yes    
+#&gt; [1] unknown no      yes     yes     yes     no     
 #&gt; Levels: yes no unknown missing
 #&gt; 
 #&gt; $followup
-#&gt; [1] unknown missing no      yes     no      unknown
+#&gt; [1] no      yes     no      unknown missing unknown
 #&gt; Levels: yes no unknown missing
 #&gt; </div></pre>
   </div>
