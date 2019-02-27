@@ -8,9 +8,9 @@ withWarnings <- function(expr) {
   }
   eHandler <- function(e) {
     myErrors <<- c(myErrors, list(e))
-    invokeRestart("mulffleError") 
+    NULL
   }
-  val <- withCallingHandlers(expr, error = eHandler, warning = wHandler)
+  val <- withCallingHandlers(tryCatch(expr, error = eHandler), warning = wHandler)
   list(value = val, warnings = myWarnings, errors = myErrors)
 }
 

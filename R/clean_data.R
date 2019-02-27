@@ -74,8 +74,9 @@
 
 
 clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
-                       error_tolerance = 0.5, wordlists = NULL, spelling_vars = 3, 
-                       sort_by = NULL, protect = FALSE, ...) {
+                       error_tolerance = 0.5, wordlists = NULL, 
+                       spelling_vars = 3, sort_by = NULL, protect = FALSE, 
+                       ...) {
 
   xname <- deparse(substitute(x))
   if (!is.data.frame(x)) {

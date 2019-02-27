@@ -62,6 +62,33 @@ test_that("spelling cleaning works as expected", {
 
 })
 
+test_that("default errors will be thrown", {
+
+  corr <- data.frame(bad = c(".default", ".default"),
+                     good = c("check data", "check data"),
+                     column = c("raboof", "treatment"),
+                     orders = Inf,
+                     stringsAsFactors = FALSE
+  )
+  corr <- rbind(corrections, corr)
+  wrn <- "raboof_____:.+?treatment__:.+?'check data'"
+  expect_warning(clean_variable_spelling(my_data_frame, corr, warn = TRUE), wrn)
+
+})
+
+
+test_that("errors will be captured and passed through", {
+
+  with_list <- my_data_frame
+  with_list$listcol <- as.list(with_list$region)
+  corr <- corrections
+  corr[12, ] <- c("Florida", "Flo Rida", "listcol", 1)
+  err <- "listcol____:.+?x must be coerceable to a character"
+  expect_warning(clean_variable_spelling(with_list, corr, warn = TRUE), err)
+
+
+})
+
 
 test_that("sorting works as expected", {
 

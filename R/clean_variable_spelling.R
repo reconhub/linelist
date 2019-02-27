@@ -20,6 +20,9 @@
 #'   each data frame. If the incoming variables are factors, this determines how
 #'   the resulting factors will be sorted.
 #' 
+#' @param warn if `TRUE`, warnings and errors from [clean_spelling()] will be 
+#'   shown as a single warning. Defaults to `FALSE`, which shows nothing.
+#'
 #' @inheritParams clean_variable_labels
 #' 
 #'
@@ -131,7 +134,7 @@
 #' head(res)
 #' as.list(head(res))
 
-clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelling_vars = 3, sort_by = NULL, classes = NULL) {
+clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelling_vars = 3, sort_by = NULL, classes = NULL, warn = FALSE) {
 
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
@@ -236,13 +239,17 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     # Evaluate and collect any warnings/errors that pop up
     w          <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
     x[[i]]     <- w$val
+    if (warn) {
     warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
     errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
+    }
   }
   
   # Process warnings and errors and give a warning if there were any
+  if (warn) {
   wemsg <- process_werrors(warns, errs)
   if (!is.null(wemsg)) warning(wemsg)
+  }
   
   x
 }
