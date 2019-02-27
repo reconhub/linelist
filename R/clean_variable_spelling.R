@@ -223,12 +223,26 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
       to_iterate <- unique(c(to_iterate, unprotected))
     }
   }
+
+  # Prepare warning/error labels ---------------------------------------------
+  warns <- vector(mode = "list", length = length(to_iterate)) -> errs
+  iter_print <- gsub(" ", "_", format(to_iterate))
+  names(iter_print) <- to_iterate
+
   # Loop over the variables and clean spelling --------------------------------
   for (i in to_iterate) {
     d <- if (ddf) wordlists else wordlists[[i]] 
     d <- if (is.null(d)) global_words else d
-    try(x[[i]] <- clean_spelling(x[[i]], d, quiet = TRUE))
+    # Evaluate and collect any warnings/errors that pop up
+    w          <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
+    x[[i]]     <- w$val
+    warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
+    errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
   }
-
+  
+  # Process warnings and errors and give a warning if there were any
+  wemsg <- process_werrors(warns, errs)
+  if (!is.null(wemsg)) warning(wemsg)
+  
   x
 }
