@@ -71,10 +71,14 @@ test_that("clean_spelling will throw a warning if there are duplicated keys", {
 
 test_that("clean_spelling will take in a default value", {
 
-  with_default <- rbind(corrections, c(bad = ".default", good = "unknown"))
+  with_default <- rbind(corrections, c(bad = ".default", good = "check me"))
   cleaned_default <- cleaned_data
-  cleaned_default[!cleaned_default %in% with_default$good] <- "unknown"
-  expect_identical(clean_spelling(my_data, with_default), cleaned_default)
+  cleaned_default[!cleaned_default %in% with_default$good] <- "check me"
+  d_warn <- "'a', 'b', 'c', 'd', 'e', 'fumar' were changed to the default value \\('check me'\\)"
+  expect_warning({
+    my_cleaned <- clean_spelling(my_data, with_default) 
+  }, d_warn)
+  expect_identical(my_cleaned, cleaned_default)
 
 })
 
