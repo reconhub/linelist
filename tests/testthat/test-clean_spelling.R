@@ -2,13 +2,13 @@ context("clean spelling tests")
 
 
 corrections <- data.frame(
-  bad = c("foubar", "foobr", "fubar", NA, "unknown"),
+  bad = c("foubar", "foobr", "fubar", ".missing", "unknown"),
   good = c("foobar", "foobar", "foobar", "missing", "missing"),
   stringsAsFactors = FALSE
 )
 
-my_data <- c(letters[1:5], "foubar", "foobr", "fubar", NA, "unknown", "fumar")
-cleaned_data <- c(letters[1:5], "foobar", "foobar", "foobar", "missing", "missing", "fumar")
+my_data <- c(letters[1:5], "foubar", "foobr", "fubar", NA, "", "unknown", "fumar")
+cleaned_data <- c(letters[1:5], "foobar", "foobar", "foobar", "missing", "missing", "missing", "fumar")
 
 test_that("clean_spelling throws an error with no data or a data frame", {
 
@@ -44,10 +44,27 @@ test_that("clean_spelling will clean everything defined in the wordlist", {
 })
 
 
-
 test_that("clean_spelling will work with a matrix", {
 
   expect_identical(clean_spelling(my_data, as.matrix(corrections)), cleaned_data) 
+
+})
+
+test_that("clean_spelling will throw a warning if there is a missing value", {
+
+  corrections2 <- corrections
+  missme <- corrections[[1]] == ".missing"
+  corrections2[[1]][missme] <- NA
+  expect_warning(clean_spelling(my_data, corrections2),
+                 "If you want to indicate missing data, use the '.missing' keyword")
+
+})
+
+test_that("clean_spelling will throw a warning if there are duplicated keys", {
+
+  corrections2 <- rbind(corrections, corrections[1:2, ])
+  expect_warning(clean_spelling(my_data, corrections2),
+                 "Duplicate keys were found.+.foubar., .foobr.[^,]")
 
 })
 

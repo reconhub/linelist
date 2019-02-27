@@ -119,9 +119,7 @@ test_that("A global wordlist can be implemented alongside the wordlist", {
 
   wl <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
 
-  expect_warning({
-    clean_global <- clean_data(md, wordlists = wl)
-  }, "HOSPITAL") # warning from forcats
+  clean_global <- clean_data(md, wordlists = wl)
 
   expect_is(clean_global$location, "factor")
 

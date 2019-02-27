@@ -2,7 +2,7 @@ context("clean_variable_spelling() tests")
 
 
 corrections <- data.frame(
-  bad = c("foubar", "foobr", "fubar", NA, "unknown", "Yes", "Y", "No", "N", NA),
+  bad = c("foubar", "foobr", "fubar", ".missing", "unknown", "Yes", "Y", "No", "N", ".missing"),
   good = c("foobar", "foobar", "foobar", "missing", "missing", "yes", "yes", "no", "no", "missing"),
   column = c(rep("raboof", 5), rep("treatment", 5)),
   orders = c(1:5, 5:1),
@@ -12,7 +12,7 @@ corrections <- data.frame(
 clist <- split(corrections, corrections$column)
 
 my_data_frame <- data.frame(
-   raboof    = c(letters[1:5], "foubar", "foobr", "fubar", NA, "unknown", "fumar"),
+   raboof    = c(letters[1:5], "foubar", "foobr", "fubar", "", "unknown", "fumar"),
    treatment = c(letters[5:1], "Y", "Yes", "N", NA, "No", "yes"),
    region    = state.name[1:11]
 )

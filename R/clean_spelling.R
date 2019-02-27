@@ -7,14 +7,27 @@
 #' @param x a character or factor vector
 #'
 #' @param wordlist a two-column matrix or data frame defining mis-spelled
-#'   words in the first column and replacements in the second column. If there
-#'   is a ".default" value in the first column, then this will be used to 
-#'   change all other spellings/values to a default value in the second column.
-#'   See examples.
+#'   words in the first column and replacements in the second column. There
+#'   are keywords that can be appended to the first column for cleaning missing
+#'   or default values.
 #'
 #' @param quiet a `logical` indicating if warnings should be issued if no
 #'   replacement is made; if `FALSE`, these warnings will be disabled
 #' 
+#'
+#' @details 
+#'
+#' \subsection{Keywords}{
+#'
+#' There are currently two keywords that can be placed in the first column of
+#' your wordlist:
+#'
+#'  - `.missing`: replaces any missing values
+#'  - `.default`: replaces **ALL** values that are not defined in the wordlist
+#'                and are not missing. 
+#'
+#' }
+#'
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned. 
 #'   Note that factors will be arranged by the order presented in the data 
 #'   wordlist; other levels will appear afterwards.  
@@ -29,12 +42,15 @@
 #' @examples
 #'
 #' corrections <- data.frame(
-#'   bad = c("foubar", "foobr", "fubar", NA, "unknown"),
+#'   bad = c("foubar", "foobr", "fubar", "unknown", ".missing"), 
 #'   good = c("foobar", "foobar", "foobar", "missing", "missing"),
 #'   stringsAsFactors = FALSE
 #' )
 #' corrections
-#' my_data <- c(letters[1:5], sample(corrections$bad, 10, replace = TRUE))
+#' 
+#' # create some fake data
+#' my_data <- c(letters[1:5], sample(corrections$bad[-5], 10, replace = TRUE))
+#' my_data[sample(6:15, 2)] <- NA  # with missing elements
 #'
 #' clean_spelling(my_data, corrections)
 #'
@@ -50,7 +66,7 @@
 #' # The can be used for translating survey output
 #'
 #' words <- data.frame(
-#'   option_code = c("Y", "N", "U", NA),
+#'   option_code = c("Y", "N", "U", ".missing"),
 #'   option_name = c("Yes", "No", "Unknown", "Missing"),
 #'   stringsAsFactors = FALSE
 #' )
@@ -81,29 +97,64 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
     wordlist <- as.data.frame(wordlist, stringsAsFactors = FALSE)
   }
 
-  if (!is.atomic(wordlist[[1]]) || !is.atomic(wordlist[[2]])) {
+  keys   <- wordlist[[1]]
+  values <- wordlist[[2]]
+
+  if (!is.atomic(keys) || !is.atomic(values)) {
     stop("wordlist must have two columns coerceable to a character")
   }
 
-  wordlist[[1]] <- as.character(wordlist[[1]])
-  wordlist[[2]] <- as.character(wordlist[[2]])
+  keys <- as.character(keys)
+  values <- as.character(values)
 
 
   x_is_factor <- is.factor(x)
 
+  # replace missing with "NA" if NA is present in data
+  na_present <- is.na(keys)
+  keys[na_present] <- "NA"
+
+  # replace missing keyword with NA
+  missing_kw       <- keys == ".missing" | keys == ""
+  keys[missing_kw] <- NA_character_
+
+  # removing duplicated keys
+  duplikeys <- duplicated(keys)
+  dkeys     <- keys[duplikeys]
+  keys      <- keys[!duplikeys]
+  values    <- values[!duplikeys]
+
   if (!quiet) {
-    no_keys   <- !any(x %in% wordlist[[1]], na.rm = TRUE)
-    no_values <- !any(x %in% wordlist[[2]], na.rm = TRUE)
+    the_call  <- match.call()
+    no_keys   <- !any(x %in% keys, na.rm = TRUE)
+    no_values <- !any(x %in% values, na.rm = TRUE)
+    the_x     <- deparse(the_call[["x"]])
+    the_words <- deparse(the_call[["wordlist"]])
 
     if (no_keys && no_values) {
-      the_call <- match.call()
       msg <- "None of the variables in %s were found in %s. Did you use the correct wordlist?" 
-      msg <- sprintf(msg, deparse(the_call[["x"]]), deparse(the_call[["wordlist"]]))
+      msg <- sprintf(msg, the_x, the_words)
+      warning(msg)
+    }
+
+    if (any(na_present)) {
+      msg <- "NA was present in the first column of %s; replacing with the character 'NA'"
+      msg <- paste(msg, 
+                   "If you want to indicate missing data, use the '.missing' keyword.", 
+                   collapse = "\n")
+      msg <- sprintf(msg, the_words)
+      warning(msg)
+    }
+
+    if (length(dkeys) > 0) {
+      msg <- 'Duplicate keys were found in the first column of %s: "%s"\nonly the first instance will be used.'
+      msg <- sprintf(msg, the_words, paste(dkeys, collapse = '", "'))
       warning(msg)
     }
   }
 
-  dict <- stats::setNames(wordlist[[1]], wordlist[[2]])
+  dict        <- keys
+  names(dict) <- values
   
   na_posi      <- is.na(dict)
   default_posi <- dict == ".default" 
@@ -112,8 +163,11 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
   nas     <- dict[na_posi]
   dict    <- dict[!na_posi & !default_posi]
 
+  # Making "" explicitly NA ---------------------------------------------------
+  x <- forcats::fct_recode(x, NULL = "")
+
   # Recode data with forcats --------------------------------------------------
-  suppressWarnings(x <- forcats::fct_recode(x, !!!dict))
+  suppressWarnings(x <- forcats::fct_recode(x, !!! dict))
 
   # Replace NAs if there are any ----------------------------------------------
   if (length(nas) > 0) {
@@ -127,7 +181,7 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
 
   # Make sure order is preserved if it's a factor -----------------------------
   if (x_is_factor) {
-    x <- forcats::fct_relevel(x, unique(wordlist[[2]]))
+    suppressWarnings(x <- forcats::fct_relevel(x, unique(values)))
   } else {
     x <- as.character(x)
   }
