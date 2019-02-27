@@ -25,7 +25,7 @@
 #' (`factor` or `character`)
 #' 
 #' @examples
-
+#' 
 #' head(iris)
 #' get_structure(iris)
 
