@@ -79,6 +79,17 @@ test_that("clean_spelling will take in a default value", {
 })
 
 
+test_that("nothing to default will not throw a warning", {
+
+  
+  with_default <- rbind(corrections, c(bad = ".default", good = "unknown"))
+  cleaned_default <- cleaned_data[6:7]
+  expect_failure(expect_warning(clean_spelling(my_data[6:7], with_default)))
+
+
+})
+
+
 test_that("clean_spelling will be silent if the data are already cleaned", {
 
   expect_failure(expect_warning(clean_spelling(cleaned_data, corrections)))

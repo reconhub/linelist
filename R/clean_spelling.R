@@ -176,7 +176,9 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
 
   # Replace any untranslated variables if .default is defined -----------------
   if (length(default) > 0) {
-    x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other = names(default))
+    suppressWarnings({
+      x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other = names(default))
+    })
   }
 
   # Make sure order is preserved if it's a factor -----------------------------
