@@ -157,11 +157,11 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     # There is a spelling_varsing column ----------------------------------------
     if (!is.null(spelling_vars) && length(spelling_vars) == 1) {
       is_number <- is.numeric(spelling_vars) &&          # spelling_vars is a number
-                   as.integer(spelling_vars) == spelling_vars && # ... and an integer
-                   spelling_vars <= ncol(wordlists)      # ... and is within the bounds
+        as.integer(spelling_vars) == spelling_vars && # ... and an integer
+          spelling_vars <= ncol(wordlists)      # ... and is within the bounds
 
       is_name   <- is.character(spelling_vars) &&         # spelling_vars is a name
-                   any(names(wordlists) == spelling_vars) # ... in the wordlists
+        any(names(wordlists) == spelling_vars) # ... in the wordlists
       if (is_number || is_name) {
         wordlists <- split(wordlists, wordlists[[spelling_vars]])
       } else {
@@ -240,16 +240,16 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     w          <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
     x[[i]]     <- w$val
     if (warn) {
-    warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
-    errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
+      warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
+      errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
     }
   }
-  
+
   # Process warnings and errors and give a warning if there were any
   if (warn) {
-  wemsg <- process_werrors(warns, errs)
-  if (!is.null(wemsg)) warning(wemsg)
+    wemsg <- process_werrors(warns, errs)
+    if (!is.null(wemsg)) warning(wemsg)
   }
-  
+
   x
 }
