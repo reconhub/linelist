@@ -238,7 +238,7 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     d <- if (is.null(d)) global_words else d
     # Evaluate and collect any warnings/errors that pop up
     w          <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
-    x[[i]]     <- w$val
+    x[[i]]     <- if(is.null(w$val)) x[[i]] else w$val
     if (warn) {
       warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
       errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
