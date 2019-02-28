@@ -385,8 +385,9 @@ print.data_comparison <- function(x, ...) {
           cat(
               crayon::green(
                   sprintf(
-                      "`%s`: same values \n",
-                      current_variable)
+                      "`%s`: same class (%s) \n",
+                      current_variable,
+                      class(e))
               )
           )
         } else {
@@ -432,7 +433,7 @@ print.data_comparison <- function(x, ...) {
           cat(
               crayon::italic(
                   sprintf(
-                      "\n  * New vales in `%s`:\n",
+                      "\n  * New values in `%s`:\n",
                       current_variable))
           )
           print(e$new)
