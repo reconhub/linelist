@@ -51,11 +51,7 @@ compare_data.data_structure <- function(ref, x, ...) {
   out_names <- compare_names(ref$names, x_str$names)
 
   ## compare classes
-  if (length(out_names$common) > 0) {
-    out_classes <- compare_classes(ref$classes, x_str$classes)
-  } else {
-    out_classes <- "Cannot compare classes: no variable in common"
-  }
+
 }
 
 
@@ -74,8 +70,10 @@ compare_data.data.frame <- function(ref, x, ...) {
 #'
 #' Returns `NULL` if dimensions are the same, and a named list otherwise.
 
-compare_dim <- function(ref_dim, x_dim) {
-
+compare_dim <- function(ref, x) {
+  ref_dim <- ref$dim
+  x_dim <- x$dim
+  
   ## first case: identical dimensions
   if (identical(ref_dim, x_dim)) {
     return(NULL)
@@ -107,8 +105,10 @@ compare_dim <- function(ref_dim, x_dim) {
 #' The function returns `NULL` if the names are the same, and a named list of
 #' character strings if there are differences.
 
-compare_names <- function(ref_names, x_names) {
-
+compare_names <- function(ref, x) {
+  ref_names <- ref$names
+  x_names <- x$names
+  
   ## first case: identical names
   if (identical(ref_names, x_names)) {
     return(NULL)
@@ -127,5 +127,59 @@ compare_names <- function(ref_names, x_names) {
   out$new <- setdiff(x_names, ref_names)
   out$common <- intersect(x_names, ref_names)
   
+  out
+}
+
+
+
+
+#' Compare vectors of classes
+#'
+#' The function returns `NULL` if the classes are the same, and a named list of
+#' character strings if there are differences. Unlike simpler functions, 
+
+compare_classes <- function(ref, x) {
+  ref_names <- ref$names
+  ref_classes <- ref$classes
+  names(ref_classes) <- ref_names
+
+  x_names <- x$names
+  x_classes <- x$classes
+  names(x_classes) <- x_names
+
+    
+  ## first case: identical classes
+  if (identical(ref_classes, x_classes)) {
+    return(NULL)
+  }
+
+  ## find common variables
+  common_variables <- intersect(ref_names, x_names)
+  n_common <- length(common_variables)
+  
+  ## no variable in common - get out of here
+  if (length(common_variables) == 0) {
+    out <- "Cannot compare classes: no variable in common"
+    return(out)
+  }
+
+  
+  ## general case: comparison for common variables
+  out <- list()
+  for (i in seq_len(n_common)) {
+    current_variable <- common_variables[i]
+    if (ref_classes[current_variable] !=
+        x_classes[current_variable]) {
+      out[[current_variable]] <- sprintf(
+          "Class of `%s` has changed from `%s` to `%s`",
+          current_variable,
+          ref_classes[current_variable],
+          x_classes[current_variable])
+    }
+  }
+
+  if (length(out) == 0) {
+    out <- NULL
+  }
   out
 }
