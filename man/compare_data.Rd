@@ -32,6 +32,20 @@ The comparison relies on checking differences in:
 \item values of the categorical variables
 }
 }
+\examples{
+
+## no differences
+compare_data(iris, iris)
+
+## different dimensions
+compare_data(iris, iris[-1, -2])
+compare_data(iris[-1, -2], iris) # inverse
+
+## one variable in common but different class and content
+compare_data(iris,
+             data.frame(Species = letters,
+                        stringsAsFactors = FALSE))
+}
 \author{
 Thibaut Jombart
 }

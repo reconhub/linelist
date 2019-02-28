@@ -20,7 +20,20 @@
 #' - classes of the columns (only the first class is used)
 #'
 #' - values of the categorical variables
+#'
+#' @examples
+#'
+#' ## no differences
+#' compare_data(iris, iris)
+#'
+#' ## different dimensions
+#' compare_data(iris, iris[-1, -2])
+#' compare_data(iris[-1, -2], iris) # inverse
 #' 
+#' ## one variable in common but different class and content
+#' compare_data(iris,
+#'              data.frame(Species = letters,
+#'                         stringsAsFactors = FALSE))
 
 compare_data <- function(ref, x, ...) {
   UseMethod("compare_data")
@@ -58,6 +71,8 @@ compare_data.default <- function(ref, x, ...) {
 #' 
 #' @param use_values a `logical` indicating if values of matching
 #'   categorical variables should be compared
+#'
+#' @param ... further arguments passed to other methods
 #' 
 
 compare_data.data_structure <- function(ref, x,
@@ -243,7 +258,7 @@ compare_values <- function(ref, x) {
   
   ## first case: identical values
   if (identical(ref_values, x_values)) {
-    return(NULL)
+    return(TRUE)
   }
 
   ## find common variables, keeping only categorical variables, i.e. `factor`
@@ -409,8 +424,13 @@ print.data_comparison <- function(x, ...) {
     cat(
         crayon::bold("\n\n // Comparison of values in categorical variables /\n")
     )
+    if (isTRUE(x$values)) {
+      cat(
+          crayon::green(
+              "\nSame values for categorical variables")
+      )
+    }
     for (i in seq_along(x$values)) {
-      ## browser()
       e <- x$values[[i]]
       current_variable <- names(x$values)[i]
       if (isTRUE(e)) {
