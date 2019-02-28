@@ -15,7 +15,8 @@
 #' @param x a `data.frame` to be checked
 #'
 #' @return A list containing:
-#'
+#' - `dim`: the dimensions of the dataset (rows, columns)
+#' 
 #' - `names`: the names of the dataset
 #'
 #' - `classes`: the corresponding classes (if a column has several classes, only
@@ -37,7 +38,8 @@ get_structure <- function(x) {
   x <- as.data.frame(x)
   
   out <- list()
-  
+
+  out$dim <- dim(x)
   out$names <- names(x)
   out$classes <- vapply(x, function(e) class(e)[1], character(1))
   categorical <- out$names[out$classes %in% c("factor", "character")]
