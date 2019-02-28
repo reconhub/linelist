@@ -12,6 +12,7 @@ get_structure(x)
 \value{
 A list containing:
 \itemize{
+\item \code{dim}: the dimensions of the dataset (rows, columns)
 \item \code{names}: the names of the dataset
 \item \code{classes}: the corresponding classes (if a column has several classes, only
 the first one is kept)
@@ -31,6 +32,7 @@ the following information:
 }
 }
 \examples{
+
 head(iris)
 get_structure(iris)
 }
