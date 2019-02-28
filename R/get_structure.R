@@ -43,11 +43,7 @@ get_structure <- function(x) {
   out$names <- names(x)
   out$classes <- vapply(x, function(e) class(e)[1], character(1))
   categorical <- out$names[out$classes %in% c("factor", "character")]
-  out$values <- lapply(
-      x[categorical],
-      function(e)
-        if(is.factor(e)) levels(e) else unique(e))
-  out$values <- lapply(out$values, sort)
+  out$values <- lapply(x[categorical], get_categories)
   
   class(out) <- c("data_structure", "list")
   out
