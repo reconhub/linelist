@@ -44,14 +44,20 @@ compare_data.default <- function(ref, x, ...) {
 compare_data.data_structure <- function(ref, x, ...) {
   x_str <- get_structure(x)
 
+  out <- list()
+  
   ## compare names
-  out_dim <- compare_dim(ref$dim, x_str$dim)
+  out$dim <- compare_dim(ref, x_str)
 
   ## compare names
-  out_names <- compare_names(ref$names, x_str$names)
+  out$names <- compare_names(ref, x_str)
 
   ## compare classes
+  out$classes <- compare_classes(ref, x_str)
 
+  ## compare values of categorical variables
+
+  out
 }
 
 
@@ -63,6 +69,7 @@ compare_data.data.frame <- function(ref, x, ...) {
   ref_str(get_structure(ref))
   compare_data(ref_str, x)
 }
+
 
 
 
@@ -136,7 +143,7 @@ compare_names <- function(ref, x) {
 #' Compare vectors of classes
 #'
 #' The function returns `NULL` if the classes are the same, and a named list of
-#' character strings if there are differences. Unlike simpler functions, 
+#' character strings if there are differences.
 
 compare_classes <- function(ref, x) {
   ref_names <- ref$names
@@ -168,6 +175,7 @@ compare_classes <- function(ref, x) {
   out <- list()
   for (i in seq_len(n_common)) {
     current_variable <- common_variables[i]
+    
     if (ref_classes[current_variable] !=
         x_classes[current_variable]) {
       out[[current_variable]] <- sprintf(
@@ -181,5 +189,75 @@ compare_classes <- function(ref, x) {
   if (length(out) == 0) {
     out <- NULL
   }
+  out
+}
+
+
+
+
+#' Compare values of categorical variables
+#'
+#' The function returns `NULL` if the categories of categorical variables are
+#' the same, and a named list of character strings if there are differences.
+
+compare_values <- function(ref, x) {
+  ref_names <- ref$names
+  ref_classes <- ref$classes
+  ref_values <- ref$values
+  names(ref_classes) <- ref_names
+
+  x_names <- x$names
+  x_classes <- x$classes
+  x_values <- x$values
+  names(x_classes) <- x_names
+
+    
+  ## first case: identical values
+  if (identical(ref_values, x_values)) {
+    return(NULL)
+  }
+
+  ## find common variables, keeping only categorical variables, i.e. `factor`
+  ## and `character`
+  categories <- c("factor", "character")
+  
+  ref_names_to_keep <- ref_classes %in% categories
+  ref_names <- ref_names[ref_names_to_keep]
+
+  x_names_to_keep <- x_classes %in% categories
+  x_names <- x_names[x_names_to_keep]
+
+  common_variables <- intersect(ref_names, x_names)  
+  n_common <- length(common_variables)
+  
+  ## no variable in common - get out of here
+  if (length(common_variables) == 0) {
+    out <- "Cannot compare values: no categorical variable in common"
+    return(out)
+  }
+
+  
+  ## general case: comparison for common variables
+  out <- list()
+  
+  for (i in seq_len(n_common)) {
+    current_variable <- common_variables[i]
+
+    ref_values_current <- ref_values[current_variable]
+    x_values_current <- x_values[current_variable]
+    
+    if (!identical(ref_values_current, x_values_current)) {
+      
+      out[[current_variable]] <- list(
+          missing = setdiff(ref_values_current, x_values_current),
+          new = setdiff(x_values_current, ref_values_current),
+          common = intersect(x_values_current, ref_values_current))
+    }
+  }
+
+  if (length(out) == 0) {
+    out <- NULL
+  }
+  
   out
 }
