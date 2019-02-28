@@ -8,11 +8,17 @@
 #' @param protect a logical or numeric vector defining the columns to protect
 #'   from any manipulation. Note: columns in `protect` will override any columns
 #'   in either `force_Date` or `guess_dates`.
+#' 
+#' @param warn_spelling if `TRUE`, errors and warnings from [clean_spelling()]
+#'   will be aggregated and presented for each column that issues them. The
+#'   default value is `FALSE`, which means that all errors and warnings will be
+#'   ignored. 
 #'
 #' @export 
 #' @author Zhian N. Kamvar
 #' @seealso [clean_variable_labels()] to standardise text, 
 #'   [clean_variable_spelling()] to correct spelling with a wordlist.
+#'
 #' @inheritParams clean_variable_spelling
 #'
 #' @examples
@@ -45,7 +51,8 @@
 #'                 spelling_vars = "variable"
 #'                )
 clean_variables <- function(x, sep = "_", wordlists = NULL, spelling_vars = 3, 
-                            sort_by = NULL, protect = FALSE, classes = NULL) {
+                            sort_by = NULL, protect = FALSE, classes = NULL,
+                            warn_spelling = FALSE) {
 
   xname <- deparse(substitute(x))
   if (!is.data.frame(x)) {
@@ -71,6 +78,7 @@ clean_variables <- function(x, sep = "_", wordlists = NULL, spelling_vars = 3,
                                    wordlists = wordlists, 
                                    spelling_vars = spelling_vars, 
                                    sort_by = sort_by,
+                                   warn    = warn_spelling,
                                    classes = classes)
   }
   

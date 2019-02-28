@@ -75,8 +75,8 @@
 
 clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
                        error_tolerance = 0.5, wordlists = NULL, 
-                       spelling_vars = 3, sort_by = NULL, protect = FALSE, 
-                       ...) {
+                       spelling_vars = 3, sort_by = NULL, warn_spelling = FALSE,
+                       protect = FALSE, ...) {
 
   xname <- deparse(substitute(x))
   if (!is.data.frame(x)) {
@@ -101,6 +101,7 @@ clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
                          wordlists = wordlists,
                          spelling_vars = spelling_vars,
                          sort_by = sort_by,
+                         warn_spelling = warn_spelling,
                          classes = classes)
   
   # Cleaning and guessing dates ------------------------------------------------

@@ -77,14 +77,19 @@ test_that("default errors will be thrown", {
 })
 
 
-test_that("errors will be captured and passed through", {
+test_that("errors will be captured and passed through; error'd cols are preserved", {
 
   with_list <- my_data_frame
   with_list$listcol <- as.list(with_list$region)
   corr <- corrections
   corr[12, ] <- c("Florida", "Flo Rida", "listcol", 1)
   err <- "listcol____:.+?x must be coerceable to a character"
-  expect_warning(clean_variable_spelling(with_list, corr, warn = TRUE), err)
+  expect_warning(lc <- clean_variable_spelling(with_list, corr, warn = TRUE), err)
+  expect_length(lc, 4)
+  expect_is(lc[[4]], "list")
+  expect_named(lc, names(with_list))
+  expect_identical(with_list[[4]], lc[[4]])
+  expect_warning(lc <- clean_data(with_list, wordlists = corr, warn_spelling = TRUE), err)
 
 
 })

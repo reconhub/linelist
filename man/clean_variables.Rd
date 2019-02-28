@@ -5,7 +5,8 @@
 \title{Clean variable labels and fix spelling according to a wordlist}
 \usage{
 clean_variables(x, sep = "_", wordlists = NULL, spelling_vars = 3,
-  sort_by = NULL, protect = FALSE, classes = NULL)
+  sort_by = NULL, protect = FALSE, classes = NULL,
+  warn_spelling = FALSE)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -34,6 +35,11 @@ in either \code{force_Date} or \code{guess_dates}.}
 \item{classes}{a vector of class definitions for each of the columns. If this
 is not provided, the classes will be read from the columns themselves.
 Practically, this is used in \code{\link[=clean_data]{clean_data()}} to mark columns as protected.}
+
+\item{warn_spelling}{if \code{TRUE}, errors and warnings from \code{\link[=clean_spelling]{clean_spelling()}}
+will be aggregated and presented for each column that issues them. The
+default value is \code{FALSE}, which means that all errors and warnings will be
+ignored.}
 }
 \description{
 Clean variable labels and fix spelling according to a wordlist
