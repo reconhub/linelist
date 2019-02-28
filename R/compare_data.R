@@ -44,9 +44,60 @@ compare_data.default <- function(ref, x, ...) {
 compare_data.data_structure <- function(ref, x, ...) {
   x_str <- get_structure(x)
 
-  
+  ## compare names
+  out_dim <- compare_dim(ref$dim, x_str$dim)
 
+  ## compare names
+  out_names <- compare_names(ref$names, x_str$names)
+
+  ## compare classes
+  if (length(out_names$common) > 0) {
+    out_classes <- compare_classes(ref$classes, x_str$classes)
+  } else {
+    out_classes <- "Cannot compare classes: no variable in common"
+  }
 }
+
+
+
+
+#' @export
+#' @rdname compare_data
+compare_data.data.frame <- function(ref, x, ...) {
+  ref_str(get_structure(ref))
+  compare_data(ref_str, x)
+}
+
+
+
+#' Compare dimensions
+#'
+#' Returns `NULL` if dimensions are the same, and a named list otherwise.
+
+compare_dim <- function(ref_dim, x_dim) {
+
+  ## first case: identical dimensions
+  if (identical(ref_dim, x_dim)) {
+    return(NULL)
+  }
+
+  out <- list()
+  
+  ## different rows
+  if (ref_dim[1] != x_dim[1]) {
+    out$n_rows <- sprintf("Number of rows have changed from %d to %d",
+                          ref_dim[1], x_dim[1])
+  }
+
+  ## different columns
+  if (ref_dim[2] != x_dim[2]) {
+    out$n_columns <- sprintf("Number of columns have changed from %d to %d",
+                             ref_dim[2], x_dim[2])
+  }
+
+  out
+}
+
 
 
 
@@ -74,6 +125,7 @@ compare_names <- function(ref_names, x_names) {
   out <- list()
   out$missing <- setdiff(ref_names, x_names)
   out$new <- setdiff(x_names, ref_names)
+  out$common <- intersect(x_names, ref_names)
   
   out
 }
