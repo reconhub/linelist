@@ -11,6 +11,12 @@ ll <- as_linelist(clean_data(messy_data(), first_date = as.Date("1969-4-20")),
                   NULL
 )
                   
+test_that("linelist announces itself", {
+
+  expect_output(print(ll), "linelist")
+  expect_output(print(ll, show_epivars = TRUE), "epivars")
+
+})
 
 test_that("a linelist is a data frame", {
 
