@@ -53,9 +53,6 @@ compare_data.default <- function(ref, x, ...) {
 
 
 
-#' @export
-#' @rdname compare_data
-#'
 #' All the sub-functions are internal, non-exported, and have the same
 #' behaviour: they return `TRUE` if items are identical, and a named list of
 #' informative messages otherwise.
@@ -74,6 +71,9 @@ compare_data.default <- function(ref, x, ...) {
 #'
 #' @param ... further arguments passed to other methods
 #' 
+#' @export
+#' @rdname compare_data
+#'
 
 compare_data.data_structure <- function(ref, x,
                                         use_dim = TRUE,
@@ -105,7 +105,7 @@ compare_data.data_structure <- function(ref, x,
     out$values <- compare_values(ref, x_str)
   }
 
-  class(out) <- c("data_comparison", "list")
+  class(out) <- c("data_comparison")
   out
 }
 
@@ -125,6 +125,7 @@ compare_data.data.frame <- function(ref, x, ...) {
 #' Compare dimensions
 #'
 #' Returns `TRUE` if dimensions are the same, and a named list otherwise.
+#' @noRd
 
 compare_dim <- function(ref, x) {
   ref_dim <- ref$dim
@@ -158,6 +159,7 @@ compare_dim <- function(ref, x) {
 #'
 #' The function returns `NULL` if the names are the same, and a named list of
 #' character strings if there are differences.
+#' @noRd
 
 compare_names <- function(ref, x) {
   ref_names <- ref$names
@@ -189,6 +191,7 @@ compare_names <- function(ref, x) {
 #'
 #' The function returns `NULL` if the classes are the same, and a named list of
 #' character strings if there are differences.
+#' @noRd
 
 compare_classes <- function(ref, x) {
   ref_names <- ref$names
@@ -243,6 +246,7 @@ compare_classes <- function(ref, x) {
 #'
 #' The function returns `NULL` if the categories of categorical variables are
 #' the same, and a named list of character strings if there are differences.
+#' @noRd
 
 compare_values <- function(ref, x) {
   ref_names <- ref$names

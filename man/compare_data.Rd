@@ -3,6 +3,7 @@
 \name{compare_data}
 \alias{compare_data}
 \alias{compare_data.default}
+\alias{compare_data.data_structure}
 \alias{compare_data.data.frame}
 \alias{print.data_comparison}
 \title{Compare structures of two datasets}
@@ -10,6 +11,9 @@
 compare_data(ref, x, ...)
 
 \method{compare_data}{default}(ref, x, ...)
+
+\method{compare_data}{data_structure}(ref, x, use_dim = TRUE,
+  use_names = TRUE, use_classes = TRUE, use_values = TRUE, ...)
 
 \method{compare_data}{data.frame}(ref, x, ...)
 
@@ -19,6 +23,20 @@ compare_data(ref, x, ...)
 \item{ref}{the reference \code{data.frame}}
 
 \item{x}{a \code{data.frame} to be compared against a reference}
+
+\item{...}{further arguments passed to other methods}
+
+\item{use_dim}{a \code{logical} indicating if dataset dimensions should be
+compared}
+
+\item{use_names}{a \code{logical} indicating if names of the variables should be
+compared}
+
+\item{use_classes}{a \code{logical} indicating if classes of the variables should be
+compared}
+
+\item{use_values}{a \code{logical} indicating if values of matching
+categorical variables should be compared}
 }
 \description{
 This function extracts the structures of two \code{data.frames} and compares them,

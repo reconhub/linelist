@@ -3,6 +3,7 @@
 #' @param x a `character` vector
 #'
 #' @param sep a separator to be used to collate the text
+#' @noRd
 
 collapse <- function(x, sep = ", ") {
   paste(x, collapse = ", ")
