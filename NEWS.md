@@ -4,6 +4,7 @@
   This includes, names, classes, dimensions, and values in matching categorical
   variables. (See https://github.com/reconhub/linelist/pull/50 for details).
 * `top_values()` will mask all but the top `n` values in a factor.
+* the `crayon` package is added to imports
 
 # linelist 0.7.3.9000
 
