@@ -1,3 +1,10 @@
+# linelist 0.8.0.9000
+
+* `compare_data()` allows users to compare _structural changes_ to data frames
+  This includes, names, classes, dimensions, and values in matching categorical
+  variables. (See https://github.com/reconhub/linelist/pull/50 for details).
+* `top_values()` will mask all but the top `n` values in a factor.
+
 # linelist 0.7.3.9000
 
 * `clean_spelling()` wordlists now allow the optional `.missing` keyword to
@@ -14,8 +21,9 @@
 # linelist 0.7.1.9000
 
 * `clean_spelling()` gains a `quiet` argument to suppress warnings.
-* `clean_variable_spelling()` will no longer error if there are variable specifications that don't exist in the data. It will also suppress all warnings from `clean_spelling()`. 
-  (see #41 for details)
+* `clean_variable_spelling()` will no longer error if there are variable 
+  specifications that don't exist in the data. It will also suppress all 
+  warnings from `clean_spelling()`. (see #41 for details)
 
 # linelist 0.7.0.9000
 
