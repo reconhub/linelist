@@ -6,7 +6,7 @@
 \usage{
 clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
   error_tolerance = 0.5, wordlists = NULL, spelling_vars = 3,
-  sort_by = NULL, protect = FALSE, ...)
+  sort_by = NULL, warn_spelling = FALSE, protect = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -42,6 +42,11 @@ third column is to be used.}
 \item{sort_by}{a character the column to be used for sorting the values in
 each data frame. If the incoming variables are factors, this determines how
 the resulting factors will be sorted.}
+
+\item{warn_spelling}{if \code{TRUE}, errors and warnings from \code{\link[=clean_spelling]{clean_spelling()}}
+will be aggregated and presented for each column that issues them. The
+default value is \code{FALSE}, which means that all errors and warnings will be
+ignored.}
 
 \item{protect}{a logical or numeric vector defining the columns to protect
 from any manipulation. Note: columns in \code{protect} will override any columns

@@ -5,7 +5,7 @@
 \title{Rename values in a vector based on a wordlist}
 \usage{
 clean_spelling(x = character(), wordlist = data.frame(),
-  quiet = FALSE)
+  quiet = FALSE, warn_default = TRUE)
 }
 \arguments{
 \item{x}{a character or factor vector}
@@ -17,6 +17,11 @@ or default values.}
 
 \item{quiet}{a \code{logical} indicating if warnings should be issued if no
 replacement is made; if \code{FALSE}, these warnings will be disabled}
+
+\item{warn_default}{a \code{logical}. When a \code{.default} keyword is set and
+\code{warn_default = TRUE}, a warning will be issued listing the variables
+that were changed to the default value. This can be used to update your
+wordlist.}
 }
 \value{
 a vector of the same type as \code{x} with mis-spelled labels cleaned.
@@ -59,7 +64,12 @@ clean_spelling(my_data, corrections)
 # You can also set a default value
 corrections_with_default <- rbind(corrections, c(bad = ".default", good = "unknown"))
 corrections_with_default
+
+# a warning will be issued about the data that were converted
 clean_spelling(my_data, corrections_with_default)
+
+# use the warn_default = FALSE, if you are absolutely sure you don't want it.
+clean_spelling(my_data, corrections_with_default, warn_default = FALSE)
 
 # The function will give you a warning if the wordlist does not
 # match the data

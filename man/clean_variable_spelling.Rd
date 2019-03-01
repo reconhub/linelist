@@ -5,7 +5,7 @@
 \title{Check and clean spelling or codes of multiple variables in a data frame}
 \usage{
 clean_variable_spelling(x = data.frame(), wordlists = list(),
-  spelling_vars = 3, sort_by = NULL, classes = NULL)
+  spelling_vars = 3, sort_by = NULL, classes = NULL, warn = FALSE)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -27,6 +27,9 @@ the resulting factors will be sorted.}
 \item{classes}{a vector of class definitions for each of the columns. If this
 is not provided, the classes will be read from the columns themselves.
 Practically, this is used in \code{\link[=clean_data]{clean_data()}} to mark columns as protected.}
+
+\item{warn}{if \code{TRUE}, warnings and errors from \code{\link[=clean_spelling]{clean_spelling()}} will be
+shown as a single warning. Defaults to \code{FALSE}, which shows nothing.}
 }
 \value{
 a data frame with re-defined data based on the dictionary

@@ -14,6 +14,11 @@
 #' @param quiet a `logical` indicating if warnings should be issued if no
 #'   replacement is made; if `FALSE`, these warnings will be disabled
 #' 
+#' @param warn_default a `logical`. When a `.default` keyword is set and 
+#'   `warn_default = TRUE`, a warning will be issued listing the variables
+#'   that were changed to the default value. This can be used to update your
+#'   wordlist.
+#' 
 #'
 #' @details 
 #'
@@ -57,7 +62,12 @@
 #' # You can also set a default value
 #' corrections_with_default <- rbind(corrections, c(bad = ".default", good = "unknown"))
 #' corrections_with_default
+#' 
+#' # a warning will be issued about the data that were converted
 #' clean_spelling(my_data, corrections_with_default)
+#'
+#' # use the warn_default = FALSE, if you are absolutely sure you don't want it.
+#' clean_spelling(my_data, corrections_with_default, warn_default = FALSE)
 #'
 #' # The function will give you a warning if the wordlist does not
 #' # match the data
@@ -76,7 +86,7 @@
 #' @importFrom rlang "!!!"
 
 clean_spelling <- function(x = character(), wordlist = data.frame(),
-                           quiet = FALSE) {
+                           quiet = FALSE, warn_default = TRUE) {
 
   if (length(x) == 0 || !is.atomic(x)) {
     stop("x must be coerceable to a character")
@@ -176,7 +186,15 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
 
   # Replace any untranslated variables if .default is defined -----------------
   if (length(default) > 0) {
-    x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other = names(default))
+    default_vars <- levels(x)[!levels(x) %in% c(names(dict), names(nas))]
+    if (warn_default && length(default_vars) > 0) {
+      was <- if (length(default_vars) > 1) "were" else "was"
+      msg <- "'%s' %s changed to the default value ('%s')"
+      warning(sprintf(msg, paste(default_vars, collapse = "', '"), was, names(default)))
+    }
+    suppressWarnings({
+      x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other = names(default))
+    })
   }
 
   # Make sure order is preserved if it's a factor -----------------------------

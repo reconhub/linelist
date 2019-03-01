@@ -20,6 +20,9 @@
 #'   each data frame. If the incoming variables are factors, this determines how
 #'   the resulting factors will be sorted.
 #' 
+#' @param warn if `TRUE`, warnings and errors from [clean_spelling()] will be 
+#'   shown as a single warning. Defaults to `FALSE`, which shows nothing.
+#'
 #' @inheritParams clean_variable_labels
 #' 
 #'
@@ -131,7 +134,7 @@
 #' head(res)
 #' as.list(head(res))
 
-clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelling_vars = 3, sort_by = NULL, classes = NULL) {
+clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelling_vars = 3, sort_by = NULL, classes = NULL, warn = FALSE) {
 
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
@@ -154,11 +157,11 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     # There is a spelling_varsing column ----------------------------------------
     if (!is.null(spelling_vars) && length(spelling_vars) == 1) {
       is_number <- is.numeric(spelling_vars) &&          # spelling_vars is a number
-                   as.integer(spelling_vars) == spelling_vars && # ... and an integer
-                   spelling_vars <= ncol(wordlists)      # ... and is within the bounds
+        as.integer(spelling_vars) == spelling_vars && # ... and an integer
+          spelling_vars <= ncol(wordlists)      # ... and is within the bounds
 
       is_name   <- is.character(spelling_vars) &&         # spelling_vars is a name
-                   any(names(wordlists) == spelling_vars) # ... in the wordlists
+        any(names(wordlists) == spelling_vars) # ... in the wordlists
       if (is_number || is_name) {
         wordlists <- split(wordlists, wordlists[[spelling_vars]])
       } else {
@@ -223,11 +226,29 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
       to_iterate <- unique(c(to_iterate, unprotected))
     }
   }
+
+  # Prepare warning/error labels ---------------------------------------------
+  warns <- vector(mode = "list", length = length(to_iterate)) -> errs
+  iter_print <- gsub(" ", "_", format(to_iterate))
+  names(iter_print) <- to_iterate
+
   # Loop over the variables and clean spelling --------------------------------
   for (i in to_iterate) {
     d <- if (ddf) wordlists else wordlists[[i]] 
     d <- if (is.null(d)) global_words else d
-    try(x[[i]] <- clean_spelling(x[[i]], d, quiet = TRUE))
+    # Evaluate and collect any warnings/errors that pop up
+    w          <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
+    x[[i]]     <- if(is.null(w$val)) x[[i]] else w$val
+    if (warn) {
+      warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
+      errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
+    }
+  }
+
+  # Process warnings and errors and give a warning if there were any
+  if (warn) {
+    wemsg <- process_werrors(warns, errs)
+    if (!is.null(wemsg)) warning(wemsg)
   }
 
   x
