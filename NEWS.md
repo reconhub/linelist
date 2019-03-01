@@ -1,3 +1,12 @@
+# linelist 0.8.1.9000
+
+* `clean_spelling()` will no longer throw a warning if there is no value for
+  .default to replace.
+* `clean_variable_spelling()`, `clean_variables()`, and `clean_data()` gain the
+  `warn` and `warn_spelling` arguments which will capture all errors and
+  warnings issued from `clean_spelling()` for each variable. 
+  See https://github.com/reconhub/linelist/pull/48 for details).  
+
 # linelist 0.8.0.9000
 
 * `compare_data()` allows users to compare _structural changes_ to data frames
