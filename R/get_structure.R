@@ -41,10 +41,10 @@ get_structure <- function(x) {
 
   out$dim <- dim(x)
   out$names <- names(x)
-  out$classes <- vapply(x, function(e) class(e)[1], character(1))
+  out$classes <- i_find_classes(x)
   categorical <- out$names[out$classes %in% c("factor", "character")]
   out$values <- lapply(x[categorical], get_categories)
   
-  class(out) <- c("data_structure", "list")
+  class(out) <- c("data_structure")
   out
 }
