@@ -32,19 +32,20 @@
 
 get_structure <- function(x) {
   if (!is.data.frame(x)) {
-    warning("converting 'x' to a data.frame")
+    stop("get_structure only works with data frames")
   }
   
   x <- as.data.frame(x)
   
   out <- list()
 
-  out$dim <- dim(x)
-  out$names <- names(x)
+  out$dim     <- dim(x)
+  out$names   <- names(x)
   out$classes <- i_find_classes(x)
   categorical <- out$names[out$classes %in% c("factor", "character")]
-  out$values <- lapply(x[categorical], get_categories)
+  out$values  <- lapply(x[categorical], get_categories)
   
   class(out) <- c("data_structure")
+  
   out
 }
