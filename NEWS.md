@@ -1,3 +1,10 @@
+# linelist 0.8.2.9000
+
+* `clean_variable_spelling()` will now run global variables before processing
+  named variables instead of in tandem. This allows the user to define
+  misspellings in the `.global` variable.
+  See https://github.com/reconhub/linelist/issues/51 for details.
+
 # linelist 0.8.1.9000
 
 * `clean_spelling()` will no longer throw a warning if there is no value for

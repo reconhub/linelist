@@ -1,6 +1,6 @@
 Package: linelist
 Title: Tools to Import and Tidy Case Linelist Data
-Version: 0.8.1.9000
+Version: 0.8.2.9000
 Authors@R: c(person("Thibaut", "Jombart", email = "thibautjombart@gmail.com", role = c("aut", "cre")),
     person("Zhian N.", "Kamvar", email = "zkamvar@gmail.com", role = c("aut")))
 Description: A collection of wrappers for importing case linelist data from usual formats, and tools for cleaning data, detecting dates, and storing meta-information on the content of the resulting \code{data.frame}.  
