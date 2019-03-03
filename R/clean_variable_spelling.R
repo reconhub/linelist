@@ -187,10 +187,10 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     }
   }
 
-  ddf            <- is.data.frame(wordlists)
+  one_big_dictionary            <- is.data.frame(wordlists)
   exists_sort_by <- !is.null(sort_by)
 
-  if (ddf) {
+  if (one_big_dictionary) {
     # If there is one big dictionary ------------------------------------
     if (exists_sort_by && sort_by %in% names(wordlists)) {
       wordlists <- wordlists[order(wordlists[[sort_by]]), , drop = FALSE]
@@ -210,16 +210,6 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     global_words <- wordlists[[".global"]]
     wordlists    <- wordlists[names(wordlists) != ".global"]
     has_global   <- !is.null(global_words)
-    if (has_global) {
-      for (i in names(wordlists)) {
-        # Append the global dictionary to the specific one -
-        wordlists[[i]] <- rbind(wordlists[[i]], global_words, 
-                                stringsAsFactors = FALSE,
-                                make.row.names = FALSE)
-        # The specific values override the global values --
-        wordlists[[i]] <- wordlists[[i]][!duplicated(wordlists[[i]][1]), ,drop = FALSE]
-      }
-    }
     # Iterate over the names of the dictionaries -----------
     to_iterate <- intersect(names(wordlists), names(x))
     if (has_global) {
@@ -234,14 +224,35 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
 
   # Loop over the variables and clean spelling --------------------------------
   for (i in to_iterate) {
-    d <- if (ddf) wordlists else wordlists[[i]] 
-    d <- if (is.null(d)) global_words else d
+    d <- if (one_big_dictionary) wordlists else wordlists[[i]] 
+
+    if (is.null(d)) {
+    # d is null because this is a variable without a specific spelling def
+      d <- global_words
+    } else if (!one_big_dictionary) {
+    # d is not null, but the input has specific variables
+      # find the words that match the wordlist
+      gw <- !global_words[[1]] %in% d[[1]]
+      if (sum(gw) > 0) {
+      # If there are still global words to clean, pass them through
+        g      <- global_words[gw, , drop = FALSE]
+        w      <- withWarnings(clean_spelling(x[[i]], g, quiet = FALSE))
+        x[[i]] <- if(is.null(w$val)) x[[i]] else w$val
+        if (warn) {
+          warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
+          errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
+        }
+      }
+    } else {
+      # There is one big, global dictionary
+      d <- d
+    }
     # Evaluate and collect any warnings/errors that pop up
-    w          <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
-    x[[i]]     <- if(is.null(w$val)) x[[i]] else w$val
+    w      <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
+    x[[i]] <- if(is.null(w$val)) x[[i]] else w$val
     if (warn) {
-      warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
-      errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
+      warns[[i]] <- c(warns[[i]], collect_ya_errs(w$warnings, iter_print[i]))
+      errs[[i]]  <- c(errs[[i]], collect_ya_errs(w$errors, iter_print[i]))
     }
   }
 
