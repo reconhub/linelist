@@ -119,7 +119,10 @@ test_that("A global wordlist can be implemented alongside the wordlist", {
 
   wl <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
 
-  clean_global <- clean_data(md, wordlists = wl)
+
+  expect_warning({
+    clean_global <- clean_data(md, wordlists = wl, warn = TRUE)
+  }, "epi_case_definition__:")
 
   expect_is(clean_global$location, "factor")
 
@@ -139,7 +142,14 @@ test_that("A global wordlist can be implemented alongside the wordlist", {
 test_that("A global wordlist can be implemented as-is", {
 
   
-  clean_global <- clean_data(md, wordlists = global_words)
+  expect_warning({
+    clean_global <- clean_data(md, 
+                               wordlists = global_words, 
+                               sort_by = "orders", 
+                               spelling_vars = NULL 
+                              )
+  }, "Using wordlist globally across all character/factor columns.")
+
 
   expect_true("HOSPITAL" %in% clean_global$location)
   expect_true("medical" %in% clean_global$location)
@@ -160,8 +170,14 @@ test_that("A global wordlist with a '.default' value would throw an error", {
 
 test_that("clean_variables and clean_data will return the same thing if no dates", {
 
-  cdcd <- clean_data(md, wordlists = wordlist, spelling_vars = "var_shortname", guess_dates = FALSE, force_Date = FALSE)
-  cdcv <- clean_variables(clean_variable_names(md), wordlists = wordlist, spelling_vars = "var_shortname")
+  cdcd <- clean_data(md, 
+                     wordlists = wordlist, 
+                     spelling_vars = "var_shortname", 
+                     guess_dates = FALSE, 
+                     force_Date = FALSE)
+  cdcv <- clean_variables(clean_variable_names(md), 
+                          wordlists = wordlist, 
+                          spelling_vars = "var_shortname")
   expect_identical(cdcd, cdcv)
 })
 
