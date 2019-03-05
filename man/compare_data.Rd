@@ -38,6 +38,10 @@ compared}
 \item{use_values}{a \code{logical} indicating if values of matching
 categorical variables should be compared}
 }
+\value{
+an object of class \code{data_comparison}. This is a named list for
+each test
+}
 \description{
 This function extracts the structures of two \code{data.frames} and compares them,
 issuing a series of diagnostics.

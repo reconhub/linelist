@@ -49,13 +49,13 @@ well.
 \subsection{Global wordlists}{
 
 A global wordlist is a set of definitions applied to all valid columns of \code{x}
-indiscriminantly. When a global dictioary is used, you might see several
-warnings appear because some variables were not found in the data.
+indiscriminantly.
 \itemize{
 \item \strong{.global spelling_var}: If you want to apply a set of definitions to all
 valid columns in addition to specified columns, then you can include a
 \code{.global} group in the \code{spelling_var} column of your \code{wordlists} data
-frame. \emph{NOTE: specific variable definitions will override global
+frame. This is useful for setting up a dictionary of common spelling
+errors. \emph{NOTE: specific variable definitions will override global
 defintions.} For example: if you have a column for cardinal directions
 and a definiton for \code{N = North}, then the global variable \code{N = no} will
 not override that. See Example.
@@ -74,7 +74,7 @@ numeric and Date columns from conversion to character.
 
 # Set up wordlist ------------------------------------------------ 
 
-yesno  <- c("Y", "N", "U", ".missing")
+yesno  <- c("y", "n", "u", ".missing")
 dyesno <- c("Yes", "No", "Unknown", "Missing")
 
 treatment_administered  <- c(0:1, ".missing")
@@ -98,7 +98,7 @@ wordlist <- data.frame(
 # Assigning global values ----------------------------------------
 
 global_words <- data.frame(
-  options = c("Y", "N", "U", "unk", "oui", ".missing"),
+  options = c("y", "n", "u", "unk", "oui", ".missing"),
   values  = c("yes", "no", "unknown", "unknown", "yes", "missing"),
   grp     = rep(".global", 6),
   orders  = rep(Inf, 6),

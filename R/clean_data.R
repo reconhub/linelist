@@ -15,6 +15,14 @@
 #'
 #' @return A `data.frame` with standardised labels for characters and
 #'   factors.
+#'
+#' @note \subsection{Creating your wordlist}{
+#'  When creating the wordlist for `clean_variable_spelling()`, it's important
+#'  to remember that the data will first be cleaned with 
+#'  `clean_variable_labels()`, which will remove any capitalisation, accents,
+#'  and replace all punctuation and spaces with "_". 
+#'
+#' }
 #' 
 #' @seealso This function wraps three other functions: 
 #' [clean_variable_names()] - to handle variable names, 

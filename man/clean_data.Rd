@@ -65,6 +65,15 @@ by standardising variable names, labels used categorical variables
 intelligent date search can be used on character strings to extract dates
 from various formats mixed with other text. See details for more information.
 }
+\note{
+\subsection{Creating your wordlist}{
+When creating the wordlist for \code{clean_variable_spelling()}, it's important
+to remember that the data will first be cleaned with
+\code{clean_variable_labels()}, which will remove any capitalisation, accents,
+and replace all punctuation and spaces with "_".
+
+}
+}
 \examples{
 
 ## make toy data

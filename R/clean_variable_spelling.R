@@ -34,13 +34,13 @@
 #' \subsection{Global wordlists}{
 #' 
 #' A global wordlist is a set of definitions applied to all valid columns of `x`
-#' indiscriminantly. When a global dictioary is used, you might see several
-#' warnings appear because some variables were not found in the data.
+#' indiscriminantly.
 #'
 #'  - **.global spelling_var**: If you want to apply a set of definitions to all
 #'     valid columns in addition to specified columns, then you can include a
 #'     `.global` group in the `spelling_var` column of your `wordlists` data
-#'     frame. *NOTE: specific variable definitions will override global
+#'     frame. This is useful for setting up a dictionary of common spelling 
+#'     errors. *NOTE: specific variable definitions will override global
 #'     defintions.* For example: if you have a column for cardinal directions
 #'     and a definiton for `N = North`, then the global variable `N = no` will
 #'     not override that. See Example.
@@ -67,7 +67,7 @@
 #' 
 #' # Set up wordlist ------------------------------------------------ 
 #'
-#' yesno  <- c("Y", "N", "U", ".missing")
+#' yesno  <- c("y", "n", "u", ".missing")
 #' dyesno <- c("Yes", "No", "Unknown", "Missing")
 #'
 #' treatment_administered  <- c(0:1, ".missing")
@@ -91,7 +91,7 @@
 #' # Assigning global values ----------------------------------------
 #'
 #' global_words <- data.frame(
-#'   options = c("Y", "N", "U", "unk", "oui", ".missing"),
+#'   options = c("y", "n", "u", "unk", "oui", ".missing"),
 #'   values  = c("yes", "no", "unknown", "unknown", "yes", "missing"),
 #'   grp     = rep(".global", 6),
 #'   orders  = rep(Inf, 6),
@@ -187,10 +187,10 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     }
   }
 
-  ddf            <- is.data.frame(wordlists)
-  exists_sort_by <- !is.null(sort_by)
+  one_big_dictionary <- is.data.frame(wordlists)
+  exists_sort_by     <- !is.null(sort_by)
 
-  if (ddf) {
+  if (one_big_dictionary) {
     # If there is one big dictionary ------------------------------------
     if (exists_sort_by && sort_by %in% names(wordlists)) {
       wordlists <- wordlists[order(wordlists[[sort_by]]), , drop = FALSE]
@@ -210,16 +210,6 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     global_words <- wordlists[[".global"]]
     wordlists    <- wordlists[names(wordlists) != ".global"]
     has_global   <- !is.null(global_words)
-    if (has_global) {
-      for (i in names(wordlists)) {
-        # Append the global dictionary to the specific one -
-        wordlists[[i]] <- rbind(wordlists[[i]], global_words, 
-                                stringsAsFactors = FALSE,
-                                make.row.names = FALSE)
-        # The specific values override the global values --
-        wordlists[[i]] <- wordlists[[i]][!duplicated(wordlists[[i]][1]), ,drop = FALSE]
-      }
-    }
     # Iterate over the names of the dictionaries -----------
     to_iterate <- intersect(names(wordlists), names(x))
     if (has_global) {
@@ -227,6 +217,20 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     }
   }
 
+  # check if there is a ".default" value in the global dictionary
+  global_with_default <- one_big_dictionary && 
+    any(wordlists[[1]] == ".default") || 
+    (
+     !one_big_dictionary && 
+     has_global && 
+     any(global_words[[1]] == ".default")
+    )
+
+  if (global_with_default) {
+  
+    stop("the .default keyword cannot be used with .global")
+  
+  }
   # Prepare warning/error labels ---------------------------------------------
   warns <- vector(mode = "list", length = length(to_iterate)) -> errs
   iter_print <- gsub(" ", "_", format(to_iterate))
@@ -234,14 +238,35 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
 
   # Loop over the variables and clean spelling --------------------------------
   for (i in to_iterate) {
-    d <- if (ddf) wordlists else wordlists[[i]] 
-    d <- if (is.null(d)) global_words else d
+    d <- if (one_big_dictionary) wordlists else wordlists[[i]] 
+
+    if (is.null(d)) {
+    # d is null because this is a variable without a specific spelling def
+      d <- global_words
+    } else if (!one_big_dictionary) {
+    # d is not null, but the input has specific variables
+      # find the words that match the wordlist
+      gw <- !global_words[[1]] %in% d[[1]]
+      if (sum(gw) > 0) {
+      # If there are still global words to clean, pass them through
+        g      <- global_words[gw, , drop = FALSE]
+        w      <- withWarnings(clean_spelling(x[[i]], g, quiet = FALSE))
+        x[[i]] <- if(is.null(w$val)) x[[i]] else w$val
+        if (warn) {
+          warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
+          errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
+        }
+      }
+    } else {
+      # There is one big, global dictionary
+      d <- d
+    }
     # Evaluate and collect any warnings/errors that pop up
-    w          <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
-    x[[i]]     <- if(is.null(w$val)) x[[i]] else w$val
+    w      <- withWarnings(clean_spelling(x[[i]], d, quiet = FALSE))
+    x[[i]] <- if(is.null(w$val)) x[[i]] else w$val
     if (warn) {
-      warns[[i]] <- collect_ya_errs(w$warnings, iter_print[i])
-      errs[[i]]  <- collect_ya_errs(w$errors, iter_print[i])
+      warns[[i]] <- c(warns[[i]], collect_ya_errs(w$warnings, iter_print[i]))
+      errs[[i]]  <- c(errs[[i]], collect_ya_errs(w$errors, iter_print[i]))
     }
   }
 

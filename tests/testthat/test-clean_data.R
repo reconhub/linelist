@@ -20,17 +20,17 @@ md$location <- factor(messy_locations)
 
 # add a wordlist
 wordlist <- data.frame(
-  from  = c("hopsital", "hopital",  "medical", "feild"),
-  to    = c("hospital", "hospital", "clinic",  "field"),
-  var_shortname = rep("location", 4),
-  orders = 1:4,
+  from  = c("hopsital", "hopital",  "medical", "feild", "not_a_case"),
+  to    = c("hospital", "hospital", "clinic",  "field", "not a case"),
+  var_shortname = c(rep("location", 4), "epi_case_definition"),
+  orders = c(1:4, 1),
   stringsAsFactors = FALSE
 )
 
 # define a global wordlist to check for things that change and things that don't
 global_words <- data.frame(
-  from = c("not_a_case", "female", "male", "hopital"),
-  to  = c("not a case", "feminine", "masculine", "HOSPITAL"),
+  from = c("female", "male", "hopital"),
+  to  = c("feminine", "masculine", "HOSPITAL"),
   var_shortname     = ".global",
   orders = Inf,
   stringsAsFactors = FALSE
@@ -119,7 +119,10 @@ test_that("A global wordlist can be implemented alongside the wordlist", {
 
   wl <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
 
-  clean_global <- clean_data(md, wordlists = wl)
+
+  expect_warning({
+    clean_global <- clean_data(md, wordlists = wl, warn = TRUE)
+  }, "epi_case_definition__:")
 
   expect_is(clean_global$location, "factor")
 
@@ -139,7 +142,14 @@ test_that("A global wordlist can be implemented alongside the wordlist", {
 test_that("A global wordlist can be implemented as-is", {
 
   
-  clean_global <- clean_data(md, wordlists = global_words)
+  expect_warning({
+    clean_global <- clean_data(md, 
+                               wordlists = global_words, 
+                               sort_by = "orders", 
+                               spelling_vars = NULL 
+                              )
+  }, "Using wordlist globally across all character/factor columns.")
+
 
   expect_true("HOSPITAL" %in% clean_global$location)
   expect_true("medical" %in% clean_global$location)
@@ -147,10 +157,27 @@ test_that("A global wordlist can be implemented as-is", {
 
 })
 
+test_that("A global wordlist with a '.default' value would throw an error", {
+
+  gw <- rbind(global_words, c(".default", "NOOOOO", ".global", "Inf"))
+  expect_error(clean_data(md, wordlists = gw), "the .default keyword cannot be used with .global")
+
+  wl <- rbind(wordlist, gw, stringsAsFactors = FALSE)
+  expect_error(clean_data(md, wordlists = gw), "the .default keyword cannot be used with .global")
+  
+})
+
+
 test_that("clean_variables and clean_data will return the same thing if no dates", {
 
-  cdcd <- clean_data(md, wordlists = wordlist, spelling_vars = "var_shortname", guess_dates = FALSE, force_Date = FALSE)
-  cdcv <- clean_variables(clean_variable_names(md), wordlists = wordlist, spelling_vars = "var_shortname")
+  cdcd <- clean_data(md, 
+                     wordlists = wordlist, 
+                     spelling_vars = "var_shortname", 
+                     guess_dates = FALSE, 
+                     force_Date = FALSE)
+  cdcv <- clean_variables(clean_variable_names(md), 
+                          wordlists = wordlist, 
+                          spelling_vars = "var_shortname")
   expect_identical(cdcd, cdcv)
 })
 
