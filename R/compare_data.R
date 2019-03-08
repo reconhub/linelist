@@ -232,7 +232,7 @@ compare_classes <- function(ref, x) {
                     new_class = x_classes[i]
                     )
     } else {
-      out[[i]] <- TRUE
+      out[[i]] <- ref_classes[i] 
     }
 
   }
