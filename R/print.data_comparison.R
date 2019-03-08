@@ -83,13 +83,13 @@ print.data_comparison <- function(x, ...) {
       for (i in seq_along(x$classes)) {
         e <- x$classes[[i]]
         current_variable <- names(x$classes)[i]
-        if (isTRUE(e)) {
+        if (length(e) == 1) {
           cat(
               crayon::green(
                             sprintf(
                                     "`%s`: same class (%s) \n",
                                     current_variable,
-                                    class(e))
+                                    e)
                             )
               )
         } else {
@@ -149,7 +149,7 @@ print.data_comparison <- function(x, ...) {
           cat(
               crayon::italic(
                              sprintf(
-                                     "\n  * `%s`, values common to both datesets:\n",
+                                     "\n  * `%s`, values common to both datasets:\n",
                                      current_variable))
               )
           print(e$common)

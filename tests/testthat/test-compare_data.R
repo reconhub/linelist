@@ -20,7 +20,7 @@ test_that("Same content in different order will say so", {
   expect_is(res, "data_comparison")
   expect_identical(res$names, list(different_order = TRUE))
   expect_identical(names(res$classes), names(iris))
-  expect_true(all(unlist(res$classes)))
+  expect_identical(vapply(res$classes, "[[", character(1), 1), i_find_classes(iris))
   expect_true(res$values)
   expect_true(res$dim)
   

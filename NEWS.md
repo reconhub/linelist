@@ -1,3 +1,8 @@
+# linelist 0.8.3.9000
+
+* `compare_data()` now returns list of variable classes instead of TRUE if the
+  classes match. (See #53 for details).
+
 # linelist 0.8.2.9000
 
 * `clean_variable_spelling()` will now run global variables before processing
