@@ -46,12 +46,16 @@ test_that("different classes will trigger", {
 test_that("different variables will trigger", {
 
   ichar <- iris
-  levels(ichar$Species) <- c("hickory", "dickory", "doc")
+  levels(ichar$Species) <- c("hickory", "dickory", "setosa")
   res <- compare_data(iris, ichar)
   expect_true(res$dim)
   expect_true(res$names)
   expect_true(res$classes)
   expect_is(res$values, "list")
+  expect_named(res$values, "Species")
+  expect_setequal(res$values$Species$new, c("hickory", "dickory"))
+  expect_setequal(res$values$Species$missing, c("versicolor", "virginica"))
+  expect_setequal(res$values$Species$common, "setosa")
   expect_output(print(res), "Missing values in `Species`")
 
 })
