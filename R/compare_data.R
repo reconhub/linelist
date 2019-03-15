@@ -290,12 +290,12 @@ compare_values <- function(ref, x) {
 
   for (i in common_variables) {
 
-    ref_values_current <- ref_values[i]
-    x_values_current <- x_values[i]
+    ref_values_current <- ref_values[[i]]
+    x_values_current <- x_values[[i]]
 
     if (!identical(ref_values_current, x_values_current)) {
 
-      out[[i]] <- c(
+      out[[i]] <- list(
                     missing = setdiff(ref_values_current, x_values_current),
                     new = setdiff(x_values_current, ref_values_current),
                     common = intersect(x_values_current, ref_values_current))
