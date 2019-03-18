@@ -57,6 +57,7 @@ test_that("different variables will trigger", {
   expect_setequal(res$values$Species$missing, c("versicolor", "virginica"))
   expect_setequal(res$values$Species$common, "setosa")
   expect_output(print(res), "Missing values in `Species`")
+  expect_output(print(res, common_values = FALSE), "1 value\\(s\\) \\[hidden\\]")
 
 })
 
