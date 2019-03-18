@@ -1,7 +1,8 @@
 #' @export
 #' @rdname compare_data
-
-print.data_comparison <- function(x, ...) {
+#' @param common_values when `TRUE` (default), common values are printed. When `FALSE`,
+#'   common values are hidden.
+print.data_comparison <- function(x, ..., common_values = TRUE) {
 
   cat(
       crayon::bold("\n /// Comparisons of data content // \n")
@@ -152,7 +153,11 @@ print.data_comparison <- function(x, ...) {
                                      "\n  * `%s`, values common to both datasets:\n",
                                      current_variable))
               )
-          print(e$common)
+          if (common_values) {
+            print(e$common)
+          } else {
+            cat(sprintf("\t%d value(s) [hidden]", length(e$common)))
+          }
         }
 
       }
