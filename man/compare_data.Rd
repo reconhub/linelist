@@ -17,7 +17,8 @@ compare_data(ref, x, ...)
 
 \method{compare_data}{data.frame}(ref, x, ...)
 
-\method{print}{data_comparison}(x, ..., common_values = TRUE)
+\method{print}{data_comparison}(x, ..., common_values = TRUE,
+  diff_only = FALSE)
 }
 \arguments{
 \item{ref}{the reference \code{data.frame}}
@@ -38,7 +39,9 @@ compared}
 \item{use_values}{a \code{logical} indicating if values of matching
 categorical variables should be compared}
 
-\item{common_values}{when \code{TRUE} (default), common values are printed. When \code{FALSE},
+\item{common_values}{when \code{TRUE} (default), common values are printed. When \code{FALSE}, common values are suppressed.}
+
+\item{diff_only}{when \code{TRUE} only differences between ref and the current data content are presented, ignoring similarities. Defaults to \code{FALSE}.
 common values are hidden.}
 }
 \value{

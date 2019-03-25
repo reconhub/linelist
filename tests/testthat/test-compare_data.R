@@ -39,6 +39,8 @@ test_that("different classes will trigger", {
   expect_is(res$classes, "list")
   expect_equal(unname(res$classes$Species), c("Species", "factor", "character"))
   expect_output(print(res), "`Species` has changed from `factor` to `character`")
+  expect_output(print(res), "`Sepal.Length`: same class \\(numeric\\)")
+  expect_failure(expect_output(print(res, diff_only = TRUE), "`Sepal.Length`: same class \\(numeric\\)"))
 
 })
 

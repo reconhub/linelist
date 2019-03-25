@@ -1,3 +1,8 @@
+# linelist 0.0.28.9000
+
+* `print.data_comparison()` gains the logical arguments `common_values` and
+  `diff_only` to control the length of print output (See #61).
+
 # linelist 0.0.27.9000
 
 * `compare_data()` now correctly accounts for different values in variables.
