@@ -1,8 +1,9 @@
 #' @export
 #' @rdname compare_data
-#' @param common_values when `TRUE` (default), common values are printed. When `FALSE`,
+#' @param common_values when `TRUE` (default), common values are printed. When `FALSE`, common values are suppressed. 
+#' @param diff_only when `TRUE` only differences between ref and the current data content are presented, ignoring similarities. Defaults to `FALSE`.
 #'   common values are hidden.
-print.data_comparison <- function(x, ..., common_values = TRUE) {
+print.data_comparison <- function(x, ..., common_values = TRUE, diff_only = FALSE) {
 
   cat(
       crayon::bold("\n /// Comparisons of data content // \n")
@@ -62,7 +63,7 @@ print.data_comparison <- function(x, ..., common_values = TRUE) {
         cat("\n  * new variables:\n")
         print(x$names$new)
       }
-      if (!is_empty(x$names$common)) {
+      if (!is_empty(x$names$common) && !diff_only) {
         cat("\n  * variables common to both datesets:\n")
         print(x$names$common)
       }
@@ -85,14 +86,16 @@ print.data_comparison <- function(x, ..., common_values = TRUE) {
         e <- x$classes[[i]]
         current_variable <- names(x$classes)[i]
         if (length(e) == 1) {
-          cat(
-              crayon::green(
-                            sprintf(
-                                    "`%s`: same class (%s) \n",
-                                    current_variable,
-                                    e)
-                            )
-              )
+          if (!diff_only) {
+            cat(
+                crayon::green(
+                              sprintf(
+                                      "`%s`: same class (%s) \n",
+                                      current_variable,
+                                      e)
+                              )
+                )
+          }
         } else {
           cat(
               crayon::italic(
@@ -122,11 +125,13 @@ print.data_comparison <- function(x, ..., common_values = TRUE) {
       e <- x$values[[i]]
       current_variable <- names(x$values)[i]
       if (isTRUE(e)) {
-        cat(
-            crayon::green(
-                          sprintf("\n`%s`: same variable values",
-                                  current_variable))
-            )
+        if (!diff_only) {
+          cat(
+              crayon::green(
+                            sprintf("\n`%s`: same variable values",
+                                    current_variable))
+              )
+        }
       } else {
         if (!is_empty(e$missing)) {
           cat(
@@ -146,7 +151,7 @@ print.data_comparison <- function(x, ..., common_values = TRUE) {
               )
           print(e$new)
         }
-        if (!is_empty(e$common)) {
+        if (!is_empty(e$common) && !diff_only) {
           cat(
               crayon::italic(
                              sprintf(
