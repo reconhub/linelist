@@ -6,10 +6,10 @@
 #'
 #' @param x a character or factor vector
 #'
-#' @param wordlist a two-column matrix or data frame defining mis-spelled
-#'   words in the first column and replacements in the second column. There
-#'   are keywords that can be appended to the first column for cleaning missing
-#'   or default values.
+#' @param wordlist a two-column matrix or data frame defining mis-spelled words
+#' in the first column (keys) and replacements (values) in the second column.
+#' There are keywords that can be appended to the first column for addressing
+#' default values and missing data.
 #'
 #' @param quiet a `logical` indicating if warnings should be issued if no
 #'   replacement is made; if `FALSE`, these warnings will be disabled
@@ -22,16 +22,33 @@
 #'
 #' @details 
 #'
-#' \subsection{Keywords}{
+#' \subsection{Keys (first column)}{
+#' 
+#' The first column of the wordlist will contain the keys that you want to
+#' match in your current data set. These are expected to match exactly with
+#' the exception of two reserved keywords that both start with a full stop:
 #'
-#' There are currently two keywords that can be placed in the first column of
-#' your wordlist:
-#'
-#'  - `.missing`: replaces any missing values
+#'  - `.missing`: replaces any missing values (see NOTE)
 #'  - `.default`: replaces **ALL** values that are not defined in the wordlist
 #'                and are not missing. 
 #'
 #' }
+#' \subsection{Values (second column)}{
+#' 
+#' The values will replace their respective keys exactly as they are presented.
+#'
+#' There is currently one recognised keyword that can be placed in the second
+#' column of your wordlist:
+#'
+#'  - `.na`: Replace keys with missing data. When used in combination with the
+#'    `.missing` keyword (in column 1), it can allow you to differentiate
+#'    between explicit and implicit missing data.
+#' 
+#' }
+#'
+#' @note If there are any missing values in the first column (keys), then they
+#' are automatically converted to the character "NA" with a warning. If you want
+#' to target missing data with your wordlist, use the `.missing` keyword.
 #'
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned. 
 #'   Note that factors will be arranged by the order presented in the data 
@@ -48,7 +65,7 @@
 #'
 #' corrections <- data.frame(
 #'   bad = c("foubar", "foobr", "fubar", "unknown", ".missing"), 
-#'   good = c("foobar", "foobar", "foobar", "missing", "missing"),
+#'   good = c("foobar", "foobar", "foobar", ".na", "missing"),
 #'   stringsAsFactors = FALSE
 #' )
 #' corrections
@@ -77,7 +94,7 @@
 #'
 #' words <- data.frame(
 #'   option_code = c("Y", "N", "U", ".missing"),
-#'   option_name = c("Yes", "No", "Unknown", "Missing"),
+#'   option_name = c("Yes", "No", ".na", "Missing"),
 #'   stringsAsFactors = FALSE
 #' )
 #' clean_spelling(c("Y", "Y", NA, "N", "U", "U", "N"), words)
@@ -183,6 +200,9 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
   if (length(nas) > 0) {
     x <- forcats::fct_explicit_na(x, na_level = names(nas))
   }
+  
+  # Make certain values missing if ".na" is in the values
+  x <- forcats::fct_recode(x, NULL = ".na")
 
   # Replace any untranslated variables if .default is defined -----------------
   if (length(default) > 0) {
