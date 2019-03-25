@@ -72,6 +72,10 @@ include:
 - `clean_variable_names()`: like `clean_data`, but only the variable names
 
 - `clean_variable_labels()`: like `clean_data`, but only the variable labels
+ 
+- `clean_variable_spelling()`: provided with a dictionary, will correct the
+  spelling of values in a variable and can globally correct commonly mis-spelled
+  words.
 
 - `clean_dates()`: like `clean_data`, but only the dates
 

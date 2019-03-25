@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a linelist object to a data frame — as.data.frame.linelist • linelist</title>
+<title>Extract the structure of a dataset — get_structure • linelist</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Convert a linelist object to a data frame — as.data.frame.linelist" />
+<meta property="og:title" content="Extract the structure of a dataset — get_structure" />
 
-<meta property="og:description" content="Convert a linelist object to a data frame" />
+<meta property="og:description" content="This function extracts the structure and content of a data.frame, storing
+the following information:" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,49 +115,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a linelist object to a data frame</h1>
-    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/as.data.frame.linelist.R'><code>R/as.data.frame.linelist.R</code></a></small>
-    <div class="hidden name"><code>as.data.frame.linelist.Rd</code></div>
+    <h1>Extract the structure of a dataset</h1>
+    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/get_structure.R'><code>R/get_structure.R</code></a></small>
+    <div class="hidden name"><code>get_structure.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Convert a linelist object to a data frame</p>
+    <p>This function extracts the structure and content of a <code>data.frame</code>, storing
+the following information:</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for linelist</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>get_structure</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a linelist object</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>unused</p></td>
+      <td><p>a <code>data.frame</code> to be checked</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data frame without the associated metadata</p>
+    <p>A list containing:</p><ul>
+<li><p><code>dim</code>: the dimensions of the dataset (rows, columns)</p></li>
+<li><p><code>names</code>: the names of the dataset</p></li>
+<li><p><code>classes</code>: the corresponding classes (if a column has several classes, only
+the first one is kept)</p></li>
+<li><p><code>values</code>: the list of sorted, unique values for each categorical column
+(<code>factor</code> or <code>character</code>)</p></li>
+</ul>
+
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <ul>
+<li><p>names and order of columns</p></li>
+<li><p>class of the columns</p></li>
+<li><p>values of the columns, for <code>factors</code> and <code>characters</code></p></li>
+</ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>md</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='messy_data.html'>messy_data</a></span>()
-<span class='no'>cd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='clean_data.html'>clean_data</a></span>(<span class='no'>md</span>)
-<span class='no'>ll</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='as_linelist.html'>as_linelist</a></span>(<span class='no'>cd</span>,
-                  <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"id"</span>,
-                  <span class='kw'>date_onset</span> <span class='kw'>=</span> <span class='st'>"date_of_onset"</span>,
-                  <span class='kw'>gender</span> <span class='kw'>=</span> <span class='st'>"gender"</span>,
-                  <span class='kw'>geo_lon</span> <span class='kw'>=</span> <span class='st'>"lon"</span>,
-                  <span class='kw'>geo_lat</span> <span class='kw'>=</span> <span class='st'>"lat"</span>
-                 )
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(<span class='no'>cd</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a></span>(<span class='no'>ll</span>))</div><div class='output co'>#&gt; [1] TRUE</div></pre>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1          5.1         3.5          1.4         0.2  setosa
+#&gt; 2          4.9         3.0          1.4         0.2  setosa
+#&gt; 3          4.7         3.2          1.3         0.2  setosa
+#&gt; 4          4.6         3.1          1.5         0.2  setosa
+#&gt; 5          5.0         3.6          1.4         0.2  setosa
+#&gt; 6          5.4         3.9          1.7         0.4  setosa</div><div class='input'><span class='fu'>get_structure</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; $dim
+#&gt; [1] 150   5
+#&gt; 
+#&gt; $names
+#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"     
+#&gt; 
+#&gt; $classes
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width      Species 
+#&gt;    "numeric"    "numeric"    "numeric"    "numeric"     "factor" 
+#&gt; 
+#&gt; $values
+#&gt; $values$Species
+#&gt; [1] "setosa"     "versicolor" "virginica" 
+#&gt; 
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "data_structure"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -164,12 +191,14 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
-    <p>Zhian N. Kamvar</p>
+    <p>Thibaut Jombart</p>
   </div>
 </div>
 

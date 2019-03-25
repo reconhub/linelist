@@ -67,7 +67,7 @@ from various formats mixed with other text. See details for more information." /
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.29.9000</span>
       </span>
     </div>
 
@@ -135,7 +135,7 @@ from various formats mixed with other text. See details for more information.</p
 
     <pre class="usage"><span class='fu'>clean_data</span>(<span class='no'>x</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>, <span class='kw'>force_Date</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>guess_dates</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>protect</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>warn_spelling</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>protect</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,6 +191,13 @@ each data frame. If the incoming variables are factors, this determines how
 the resulting factors will be sorted.</p></td>
     </tr>
     <tr>
+      <th>warn_spelling</th>
+      <td><p>if <code>TRUE</code>, errors and warnings from <code><a href='clean_spelling.html'>clean_spelling()</a></code>
+will be aggregated and presented for each column that issues them. The
+default value is <code>FALSE</code>, which means that all errors and warnings will be
+ignored.</p></td>
+    </tr>
+    <tr>
       <th>protect</th>
       <td><p>a logical or numeric vector defining the columns to protect
 from any manipulation. Note: columns in <code>protect</code> will override any columns
@@ -206,6 +213,14 @@ in either <code>force_Date</code> or <code>guess_dates</code>.</p></td>
 
     <p>A <code>data.frame</code> with standardised labels for characters and
 factors.</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <h3>Creating your wordlist</h3>
+    When creating the wordlist for <code><a href='clean_variable_spelling.html'>clean_variable_spelling()</a></code>, it's important
+to remember that the data will first be cleaned with
+<code><a href='clean_variable_labels.html'>clean_variable_labels()</a></code>, which will remove any capitalisation, accents,
+and replace all punctuation and spaces with "_".
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -477,6 +492,8 @@ factors.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.29.9000</span>
       </span>
     </div>
 
@@ -126,7 +126,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>clean_variables</span>(<span class='no'>x</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>, <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>protect</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>protect</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>warn_spelling</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,6 +172,13 @@ in either <code>force_Date</code> or <code>guess_dates</code>.</p></td>
       <td><p>a vector of class definitions for each of the columns. If this
 is not provided, the classes will be read from the columns themselves.
 Practically, this is used in <code><a href='clean_data.html'>clean_data()</a></code> to mark columns as protected.</p></td>
+    </tr>
+    <tr>
+      <th>warn_spelling</th>
+      <td><p>if <code>TRUE</code>, errors and warnings from <code><a href='clean_spelling.html'>clean_spelling()</a></code>
+will be aggregated and presented for each column that issues them. The
+default value is <code>FALSE</code>, which means that all errors and warnings will be
+ignored.</p></td>
     </tr>
     </table>
     

@@ -1,3 +1,11 @@
+# linelist 0.0.29.9000
+
+* `clean_spelling()` gains a new keyword: `.na` (or should I say "valueword").
+  When this keyword is in the values (second) column of the wordlist, the keys
+  will be replaced with a missing (`<NA>`) value. This is useful for contrasting
+  between presence of an absence and an absence of a presence with the `.missing`
+  keyword. See #55 and #57 for details
+
 # linelist 0.0.28.9000
 
 * `print.data_comparison()` gains the logical arguments `common_values` and

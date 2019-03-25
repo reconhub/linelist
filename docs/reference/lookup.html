@@ -65,7 +65,7 @@ in your data set." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.29.9000</span>
       </span>
     </div>
 
@@ -217,42 +217,42 @@ for use in non-standard evaulation</p></td>
 #&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='output co'>#&gt; &gt; ll %&gt;% group_by(!!lookup(., gender)) %&gt;% count(!!lookup(., case_definition))
-#&gt; <span style='color: #949494;'># A tibble: 7 x 3</span><span>
-#&gt; </span><span style='color: #949494;'># Groups:   gender [2]</span><span>
+#&gt; <span style='color: #555555;'># A tibble: 7 x 3</span><span>
+#&gt; </span><span style='color: #555555;'># Groups:   gender [2]</span><span>
 #&gt;   gender epi_case_definition     n
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>               </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> female confirmed               1
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> female not_a_case              4
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> female probable                3
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> male   confirmed               4
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> male   not_a_case              1
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> male   probable                5
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> male   suspected               2
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>               </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> female confirmed               1
+#&gt; </span><span style='color: #555555;'>2</span><span> female not_a_case              4
+#&gt; </span><span style='color: #555555;'>3</span><span> female probable                3
+#&gt; </span><span style='color: #555555;'>4</span><span> male   confirmed               4
+#&gt; </span><span style='color: #555555;'>5</span><span> male   not_a_case              1
+#&gt; </span><span style='color: #555555;'>6</span><span> male   probable                5
+#&gt; </span><span style='color: #555555;'>7</span><span> male   suspected               2
 #&gt; &gt; L &lt;- linelist::lookup
 #&gt; &gt; ll %&gt;% group_by(!!L(., gender)) %&gt;% count(!!L(., case_definition))
-#&gt; </span><span style='color: #949494;'># A tibble: 7 x 3</span><span>
-#&gt; </span><span style='color: #949494;'># Groups:   gender [2]</span><span>
+#&gt; </span><span style='color: #555555;'># A tibble: 7 x 3</span><span>
+#&gt; </span><span style='color: #555555;'># Groups:   gender [2]</span><span>
 #&gt;   gender epi_case_definition     n
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>               </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> female confirmed               1
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> female not_a_case              4
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> female probable                3
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> male   confirmed               4
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> male   not_a_case              1
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> male   probable                5
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> male   suspected               2
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>               </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> female confirmed               1
+#&gt; </span><span style='color: #555555;'>2</span><span> female not_a_case              4
+#&gt; </span><span style='color: #555555;'>3</span><span> female probable                3
+#&gt; </span><span style='color: #555555;'>4</span><span> male   confirmed               4
+#&gt; </span><span style='color: #555555;'>5</span><span> male   not_a_case              1
+#&gt; </span><span style='color: #555555;'>6</span><span> male   probable                5
+#&gt; </span><span style='color: #555555;'>7</span><span> male   suspected               2
 #&gt; &gt; (CASEDEF &lt;- lookup(ll, case_definition))
 #&gt; epi_case_definition
 #&gt; &gt; (GEO &lt;- lookup(ll, geo_lon, geo_lat, symbol = FALSE))
 #&gt; [1] "lon" "lat"
 #&gt; &gt; ll %&gt;% group_by(!!CASEDEF) %&gt;% summarise_at(GEO, mean)
-#&gt; </span><span style='color: #949494;'># A tibble: 4 x 3</span><span>
+#&gt; </span><span style='color: #555555;'># A tibble: 4 x 3</span><span>
 #&gt;   epi_case_definition   lon   lat
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>               </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> confirmed            48.2  12.7
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> not_a_case           48.3  13.5
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> probable             47.5  13.1
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> suspected            48.5  11.8
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>               </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> confirmed            48.2  12.7
+#&gt; </span><span style='color: #555555;'>2</span><span> not_a_case           48.3  13.5
+#&gt; </span><span style='color: #555555;'>3</span><span> probable             47.5  13.1
+#&gt; </span><span style='color: #555555;'>4</span><span> suspected            48.5  11.8
 #&gt; &gt; ll %&gt;% group_by(!!CASEDEF) %&gt;% class()
 #&gt; [1] "grouped_df" "tbl_df"     "tbl"        "data.frame"
 #&gt; &gt; ll %&gt;% group_by(!!CASEDEF) %&gt;% as_linelist() %&gt;% class()

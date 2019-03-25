@@ -66,7 +66,7 @@ from electronic survey data)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.29.9000</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@ from electronic survey data).</p>
     </div>
 
     <pre class="usage"><span class='fu'>clean_variable_spelling</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(), <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(),
-  <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,6 +167,11 @@ the resulting factors will be sorted.</p></td>
 is not provided, the classes will be read from the columns themselves.
 Practically, this is used in <code><a href='clean_data.html'>clean_data()</a></code> to mark columns as protected.</p></td>
     </tr>
+    <tr>
+      <th>warn</th>
+      <td><p>if <code>TRUE</code>, warnings and errors from <code><a href='clean_spelling.html'>clean_spelling()</a></code> will be
+shown as a single warning. Defaults to <code>FALSE</code>, which shows nothing.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -181,13 +186,13 @@ dictionary is used, this includes all <code>character</code> and <code>factor</c
 well.</p>
 <h3>Global wordlists</h3>
     A global wordlist is a set of definitions applied to all valid columns of <code>x</code>
-indiscriminantly. When a global dictioary is used, you might see several
-warnings appear because some variables were not found in the data.
+indiscriminantly.
 <ul>
 <li><p><strong>.global spelling_var</strong>: If you want to apply a set of definitions to all
 valid columns in addition to specified columns, then you can include a
 <code>.global</code> group in the <code>spelling_var</code> column of your <code>wordlists</code> data
-frame. <em>NOTE: specific variable definitions will override global
+frame. This is useful for setting up a dictionary of common spelling
+errors. <em>NOTE: specific variable definitions will override global
 defintions.</em> For example: if you have a column for cardinal directions
 and a definiton for <code>N = North</code>, then the global variable <code>N = no</code> will
 not override that. See Example.</p></li>
@@ -210,7 +215,7 @@ numeric and Date columns from conversion to character.</p>
     <pre class="examples"><div class='input'>
 <span class='co'># Set up wordlist ------------------------------------------------ </span>
 
-<span class='no'>yesno</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='st'>".missing"</span>)
+<span class='no'>yesno</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"y"</span>, <span class='st'>"n"</span>, <span class='st'>"u"</span>, <span class='st'>".missing"</span>)
 <span class='no'>dyesno</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Yes"</span>, <span class='st'>"No"</span>, <span class='st'>"Unknown"</span>, <span class='st'>"Missing"</span>)
 
 <span class='no'>treatment_administered</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='st'>".missing"</span>)
@@ -234,7 +239,7 @@ numeric and Date columns from conversion to character.</p>
 <span class='co'># Assigning global values ----------------------------------------</span>
 
 <span class='no'>global_words</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='st'>"unk"</span>, <span class='st'>"oui"</span>, <span class='st'>".missing"</span>),
+  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"y"</span>, <span class='st'>"n"</span>, <span class='st'>"u"</span>, <span class='st'>"unk"</span>, <span class='st'>"oui"</span>, <span class='st'>".missing"</span>),
   <span class='kw'>values</span>  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"yes"</span>, <span class='st'>"no"</span>, <span class='st'>"unknown"</span>, <span class='st'>"unknown"</span>, <span class='st'>"yes"</span>, <span class='st'>"missing"</span>),
   <span class='kw'>grp</span>     <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='st'>".global"</span>, <span class='fl'>6</span>),
   <span class='kw'>orders</span>  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>Inf</span>, <span class='fl'>6</span>),
@@ -261,9 +266,9 @@ numeric and Date columns from conversion to character.</p>
 <span class='co'># Clean spelling based on wordlist ------------------------------ </span>
 
 <span class='no'>wordlist</span> <span class='co'># show the wordlist</span></div><div class='output co'>#&gt;     options      values                    grp orders
-#&gt; 1         Y         Yes            readmission      1
-#&gt; 2         N          No            readmission      2
-#&gt; 3         U     Unknown            readmission      3
+#&gt; 1         y         Yes            readmission      1
+#&gt; 2         n          No            readmission      2
+#&gt; 3         u     Unknown            readmission      3
 #&gt; 4  .missing     Missing            readmission      4
 #&gt; 5         0         Yes treatment_administered      1
 #&gt; 6         1          No treatment_administered      2
@@ -285,18 +290,18 @@ numeric and Date columns from conversion to character.</p>
 #&gt; 22       30       30-39              age_group      4
 #&gt; 23       40       40-49              age_group      5
 #&gt; 24       50         50+              age_group      6
-#&gt; 25        Y         yes                .global    Inf
-#&gt; 26        N          no                .global    Inf
-#&gt; 27        U     unknown                .global    Inf
+#&gt; 25        y         yes                .global    Inf
+#&gt; 26        n          no                .global    Inf
+#&gt; 27        u     unknown                .global    Inf
 #&gt; 28      unk     unknown                .global    Inf
 #&gt; 29      oui         yes                .global    Inf
 #&gt; 30 .missing     missing                .global    Inf</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>) <span class='co'># show the data</span></div><div class='output co'>#&gt;   readmission treatment_administered facility age_group has_symptoms followup
-#&gt; 1           Y                   &lt;NA&gt;        B         0          unk        N
-#&gt; 2           N                      1        4        20            N        Y
-#&gt; 3           N                   &lt;NA&gt;       10         0            Y        N
-#&gt; 4           U                      1        C        50            Y      unk
-#&gt; 5        &lt;NA&gt;                               B        20            Y     &lt;NA&gt;
-#&gt; 6           N                   &lt;NA&gt;        5        30            N        U</div><div class='input'>
+#&gt; 1           y                   &lt;NA&gt;        B         0          unk        n
+#&gt; 2           n                      1        4        20            n        y
+#&gt; 3           n                   &lt;NA&gt;       10         0            y        n
+#&gt; 4           u                      1        C        50            y      unk
+#&gt; 5        &lt;NA&gt;                               B        20            y     &lt;NA&gt;
+#&gt; 6           n                   &lt;NA&gt;        5        30            n        u</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>, <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>, <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>))</div><div class='output co'>#&gt;   readmission treatment_administered    facility age_group has_symptoms
 #&gt; 1         Yes                Missing     Unknown       0-9      unknown
 #&gt; 2          No                     No Facility  4     20-29           no
@@ -316,8 +321,8 @@ numeric and Date columns from conversion to character.</p>
 
 <span class='no'>dat</span>[] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='no'>dat</span>, <span class='no'>as.factor</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>as.list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>))</div><div class='output co'>#&gt; $readmission
-#&gt; [1] Y    N    N    U    &lt;NA&gt; N   
-#&gt; Levels: N U Y
+#&gt; [1] y    n    n    u    &lt;NA&gt; n   
+#&gt; Levels: n u y
 #&gt; 
 #&gt; $treatment_administered
 #&gt; [1] &lt;NA&gt; 1    &lt;NA&gt; 1         &lt;NA&gt;
@@ -332,12 +337,12 @@ numeric and Date columns from conversion to character.</p>
 #&gt; Levels: 0 10 20 30 40 50
 #&gt; 
 #&gt; $has_symptoms
-#&gt; [1] unk N   Y   Y   Y   N  
-#&gt; Levels: N oui U unk Y
+#&gt; [1] unk n   y   y   y   n  
+#&gt; Levels: n oui u unk y
 #&gt; 
 #&gt; $followup
-#&gt; [1] N    Y    N    unk  &lt;NA&gt; U   
-#&gt; Levels: N oui U unk Y
+#&gt; [1] n    y    n    unk  &lt;NA&gt; u   
+#&gt; Levels: n oui u unk y
 #&gt; </div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>,
                                <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>,
                                <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,

@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.29.9000</span>
       </span>
     </div>
 
@@ -116,6 +116,7 @@
 <li><p><code><a href="reference/clean_data.html">clean_data()</a></code>: the main function, taking a <code>data.frame</code> as input, and doing all the variable names, internal labels, and date processing described above</p></li>
 <li><p><code><a href="reference/clean_variable_names.html">clean_variable_names()</a></code>: like <code>clean_data</code>, but only the variable names</p></li>
 <li><p><code><a href="reference/clean_variable_labels.html">clean_variable_labels()</a></code>: like <code>clean_data</code>, but only the variable labels</p></li>
+<li><p><code><a href="reference/clean_variable_spelling.html">clean_variable_spelling()</a></code>: provided with a dictionary, will correct the spelling of values in a variable and can globally correct commonly mis-spelled words.</p></li>
 <li><p><code><a href="reference/clean_dates.html">clean_dates()</a></code>: like <code>clean_data</code>, but only the dates</p></li>
 <li><p><code><a href="reference/guess_dates.html">guess_dates()</a></code>: find dates in various, unspecified formats in a messy <code>character</code> vector</p></li>
 <li><p><code><a href="reference/as_linelist.html">as_linelist()</a></code>: create a new <code>linelist</code> object from a <code>data.frame</code></p></li>
@@ -166,47 +167,47 @@
 <a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">## show data</span></a>
 <a class="sourceLine" id="cb3-20" data-line-number="20">toy_data</a>
 <a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt;    Date.of.Onset. DisCharge..  SeX_. Épi.Case_définition</span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; 1      2018-01-06  16/01/2018   MALE          not a case</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; 2      2018-01-04  14/01/2018   male           Confirmed</span></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; 3      2018-01-08  18/01/2018   male           Confirmed</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; 4      2018-01-04  14/01/2018   Male           Confirmed</span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; 5      2018-01-04  14/01/2018   MALE            PROBABLE</span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; 6      2018-01-09  19/01/2018 FEMALE           suspected</span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt; 7      2018-01-11  21/01/2018   MALE          Not.a.Case</span></a>
-<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt; 8      2018-01-03  13/01/2018   MALE            PROBABLE</span></a>
-<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#&gt; 9      2018-01-08  18/01/2018 female           Confirmed</span></a>
-<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">#&gt; 10     2018-01-03  13/01/2018 FEMALE          not a case</span></a>
-<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt; 11     2018-01-06  16/01/2018 female          not a case</span></a>
-<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt; 12     2018-01-02  12/01/2018 Female         suspected  </span></a>
-<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">#&gt; 13     2018-01-05  15/01/2018   male          not a case</span></a>
-<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt; 14     2018-01-03  13/01/2018   MALE          not a case</span></a>
-<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; 15     2018-01-10  20/01/2018   male         suspected  </span></a>
-<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt; 16     2018-01-09  19/01/2018   male           Confirmed</span></a>
-<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt; 17     2018-01-11  21/01/2018   MALE           Confirmed</span></a>
-<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt; 18     2018-01-06  16/01/2018   male            PROBABLE</span></a>
-<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt; 19     2018-01-07  17/01/2018 FEMALE           Confirmed</span></a>
-<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; 20     2018-01-10  20/01/2018 female           suspected</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; 1      2018-01-09  19/01/2018 Female            PROBABLE</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; 2      2018-01-02  12/01/2018   male          not a case</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; 3      2018-01-02  12/01/2018 FEMALE          not a case</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; 4      2018-01-07  17/01/2018   MALE            probable</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; 5      2018-01-05  15/01/2018   Male          Not.a.Case</span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; 6      2018-01-05  15/01/2018   MALE           confirmed</span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt; 7      2018-01-10  20/01/2018   MALE           confirmed</span></a>
+<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt; 8      2018-01-05  15/01/2018   male         suspected  </span></a>
+<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#&gt; 9      2018-01-08  18/01/2018   MALE          Not.a.Case</span></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">#&gt; 10     2018-01-09  19/01/2018 female           Confirmed</span></a>
+<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt; 11     2018-01-07  17/01/2018 female          Not.a.Case</span></a>
+<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt; 12     2018-01-10  20/01/2018 FEMALE          Not.a.Case</span></a>
+<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">#&gt; 13     2018-01-08  18/01/2018   male           confirmed</span></a>
+<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt; 14     2018-01-04  14/01/2018   MALE           suspected</span></a>
+<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; 15     2018-01-08  18/01/2018   MALE           Confirmed</span></a>
+<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt; 16     2018-01-05  15/01/2018 FEMALE          not a case</span></a>
+<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt; 17     2018-01-09  19/01/2018   male           suspected</span></a>
+<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt; 18     2018-01-02  12/01/2018 Female            probable</span></a>
+<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt; 19     2018-01-05  15/01/2018   Male            PROBABLE</span></a>
+<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; 20     2018-01-02  12/01/2018   Male         suspected  </span></a>
 <a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt;           messy.dates</span></a>
-<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt; 1          2018_10_17</span></a>
-<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; 2  that's 24/12/1989!</span></a>
-<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="co">#&gt; 3              female</span></a>
-<a class="sourceLine" id="cb3-46" data-line-number="46"><span class="co">#&gt; 4          2018_10_17</span></a>
-<a class="sourceLine" id="cb3-47" data-line-number="47"><span class="co">#&gt; 5     // 24//12//1989</span></a>
-<a class="sourceLine" id="cb3-48" data-line-number="48"><span class="co">#&gt; 6     // 24//12//1989</span></a>
+<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt; 1          01-12-2001</span></a>
+<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; 2          2018_10_17</span></a>
+<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="co">#&gt; 3          2018_10_17</span></a>
+<a class="sourceLine" id="cb3-46" data-line-number="46"><span class="co">#&gt; 4                &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb3-47" data-line-number="47"><span class="co">#&gt; 5                &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb3-48" data-line-number="48"><span class="co">#&gt; 6          2018 10 19</span></a>
 <a class="sourceLine" id="cb3-49" data-line-number="49"><span class="co">#&gt; 7     // 24//12//1989</span></a>
-<a class="sourceLine" id="cb3-50" data-line-number="50"><span class="co">#&gt; 8  that's 24/12/1989!</span></a>
-<a class="sourceLine" id="cb3-51" data-line-number="51"><span class="co">#&gt; 9                male</span></a>
-<a class="sourceLine" id="cb3-52" data-line-number="52"><span class="co">#&gt; 10               &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb3-53" data-line-number="53"><span class="co">#&gt; 11 that's 24/12/1989!</span></a>
-<a class="sourceLine" id="cb3-54" data-line-number="54"><span class="co">#&gt; 12 that's 24/12/1989!</span></a>
-<a class="sourceLine" id="cb3-55" data-line-number="55"><span class="co">#&gt; 13         01-12-2001</span></a>
-<a class="sourceLine" id="cb3-56" data-line-number="56"><span class="co">#&gt; 14               &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb3-57" data-line-number="57"><span class="co">#&gt; 15             female</span></a>
-<a class="sourceLine" id="cb3-58" data-line-number="58"><span class="co">#&gt; 16               &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb3-59" data-line-number="59"><span class="co">#&gt; 17    // 24//12//1989</span></a>
-<a class="sourceLine" id="cb3-60" data-line-number="60"><span class="co">#&gt; 18               &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb3-61" data-line-number="61"><span class="co">#&gt; 19 that's 24/12/1989!</span></a>
-<a class="sourceLine" id="cb3-62" data-line-number="62"><span class="co">#&gt; 20         2018-10-18</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-50" data-line-number="50"><span class="co">#&gt; 8                &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb3-51" data-line-number="51"><span class="co">#&gt; 9  that's 24/12/1989!</span></a>
+<a class="sourceLine" id="cb3-52" data-line-number="52"><span class="co">#&gt; 10 that's 24/12/1989!</span></a>
+<a class="sourceLine" id="cb3-53" data-line-number="53"><span class="co">#&gt; 11    // 24//12//1989</span></a>
+<a class="sourceLine" id="cb3-54" data-line-number="54"><span class="co">#&gt; 12         01-12-2001</span></a>
+<a class="sourceLine" id="cb3-55" data-line-number="55"><span class="co">#&gt; 13         2018 10 19</span></a>
+<a class="sourceLine" id="cb3-56" data-line-number="56"><span class="co">#&gt; 14    // 24//12//1989</span></a>
+<a class="sourceLine" id="cb3-57" data-line-number="57"><span class="co">#&gt; 15         01-12-2001</span></a>
+<a class="sourceLine" id="cb3-58" data-line-number="58"><span class="co">#&gt; 16    // 24//12//1989</span></a>
+<a class="sourceLine" id="cb3-59" data-line-number="59"><span class="co">#&gt; 17               male</span></a>
+<a class="sourceLine" id="cb3-60" data-line-number="60"><span class="co">#&gt; 18 that's 24/12/1989!</span></a>
+<a class="sourceLine" id="cb3-61" data-line-number="61"><span class="co">#&gt; 19         2018 10 19</span></a>
+<a class="sourceLine" id="cb3-62" data-line-number="62"><span class="co">#&gt; 20 that's 24/12/1989!</span></a></code></pre></div>
 <p>We start by cleaning these data:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">## load library</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(linelist)</a>
@@ -215,26 +216,26 @@
 <a class="sourceLine" id="cb4-5" data-line-number="5">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/clean_data.html">clean_data</a></span>(toy_data)</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">x</a>
 <a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;    date_of_onset  discharge    sex epi_case_definition messy_dates</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 1     2018-01-06 2018-01-16   male          not_a_case  2018-10-17</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; 2     2018-01-04 2018-01-14   male           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; 3     2018-01-08 2018-01-18   male           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; 4     2018-01-04 2018-01-14   male           confirmed  2018-10-17</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; 5     2018-01-04 2018-01-14   male            probable  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; 6     2018-01-09 2018-01-19 female           suspected  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; 7     2018-01-11 2018-01-21   male          not_a_case  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; 8     2018-01-03 2018-01-13   male            probable  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; 9     2018-01-08 2018-01-18 female           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; 10    2018-01-03 2018-01-13 female          not_a_case        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; 11    2018-01-06 2018-01-16 female          not_a_case  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; 12    2018-01-02 2018-01-12 female           suspected  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; 13    2018-01-05 2018-01-15   male          not_a_case  2001-12-01</span></a>
-<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; 14    2018-01-03 2018-01-13   male          not_a_case        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; 15    2018-01-10 2018-01-20   male           suspected        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; 16    2018-01-09 2018-01-19   male           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co">#&gt; 17    2018-01-11 2018-01-21   male           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-25" data-line-number="25"><span class="co">#&gt; 18    2018-01-06 2018-01-16   male            probable        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="co">#&gt; 19    2018-01-07 2018-01-17 female           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co">#&gt; 20    2018-01-10 2018-01-20 female           suspected  2018-10-18</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 1     2018-01-09 2018-01-19 female            probable  2001-12-01</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; 2     2018-01-02 2018-01-12   male          not_a_case  2018-10-17</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; 3     2018-01-02 2018-01-12 female          not_a_case  2018-10-17</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; 4     2018-01-07 2018-01-17   male            probable        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; 5     2018-01-05 2018-01-15   male          not_a_case        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; 6     2018-01-05 2018-01-15   male           confirmed  2018-10-19</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; 7     2018-01-10 2018-01-20   male           confirmed  1989-12-24</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; 8     2018-01-05 2018-01-15   male           suspected        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; 9     2018-01-08 2018-01-18   male          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; 10    2018-01-09 2018-01-19 female           confirmed  1989-12-24</span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; 11    2018-01-07 2018-01-17 female          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; 12    2018-01-10 2018-01-20 female          not_a_case  2001-12-01</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; 13    2018-01-08 2018-01-18   male           confirmed  2018-10-19</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; 14    2018-01-04 2018-01-14   male           suspected  1989-12-24</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; 15    2018-01-08 2018-01-18   male           confirmed  2001-12-01</span></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; 16    2018-01-05 2018-01-15 female          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co">#&gt; 17    2018-01-09 2018-01-19   male           suspected        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25"><span class="co">#&gt; 18    2018-01-02 2018-01-12 female            probable  1989-12-24</span></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="co">#&gt; 19    2018-01-05 2018-01-15   male            probable  2018-10-19</span></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co">#&gt; 20    2018-01-02 2018-01-12   male           suspected  1989-12-24</span></a></code></pre></div>
 <p>We can now define some <code>epivars</code> for <code>x</code>, i.e. identify which columns correspond to typical epidemiological variables:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">## see what the dictionary is</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="reference/dictionary.html">get_dictionary</a></span>()</a>
@@ -275,26 +276,26 @@
 <a class="sourceLine" id="cb5-37" data-line-number="37"><span class="co">#&gt; &lt;linelist object&gt;</span></a>
 <a class="sourceLine" id="cb5-38" data-line-number="38"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb5-39" data-line-number="39"><span class="co">#&gt;    date_of_onset  discharge    sex epi_case_definition messy_dates</span></a>
-<a class="sourceLine" id="cb5-40" data-line-number="40"><span class="co">#&gt; 1     2018-01-06 2018-01-16   male          not_a_case  2018-10-17</span></a>
-<a class="sourceLine" id="cb5-41" data-line-number="41"><span class="co">#&gt; 2     2018-01-04 2018-01-14   male           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-42" data-line-number="42"><span class="co">#&gt; 3     2018-01-08 2018-01-18   male           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb5-43" data-line-number="43"><span class="co">#&gt; 4     2018-01-04 2018-01-14   male           confirmed  2018-10-17</span></a>
-<a class="sourceLine" id="cb5-44" data-line-number="44"><span class="co">#&gt; 5     2018-01-04 2018-01-14   male            probable  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-45" data-line-number="45"><span class="co">#&gt; 6     2018-01-09 2018-01-19 female           suspected  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-46" data-line-number="46"><span class="co">#&gt; 7     2018-01-11 2018-01-21   male          not_a_case  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-47" data-line-number="47"><span class="co">#&gt; 8     2018-01-03 2018-01-13   male            probable  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-48" data-line-number="48"><span class="co">#&gt; 9     2018-01-08 2018-01-18 female           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb5-49" data-line-number="49"><span class="co">#&gt; 10    2018-01-03 2018-01-13 female          not_a_case        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb5-50" data-line-number="50"><span class="co">#&gt; 11    2018-01-06 2018-01-16 female          not_a_case  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-51" data-line-number="51"><span class="co">#&gt; 12    2018-01-02 2018-01-12 female           suspected  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-52" data-line-number="52"><span class="co">#&gt; 13    2018-01-05 2018-01-15   male          not_a_case  2001-12-01</span></a>
-<a class="sourceLine" id="cb5-53" data-line-number="53"><span class="co">#&gt; 14    2018-01-03 2018-01-13   male          not_a_case        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb5-54" data-line-number="54"><span class="co">#&gt; 15    2018-01-10 2018-01-20   male           suspected        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb5-55" data-line-number="55"><span class="co">#&gt; 16    2018-01-09 2018-01-19   male           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb5-56" data-line-number="56"><span class="co">#&gt; 17    2018-01-11 2018-01-21   male           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-57" data-line-number="57"><span class="co">#&gt; 18    2018-01-06 2018-01-16   male            probable        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb5-58" data-line-number="58"><span class="co">#&gt; 19    2018-01-07 2018-01-17 female           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb5-59" data-line-number="59"><span class="co">#&gt; 20    2018-01-10 2018-01-20 female           suspected  2018-10-18</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-40" data-line-number="40"><span class="co">#&gt; 1     2018-01-09 2018-01-19 female            probable  2001-12-01</span></a>
+<a class="sourceLine" id="cb5-41" data-line-number="41"><span class="co">#&gt; 2     2018-01-02 2018-01-12   male          not_a_case  2018-10-17</span></a>
+<a class="sourceLine" id="cb5-42" data-line-number="42"><span class="co">#&gt; 3     2018-01-02 2018-01-12 female          not_a_case  2018-10-17</span></a>
+<a class="sourceLine" id="cb5-43" data-line-number="43"><span class="co">#&gt; 4     2018-01-07 2018-01-17   male            probable        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb5-44" data-line-number="44"><span class="co">#&gt; 5     2018-01-05 2018-01-15   male          not_a_case        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb5-45" data-line-number="45"><span class="co">#&gt; 6     2018-01-05 2018-01-15   male           confirmed  2018-10-19</span></a>
+<a class="sourceLine" id="cb5-46" data-line-number="46"><span class="co">#&gt; 7     2018-01-10 2018-01-20   male           confirmed  1989-12-24</span></a>
+<a class="sourceLine" id="cb5-47" data-line-number="47"><span class="co">#&gt; 8     2018-01-05 2018-01-15   male           suspected        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb5-48" data-line-number="48"><span class="co">#&gt; 9     2018-01-08 2018-01-18   male          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb5-49" data-line-number="49"><span class="co">#&gt; 10    2018-01-09 2018-01-19 female           confirmed  1989-12-24</span></a>
+<a class="sourceLine" id="cb5-50" data-line-number="50"><span class="co">#&gt; 11    2018-01-07 2018-01-17 female          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb5-51" data-line-number="51"><span class="co">#&gt; 12    2018-01-10 2018-01-20 female          not_a_case  2001-12-01</span></a>
+<a class="sourceLine" id="cb5-52" data-line-number="52"><span class="co">#&gt; 13    2018-01-08 2018-01-18   male           confirmed  2018-10-19</span></a>
+<a class="sourceLine" id="cb5-53" data-line-number="53"><span class="co">#&gt; 14    2018-01-04 2018-01-14   male           suspected  1989-12-24</span></a>
+<a class="sourceLine" id="cb5-54" data-line-number="54"><span class="co">#&gt; 15    2018-01-08 2018-01-18   male           confirmed  2001-12-01</span></a>
+<a class="sourceLine" id="cb5-55" data-line-number="55"><span class="co">#&gt; 16    2018-01-05 2018-01-15 female          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb5-56" data-line-number="56"><span class="co">#&gt; 17    2018-01-09 2018-01-19   male           suspected        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb5-57" data-line-number="57"><span class="co">#&gt; 18    2018-01-02 2018-01-12 female            probable  1989-12-24</span></a>
+<a class="sourceLine" id="cb5-58" data-line-number="58"><span class="co">#&gt; 19    2018-01-05 2018-01-15   male            probable  2018-10-19</span></a>
+<a class="sourceLine" id="cb5-59" data-line-number="59"><span class="co">#&gt; 20    2018-01-02 2018-01-12   male           suspected  1989-12-24</span></a></code></pre></div>
 <p>Note that the equivalent can be done using piping:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">x &lt;-<span class="st"> </span>toy_data <span class="op">%&gt;%</span></a>
@@ -304,26 +305,26 @@
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; &lt;linelist object&gt;</span></a>
 <a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;    date_of_onset  discharge    sex epi_case_definition messy_dates</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; 1     2018-01-06 2018-01-16   male          not_a_case  2018-10-17</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; 2     2018-01-04 2018-01-14   male           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; 3     2018-01-08 2018-01-18   male           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; 4     2018-01-04 2018-01-14   male           confirmed  2018-10-17</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 5     2018-01-04 2018-01-14   male            probable  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 6     2018-01-09 2018-01-19 female           suspected  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 7     2018-01-11 2018-01-21   male          not_a_case  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 8     2018-01-03 2018-01-13   male            probable  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 9     2018-01-08 2018-01-18 female           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; 10    2018-01-03 2018-01-13 female          not_a_case        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; 11    2018-01-06 2018-01-16 female          not_a_case  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; 12    2018-01-02 2018-01-12 female           suspected  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; 13    2018-01-05 2018-01-15   male          not_a_case  2001-12-01</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; 14    2018-01-03 2018-01-13   male          not_a_case        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; 15    2018-01-10 2018-01-20   male           suspected        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; 16    2018-01-09 2018-01-19   male           confirmed        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt; 17    2018-01-11 2018-01-21   male           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt; 18    2018-01-06 2018-01-16   male            probable        &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt; 19    2018-01-07 2018-01-17 female           confirmed  1989-12-24</span></a>
-<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co">#&gt; 20    2018-01-10 2018-01-20 female           suspected  2018-10-18</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; 1     2018-01-09 2018-01-19 female            probable  2001-12-01</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; 2     2018-01-02 2018-01-12   male          not_a_case  2018-10-17</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; 3     2018-01-02 2018-01-12 female          not_a_case  2018-10-17</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; 4     2018-01-07 2018-01-17   male            probable        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 5     2018-01-05 2018-01-15   male          not_a_case        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 6     2018-01-05 2018-01-15   male           confirmed  2018-10-19</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 7     2018-01-10 2018-01-20   male           confirmed  1989-12-24</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 8     2018-01-05 2018-01-15   male           suspected        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 9     2018-01-08 2018-01-18   male          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; 10    2018-01-09 2018-01-19 female           confirmed  1989-12-24</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; 11    2018-01-07 2018-01-17 female          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; 12    2018-01-10 2018-01-20 female          not_a_case  2001-12-01</span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; 13    2018-01-08 2018-01-18   male           confirmed  2018-10-19</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; 14    2018-01-04 2018-01-14   male           suspected  1989-12-24</span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; 15    2018-01-08 2018-01-18   male           confirmed  2001-12-01</span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; 16    2018-01-05 2018-01-15 female          not_a_case  1989-12-24</span></a>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt; 17    2018-01-09 2018-01-19   male           suspected        &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt; 18    2018-01-02 2018-01-12 female            probable  1989-12-24</span></a>
+<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt; 19    2018-01-05 2018-01-15   male            probable  2018-10-19</span></a>
+<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co">#&gt; 20    2018-01-02 2018-01-12   male           suspected  1989-12-24</span></a></code></pre></div>
 <p>We now handle a clean dataset, with standardised labels and variable names, and dates of onset and gender are now formally identifier:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## check available epivars</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="reference/list_epivars.html">list_epivars</a></span>(x, <span class="dt">simple =</span> <span class="ot">TRUE</span>) <span class="co"># simple</span></a>
@@ -336,26 +337,26 @@
 <a class="sourceLine" id="cb7-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw"><a href="reference/accessors.html">get_epivars</a></span>(x, <span class="st">"gender"</span>, <span class="st">"date_onset"</span>)</a>
 <a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;       sex date_of_onset</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; 1    male    2018-01-06</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; 2    male    2018-01-04</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; 3    male    2018-01-08</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; 4    male    2018-01-04</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt; 5    male    2018-01-04</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; 6  female    2018-01-09</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; 7    male    2018-01-11</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; 8    male    2018-01-03</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; 9  female    2018-01-08</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; 10 female    2018-01-03</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; 11 female    2018-01-06</span></a>
-<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; 12 female    2018-01-02</span></a>
-<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; 13   male    2018-01-05</span></a>
-<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; 14   male    2018-01-03</span></a>
-<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">#&gt; 15   male    2018-01-10</span></a>
-<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="co">#&gt; 16   male    2018-01-09</span></a>
-<a class="sourceLine" id="cb7-28" data-line-number="28"><span class="co">#&gt; 17   male    2018-01-11</span></a>
-<a class="sourceLine" id="cb7-29" data-line-number="29"><span class="co">#&gt; 18   male    2018-01-06</span></a>
-<a class="sourceLine" id="cb7-30" data-line-number="30"><span class="co">#&gt; 19 female    2018-01-07</span></a>
-<a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#&gt; 20 female    2018-01-10</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; 1  female    2018-01-09</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; 2    male    2018-01-02</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; 3  female    2018-01-02</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; 4    male    2018-01-07</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt; 5    male    2018-01-05</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; 6    male    2018-01-05</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; 7    male    2018-01-10</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; 8    male    2018-01-05</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; 9    male    2018-01-08</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; 10 female    2018-01-09</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; 11 female    2018-01-07</span></a>
+<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; 12 female    2018-01-10</span></a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; 13   male    2018-01-08</span></a>
+<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; 14   male    2018-01-04</span></a>
+<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">#&gt; 15   male    2018-01-08</span></a>
+<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="co">#&gt; 16 female    2018-01-05</span></a>
+<a class="sourceLine" id="cb7-28" data-line-number="28"><span class="co">#&gt; 17   male    2018-01-09</span></a>
+<a class="sourceLine" id="cb7-29" data-line-number="29"><span class="co">#&gt; 18 female    2018-01-02</span></a>
+<a class="sourceLine" id="cb7-30" data-line-number="30"><span class="co">#&gt; 19   male    2018-01-05</span></a>
+<a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#&gt; 20   male    2018-01-02</span></a></code></pre></div>
 <div id="getting-help-online" class="section level2">
 <h2 class="hasAnchor">
 <a href="#getting-help-online" class="anchor"></a>Getting help online</h2>
