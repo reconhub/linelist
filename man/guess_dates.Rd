@@ -98,6 +98,12 @@ print(ord <- getOption("linelist_guess_orders"))
 ord[c(1, 3, 2)]
 guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"), orders = ord[c(1, 3, 2)])
 
+# If you have a format with hours, minutes and seconds, you can add that to
+# the list
+ord$ymdhms <- c("Ymdhms", "Ymdhm")
+
+guess_dates(c("2014_04_05_23:15:43", "03 Jan 2018", "07/03/1982", "08/20/85"), orders = ord)
+
 # guess_dates can handle messy dates and tolerate missing data
 x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
       "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
