@@ -15,6 +15,29 @@
 #'
 #' @export
 #'
+#' @param x a `character` vector or a `factor`
+#'
+#' @param error_tolerance a number between 0 and 1 indicating the proportion of
+#'     entries which cannot be identified as dates to be tolerated; if this
+#'     proportion is exceeded, the original vector is returned, and a message is
+#'     issued; defaults to 0.1 (10 percent)
+#'
+#' @param first_date a Date object specifying the first valid date. Defaults to
+#'   fifty years before the `last_date`.
+#'
+#' @param last_date a Date object specifying the last valid date. Defaults to the
+#'   current date. 
+#'
+#' @param orders date codes for fine-grained parsing of dates. This allows for
+#'   parsing of mixed dates. If a list is supplied, that list will be used for
+#'   successive tries in parsing.  This is passed on to
+#'   [lubridate::parse_date_time()]. Default orders
+#'   (`getOption("linelist_guess_orders")`) parse World dmy/dby dates before US
+#'   mdy/bdy dates.
+#'
+#' @param quiet a logical indicating if messages should be displayed to the
+#'     console (`TRUE`, default); set to `FALSE` to silence messages
+#'
 #' @details Converting ambiguous character strings to dates is difficult for
 #'     many reasons:
 #'
@@ -35,47 +58,58 @@
 #' - "2018 09 19"
 #' - "19 Sep 2018"
 #' - "2018 Sep 19"
+#' - "Sep 19 2018"
+#' 
+#' \subsection{How it works}{
+#' 
+#' This function relies heavily on [lubridate::parse_date_time()], which is an
+#' extremely flexible date parser that works well for consistent date formats,
+#' but can quickly become unweildy and may produce spurious results. 
+#' `guess_dates()` will use a list of formats in the `orders` argument to run
+#' `parse_date_time()` with each format vector separately and take the first
+#' correctly parsed date from all the trials. By default, the orders are in
+#' `getOption("linelist_guess_orders")`:
+#' 
+#' ```
+#' list(
+#'   world_named_months = c("Ybd", "dby"),
+#'   world_digit_months = c("dmy", "Ymd"), 
+#'   US_formats         = c("Omdy", "YOmd")
+#' )
+#' ```
 #'
-#' Note that if a character string has multiple dates, it is currently hard to
-#' predict which date will be returned.
-#'
-#' @param x a `character` vector or a `factor`
-#'
-#' @param error_tolerance a number between 0 and 1 indicating the proportion of
-#'     entries which cannot be identified as dates to be tolerated; if this
-#'     proportion is exceeded, the original vector is returned, and a message is
-#'     issued; defaults to 0.1 (10 percent)
-#'
-#' @param first_date a Date object specifying the first valid date. Defaults to
-#'   fifty years before the `last_date`.
-#'
-#' @param last_date a Date object specifying the last valid date. Defaults to the
-#'   current date. 
-#'
-#' @param orders date codes for fine-grained parsing of dates. This allows for
-#' parsing of mixed dates. If a list is supplied, that list will be used for
-#' successive tries in parsing.  This is passed on to
-#' [lubridate::parse_date_time()]. Default orders parse World dmy/dby dates 
-#' before US mdy/bdy dates.
-#' @param quiet a logical indicating if messages should be displayed to the
-#'     console (`TRUE`, default); set to `FALSE` to silence messages
+#' In this case, the dates 03 Jan 2018, 07/03/1982, and 08/20/85 are correctly
+#' intepreted as 2018-01-03, 1982-03-07, and 1985-08-20. The examples section
+#' will show how you can manipulate the `orders` to be customised for your
+#' situation.
+#' }
 #'
 #' @seealso [clean_dates()] for cleaning of data frames
 #' 
 #' @examples
 #' 
+#' guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85")) # default
+#' 
+#' # The default orders prioritize world date ordering over American-style.
+#' print(ord <- getOption("linelist_guess_orders"))
+#'
+#' # if you want to prioritize American-style dates with numeric months, you
+#' # can switch the second and third elements of the default orders
+#' ord[c(1, 3, 2)]
+#' guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"), orders = ord[c(1, 3, 2)])
+#' 
+#' # guess_dates can handle messy dates and tolerate missing data
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
 #'       "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
 #'       "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
-#' FIRST_DATE <- as.Date("1969-11-11")
-#' guess_dates(x, error_tolerance = 1, first_date = FIRST_DATE) # forced conversion
-#' guess_dates(x, error_tolerance = 0.15, first_date = FIRST_DATE) # only 15% errors allowed
-
+#'
+#' guess_dates(x, error_tolerance = 1) # forced conversion
+#' 
+#' guess_dates(x, error_tolerance = 0.15) # only 15% errors allowed
+#' 
 guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL, 
                         last_date = Sys.Date(), 
-                        orders = list(world_named_months = c("Ybd", "dby"),
-                                      world_digit_months = c("dmy", "Ymd"), 
-                                      US_formats = c("Omdy", "YOmd")),
+                        orders = getOption("linelist_guess_orders"),
                         quiet = TRUE) {
 
   ## This function tries converting a single character string into a
@@ -139,21 +173,24 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
 
   good_and_bad <- constrain_date(x_rescued, first_date, last_date, x)
   bad_dates    <- good_and_bad$bad_dates
-  bd <- do.call("c", unname(bad_dates))
+  bd           <- do.call("c", unname(bad_dates))
   
   if (!all(is.na(bd))) {
-    bd <- utils::stack(bd)
+    bd     <- utils::stack(bd)
     bd$ind <- as.character(bd$ind)
-    bd <- unique(bd)
+    bd     <- unique(bd)
+    # remove the rows that have NA values 
+    bd     <- bd[!is.na(bd[[1]]) | !is.na(bd[[2]]), ]
+    bd     <- bd[order(bd[[1]]), ]
     misses <- sprintf("  %s  |  %s", 
-                      format(c("original", "-----   ", bd$values)), 
-                      format(c("parsed", "-----   ", bd$ind))
+                      format(c("original", "--------", bd$values)), 
+                      format(c("parsed",   "------  ", bd$ind))
                       )
     misses <- paste(misses, collapse = "\n")
     msg    <- paste0("\nThe following dates were not in the correct timeframe",
-                    " (%s -- %s):\n\n",
-                    misses
-                   )
+                     " (%s -- %s):\n\n",
+                     misses
+                    )
     warning(sprintf(msg, first_date, last_date))
   }
   

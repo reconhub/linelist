@@ -37,8 +37,22 @@ test_that("American dates also work", {
                er)
 })
 
+test_that("hms dates also work", {
+
+  y   <- c(x, "February the 29th, 2016 16:37 24", "02/29/16 16:37")
+  er  <- c(expected_result, as.Date(c("2016-02-29", "2016-02-29")))
+  o   <- getOption("linelist_guess_orders")
+  o$US_formats <- c(o$US_formats, "Omdyhm", "Omdyhms")
+  res <- guess_dates(y, 
+                     orders = o,
+                     error_tolerance = 0.8, 
+                     first_date = as.Date("1980-01-01"))
+  expect_equal(res, er)
+
+})
 
 test_that("The first date defaults to fifty years prior", {
+
   last_date <-as.Date("2012-11-05")
   first_date <- as.Date("1962-11-05")
   er <- expected_result
@@ -46,10 +60,11 @@ test_that("The first date defaults to fifty years prior", {
   expect_warning(res <- guess_dates(x, error_tolerance = 1, last_date = last_date),
   "original")
   expect_equal(res, er)
+
 })
 
 
-test_that("passing a non-data frame throws an error", {
+test_that("passing a non-data frame to clean_dates throws an error", {
 
   x <- structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L, 4L, 1L, 2L, 3L), .Label = c("", 
     "04-Jul-1985", "12-Sep-1987", "27-Jun-1975"), class = "factor")
