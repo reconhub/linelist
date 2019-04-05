@@ -82,11 +82,20 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   ## well-formatted date, but still returning a character. If it can't convert
   ## it, it returns NA.
 
+  # If the input is a date already: no guessing needed!
+  if (inherits(x, c("Date", "POSIXt", "aweek"))) {
+    return(as.Date(x))
+  }
+
   # save the original x for later if nothing is converted
   ox <- x
 
   if (is.factor(x)) {
     x <- as.character(x)
+  }
+
+  if (!is.character(x)) {
+    stop("guess dates will only work for characters and factors")
   }
 
   iso_8601 <- "[0-9]{4}-(0|1(?=[0-2]))[0-9]-([0-2]|3(?=[0-1]))[0-9]"

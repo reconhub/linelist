@@ -8,11 +8,27 @@ expected_result <- structure(c(4417, 17793, 11323, 15321, 15647, 16052,
                                NA, NA, NA, 10623), class = "Date")
 
 
+test_that("only characters and factors are expected", {
+       
+  expect_error(guess_dates(NULL), "guess dates will only work for characters and factors")
+  expect_error(guess_dates(pi), "guess dates will only work for characters and factors")
+
+})
+
+
 test_that("mixed formats work", {
   expect_equal(guess_dates(x, error_tolerance = 0.8, first_date = as.Date("1980-01-01")),
                expected_result)
 })
 
+
+test_that("date input requires no guesswork", {
+
+  expect_identical(guess_dates(expected_result), expected_result)
+  expect_identical(guess_dates(as.POSIXlt(expected_result)), expected_result)
+  expect_identical(guess_dates(as.POSIXct(expected_result)), expected_result)
+
+})
 
 test_that("American dates also work", { 
   y <- c(x, "February the 29th, 2016", "02/29/16")
@@ -46,8 +62,10 @@ test_that("passing a non-data frame throws an error", {
 })
 
 test_that("passing a non-date as first_date throws an error", {
+
   expect_error(guess_dates(x, first_date = "18-01-01"), "first_date and last_date must be Date objects.")
   expect_failure(expect_error(guess_dates(x, first_date = "1918-01-01"), "first_date and last_date must be Date objects."))
   expect_error(guess_dates(x, last_date = "18-01-01"), "first_date and last_date must be Date objects.")
   expect_failure(expect_error(guess_dates(x, last_date = "2019-01-01"), "first_date and last_date must be Date objects."))
+
 })
