@@ -1,3 +1,14 @@
+# linelist 0.0.30.9000
+
+* `guess_dates()` can now handle dates that were imported from Excel as 
+  integers (#66).
+* `guess_dates()` gains the argument "modern_excel" to indicate how integer
+  dates should be formatted.
+* `getOption("linelist_guess_orders")` replaces the explicit list of orders in
+  `guess_dates()` for easier access.
+* `guess_dates()` no longer throws an error if passed a date class object (#65).
+* `guess_dates()` has been better documented to reflect the above changes (#64).
+
 # linelist 0.0.29.9000
 
 * `clean_spelling()` gains a new keyword: `.na` (or should I say "valueword").
