@@ -6,7 +6,7 @@
 \usage{
 guess_dates(x, error_tolerance = 0.1, first_date = NULL,
   last_date = Sys.Date(), orders = getOption("linelist_guess_orders"),
-  quiet = TRUE)
+  quiet = TRUE, modern_excel = TRUE)
 }
 \arguments{
 \item{x}{a \code{character} vector or a \code{factor}}
@@ -31,6 +31,14 @@ mdy/bdy dates.}
 
 \item{quiet}{a logical indicating if messages should be displayed to the
 console (\code{TRUE}, default); set to \code{FALSE} to silence messages}
+
+\item{modern_excel}{When parsing dates from excel, some dates are stored as
+integers. Modern versions of Excel represent dates as the number of days
+since 1900-01-01, but pre-2011 Excel for OSX have the origin set at
+1904-01-01. If this parameter is \code{TRUE} (default), then this assumes that
+all numeric values represent dates from either a Windows version of Excel
+or a 2011 or later version of Excel for OSX. Set this parameter to \code{FALSE}
+if the data came from an OSX version of Excel before 2011.}
 }
 \description{
 Note that THIS FEATURE IS STILL EXPERIMENTAL: we strongly recommend checking
@@ -88,25 +96,39 @@ situation.
 }
 \examples{
 
+# Mixed format date -----------------------------------------
+
 guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85")) # default
 
+# Prioritizing specific date formats ------------------------
+# 
 # The default orders prioritize world date ordering over American-style.
+
 print(ord <- getOption("linelist_guess_orders"))
 
 # if you want to prioritize American-style dates with numeric months, you
 # can switch the second and third elements of the default orders
-ord[c(1, 3, 2)]
-guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"), orders = ord[c(1, 3, 2)])
 
-# If you have a format with hours, minutes and seconds, you can add that to
-# the list
-ord$ymdhms <- c("Ymdhms", "Ymdhm")
+print(ord <- getOption("linelist_guess_orders"))
+print(us_ord <- ord[c(1, 3, 2)])
+guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"), orders = us_ord)
+
+# Handling dates with time formats --------------------------
+#
+# If you have a format with hours, minutes and seconds, you can also add that
+# to the list of formats. Note, however, that this function will drop levels
+# below day.
+
+print(ord$ymdhms <- c("Ymdhms", "Ymdhm"))
 
 guess_dates(c("2014_04_05_23:15:43", "03 Jan 2018", "07/03/1982", "08/20/85"), orders = ord)
 
+# Handling  missing and nonsense data -----------------------
+# 
 # guess_dates can handle messy dates and tolerate missing data
+
 x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
-      "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
+      "43387", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
       "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
 
 guess_dates(x, error_tolerance = 1) # forced conversion

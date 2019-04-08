@@ -21,6 +21,17 @@ test_that("mixed formats work", {
                expected_result)
 })
 
+test_that("excel dates work", {
+
+  xl <- x
+  xl[1:2] <- expected_result[1:2] - as.Date("1900-01-01")
+  expect_equal(guess_dates(xl, error_tolerance = 0.8, first_date = as.Date("1980-01-01")),
+               expected_result)
+  xl[1:2] <- expected_result[1:2] - as.Date("1904-01-01")
+  expect_equal(guess_dates(xl, error_tolerance = 0.8, first_date = as.Date("1980-01-01"), modern_excel = FALSE),
+               expected_result)
+
+})
 
 test_that("date input requires no guesswork", {
 
@@ -55,10 +66,22 @@ test_that("The first date defaults to fifty years prior", {
 
   last_date <-as.Date("2012-11-05")
   first_date <- as.Date("1962-11-05")
-  er <- expected_result
+  er <- c(expected_result, NA, NA)
   er[er < first_date | er > last_date] <- NA
-  expect_warning(res <- guess_dates(x, error_tolerance = 1, last_date = last_date),
-  "original")
+  z <- c(x, "19/09/18", "09/08/18") # slightly ambiguous dates that are missing
+  warn <- "The following 4 dates were not in the correct timeframe \\(1962-11-05 -- 2012-11-05\\):
+
+  original              |  parsed    
+  --------              |  ------    
+  09/08/18              |  2018-08-09
+  09/08/18              |  2018-09-08
+  19 Sep 2018           |  2018-09-19
+  19/09/18              |  2018-09-19
+  haha... 2013-12-13..  |  2013-12-13
+"
+  
+  expect_warning(res <- guess_dates(z, error_tolerance = 1, last_date = last_date),
+                 warn)
   expect_equal(res, er)
 
 })
