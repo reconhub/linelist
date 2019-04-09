@@ -15,6 +15,37 @@
 #'
 #' @export
 #'
+#' @param x a `character` vector or a `factor`
+#'
+#' @param error_tolerance a number between 0 and 1 indicating the proportion of
+#'     entries which cannot be identified as dates to be tolerated; if this
+#'     proportion is exceeded, the original vector is returned, and a message is
+#'     issued; defaults to 0.1 (10 percent)
+#'
+#' @param first_date a Date object specifying the first valid date. Defaults to
+#'   fifty years before the `last_date`.
+#'
+#' @param last_date a Date object specifying the last valid date. Defaults to the
+#'   current date. 
+#'
+#' @param orders date codes for fine-grained parsing of dates. This allows for
+#'   parsing of mixed dates. If a list is supplied, that list will be used for
+#'   successive tries in parsing.  This is passed on to
+#'   [lubridate::parse_date_time()]. Default orders
+#'   (`getOption("linelist_guess_orders")`) parse World dmy/dby dates before US
+#'   mdy/bdy dates.
+#'
+#' @param modern_excel When parsing dates from excel, some dates are stored as
+#'   integers. Modern versions of Excel represent dates as the number of days
+#'   since 1900-01-01, but pre-2011 Excel for OSX have the origin set at 
+#'   1904-01-01. If this parameter is `TRUE` (default), then this assumes that
+#'   all numeric values represent dates from either a Windows version of Excel
+#'   or a 2011 or later version of Excel for OSX. Set this parameter to `FALSE`
+#'   if the data came from an OSX version of Excel before 2011. 
+#'
+#' @param quiet a logical indicating if messages should be displayed to the
+#'     console (`TRUE`, default); set to `FALSE` to silence messages
+#'
 #' @details Converting ambiguous character strings to dates is difficult for
 #'     many reasons:
 #'
@@ -35,58 +66,99 @@
 #' - "2018 09 19"
 #' - "19 Sep 2018"
 #' - "2018 Sep 19"
+#' - "Sep 19 2018"
+#' 
+#' \subsection{How it works}{
+#' 
+#' This function relies heavily on [lubridate::parse_date_time()], which is an
+#' extremely flexible date parser that works well for consistent date formats,
+#' but can quickly become unweildy and may produce spurious results. 
+#' `guess_dates()` will use a list of formats in the `orders` argument to run
+#' `parse_date_time()` with each format vector separately and take the first
+#' correctly parsed date from all the trials. By default, the orders are in
+#' `getOption("linelist_guess_orders")`:
+#' 
+#' ```
+#' list(
+#'   world_named_months = c("Ybd", "dby"),
+#'   world_digit_months = c("dmy", "Ymd"), 
+#'   US_formats         = c("Omdy", "YOmd")
+#' )
+#' ```
 #'
-#' Note that if a character string has multiple dates, it is currently hard to
-#' predict which date will be returned.
-#'
-#' @param x a `character` vector or a `factor`
-#'
-#' @param error_tolerance a number between 0 and 1 indicating the proportion of
-#'     entries which cannot be identified as dates to be tolerated; if this
-#'     proportion is exceeded, the original vector is returned, and a message is
-#'     issued; defaults to 0.1 (10 percent)
-#'
-#' @param first_date a Date object specifying the first valid date. Defaults to
-#'   fifty years before the `last_date`.
-#'
-#' @param last_date a Date object specifying the last valid date. Defaults to the
-#'   current date. 
-#'
-#' @param orders date codes for fine-grained parsing of dates. This allows for
-#' parsing of mixed dates. If a list is supplied, that list will be used for
-#' successive tries in parsing.  This is passed on to
-#' [lubridate::parse_date_time()]. Default orders parse World dmy/dby dates 
-#' before US mdy/bdy dates.
-#' @param quiet a logical indicating if messages should be displayed to the
-#'     console (`TRUE`, default); set to `FALSE` to silence messages
+#' In this case, the dates 03 Jan 2018, 07/03/1982, and 08/20/85 are correctly
+#' intepreted as 2018-01-03, 1982-03-07, and 1985-08-20. The examples section
+#' will show how you can manipulate the `orders` to be customised for your
+#' situation.
+#' }
 #'
 #' @seealso [clean_dates()] for cleaning of data frames
 #' 
 #' @examples
 #' 
+#' # Mixed format date -----------------------------------------
+#' 
+#' guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85")) # default
+#' 
+#' # Prioritizing specific date formats ------------------------
+#' # 
+#' # The default orders prioritize world date ordering over American-style.
+#' 
+#' print(ord <- getOption("linelist_guess_orders"))
+#'
+#' # if you want to prioritize American-style dates with numeric months, you
+#' # can switch the second and third elements of the default orders
+#' 
+#' print(ord <- getOption("linelist_guess_orders"))
+#' print(us_ord <- ord[c(1, 3, 2)])
+#' guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"), orders = us_ord)
+#'
+#' # Handling dates with time formats --------------------------
+#' #
+#' # If you have a format with hours, minutes and seconds, you can also add that
+#' # to the list of formats. Note, however, that this function will drop levels
+#' # below day.
+#' 
+#' print(ord$ymdhms <- c("Ymdhms", "Ymdhm"))
+#' 
+#' guess_dates(c("2014_04_05_23:15:43", "03 Jan 2018", "07/03/1982", "08/20/85"), orders = ord)
+#' 
+#' # Handling  missing and nonsense data -----------------------
+#' # 
+#' # guess_dates can handle messy dates and tolerate missing data
+#' 
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
-#'       "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
+#'       "43387", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
 #'       "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
-#' FIRST_DATE <- as.Date("1969-11-11")
-#' guess_dates(x, error_tolerance = 1, first_date = FIRST_DATE) # forced conversion
-#' guess_dates(x, error_tolerance = 0.15, first_date = FIRST_DATE) # only 15% errors allowed
-
+#'
+#' guess_dates(x, error_tolerance = 1) # forced conversion
+#' 
+#' guess_dates(x, error_tolerance = 0.15) # only 15% errors allowed
+#' 
 guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL, 
                         last_date = Sys.Date(), 
-                        orders = list(world_named_months = c("Ybd", "dby"),
-                                      world_digit_months = c("dmy", "Ymd"), 
-                                      US_formats = c("Omdy", "YOmd")),
-                        quiet = TRUE) {
+                        orders = getOption("linelist_guess_orders"),
+                        quiet = TRUE,
+                        modern_excel = TRUE) {
 
   ## This function tries converting a single character string into a
   ## well-formatted date, but still returning a character. If it can't convert
   ## it, it returns NA.
+
+  # If the input is a date already: no guessing needed!
+  if (inherits(x, c("Date", "POSIXt", "aweek"))) {
+    return(as.Date(x))
+  }
 
   # save the original x for later if nothing is converted
   ox <- x
 
   if (is.factor(x)) {
     x <- as.character(x)
+  }
+
+  if (!is.character(x)) {
+    stop("guess dates will only work for characters and factors")
   }
 
   iso_8601 <- "[0-9]{4}-(0|1(?=[0-2]))[0-9]-([0-2]|3(?=[0-1]))[0-9]"
@@ -123,32 +195,35 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   
   ## convert all entries to character strings
   x_test <- data.frame(lapply(orders, find_lubridate, x), stringsAsFactors = FALSE)
-  
+
   ## if lubridate fails to do the job, then we should use thibaut's parser.  
-  first_constraint <- constrain_date(x_test, first_date, last_date)$good_dates
-  x_rescued        <- rescue_lubridate_failures(first_constraint, x)
+  first_constraint <- constrain_date(x_test, first_date, last_date, x)
+  x_rescued        <- rescue_lubridate_failures(first_constraint$good_dates, x, mxl = modern_excel)
 
   good_and_bad <- constrain_date(x_rescued, first_date, last_date, x)
-  bad_dates    <- good_and_bad$bad_dates
-  bd <- do.call("c", unname(bad_dates))
+  bad_dates    <- c(first_constraint$bad_dates, good_and_bad$bad_dates)
+  bd           <- do.call("c", unname(bad_dates))
   
   if (!all(is.na(bd))) {
-    bd <- utils::stack(bd)
-    bd$ind <- as.character(bd$ind)
-    bd <- unique(bd)
+    bd     <- utils::stack(bd)     # make a data frame with ind and values
+    bd$ind <- as.character(bd$ind) # convert ind to char
+    bd     <- unique(bd)           # only consider unique values
+    bd     <- bd[!is.na(bd[[1]]) | !is.na(bd[[2]]), ] # remove NA rows
+    bd     <- bd[order(bd[[1]]), ] # sort by value
     misses <- sprintf("  %s  |  %s", 
-                      format(c("original", "-----   ", bd$values)), 
-                      format(c("parsed", "-----   ", bd$ind))
+                      format(c("original", "--------", bd$values)), 
+                      format(c("parsed",   "------  ", bd$ind))
                       )
     misses <- paste(misses, collapse = "\n")
-    msg    <- paste0("\nThe following dates were not in the correct timeframe",
-                    " (%s -- %s):\n\n",
-                    misses
-                   )
-    warning(sprintf(msg, first_date, last_date))
+    msg    <- paste0("\nThe following %s dates were not in the correct timeframe",
+                     " (%s -- %s):\n\n",
+                     misses
+                    )
+    warning(sprintf(msg, length(unique(bd$values)), first_date, last_date))
   }
   
   new_x <- choose_first_good_date(good_and_bad$good_dates)
+
 
   ## check how successful we were
   na_before       <- sum(is.na(x))
@@ -221,15 +296,24 @@ choose_first_good_date <- function(date_a_frame, original_dates) {
 #' @param date_a_frame a data frame where each column contains a different
 #'   parsing of the same date vector
 #' @param original_dates the vector of original dates.
+#' @param mxl "modern excel" if TRUE, then it uses 1900 as the origin, otherwise
+#'   1904 is used as the origin.
 #' @keywords internal
 #' @noRd
-rescue_lubridate_failures <- function(date_a_frame, original_dates) {
+rescue_lubridate_failures <- function(date_a_frame, original_dates, mxl = TRUE) {
   nas     <- is.na(date_a_frame)
   # Find places where all rows are missing
-  all_nas <- which(apply(nas, 1, all))
+  all_nas <- apply(nas, 1, all)
+  numbers <- suppressWarnings(!is.na(o_num <- as.integer(original_dates)))
+  go_tibo <- which(all_nas & !numbers)
+  go_exel <- all_nas & numbers
   # Use Thibaut's guesser instead
-  for (i in all_nas) {
+  for (i in go_tibo) {
     date_a_frame[i, 1] <- i_extract_date_string(original_dates[i])
+  }
+  if (sum(go_exel)) {
+    origin <- if (mxl) as.Date("1900-01-01") else as.Date("1904-01-01")
+    date_a_frame[go_exel, 1] <- as.Date(o_num[go_exel], origin = origin)
   }
   date_a_frame
 }

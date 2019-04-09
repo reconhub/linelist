@@ -71,7 +71,7 @@ threshold is exceeded, the original vector is returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.29.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.30.9000</span>
       </span>
     </div>
 
@@ -142,9 +142,8 @@ threshold is exceeded, the original vector is returned.</p>
     </div>
 
     <pre class="usage"><span class='fu'>guess_dates</span>(<span class='no'>x</span>, <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>first_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>last_date</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>(), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>world_named_months</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Ybd"</span>,
-  <span class='st'>"dby"</span>), <span class='kw'>world_digit_months</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"dmy"</span>, <span class='st'>"Ymd"</span>), <span class='kw'>US_formats</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Omdy"</span>,
-  <span class='st'>"YOmd"</span>)), <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>last_date</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>(), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>),
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>modern_excel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,13 +174,24 @@ current date.</p></td>
       <td><p>date codes for fine-grained parsing of dates. This allows for
 parsing of mixed dates. If a list is supplied, that list will be used for
 successive tries in parsing.  This is passed on to
-<code><a href='http://lubridate.tidyverse.org/reference/parse_date_time.html'>lubridate::parse_date_time()</a></code>. Default orders parse World dmy/dby dates
-before US mdy/bdy dates.</p></td>
+<code><a href='http://lubridate.tidyverse.org/reference/parse_date_time.html'>lubridate::parse_date_time()</a></code>. Default orders
+(<code><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption("linelist_guess_orders")</a></code>) parse World dmy/dby dates before US
+mdy/bdy dates.</p></td>
     </tr>
     <tr>
       <th>quiet</th>
       <td><p>a logical indicating if messages should be displayed to the
 console (<code>TRUE</code>, default); set to <code>FALSE</code> to silence messages</p></td>
+    </tr>
+    <tr>
+      <th>modern_excel</th>
+      <td><p>When parsing dates from excel, some dates are stored as
+integers. Modern versions of Excel represent dates as the number of days
+since 1900-01-01, but pre-2011 Excel for OSX have the origin set at
+1904-01-01. If this parameter is <code>TRUE</code> (default), then this assumes that
+all numeric values represent dates from either a Windows version of Excel
+or a 2011 or later version of Excel for OSX. Set this parameter to <code>FALSE</code>
+if the data came from an OSX version of Excel before 2011.</p></td>
     </tr>
     </table>
     
@@ -202,9 +212,25 @@ format should be automatically detected, irrespective of separators
 <li><p>"2018 09 19"</p></li>
 <li><p>"19 Sep 2018"</p></li>
 <li><p>"2018 Sep 19"</p></li>
+<li><p>"Sep 19 2018"</p></li>
 </ul>
-    <p>Note that if a character string has multiple dates, it is currently hard to
-predict which date will be returned.</p>
+    <h3>How it works</h3>
+    This function relies heavily on <code><a href='http://lubridate.tidyverse.org/reference/parse_date_time.html'>lubridate::parse_date_time()</a></code>, which is an
+extremely flexible date parser that works well for consistent date formats,
+but can quickly become unweildy and may produce spurious results.
+<code>guess_dates()</code> will use a list of formats in the <code>orders</code> argument to run
+<code>parse_date_time()</code> with each format vector separately and take the first
+correctly parsed date from all the trials. By default, the orders are in
+<code><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption("linelist_guess_orders")</a></code>:<pre>list(
+  world_named_months = c("Ybd", "dby"),
+  world_digit_months = c("dmy", "Ymd"), 
+  US_formats         = c("Omdy", "YOmd")
+)
+</pre>
+    In this case, the dates 03 Jan 2018, 07/03/1982, and 08/20/85 are correctly
+intepreted as 2018-01-03, 1982-03-07, and 1985-08-20. The examples section
+will show how you can manipulate the <code>orders</code> to be customised for your
+situation.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -213,19 +239,69 @@ predict which date will be returned.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
+<span class='co'># Mixed format date -----------------------------------------</span>
+
+<span class='fu'>guess_dates</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>)) <span class='co'># default</span></div><div class='output co'>#&gt; [1] "2018-01-03" "1982-03-07" "1985-08-20"</div><div class='input'>
+<span class='co'># Prioritizing specific date formats ------------------------</span>
+<span class='co'># </span>
+<span class='co'># The default orders prioritize world date ordering over American-style.</span>
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>))</div><div class='output co'>#&gt; $world_named_months
+#&gt; [1] "Ybd" "dby"
+#&gt; 
+#&gt; $world_digit_months
+#&gt; [1] "dmy" "Ymd"
+#&gt; 
+#&gt; $US_formats
+#&gt; [1] "Omdy" "YOmd"
+#&gt; </div><div class='input'>
+<span class='co'># if you want to prioritize American-style dates with numeric months, you</span>
+<span class='co'># can switch the second and third elements of the default orders</span>
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>))</div><div class='output co'>#&gt; $world_named_months
+#&gt; [1] "Ybd" "dby"
+#&gt; 
+#&gt; $world_digit_months
+#&gt; [1] "dmy" "Ymd"
+#&gt; 
+#&gt; $US_formats
+#&gt; [1] "Omdy" "YOmd"
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>us_ord</span> <span class='kw'>&lt;-</span> <span class='no'>ord</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>2</span>)])</div><div class='output co'>#&gt; $world_named_months
+#&gt; [1] "Ybd" "dby"
+#&gt; 
+#&gt; $US_formats
+#&gt; [1] "Omdy" "YOmd"
+#&gt; 
+#&gt; $world_digit_months
+#&gt; [1] "dmy" "Ymd"
+#&gt; </div><div class='input'><span class='fu'>guess_dates</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='no'>us_ord</span>)</div><div class='output co'>#&gt; [1] "2018-01-03" "1982-07-03" "1985-08-20"</div><div class='input'>
+<span class='co'># Handling dates with time formats --------------------------</span>
+<span class='co'>#</span>
+<span class='co'># If you have a format with hours, minutes and seconds, you can also add that</span>
+<span class='co'># to the list of formats. Note, however, that this function will drop levels</span>
+<span class='co'># below day.</span>
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>ord</span>$<span class='no'>ymdhms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Ymdhms"</span>, <span class='st'>"Ymdhm"</span>))</div><div class='output co'>#&gt; [1] "Ymdhms" "Ymdhm" </div><div class='input'>
+<span class='fu'>guess_dates</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2014_04_05_23:15:43"</span>, <span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='no'>ord</span>)</div><div class='output co'>#&gt; [1] "2014-04-05" "2018-01-03" "1982-03-07" "1985-08-20"</div><div class='input'>
+<span class='co'># Handling  missing and nonsense data -----------------------</span>
+<span class='co'># </span>
+<span class='co'># guess_dates can handle messy dates and tolerate missing data</span>
+
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"01-12-2001"</span>, <span class='st'>"male"</span>, <span class='st'>"female"</span>, <span class='st'>"2018-10-18"</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='st'>"2018_10_17"</span>,
-      <span class='st'>"2018 10 19"</span>, <span class='st'>"// 24/12/1989"</span>, <span class='st'>"this is 24/12/1989!"</span>,
+      <span class='st'>"43387"</span>, <span class='st'>"2018 10 19"</span>, <span class='st'>"// 24/12/1989"</span>, <span class='st'>"this is 24/12/1989!"</span>,
       <span class='st'>"RECON NGO: 19 Sep 2018 :)"</span>, <span class='st'>"6/9/11"</span>, <span class='st'>"10/10/10"</span>)
-<span class='no'>FIRST_DATE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='st'>"1969-11-11"</span>)
-<span class='fu'>guess_dates</span>(<span class='no'>x</span>, <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>first_date</span> <span class='kw'>=</span> <span class='no'>FIRST_DATE</span>) <span class='co'># forced conversion</span></div><div class='output co'>#&gt;  [1] "2001-12-01" NA           NA           "2018-10-18" NA          
-#&gt;  [6] NA           "2018-10-17" "2018-10-19" "1989-12-24" "1989-12-24"
-#&gt; [11] "2018-09-19" "2011-09-06" "2010-10-10"</div><div class='input'><span class='fu'>guess_dates</span>(<span class='no'>x</span>, <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.15</span>, <span class='kw'>first_date</span> <span class='kw'>=</span> <span class='no'>FIRST_DATE</span>) <span class='co'># only 15% errors allowed</span></div><div class='output co'>#&gt;  [1] "01-12-2001"                "male"                     
+
+<span class='fu'>guess_dates</span>(<span class='no'>x</span>, <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='co'># forced conversion</span></div><div class='output co'>#&gt;  [1] "2001-12-01" NA           NA           "2018-10-18" NA          
+#&gt;  [6] NA           "2018-10-17" "2018-10-16" "2018-10-19" "1989-12-24"
+#&gt; [11] "1989-12-24" "2018-09-19" "2011-09-06" "2010-10-10"</div><div class='input'>
+<span class='fu'>guess_dates</span>(<span class='no'>x</span>, <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.15</span>) <span class='co'># only 15% errors allowed</span></div><div class='output co'>#&gt;  [1] "01-12-2001"                "male"                     
 #&gt;  [3] "female"                    "2018-10-18"               
 #&gt;  [5] NA                          NA                         
-#&gt;  [7] "2018_10_17"                "2018 10 19"               
-#&gt;  [9] "// 24/12/1989"             "this is 24/12/1989!"      
-#&gt; [11] "RECON NGO: 19 Sep 2018 :)" "6/9/11"                   
-#&gt; [13] "10/10/10"                 </div></pre>
+#&gt;  [7] "2018_10_17"                "43387"                    
+#&gt;  [9] "2018 10 19"                "// 24/12/1989"            
+#&gt; [11] "this is 24/12/1989!"       "RECON NGO: 19 Sep 2018 :)"
+#&gt; [13] "6/9/11"                    "10/10/10"                 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -5,9 +5,8 @@
 \title{Try and guess dates from a characters}
 \usage{
 guess_dates(x, error_tolerance = 0.1, first_date = NULL,
-  last_date = Sys.Date(), orders = list(world_named_months = c("Ybd",
-  "dby"), world_digit_months = c("dmy", "Ymd"), US_formats = c("Omdy",
-  "YOmd")), quiet = TRUE)
+  last_date = Sys.Date(), orders = getOption("linelist_guess_orders"),
+  quiet = TRUE, modern_excel = TRUE)
 }
 \arguments{
 \item{x}{a \code{character} vector or a \code{factor}}
@@ -26,11 +25,20 @@ current date.}
 \item{orders}{date codes for fine-grained parsing of dates. This allows for
 parsing of mixed dates. If a list is supplied, that list will be used for
 successive tries in parsing.  This is passed on to
-\code{\link[lubridate:parse_date_time]{lubridate::parse_date_time()}}. Default orders parse World dmy/dby dates
-before US mdy/bdy dates.}
+\code{\link[lubridate:parse_date_time]{lubridate::parse_date_time()}}. Default orders
+(\code{getOption("linelist_guess_orders")}) parse World dmy/dby dates before US
+mdy/bdy dates.}
 
 \item{quiet}{a logical indicating if messages should be displayed to the
 console (\code{TRUE}, default); set to \code{FALSE} to silence messages}
+
+\item{modern_excel}{When parsing dates from excel, some dates are stored as
+integers. Modern versions of Excel represent dates as the number of days
+since 1900-01-01, but pre-2011 Excel for OSX have the origin set at
+1904-01-01. If this parameter is \code{TRUE} (default), then this assumes that
+all numeric values represent dates from either a Windows version of Excel
+or a 2011 or later version of Excel for OSX. Set this parameter to \code{FALSE}
+if the data came from an OSX version of Excel before 2011.}
 }
 \description{
 Note that THIS FEATURE IS STILL EXPERIMENTAL: we strongly recommend checking
@@ -62,19 +70,71 @@ format should be automatically detected, irrespective of separators
 \item "2018 09 19"
 \item "19 Sep 2018"
 \item "2018 Sep 19"
+\item "Sep 19 2018"
 }
 
-Note that if a character string has multiple dates, it is currently hard to
-predict which date will be returned.
+\subsection{How it works}{
+
+This function relies heavily on \code{\link[lubridate:parse_date_time]{lubridate::parse_date_time()}}, which is an
+extremely flexible date parser that works well for consistent date formats,
+but can quickly become unweildy and may produce spurious results.
+\code{guess_dates()} will use a list of formats in the \code{orders} argument to run
+\code{parse_date_time()} with each format vector separately and take the first
+correctly parsed date from all the trials. By default, the orders are in
+\code{getOption("linelist_guess_orders")}:\preformatted{list(
+  world_named_months = c("Ybd", "dby"),
+  world_digit_months = c("dmy", "Ymd"), 
+  US_formats         = c("Omdy", "YOmd")
+)
+}
+
+In this case, the dates 03 Jan 2018, 07/03/1982, and 08/20/85 are correctly
+intepreted as 2018-01-03, 1982-03-07, and 1985-08-20. The examples section
+will show how you can manipulate the \code{orders} to be customised for your
+situation.
+}
 }
 \examples{
 
+# Mixed format date -----------------------------------------
+
+guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85")) # default
+
+# Prioritizing specific date formats ------------------------
+# 
+# The default orders prioritize world date ordering over American-style.
+
+print(ord <- getOption("linelist_guess_orders"))
+
+# if you want to prioritize American-style dates with numeric months, you
+# can switch the second and third elements of the default orders
+
+print(ord <- getOption("linelist_guess_orders"))
+print(us_ord <- ord[c(1, 3, 2)])
+guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"), orders = us_ord)
+
+# Handling dates with time formats --------------------------
+#
+# If you have a format with hours, minutes and seconds, you can also add that
+# to the list of formats. Note, however, that this function will drop levels
+# below day.
+
+print(ord$ymdhms <- c("Ymdhms", "Ymdhm"))
+
+guess_dates(c("2014_04_05_23:15:43", "03 Jan 2018", "07/03/1982", "08/20/85"), orders = ord)
+
+# Handling  missing and nonsense data -----------------------
+# 
+# guess_dates can handle messy dates and tolerate missing data
+
 x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
-      "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
+      "43387", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
       "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
-FIRST_DATE <- as.Date("1969-11-11")
-guess_dates(x, error_tolerance = 1, first_date = FIRST_DATE) # forced conversion
-guess_dates(x, error_tolerance = 0.15, first_date = FIRST_DATE) # only 15\% errors allowed
+
+guess_dates(x, error_tolerance = 1) # forced conversion
+
+guess_dates(x, error_tolerance = 0.15) # only 15\% errors allowed
+
 }
 \seealso{
 \code{\link[=clean_dates]{clean_dates()}} for cleaning of data frames
