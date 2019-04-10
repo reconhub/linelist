@@ -77,6 +77,17 @@ compare_data(iris[-1, -2], iris) # inverse
 compare_data(iris,
              data.frame(Species = letters,
                         stringsAsFactors = FALSE))
+
+## Comparing only specific columns
+
+iris1 <- iris2 <- iris
+iris1$letter <- sample(letters[1:3], nrow(iris), replace = TRUE)
+iris2$letter <- sample(letters[1:8], nrow(iris), replace = TRUE)
+compare_data(iris1, iris2, columns = "Species")
+compare_data(iris, iris2, columns = "Species")
+compare_data(iris, iris1)
+compare_data(iris1, iris2)
+
 }
 \author{
 Thibaut Jombart

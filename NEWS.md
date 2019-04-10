@@ -1,3 +1,9 @@
+# linelist 0.0.31.9000
+
+* `compare_data()` gains the option `columns`, which allows users to 
+  choose which columns they want to compare. Defaults to `TRUE`, which
+  compares all columns (#58).
+
 # linelist 0.0.30.9000
 
 * `guess_dates()` can now handle dates that were imported from Excel as 
