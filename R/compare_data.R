@@ -7,7 +7,7 @@
 #'
 #' @author Thibaut Jombart
 #'
-#' @param x a `data.frame` to be compared against a reference
+#' @inheritParams get_structure
 #'
 #' @param ref the reference `data.frame`
 #'
@@ -83,8 +83,9 @@ compare_data.data_structure <- function(ref, x,
                                         use_names = TRUE,
                                         use_classes = TRUE,
                                         use_values = TRUE,
+                                        columns = TRUE,
                                         ...) {
-  x_str <- get_structure(x)
+  x_str <- get_structure(x, columns = columns)
 
   out <- list()
 
@@ -118,8 +119,10 @@ compare_data.data_structure <- function(ref, x,
 #' @export
 #' @rdname compare_data
 compare_data.data.frame <- function(ref, x, ...) {
-  ref_str <- get_structure(ref)
-  compare_data(ref_str, x)
+  dots <- list(...)
+  cols <- if (is.null(dots$columns)) TRUE else dots$columns
+  ref_str <- get_structure(ref, columns = cols)
+  compare_data(ref_str, x, ...)
 }
 
 
