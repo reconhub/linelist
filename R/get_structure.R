@@ -13,6 +13,8 @@
 #' @author Thibaut Jombart
 #'
 #' @param x a `data.frame` to be checked
+#' @param columns the names or indices of columns to compare. Defaults to `TRUE`
+#'   which will keep all columns by default. 
 #'
 #' @return A list containing:
 #' - `dim`: the dimensions of the dataset (rows, columns)
@@ -30,12 +32,12 @@
 #' head(iris)
 #' get_structure(iris)
 
-get_structure <- function(x) {
+get_structure <- function(x, columns = TRUE) {
   if (!is.data.frame(x)) {
     stop("get_structure only works with data frames")
   }
   
-  x <- as.data.frame(x)
+  x <- as.data.frame(x[columns])
   
   out <- list()
 

@@ -63,7 +63,16 @@ test_that("different variables will trigger", {
 
 })
 
-test_that("completely different data will rendere incomparable", {
+test_that("users can choose columns to keep/ignore", {
+
+  ichar <- iris
+  levels(ichar$Species) <- c("hickory", "dickory", "setosa")
+  res <- compare_data(iris, ichar, columns = -5)
+  expect_true(all(unlist(res)))
+
+})
+
+test_that("completely different data will render incomparable", {
 
   res <- compare_data(iris, mtcars)
   expect_output(print(res), "new variables")

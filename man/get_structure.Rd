@@ -4,10 +4,13 @@
 \alias{get_structure}
 \title{Extract the structure of a dataset}
 \usage{
-get_structure(x)
+get_structure(x, columns = TRUE)
 }
 \arguments{
 \item{x}{a \code{data.frame} to be checked}
+
+\item{columns}{the names or indices of columns to compare. Defaults to \code{TRUE}
+which will keep all columns by default.}
 }
 \value{
 A list containing:

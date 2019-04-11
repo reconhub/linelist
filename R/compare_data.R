@@ -7,7 +7,7 @@
 #'
 #' @author Thibaut Jombart
 #'
-#' @param x a `data.frame` to be compared against a reference
+#' @inheritParams get_structure
 #'
 #' @param ref the reference `data.frame`
 #'
@@ -37,6 +37,17 @@
 #' compare_data(iris,
 #'              data.frame(Species = letters,
 #'                         stringsAsFactors = FALSE))
+#'
+#' ## Comparing only specific columns
+#'
+#' iris1 <- iris2 <- iris
+#' iris1$letter <- sample(letters[1:3], nrow(iris), replace = TRUE)
+#' iris2$letter <- sample(letters[1:8], nrow(iris), replace = TRUE)
+#' compare_data(iris1, iris2, columns = "Species")
+#' compare_data(iris, iris2, columns = "Species")
+#' compare_data(iris, iris1)
+#' compare_data(iris1, iris2)
+#' 
 
 compare_data <- function(ref, x, ...) {
   UseMethod("compare_data")
@@ -83,8 +94,9 @@ compare_data.data_structure <- function(ref, x,
                                         use_names = TRUE,
                                         use_classes = TRUE,
                                         use_values = TRUE,
+                                        columns = TRUE,
                                         ...) {
-  x_str <- get_structure(x)
+  x_str <- get_structure(x, columns = columns)
 
   out <- list()
 
@@ -118,8 +130,10 @@ compare_data.data_structure <- function(ref, x,
 #' @export
 #' @rdname compare_data
 compare_data.data.frame <- function(ref, x, ...) {
-  ref_str <- get_structure(ref)
-  compare_data(ref_str, x)
+  dots <- list(...)
+  cols <- if (is.null(dots$columns)) TRUE else dots$columns
+  ref_str <- get_structure(ref, columns = cols)
+  compare_data(ref_str, x, ...)
 }
 
 

@@ -13,7 +13,8 @@ compare_data(ref, x, ...)
 \method{compare_data}{default}(ref, x, ...)
 
 \method{compare_data}{data_structure}(ref, x, use_dim = TRUE,
-  use_names = TRUE, use_classes = TRUE, use_values = TRUE, ...)
+  use_names = TRUE, use_classes = TRUE, use_values = TRUE,
+  columns = TRUE, ...)
 
 \method{compare_data}{data.frame}(ref, x, ...)
 
@@ -23,7 +24,7 @@ compare_data(ref, x, ...)
 \arguments{
 \item{ref}{the reference \code{data.frame}}
 
-\item{x}{a \code{data.frame} to be compared against a reference}
+\item{x}{a \code{data.frame} to be checked}
 
 \item{...}{further arguments passed to other methods}
 
@@ -38,6 +39,9 @@ compared}
 
 \item{use_values}{a \code{logical} indicating if values of matching
 categorical variables should be compared}
+
+\item{columns}{the names or indices of columns to compare. Defaults to \code{TRUE}
+which will keep all columns by default.}
 
 \item{common_values}{when \code{TRUE} (default), common values are printed. When \code{FALSE}, common values are suppressed.}
 
@@ -73,6 +77,17 @@ compare_data(iris[-1, -2], iris) # inverse
 compare_data(iris,
              data.frame(Species = letters,
                         stringsAsFactors = FALSE))
+
+## Comparing only specific columns
+
+iris1 <- iris2 <- iris
+iris1$letter <- sample(letters[1:3], nrow(iris), replace = TRUE)
+iris2$letter <- sample(letters[1:8], nrow(iris), replace = TRUE)
+compare_data(iris1, iris2, columns = "Species")
+compare_data(iris, iris2, columns = "Species")
+compare_data(iris, iris1)
+compare_data(iris1, iris2)
+
 }
 \author{
 Thibaut Jombart
