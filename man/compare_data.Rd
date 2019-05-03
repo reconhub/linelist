@@ -45,7 +45,7 @@ which will keep all columns by default.}
 
 \item{common_values}{when \code{TRUE} (default), common values are printed. When \code{FALSE}, common values are suppressed.}
 
-\item{diff_only}{when \code{TRUE} only differences between ref and the current data content are presented, ignoring similarities. Defaults to \code{FALSE}.
+\item{diff_only}{when \code{TRUE} (default) only differences between ref and the current data content are presented, ignoring similarities.
 common values are hidden.}
 }
 \value{

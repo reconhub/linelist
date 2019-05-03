@@ -64,7 +64,7 @@ issuing a series of diagnostics." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.30.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.32.9000</span>
       </span>
     </div>
 
@@ -134,14 +134,15 @@ issuing a series of diagnostics.</p>
 
 <span class='co'># S3 method for data_structure</span>
 <span class='fu'>compare_data</span>(<span class='no'>ref</span>, <span class='no'>x</span>, <span class='kw'>use_dim</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>use_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>use_classes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>use_values</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+  <span class='kw'>use_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>use_classes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>use_values</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>columns</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>compare_data</span>(<span class='no'>ref</span>, <span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data_comparison</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>common_values</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>diff_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>diff_only</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,7 +153,7 @@ issuing a series of diagnostics.</p>
     </tr>
     <tr>
       <th>x</th>
-      <td><p>a <code>data.frame</code> to be compared against a reference</p></td>
+      <td><p>a <code>data.frame</code> to be checked</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -179,12 +180,17 @@ compared</p></td>
 categorical variables should be compared</p></td>
     </tr>
     <tr>
+      <th>columns</th>
+      <td><p>the names or indices of columns to compare. Defaults to <code>TRUE</code>
+which will keep all columns by default.</p></td>
+    </tr>
+    <tr>
       <th>common_values</th>
       <td><p>when <code>TRUE</code> (default), common values are printed. When <code>FALSE</code>, common values are suppressed.</p></td>
     </tr>
     <tr>
       <th>diff_only</th>
-      <td><p>when <code>TRUE</code> only differences between ref and the current data content are presented, ignoring similarities. Defaults to <code>FALSE</code>.
+      <td><p>when <code>TRUE</code> (default) only differences between ref and the current data content are presented, ignoring similarities.
 common values are hidden.</p></td>
     </tr>
     </table>
@@ -208,7 +214,8 @@ each test</p>
 <span class='co'>## no differences</span>
 <span class='fu'>compare_data</span>(<span class='no'>iris</span>, <span class='no'>iris</span>)</div><div class='output co'>#&gt; <span style='font-weight: bold;'>
 #&gt;  /// Comparisons of data content // 
-#&gt; 
+#&gt; </span><span style='color: #00BB00;font-style: italic;'>     (showing differences only)
+#&gt; </span><span style='font-weight: bold;'>
 #&gt; 
 #&gt;  // Comparison of dimensions /</span><span style='color: #00BB00;'>
 #&gt; Same number of rows and columns</span><span style='font-weight: bold;'>
@@ -227,7 +234,8 @@ each test</p>
 <span class='co'>## different dimensions</span>
 <span class='fu'>compare_data</span>(<span class='no'>iris</span>, <span class='no'>iris</span>[-<span class='fl'>1</span>, -<span class='fl'>2</span>])</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>
 #&gt;  /// Comparisons of data content // 
-#&gt; 
+#&gt; </span><span style='color: #00BB00;font-style: italic;'>     (showing differences only)
+#&gt; </span><span style='font-weight: bold;'>
 #&gt; 
 #&gt;  // Comparison of dimensions /</span><span>
 #&gt;   * different numbers of rows: ref has 150, new data has 149</span><span style='font-style: italic;'>
@@ -238,23 +246,17 @@ each test</p>
 #&gt; </span><span style='font-style: italic;'>
 #&gt;   * variables missing in the new data:
 #&gt; </span><span>[1] "Sepal.Width"
-#&gt; 
-#&gt;   * variables common to both datesets:
-#&gt; [1] "Sepal.Length" "Petal.Length" "Petal.Width"  "Species"     
 #&gt; </span><span style='font-weight: bold;'>
 #&gt; 
 #&gt;  // Comparison of variable classes /
-#&gt; </span><span style='color: #00BB00;'>`Sepal.Length`: same class (numeric) 
-#&gt; `Petal.Length`: same class (numeric) 
-#&gt; `Petal.Width`: same class (numeric) 
-#&gt; `Species`: same class (factor) 
-#&gt; </span><span style='font-weight: bold;'>
+#&gt; 
 #&gt; 
 #&gt;  // Comparison of values in categorical variables /
 #&gt; </span><span style='color: #00BB00;'>
 #&gt; Same values for categorical variables</span><span></div><div class='input'><span class='fu'>compare_data</span>(<span class='no'>iris</span>[-<span class='fl'>1</span>, -<span class='fl'>2</span>], <span class='no'>iris</span>) <span class='co'># inverse</span></div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>
 #&gt;  /// Comparisons of data content // 
-#&gt; 
+#&gt; </span><span style='color: #00BB00;font-style: italic;'>     (showing differences only)
+#&gt; </span><span style='font-weight: bold;'>
 #&gt; 
 #&gt;  // Comparison of dimensions /</span><span>
 #&gt;   * different numbers of rows: ref has 149, new data has 150</span><span style='font-style: italic;'>
@@ -265,17 +267,10 @@ each test</p>
 #&gt; </span><span>
 #&gt;   * new variables:
 #&gt; [1] "Sepal.Width"
-#&gt; 
-#&gt;   * variables common to both datesets:
-#&gt; [1] "Sepal.Length" "Petal.Length" "Petal.Width"  "Species"     
 #&gt; </span><span style='font-weight: bold;'>
 #&gt; 
 #&gt;  // Comparison of variable classes /
-#&gt; </span><span style='color: #00BB00;'>`Sepal.Length`: same class (numeric) 
-#&gt; `Petal.Length`: same class (numeric) 
-#&gt; `Petal.Width`: same class (numeric) 
-#&gt; `Species`: same class (factor) 
-#&gt; </span><span style='font-weight: bold;'>
+#&gt; 
 #&gt; 
 #&gt;  // Comparison of values in categorical variables /
 #&gt; </span><span style='color: #00BB00;'>
@@ -285,7 +280,8 @@ each test</p>
              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>Species</span> <span class='kw'>=</span> <span class='no'>letters</span>,
                         <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>
 #&gt;  /// Comparisons of data content // 
-#&gt; 
+#&gt; </span><span style='color: #00BB00;font-style: italic;'>     (showing differences only)
+#&gt; </span><span style='font-weight: bold;'>
 #&gt; 
 #&gt;  // Comparison of dimensions /</span><span>
 #&gt;   * different numbers of rows: ref has 150, new data has 26</span><span style='font-style: italic;'>
@@ -296,9 +292,6 @@ each test</p>
 #&gt; </span><span style='font-style: italic;'>
 #&gt;   * variables missing in the new data:
 #&gt; </span><span>[1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" 
-#&gt; 
-#&gt;   * variables common to both datesets:
-#&gt; [1] "Species"
 #&gt; </span><span style='font-weight: bold;'>
 #&gt; 
 #&gt;  // Comparison of variable classes /
@@ -313,7 +306,89 @@ each test</p>
 #&gt;   * New values in `Species`:
 #&gt; </span><span> [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
 #&gt; [20] "t" "u" "v" "w" "x" "y" "z"
-#&gt; </div></span></pre>
+#&gt; </div><div class='input'>
+<span class='co'>## Comparing only specific columns</span>
+
+<span class='no'>iris1</span> <span class='kw'>&lt;-</span> <span class='no'>iris2</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
+<span class='no'>iris1</span>$<span class='no'>letter</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>3</span>], <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>iris</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>iris2</span>$<span class='no'>letter</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>8</span>], <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>iris</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>compare_data</span>(<span class='no'>iris1</span>, <span class='no'>iris2</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>
+#&gt;  /// Comparisons of data content // 
+#&gt; </span><span style='color: #00BB00;font-style: italic;'>     (showing differences only)
+#&gt; </span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of dimensions /</span><span style='color: #00BB00;'>
+#&gt; Same number of rows and columns</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of variable names /
+#&gt; </span><span style='color: #00BB00;'>
+#&gt; Same variable names, in the same order</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of variable classes /
+#&gt; </span><span style='color: #00BB00;'>
+#&gt; Same variable classes</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of values in categorical variables /
+#&gt; </span><span style='color: #00BB00;'>
+#&gt; Same values for categorical variables</span><span></div><div class='input'><span class='fu'>compare_data</span>(<span class='no'>iris</span>, <span class='no'>iris2</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>
+#&gt;  /// Comparisons of data content // 
+#&gt; </span><span style='color: #00BB00;font-style: italic;'>     (showing differences only)
+#&gt; </span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of dimensions /</span><span style='color: #00BB00;'>
+#&gt; Same number of rows and columns</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of variable names /
+#&gt; </span><span style='color: #00BB00;'>
+#&gt; Same variable names, in the same order</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of variable classes /
+#&gt; </span><span style='color: #00BB00;'>
+#&gt; Same variable classes</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of values in categorical variables /
+#&gt; </span><span style='color: #00BB00;'>
+#&gt; Same values for categorical variables</span><span></div><div class='input'><span class='fu'>compare_data</span>(<span class='no'>iris</span>, <span class='no'>iris1</span>)</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>
+#&gt;  /// Comparisons of data content // 
+#&gt; </span><span style='color: #00BB00;font-style: italic;'>     (showing differences only)
+#&gt; </span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of dimensions /</span><span style='font-style: italic;'>
+#&gt;   * different numbers of columns: ref has 5, new data has 6</span><span>
+#&gt; </span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of variable names /
+#&gt; </span><span>
+#&gt;   * new variables:
+#&gt; [1] "letter"
+#&gt; </span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of variable classes /
+#&gt; 
+#&gt; 
+#&gt;  // Comparison of values in categorical variables /
+#&gt; </span><span></div><div class='input'><span class='fu'>compare_data</span>(<span class='no'>iris1</span>, <span class='no'>iris2</span>)</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>
+#&gt;  /// Comparisons of data content // 
+#&gt; </span><span style='color: #00BB00;font-style: italic;'>     (showing differences only)
+#&gt; </span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of dimensions /</span><span style='color: #00BB00;'>
+#&gt; Same number of rows and columns</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of variable names /
+#&gt; </span><span style='color: #00BB00;'>
+#&gt; Same variable names, in the same order</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of variable classes /
+#&gt; </span><span style='color: #00BB00;'>
+#&gt; Same variable classes</span><span style='font-weight: bold;'>
+#&gt; 
+#&gt;  // Comparison of values in categorical variables /
+#&gt; </span><span style='font-style: italic;'>
+#&gt;   * New values in `letter`:
+#&gt; </span><span>[1] "d" "e" "f" "g" "h"
+#&gt; </div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

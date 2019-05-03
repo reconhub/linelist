@@ -1,7 +1,7 @@
 #' @export
 #' @rdname compare_data
 #' @param common_values when `TRUE` (default), common values are printed. When `FALSE`, common values are suppressed. 
-#' @param diff_only when `TRUE` only differences between ref and the current data content are presented, ignoring similarities. Defaults to `FALSE`.
+#' @param diff_only when `TRUE` (default) only differences between ref and the current data content are presented, ignoring similarities. 
 #'   common values are hidden.
 print.data_comparison <- function(x, ..., common_values = TRUE, diff_only = TRUE) {
 
