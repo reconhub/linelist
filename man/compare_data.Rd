@@ -19,7 +19,7 @@ compare_data(ref, x, ...)
 \method{compare_data}{data.frame}(ref, x, ...)
 
 \method{print}{data_comparison}(x, ..., common_values = TRUE,
-  diff_only = FALSE)
+  diff_only = TRUE)
 }
 \arguments{
 \item{ref}{the reference \code{data.frame}}
