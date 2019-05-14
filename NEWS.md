@@ -1,7 +1,7 @@
 # linelist 0.0.33.9000
 
 * `guess_dates()` now processes at double the speed of the previous version.
-  `guess_dates()` will now properly constrain date vectors to the start and end
+* `guess_dates()` will now properly constrain date vectors to the start and end
   dates. 
 
 # linelist 0.0.32.9000
