@@ -199,7 +199,7 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   # If the input is a date already: no guessing needed!
   if (inherits(x, c("Date", "POSIXt", "aweek"))) {
     x <- as.Date(x)
-    x <- x[x >= first_date | x <= last_date]
+    x[x < first_date | x > last_date] <- as.Date(NA_character_)
     return(x)
   }
 

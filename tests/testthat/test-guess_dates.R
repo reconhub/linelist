@@ -39,6 +39,9 @@ test_that("date input requires no guesswork", {
   expect_identical(guess_dates(as.POSIXlt(expected_result)), expected_result)
   expect_identical(guess_dates(as.POSIXct(expected_result)), expected_result)
 
+  er <- c(expected_result, as.Date(NA_character_))
+  expect_identical(guess_dates(c(expected_result, Sys.Date() + 10)), er)
+
 })
 
 test_that("American dates also work", { 
