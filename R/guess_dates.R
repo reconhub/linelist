@@ -145,22 +145,32 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   ## well-formatted date, but still returning a character. If it can't convert
   ## it, it returns NA.
 
-  # If the input is a date already: no guessing needed!
-  if (inherits(x, c("Date", "POSIXt", "aweek"))) {
-    return(as.Date(x))
-  }
+  ## The conversion process uses `lubridate::parse_date_time()` under the hood,
+  ## but attempts to avoid the specificity problems that lubridate introduces
+  ## when you have several date formats you want to test. For example,
+  ## lubridate will somtimes parse 04 Feb 1982 as 1982-04-19 because it thinks
+  ## that "Feb" is a separator.
+  ##
+  ## To prevent this, `guess_dates()` takes a list of possible date formats and
+  ## parses the entire vector of `x` using each element separately.
+  ## 
+  ## There are three default formats:
+  ##
+  ## $world_named_months
+  ## [1] "Ybd" "dby"
+  ## 
+  ## $world_digit_months
+  ## [1] "dmy" "Ymd"
+  ## 
+  ## $US_formats
+  ## [1] "Omdy" "YOmd"
+  ## 
+  ## This returns a data frame of potential dates that is then 
 
-  # save the original x for later if nothing is converted
-  ox <- x
 
-  if (is.factor(x)) {
-    x <- as.character(x)
-  }
-
-  if (!is.character(x)) {
-    stop("guess dates will only work for characters and factors")
-  }
-
+  # Process first and last dates -----------------------------------------------
+  
+  # make sure that they are single character strings in ISO 8601 format.
   iso_8601 <- "[0-9]{4}-(0|1(?=[0-2]))[0-9]-([0-2]|3(?=[0-1]))[0-9]"
   
   if (is.character(first_date) && 
@@ -175,6 +185,7 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     last_date <- as.Date(last_date, "%Y-%m-%d")
   }
   
+  # Set the first date to 50 years before the last date if it's not set
   if (is.null(first_date) && inherits(last_date, "Date")) {
     first_date <- min(seq.Date(last_date, length.out = 2, by = "-50 years"))
   } 
@@ -183,7 +194,27 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     stop("first_date and last_date must be Date objects or characters in yyyy-mm-dd format.")
   }
   
-  stopifnot(inherits(first_date, "Date"), inherits(last_date, "Date"))
+  # Process dates --------------------------------------------------------------
+
+  # If the input is a date already: no guessing needed!
+  if (inherits(x, c("Date", "POSIXt", "aweek"))) {
+    x <- as.Date(x)
+    x <- x[x >= first_date | x <= last_date]
+    return(x)
+  }
+
+  # save the original x for later if nothing is converted
+  ox <- x
+
+  if (is.factor(x)) {
+    x <- as.character(x)
+  }
+
+  if (!is.character(x)) {
+    stop("guess dates will only work for characters and factors")
+  }
+
+  # Process lubridate order list -----------------------------------------------
 
   if (!is.list(orders) && is.character(orders)) {
     orders <- list(orders)
@@ -193,14 +224,19 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     stop("orders must be a list of character vectors")
   }
   
+  # Guess dates ----------------------------------------------------------------
+
   ## convert all entries to character strings
   x_test <- data.frame(lapply(orders, find_lubridate, x), stringsAsFactors = FALSE)
 
-  ## if lubridate fails to do the job, then we should use thibaut's parser.  
+  ## constrain dates to the timeframe
   first_constraint <- constrain_date(x_test, first_date, last_date, x)
-  x_rescued        <- rescue_lubridate_failures(first_constraint$good_dates, x, mxl = modern_excel)
 
+  ## if lubridate fails to do the job, then we should use thibaut's parser.  
+  x_rescued    <- rescue_lubridate_failures(first_constraint$good_dates, x, mxl = modern_excel)
   good_and_bad <- constrain_date(x_rescued, first_date, last_date, x)
+
+  # process dates that were not parsed -----------------------------------------
   bad_dates    <- c(first_constraint$bad_dates, good_and_bad$bad_dates)
   bd           <- do.call("c", unname(bad_dates))
   
@@ -222,10 +258,8 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     warning(sprintf(msg, length(unique(bd$values)), first_date, last_date))
   }
   
-  new_x <- choose_first_good_date(good_and_bad$good_dates)
-
-
-  ## check how successful we were
+  # Select the correct dates and test if we were successful --------------------
+  new_x           <- choose_first_good_date(good_and_bad$good_dates)
   na_before       <- sum(is.na(x))
   na_after        <- sum(is.na(new_x))
   prop_successful <- (length(x) - na_after) / (length(x) - na_before)
@@ -248,7 +282,6 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
 find_lubridate <- function(orders = NULL, x) {
   suppressWarnings(as.Date(lubridate::parse_date_time(x, orders = orders)))
 }
-
 
 #' Trim dates outside of the defined boundaries
 #'
