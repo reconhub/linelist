@@ -67,7 +67,7 @@ and forcats::fct_recode()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.30.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.32.9000</span>
       </span>
     </div>
 
@@ -171,26 +171,26 @@ and <code><a href='https://forcats.tidyverse.org/reference/fct_recode.html'>forc
 <span class='co'>## make toy data</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>], <span class='fl'>100</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>x</span>), <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; x
-#&gt;  c  h  a  f  b  e  i  j  d  g 
-#&gt; 16 14 11 11 10  8  8  8  7  7 </div><div class='input'>
+#&gt;  i  g  h  j  a  f  e  b  c  d 
+#&gt; 16 14 11 11 10 10  9  8  7  4 </div><div class='input'>
 <span class='co'>## keep top values</span>
-<span class='fu'>top_values</span>(<span class='no'>x</span>, <span class='fl'>2</span>) <span class='co'># top 2</span></div><div class='output co'>#&gt;   [1] "other" "c"     "other" "other" "other" "other" "c"     "other" "other"
-#&gt;  [10] "other" "other" "c"     "c"     "other" "h"     "other" "h"     "h"    
-#&gt;  [19] "h"     "other" "c"     "other" "other" "other" "c"     "c"     "h"    
-#&gt;  [28] "other" "other" "other" "other" "other" "h"     "other" "other" "other"
-#&gt;  [37] "other" "other" "other" "h"     "other" "h"     "other" "h"     "c"    
-#&gt;  [46] "h"     "other" "other" "other" "other" "other" "other" "other" "other"
-#&gt;  [55] "c"     "other" "other" "other" "other" "other" "other" "other" "c"    
-#&gt;  [64] "other" "other" "other" "c"     "other" "h"     "c"     "other" "other"
-#&gt;  [73] "other" "c"     "other" "h"     "h"     "other" "other" "c"     "other"
-#&gt;  [82] "other" "other" "other" "other" "other" "h"     "other" "other" "other"
-#&gt;  [91] "other" "c"     "other" "c"     "other" "other" "other" "other" "other"
-#&gt; [100] "other"</div><div class='input'><span class='fu'>top_values</span>(<span class='no'>x</span>, <span class='fl'>2</span>, <span class='fl'>NA</span>) <span class='co'># top 3, replace with NA</span></div><div class='output co'>#&gt;   [1] NA  "c" NA  NA  NA  NA  "c" NA  NA  NA  NA  "c" "c" NA  "h" NA  "h" "h"
-#&gt;  [19] "h" NA  "c" NA  NA  NA  "c" "c" "h" NA  NA  NA  NA  NA  "h" NA  NA  NA 
-#&gt;  [37] NA  NA  NA  "h" NA  "h" NA  "h" "c" "h" NA  NA  NA  NA  NA  NA  NA  NA 
-#&gt;  [55] "c" NA  NA  NA  NA  NA  NA  NA  "c" NA  NA  NA  "c" NA  "h" "c" NA  NA 
-#&gt;  [73] NA  "c" NA  "h" "h" NA  NA  "c" NA  NA  NA  NA  NA  NA  "h" NA  NA  NA 
-#&gt;  [91] NA  "c" NA  "c" NA  NA  NA  NA  NA  NA </div><div class='input'><span class='fu'>top_values</span>(<span class='no'>x</span>, <span class='fl'>0</span>) <span class='co'># extreme case, keep nothing</span></div><div class='output co'>#&gt;   [1] "other" "other" "other" "other" "other" "other" "other" "other" "other"
+<span class='fu'>top_values</span>(<span class='no'>x</span>, <span class='fl'>2</span>) <span class='co'># top 2</span></div><div class='output co'>#&gt;   [1] "other" "other" "i"     "i"     "i"     "g"     "other" "other" "other"
+#&gt;  [10] "other" "other" "other" "other" "other" "other" "other" "i"     "other"
+#&gt;  [19] "other" "g"     "i"     "other" "i"     "g"     "other" "other" "other"
+#&gt;  [28] "other" "other" "g"     "other" "other" "other" "i"     "g"     "g"    
+#&gt;  [37] "other" "i"     "other" "i"     "other" "other" "other" "other" "other"
+#&gt;  [46] "g"     "other" "other" "other" "other" "g"     "other" "other" "g"    
+#&gt;  [55] "i"     "i"     "other" "other" "g"     "other" "other" "g"     "other"
+#&gt;  [64] "other" "other" "other" "other" "g"     "other" "other" "i"     "other"
+#&gt;  [73] "other" "other" "i"     "other" "other" "g"     "other" "other" "other"
+#&gt;  [82] "other" "other" "other" "other" "i"     "other" "other" "other" "other"
+#&gt;  [91] "other" "i"     "other" "other" "other" "other" "other" "g"     "other"
+#&gt; [100] "i"    </div><div class='input'><span class='fu'>top_values</span>(<span class='no'>x</span>, <span class='fl'>2</span>, <span class='fl'>NA</span>) <span class='co'># top 3, replace with NA</span></div><div class='output co'>#&gt;   [1] NA  NA  "i" "i" "i" "g" NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  "i" NA 
+#&gt;  [19] NA  "g" "i" NA  "i" "g" NA  NA  NA  NA  NA  "g" NA  NA  NA  "i" "g" "g"
+#&gt;  [37] NA  "i" NA  "i" NA  NA  NA  NA  NA  "g" NA  NA  NA  NA  "g" NA  NA  "g"
+#&gt;  [55] "i" "i" NA  NA  "g" NA  NA  "g" NA  NA  NA  NA  NA  "g" NA  NA  "i" NA 
+#&gt;  [73] NA  NA  "i" NA  NA  "g" NA  NA  NA  NA  NA  NA  NA  "i" NA  NA  NA  NA 
+#&gt;  [91] NA  "i" NA  NA  NA  NA  NA  "g" NA  "i"</div><div class='input'><span class='fu'>top_values</span>(<span class='no'>x</span>, <span class='fl'>0</span>) <span class='co'># extreme case, keep nothing</span></div><div class='output co'>#&gt;   [1] "other" "other" "other" "other" "other" "other" "other" "other" "other"
 #&gt;  [10] "other" "other" "other" "other" "other" "other" "other" "other" "other"
 #&gt;  [19] "other" "other" "other" "other" "other" "other" "other" "other" "other"
 #&gt;  [28] "other" "other" "other" "other" "other" "other" "other" "other" "other"

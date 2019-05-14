@@ -65,7 +65,7 @@ a data wordlist can be imported from a data frame." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.30.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.32.9000</span>
       </span>
     </div>
 
@@ -216,9 +216,9 @@ multiple variables in a data frame.</p></div>
 <span class='no'>my_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>], <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>corrections</span>$<span class='no'>bad</span>[-<span class='fl'>5</span>], <span class='fl'>10</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
 <span class='no'>my_data</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>6</span>:<span class='fl'>15</span>, <span class='fl'>2</span>)] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>  <span class='co'># with missing elements</span>
 
-<span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt;  [1] "a"       "b"       "c"       "d"       "e"       "foobar"  "foobar" 
-#&gt;  [8] "missing" "foobar"  "foobar"  "foobar"  "foobar"  "foobar"  "foobar" 
-#&gt; [15] "missing"</div><div class='input'>
+<span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt;  [1] "a"       "b"       "c"       "d"       "e"       "missing" "foobar" 
+#&gt;  [8] "foobar"  NA        "foobar"  "foobar"  "foobar"  "missing" "foobar" 
+#&gt; [15] "foobar" </div><div class='input'>
 <span class='co'># You can also set a default value</span>
 <span class='no'>corrections_with_default</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>corrections</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>bad</span> <span class='kw'>=</span> <span class='st'>".default"</span>, <span class='kw'>good</span> <span class='kw'>=</span> <span class='st'>"unknown"</span>))
 <span class='no'>corrections_with_default</span></div><div class='output co'>#&gt;        bad    good
@@ -229,13 +229,13 @@ multiple variables in a data frame.</p></div>
 #&gt; 5 .missing missing
 #&gt; 6 .default unknown</div><div class='input'>
 <span class='co'># a warning will be issued about the data that were converted</span>
-<span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'a', 'b', 'c', 'd', 'e' were changed to the default value ('unknown')</span></div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "foobar"  "foobar" 
-#&gt;  [8] "missing" "foobar"  "foobar"  "foobar"  "foobar"  "foobar"  "foobar" 
-#&gt; [15] "missing"</div><div class='input'>
+<span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'a', 'b', 'c', 'd', 'e' were changed to the default value ('unknown')</span></div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "missing" "foobar" 
+#&gt;  [8] "foobar"  NA        "foobar"  "foobar"  "foobar"  "missing" "foobar" 
+#&gt; [15] "foobar" </div><div class='input'>
 <span class='co'># use the warn_default = FALSE, if you are absolutely sure you don't want it.</span>
-<span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>, <span class='kw'>warn_default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "foobar"  "foobar" 
-#&gt;  [8] "missing" "foobar"  "foobar"  "foobar"  "foobar"  "foobar"  "foobar" 
-#&gt; [15] "missing"</div><div class='input'>
+<span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>, <span class='kw'>warn_default</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "missing" "foobar" 
+#&gt;  [8] "foobar"  NA        "foobar"  "foobar"  "foobar"  "missing" "foobar" 
+#&gt; [15] "foobar" </div><div class='input'>
 <span class='co'># The function will give you a warning if the wordlist does not</span>
 <span class='co'># match the data</span>
 <span class='fu'>clean_spelling</span>(<span class='no'>letters</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: None of the variables in letters were found in corrections. Did you use the correct wordlist?</span></div><div class='output co'>#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"

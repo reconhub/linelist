@@ -19,7 +19,7 @@ compare_data(ref, x, ...)
 \method{compare_data}{data.frame}(ref, x, ...)
 
 \method{print}{data_comparison}(x, ..., common_values = TRUE,
-  diff_only = FALSE)
+  diff_only = TRUE)
 }
 \arguments{
 \item{ref}{the reference \code{data.frame}}
@@ -45,7 +45,7 @@ which will keep all columns by default.}
 
 \item{common_values}{when \code{TRUE} (default), common values are printed. When \code{FALSE}, common values are suppressed.}
 
-\item{diff_only}{when \code{TRUE} only differences between ref and the current data content are presented, ignoring similarities. Defaults to \code{FALSE}.
+\item{diff_only}{when \code{TRUE} (default) only differences between ref and the current data content are presented, ignoring similarities.
 common values are hidden.}
 }
 \value{

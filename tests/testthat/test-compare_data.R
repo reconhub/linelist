@@ -39,8 +39,8 @@ test_that("different classes will trigger", {
   expect_is(res$classes, "list")
   expect_equal(unname(res$classes$Species), c("Species", "factor", "character"))
   expect_output(print(res), "`Species` has changed from `factor` to `character`")
-  expect_output(print(res), "`Sepal.Length`: same class \\(numeric\\)")
-  expect_failure(expect_output(print(res, diff_only = TRUE), "`Sepal.Length`: same class \\(numeric\\)"))
+  expect_failure(expect_output(print(res), "`Sepal.Length`: same class \\(numeric\\)"))
+  expect_output(print(res, diff_only = FALSE), "`Sepal.Length`: same class \\(numeric\\)")
 
 })
 
@@ -59,7 +59,7 @@ test_that("different variables will trigger", {
   expect_setequal(res$values$Species$missing, c("versicolor", "virginica"))
   expect_setequal(res$values$Species$common, "setosa")
   expect_output(print(res), "Missing values in `Species`")
-  expect_output(print(res, common_values = FALSE), "1 value\\(s\\) \\[hidden\\]")
+  expect_output(print(res, diff_only = FALSE, common_values = FALSE), "1 value\\(s\\) \\[hidden\\]")
 
 })
 

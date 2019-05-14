@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.30.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.32.9000</span>
       </span>
     </div>
 
@@ -179,91 +179,91 @@ a vector of the original column names named by their corresponding epivars</p></
 <span class='no'>ll</span></div><div class='output co'>#&gt; &lt;linelist object&gt;
 #&gt; 
 #&gt;        id date_of_onset  discharge gender epi_case_definition messy_dates
-#&gt; 1  wctpnh    2018-01-03 2018-01-13 female            probable        &lt;NA&gt;
-#&gt; 2  zxzwxl    2018-01-08 2018-01-18 female           suspected        &lt;NA&gt;
-#&gt; 3  chrjvr    2018-01-07 2018-01-17   male           confirmed  1989-12-24
-#&gt; 4  idypsi    2018-01-04 2018-01-14 female           confirmed        &lt;NA&gt;
-#&gt; 5  rgflve    2018-01-06 2018-01-16 female           confirmed  1989-12-24
-#&gt; 6  oqfrxc    2018-01-04 2018-01-14   male          not_a_case  2018-10-19
-#&gt; 7  vjvvsd    2018-01-02 2018-01-12 female            probable  2018-10-18
-#&gt; 8  ehwvhc    2018-01-06 2018-01-16 female           confirmed  2018-10-17
-#&gt; 9  kbjhna    2018-01-11 2018-01-21   male            probable  2018-10-18
-#&gt; 10 kdcwmw    2018-01-02 2018-01-12   male            probable  1989-12-24
-#&gt;          lat      lon
-#&gt; 1  14.927628 48.51820
-#&gt; 2   9.687926 47.80766
-#&gt; 3  15.141722 48.02881
-#&gt; 4  12.781947 48.35859
-#&gt; 5  16.798373 47.97100
-#&gt; 6  10.725939 49.14704
-#&gt; 7  12.440560 48.37359
-#&gt; 8  11.211742 48.32334
-#&gt; 9  13.273404 47.17018
-#&gt; 10 11.501669 49.39446</div><div class='input'>
+#&gt; 1  dzoshv    2018-01-09 2018-01-19 female           suspected        &lt;NA&gt;
+#&gt; 2  ibcboe    2018-01-05 2018-01-15 female            probable  2018-10-18
+#&gt; 3  rzjtsb    2018-01-09 2018-01-19   male           suspected  1989-12-24
+#&gt; 4  untjny    2018-01-03 2018-01-13   male          not_a_case  2018-10-17
+#&gt; 5  aglfzi    2018-01-05 2018-01-15   male            probable  1989-12-24
+#&gt; 6  qqrxqe    2018-01-03 2018-01-13   male            probable  2018-10-18
+#&gt; 7  fdzqnh    2018-01-06 2018-01-16   male            probable        &lt;NA&gt;
+#&gt; 8  bszjbf    2018-01-11 2018-01-21   male          not_a_case  2001-12-01
+#&gt; 9  ixkfck    2018-01-06 2018-01-16 female           suspected  1989-12-24
+#&gt; 10 iklzik    2018-01-03 2018-01-13 female           confirmed  1989-12-24
+#&gt;         lat      lon
+#&gt; 1  13.41707 49.78313
+#&gt; 2  15.24252 49.03138
+#&gt; 3  11.69601 47.41930
+#&gt; 4  10.81973 46.40692
+#&gt; 5  11.57564 47.51096
+#&gt; 6  10.27469 47.24730
+#&gt; 7  11.99862 48.66538
+#&gt; 8  15.87695 48.73566
+#&gt; 9  11.97672 48.73080
+#&gt; 10 12.99606 47.47127</div><div class='input'>
 <span class='co'># masking epivars changes the column names</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>llm</span> <span class='kw'>&lt;-</span> <span class='fu'>mask</span>(<span class='no'>ll</span>))</div><div class='output co'>#&gt; &lt;linelist object&gt;
 #&gt; 
-#&gt;        id date_onset  discharge gender case_definition messy_dates   geo_lat
-#&gt; 1  wctpnh 2018-01-03 2018-01-13 female        probable        &lt;NA&gt; 14.927628
-#&gt; 2  zxzwxl 2018-01-08 2018-01-18 female       suspected        &lt;NA&gt;  9.687926
-#&gt; 3  chrjvr 2018-01-07 2018-01-17   male       confirmed  1989-12-24 15.141722
-#&gt; 4  idypsi 2018-01-04 2018-01-14 female       confirmed        &lt;NA&gt; 12.781947
-#&gt; 5  rgflve 2018-01-06 2018-01-16 female       confirmed  1989-12-24 16.798373
-#&gt; 6  oqfrxc 2018-01-04 2018-01-14   male      not_a_case  2018-10-19 10.725939
-#&gt; 7  vjvvsd 2018-01-02 2018-01-12 female        probable  2018-10-18 12.440560
-#&gt; 8  ehwvhc 2018-01-06 2018-01-16 female       confirmed  2018-10-17 11.211742
-#&gt; 9  kbjhna 2018-01-11 2018-01-21   male        probable  2018-10-18 13.273404
-#&gt; 10 kdcwmw 2018-01-02 2018-01-12   male        probable  1989-12-24 11.501669
+#&gt;        id date_onset  discharge gender case_definition messy_dates  geo_lat
+#&gt; 1  dzoshv 2018-01-09 2018-01-19 female       suspected        &lt;NA&gt; 13.41707
+#&gt; 2  ibcboe 2018-01-05 2018-01-15 female        probable  2018-10-18 15.24252
+#&gt; 3  rzjtsb 2018-01-09 2018-01-19   male       suspected  1989-12-24 11.69601
+#&gt; 4  untjny 2018-01-03 2018-01-13   male      not_a_case  2018-10-17 10.81973
+#&gt; 5  aglfzi 2018-01-05 2018-01-15   male        probable  1989-12-24 11.57564
+#&gt; 6  qqrxqe 2018-01-03 2018-01-13   male        probable  2018-10-18 10.27469
+#&gt; 7  fdzqnh 2018-01-06 2018-01-16   male        probable        &lt;NA&gt; 11.99862
+#&gt; 8  bszjbf 2018-01-11 2018-01-21   male      not_a_case  2001-12-01 15.87695
+#&gt; 9  ixkfck 2018-01-06 2018-01-16 female       suspected  1989-12-24 11.97672
+#&gt; 10 iklzik 2018-01-03 2018-01-13 female       confirmed  1989-12-24 12.99606
 #&gt;     geo_lon
-#&gt; 1  48.51820
-#&gt; 2  47.80766
-#&gt; 3  48.02881
-#&gt; 4  48.35859
-#&gt; 5  47.97100
-#&gt; 6  49.14704
-#&gt; 7  48.37359
-#&gt; 8  48.32334
-#&gt; 9  47.17018
-#&gt; 10 49.39446</div><div class='input'>
+#&gt; 1  49.78313
+#&gt; 2  49.03138
+#&gt; 3  47.41930
+#&gt; 4  46.40692
+#&gt; 5  47.51096
+#&gt; 6  47.24730
+#&gt; 7  48.66538
+#&gt; 8  48.73566
+#&gt; 9  48.73080
+#&gt; 10 47.47127</div><div class='input'>
 <span class='co'># unmasking reverses the operation</span>
 <span class='fu'>unmask</span>(<span class='no'>llm</span>)</div><div class='output co'>#&gt; &lt;linelist object&gt;
 #&gt; 
 #&gt;        id date_of_onset  discharge gender epi_case_definition messy_dates
-#&gt; 1  wctpnh    2018-01-03 2018-01-13 female            probable        &lt;NA&gt;
-#&gt; 2  zxzwxl    2018-01-08 2018-01-18 female           suspected        &lt;NA&gt;
-#&gt; 3  chrjvr    2018-01-07 2018-01-17   male           confirmed  1989-12-24
-#&gt; 4  idypsi    2018-01-04 2018-01-14 female           confirmed        &lt;NA&gt;
-#&gt; 5  rgflve    2018-01-06 2018-01-16 female           confirmed  1989-12-24
-#&gt; 6  oqfrxc    2018-01-04 2018-01-14   male          not_a_case  2018-10-19
-#&gt; 7  vjvvsd    2018-01-02 2018-01-12 female            probable  2018-10-18
-#&gt; 8  ehwvhc    2018-01-06 2018-01-16 female           confirmed  2018-10-17
-#&gt; 9  kbjhna    2018-01-11 2018-01-21   male            probable  2018-10-18
-#&gt; 10 kdcwmw    2018-01-02 2018-01-12   male            probable  1989-12-24
-#&gt;          lat      lon
-#&gt; 1  14.927628 48.51820
-#&gt; 2   9.687926 47.80766
-#&gt; 3  15.141722 48.02881
-#&gt; 4  12.781947 48.35859
-#&gt; 5  16.798373 47.97100
-#&gt; 6  10.725939 49.14704
-#&gt; 7  12.440560 48.37359
-#&gt; 8  11.211742 48.32334
-#&gt; 9  13.273404 47.17018
-#&gt; 10 11.501669 49.39446</div><div class='input'>
+#&gt; 1  dzoshv    2018-01-09 2018-01-19 female           suspected        &lt;NA&gt;
+#&gt; 2  ibcboe    2018-01-05 2018-01-15 female            probable  2018-10-18
+#&gt; 3  rzjtsb    2018-01-09 2018-01-19   male           suspected  1989-12-24
+#&gt; 4  untjny    2018-01-03 2018-01-13   male          not_a_case  2018-10-17
+#&gt; 5  aglfzi    2018-01-05 2018-01-15   male            probable  1989-12-24
+#&gt; 6  qqrxqe    2018-01-03 2018-01-13   male            probable  2018-10-18
+#&gt; 7  fdzqnh    2018-01-06 2018-01-16   male            probable        &lt;NA&gt;
+#&gt; 8  bszjbf    2018-01-11 2018-01-21   male          not_a_case  2001-12-01
+#&gt; 9  ixkfck    2018-01-06 2018-01-16 female           suspected  1989-12-24
+#&gt; 10 iklzik    2018-01-03 2018-01-13 female           confirmed  1989-12-24
+#&gt;         lat      lon
+#&gt; 1  13.41707 49.78313
+#&gt; 2  15.24252 49.03138
+#&gt; 3  11.69601 47.41930
+#&gt; 4  10.81973 46.40692
+#&gt; 5  11.57564 47.51096
+#&gt; 6  10.27469 47.24730
+#&gt; 7  11.99862 48.66538
+#&gt; 8  15.87695 48.73566
+#&gt; 9  11.97672 48.73080
+#&gt; 10 12.99606 47.47127</div><div class='input'>
 <span class='co'># you can safely drop columns</span>
 <span class='fu'>unmask</span>(<span class='no'>llm</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grepl</a></span>(<span class='st'>"gender|geo"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>llm</span>))])</div><div class='output co'>#&gt; &lt;linelist object&gt;
 #&gt; 
-#&gt;    gender       lat      lon
-#&gt; 1  female 14.927628 48.51820
-#&gt; 2  female  9.687926 47.80766
-#&gt; 3    male 15.141722 48.02881
-#&gt; 4  female 12.781947 48.35859
-#&gt; 5  female 16.798373 47.97100
-#&gt; 6    male 10.725939 49.14704
-#&gt; 7  female 12.440560 48.37359
-#&gt; 8  female 11.211742 48.32334
-#&gt; 9    male 13.273404 47.17018
-#&gt; 10   male 11.501669 49.39446</div></pre>
+#&gt;    gender      lat      lon
+#&gt; 1  female 13.41707 49.78313
+#&gt; 2  female 15.24252 49.03138
+#&gt; 3    male 11.69601 47.41930
+#&gt; 4    male 10.81973 46.40692
+#&gt; 5    male 11.57564 47.51096
+#&gt; 6    male 10.27469 47.24730
+#&gt; 7    male 11.99862 48.66538
+#&gt; 8    male 15.87695 48.73566
+#&gt; 9  female 11.97672 48.73080
+#&gt; 10 female 12.99606 47.47127</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -1,13 +1,18 @@
 #' @export
 #' @rdname compare_data
 #' @param common_values when `TRUE` (default), common values are printed. When `FALSE`, common values are suppressed. 
-#' @param diff_only when `TRUE` only differences between ref and the current data content are presented, ignoring similarities. Defaults to `FALSE`.
+#' @param diff_only when `TRUE` (default) only differences between ref and the current data content are presented, ignoring similarities. 
 #'   common values are hidden.
-print.data_comparison <- function(x, ..., common_values = TRUE, diff_only = FALSE) {
+print.data_comparison <- function(x, ..., common_values = TRUE, diff_only = TRUE) {
 
   cat(
       crayon::bold("\n /// Comparisons of data content // \n")
       )
+  if (diff_only) {
+    cat(
+        crayon::green(crayon::italic("     (showing differences only)\n"))
+        )
+  }
 
 
   ## dimension diagnostics

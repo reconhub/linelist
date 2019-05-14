@@ -64,7 +64,7 @@ the following information:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.30.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.32.9000</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@ the following information:</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_structure</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>get_structure</span>(<span class='no'>x</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,6 +135,11 @@ the following information:</p>
     <tr>
       <th>x</th>
       <td><p>a <code>data.frame</code> to be checked</p></td>
+    </tr>
+    <tr>
+      <th>columns</th>
+      <td><p>the names or indices of columns to compare. Defaults to <code>TRUE</code>
+which will keep all columns by default.</p></td>
     </tr>
     </table>
     

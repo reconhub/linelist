@@ -1,3 +1,7 @@
+# linelist 0.0.32.9000
+
+* `print.data_comparison()` now sets `diff_only = TRUE` by default (#71)
+ 
 # linelist 0.0.31.9000
 
 * `compare_data()` gains the option `columns`, which allows users to 

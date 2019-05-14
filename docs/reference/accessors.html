@@ -64,7 +64,7 @@ epivars in your linelist object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.30.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.32.9000</span>
       </span>
     </div>
 
@@ -197,93 +197,93 @@ returned.</p>
 
 <span class='co'>## general purpose accessor</span>
 <span class='fu'><a href='list_epivars.html'>list_epivars</a></span>(<span class='no'>ll</span>, <span class='kw'>simple</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "id"         "date_onset" "gender"     "geo_lat"    "geo_lon"   </div><div class='input'><span class='fu'>get_epivars</span>(<span class='no'>ll</span>) <span class='co'># all epi variable</span></div><div class='output co'>#&gt;        id date_of_onset gender       lat      lon
-#&gt; 1  vhoipe    2018-01-02 female 12.225573 50.03937
-#&gt; 2  yoohlj    2018-01-10 female 11.429135 48.44945
-#&gt; 3  amkajo    2018-01-08 female 10.886526 49.39181
-#&gt; 4  wknpgh    2018-01-03 female 11.408917 48.42657
-#&gt; 5  mxkfrb    2018-01-02   male  9.487449 48.10758
-#&gt; 6  zdnvsg    2018-01-06 female 11.618924 48.02229
-#&gt; 7  ovamuv    2018-01-06   male 11.882916 48.60361
-#&gt; 8  kfkrnr    2018-01-04   male 11.926673 47.73735
-#&gt; 9  nvswax    2018-01-09 female 13.454254 47.47174
-#&gt; 10 znjupq    2018-01-09 female 14.956910 48.19215
-#&gt; 11 wogxwg    2018-01-10   male 12.582235 46.85380
-#&gt; 12 kudfer    2018-01-03 female 10.201179 48.84618
-#&gt; 13 wyoprg    2018-01-02 female 13.517075 48.08172
-#&gt; 14 bxbzpe    2018-01-05   male 12.116401 46.69488
-#&gt; 15 xapgxv    2018-01-06 female 14.137200 47.05509
-#&gt; 16 sfsfli    2018-01-03 female 17.253701 48.45434
-#&gt; 17 ogmxzv    2018-01-06 female 13.849717 47.14480
-#&gt; 18 xpuzsf    2018-01-02   male  9.631437 47.71310
-#&gt; 19 hswgay    2018-01-05 female 13.498804 48.89496
-#&gt; 20 ltrkjt    2018-01-11 female 15.145677 48.06730</div><div class='input'><span class='fu'>get_epivars</span>(<span class='no'>ll</span>, <span class='st'>"id"</span>, <span class='st'>"date_onset"</span>, <span class='st'>"gender"</span>) <span class='co'># named epi variables</span></div><div class='output co'>#&gt;        id date_of_onset gender
-#&gt; 1  vhoipe    2018-01-02 female
-#&gt; 2  yoohlj    2018-01-10 female
-#&gt; 3  amkajo    2018-01-08 female
-#&gt; 4  wknpgh    2018-01-03 female
-#&gt; 5  mxkfrb    2018-01-02   male
-#&gt; 6  zdnvsg    2018-01-06 female
-#&gt; 7  ovamuv    2018-01-06   male
-#&gt; 8  kfkrnr    2018-01-04   male
-#&gt; 9  nvswax    2018-01-09 female
-#&gt; 10 znjupq    2018-01-09 female
-#&gt; 11 wogxwg    2018-01-10   male
-#&gt; 12 kudfer    2018-01-03 female
-#&gt; 13 wyoprg    2018-01-02 female
-#&gt; 14 bxbzpe    2018-01-05   male
-#&gt; 15 xapgxv    2018-01-06 female
-#&gt; 16 sfsfli    2018-01-03 female
-#&gt; 17 ogmxzv    2018-01-06 female
-#&gt; 18 xpuzsf    2018-01-02   male
-#&gt; 19 hswgay    2018-01-05 female
-#&gt; 20 ltrkjt    2018-01-11 female</div><div class='input'><span class='fu'>date_onset</span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;  [1] "2018-01-02" "2018-01-10" "2018-01-08" "2018-01-03" "2018-01-02"
-#&gt;  [6] "2018-01-06" "2018-01-06" "2018-01-04" "2018-01-09" "2018-01-09"
-#&gt; [11] "2018-01-10" "2018-01-03" "2018-01-02" "2018-01-05" "2018-01-06"
-#&gt; [16] "2018-01-03" "2018-01-06" "2018-01-02" "2018-01-05" "2018-01-11"</div><div class='input'><span class='fu'>id</span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;  [1] vhoipe yoohlj amkajo wknpgh mxkfrb zdnvsg ovamuv kfkrnr nvswax znjupq
-#&gt; [11] wogxwg kudfer wyoprg bxbzpe xapgxv sfsfli ogmxzv xpuzsf hswgay ltrkjt
-#&gt; 20 Levels: amkajo bxbzpe hswgay kfkrnr kudfer ltrkjt mxkfrb nvswax ... znjupq</div><div class='input'><span class='fu'>gender</span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;  [1] female female female female male   female male   male   female female
-#&gt; [11] male   female female male   female female female male   female female
+#&gt; 1  lvijbf    2018-01-08 female 11.582811 48.26727
+#&gt; 2  glzvne    2018-01-06 female 12.582206 46.19974
+#&gt; 3  gslqeq    2018-01-07   male 13.704558 46.68366
+#&gt; 4  mfaamr    2018-01-05   male 16.489427 47.76145
+#&gt; 5  ewkadg    2018-01-07   male  9.714188 46.85687
+#&gt; 6  wxbhis    2018-01-10 female 11.441429 47.21552
+#&gt; 7  ifmmyu    2018-01-06 female 16.078899 47.17223
+#&gt; 8  cmrwtk    2018-01-06 female 14.400111 48.94434
+#&gt; 9  dbirsl    2018-01-09   male 13.235185 47.36031
+#&gt; 10 sqjlmp    2018-01-03   male 12.432755 45.82377
+#&gt; 11 gudacg    2018-01-08   male 13.995818 47.78286
+#&gt; 12 qflgkj    2018-01-06   male 16.219886 48.57991
+#&gt; 13 hvqlto    2018-01-06   male 16.722272 49.95717
+#&gt; 14 rlvuzj    2018-01-03 female 13.772498 47.04740
+#&gt; 15 cdmfnb    2018-01-07 female 10.062713 46.13261
+#&gt; 16 yesrej    2018-01-05   male 14.435050 47.03233
+#&gt; 17 ldsxty    2018-01-03   male 13.263820 48.79245
+#&gt; 18 qwtxjx    2018-01-04   male  9.268153 49.81503
+#&gt; 19 wiyjis    2018-01-10 female 11.158673 47.06303
+#&gt; 20 ysoqow    2018-01-07 female 15.408058 48.86130</div><div class='input'><span class='fu'>get_epivars</span>(<span class='no'>ll</span>, <span class='st'>"id"</span>, <span class='st'>"date_onset"</span>, <span class='st'>"gender"</span>) <span class='co'># named epi variables</span></div><div class='output co'>#&gt;        id date_of_onset gender
+#&gt; 1  lvijbf    2018-01-08 female
+#&gt; 2  glzvne    2018-01-06 female
+#&gt; 3  gslqeq    2018-01-07   male
+#&gt; 4  mfaamr    2018-01-05   male
+#&gt; 5  ewkadg    2018-01-07   male
+#&gt; 6  wxbhis    2018-01-10 female
+#&gt; 7  ifmmyu    2018-01-06 female
+#&gt; 8  cmrwtk    2018-01-06 female
+#&gt; 9  dbirsl    2018-01-09   male
+#&gt; 10 sqjlmp    2018-01-03   male
+#&gt; 11 gudacg    2018-01-08   male
+#&gt; 12 qflgkj    2018-01-06   male
+#&gt; 13 hvqlto    2018-01-06   male
+#&gt; 14 rlvuzj    2018-01-03 female
+#&gt; 15 cdmfnb    2018-01-07 female
+#&gt; 16 yesrej    2018-01-05   male
+#&gt; 17 ldsxty    2018-01-03   male
+#&gt; 18 qwtxjx    2018-01-04   male
+#&gt; 19 wiyjis    2018-01-10 female
+#&gt; 20 ysoqow    2018-01-07 female</div><div class='input'><span class='fu'>date_onset</span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;  [1] "2018-01-08" "2018-01-06" "2018-01-07" "2018-01-05" "2018-01-07"
+#&gt;  [6] "2018-01-10" "2018-01-06" "2018-01-06" "2018-01-09" "2018-01-03"
+#&gt; [11] "2018-01-08" "2018-01-06" "2018-01-06" "2018-01-03" "2018-01-07"
+#&gt; [16] "2018-01-05" "2018-01-03" "2018-01-04" "2018-01-10" "2018-01-07"</div><div class='input'><span class='fu'>id</span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;  [1] lvijbf glzvne gslqeq mfaamr ewkadg wxbhis ifmmyu cmrwtk dbirsl sqjlmp
+#&gt; [11] gudacg qflgkj hvqlto rlvuzj cdmfnb yesrej ldsxty qwtxjx wiyjis ysoqow
+#&gt; 20 Levels: cdmfnb cmrwtk dbirsl ewkadg glzvne gslqeq gudacg hvqlto ... ysoqow</div><div class='input'><span class='fu'>gender</span>(<span class='no'>ll</span>)</div><div class='output co'>#&gt;  [1] female female male   male   male   female female female male   male  
+#&gt; [11] male   male   male   female female male   male   male   female female
 #&gt; Levels: female male</div><div class='input'><span class='fu'>geo</span>(<span class='no'>ll</span>) <span class='co'># a matrix with two columns</span></div><div class='output co'>#&gt;         lon       lat
-#&gt; 1  50.03937 12.225573
-#&gt; 2  48.44945 11.429135
-#&gt; 3  49.39181 10.886526
-#&gt; 4  48.42657 11.408917
-#&gt; 5  48.10758  9.487449
-#&gt; 6  48.02229 11.618924
-#&gt; 7  48.60361 11.882916
-#&gt; 8  47.73735 11.926673
-#&gt; 9  47.47174 13.454254
-#&gt; 10 48.19215 14.956910
-#&gt; 11 46.85380 12.582235
-#&gt; 12 48.84618 10.201179
-#&gt; 13 48.08172 13.517075
-#&gt; 14 46.69488 12.116401
-#&gt; 15 47.05509 14.137200
-#&gt; 16 48.45434 17.253701
-#&gt; 17 47.14480 13.849717
-#&gt; 18 47.71310  9.631437
-#&gt; 19 48.89496 13.498804
-#&gt; 20 48.06730 15.145677</div><div class='input'><span class='fu'>get_epivars</span>(<span class='no'>ll</span>, <span class='st'>"geo_lon"</span>, <span class='st'>"geo_lat"</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) <span class='co'># a data frame with two columns</span></div><div class='output co'>#&gt;         lon       lat
-#&gt; 1  50.03937 12.225573
-#&gt; 2  48.44945 11.429135
-#&gt; 3  49.39181 10.886526
-#&gt; 4  48.42657 11.408917
-#&gt; 5  48.10758  9.487449
-#&gt; 6  48.02229 11.618924
-#&gt; 7  48.60361 11.882916
-#&gt; 8  47.73735 11.926673
-#&gt; 9  47.47174 13.454254
-#&gt; 10 48.19215 14.956910
-#&gt; 11 46.85380 12.582235
-#&gt; 12 48.84618 10.201179
-#&gt; 13 48.08172 13.517075
-#&gt; 14 46.69488 12.116401
-#&gt; 15 47.05509 14.137200
-#&gt; 16 48.45434 17.253701
-#&gt; 17 47.14480 13.849717
-#&gt; 18 47.71310  9.631437
-#&gt; 19 48.89496 13.498804
-#&gt; 20 48.06730 15.145677</div><div class='input'>
+#&gt; 1  48.26727 11.582811
+#&gt; 2  46.19974 12.582206
+#&gt; 3  46.68366 13.704558
+#&gt; 4  47.76145 16.489427
+#&gt; 5  46.85687  9.714188
+#&gt; 6  47.21552 11.441429
+#&gt; 7  47.17223 16.078899
+#&gt; 8  48.94434 14.400111
+#&gt; 9  47.36031 13.235185
+#&gt; 10 45.82377 12.432755
+#&gt; 11 47.78286 13.995818
+#&gt; 12 48.57991 16.219886
+#&gt; 13 49.95717 16.722272
+#&gt; 14 47.04740 13.772498
+#&gt; 15 46.13261 10.062713
+#&gt; 16 47.03233 14.435050
+#&gt; 17 48.79245 13.263820
+#&gt; 18 49.81503  9.268153
+#&gt; 19 47.06303 11.158673
+#&gt; 20 48.86130 15.408058</div><div class='input'><span class='fu'>get_epivars</span>(<span class='no'>ll</span>, <span class='st'>"geo_lon"</span>, <span class='st'>"geo_lat"</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) <span class='co'># a data frame with two columns</span></div><div class='output co'>#&gt;         lon       lat
+#&gt; 1  48.26727 11.582811
+#&gt; 2  46.19974 12.582206
+#&gt; 3  46.68366 13.704558
+#&gt; 4  47.76145 16.489427
+#&gt; 5  46.85687  9.714188
+#&gt; 6  47.21552 11.441429
+#&gt; 7  47.17223 16.078899
+#&gt; 8  48.94434 14.400111
+#&gt; 9  47.36031 13.235185
+#&gt; 10 45.82377 12.432755
+#&gt; 11 47.78286 13.995818
+#&gt; 12 48.57991 16.219886
+#&gt; 13 49.95717 16.722272
+#&gt; 14 47.04740 13.772498
+#&gt; 15 46.13261 10.062713
+#&gt; 16 47.03233 14.435050
+#&gt; 17 48.79245 13.263820
+#&gt; 18 49.81503  9.268153
+#&gt; 19 47.06303 11.158673
+#&gt; 20 48.86130 15.408058</div><div class='input'>
 <span class='co'># epivars that haven't been defined for the data set will return an error</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>date_report</span>(<span class='no'>ll</span>))</div><div class='output co'>#&gt; Error in get_epivars(x, "date_report") : 
 #&gt;   The following epivars were not found in the data:
