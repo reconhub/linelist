@@ -128,8 +128,8 @@
 #' # guess_dates can handle messy dates and tolerate missing data
 #' 
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
-#'       "43387", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
-#'       "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
+#'        "43391", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
+#'        "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
 #'
 #' guess_dates(x, error_tolerance = 1) # forced conversion
 #' 
@@ -399,7 +399,7 @@ rescue_lubridate_failures <- function(date_a_frame, original_dates, mxl = TRUE, 
 
   # Use the excel guesser
   if (sum(go_exel)) {
-    origin <- if (mxl) as.Date("1900-01-01") else as.Date("1904-01-01")
+    origin <- if (mxl) as.Date("1899-12-30") else as.Date("1904-01-01")
     tmpxl  <- as.Date(o_num[go_exel], origin = origin)
     date_a_frame[[1]][go_exel] <- constrain_dates(tmpxl, original_dates[go_exel], dmin, dmax, baddies)
   }
