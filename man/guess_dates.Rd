@@ -128,8 +128,8 @@ guess_dates(c("2014_04_05_23:15:43", "03 Jan 2018", "07/03/1982", "08/20/85"), o
 # guess_dates can handle messy dates and tolerate missing data
 
 x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
-      "43387", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
-      "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
+       "43391", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
+       "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
 
 guess_dates(x, error_tolerance = 1) # forced conversion
 

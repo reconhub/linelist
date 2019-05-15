@@ -1,3 +1,11 @@
+# linelist 0.0.33.9000
+
+* `guess_dates()` now processes at double the speed of the previous version.
+* `guess_dates()` will now properly constrain date vectors to the start and end
+  dates. 
+* `guess_dates()` correctly parses dates represented as integers from excel
+  (#73).
+
 # linelist 0.0.32.9000
 
 * `print.data_comparison()` now sets `diff_only = TRUE` by default (#71)

@@ -128,8 +128,8 @@
 #' # guess_dates can handle messy dates and tolerate missing data
 #' 
 #' x <- c("01-12-2001", "male", "female", "2018-10-18", NA, NA, "2018_10_17",
-#'       "43387", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
-#'       "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
+#'        "43391", "2018 10 19", "// 24/12/1989", "this is 24/12/1989!",
+#'        "RECON NGO: 19 Sep 2018 :)", "6/9/11", "10/10/10")
 #'
 #' guess_dates(x, error_tolerance = 1) # forced conversion
 #' 
@@ -145,22 +145,31 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   ## well-formatted date, but still returning a character. If it can't convert
   ## it, it returns NA.
 
-  # If the input is a date already: no guessing needed!
-  if (inherits(x, c("Date", "POSIXt", "aweek"))) {
-    return(as.Date(x))
-  }
+  ## The conversion process uses `lubridate::parse_date_time()` under the hood,
+  ## but attempts to avoid the specificity problems that lubridate introduces
+  ## when you have several date formats you want to test. For example,
+  ## lubridate will somtimes parse 04 Feb 1982 as 1982-04-19 because it thinks
+  ## that "Feb" is a separator.
+  ##
+  ## To prevent this, `guess_dates()` takes a list of possible date formats and
+  ## parses the entire vector of `x` using each element separately.
+  ## 
+  ## There are three default formats:
+  ##
+  ## $world_named_months
+  ## [1] "Ybd" "dby"
+  ## 
+  ## $world_digit_months
+  ## [1] "dmy" "Ymd"
+  ## 
+  ## $US_formats
+  ## [1] "Omdy" "YOmd"
+  ## 
 
-  # save the original x for later if nothing is converted
-  ox <- x
 
-  if (is.factor(x)) {
-    x <- as.character(x)
-  }
-
-  if (!is.character(x)) {
-    stop("guess dates will only work for characters and factors")
-  }
-
+  # Process first and last dates -----------------------------------------------
+  
+  # make sure that they are single character strings in ISO 8601 format.
   iso_8601 <- "[0-9]{4}-(0|1(?=[0-2]))[0-9]-([0-2]|3(?=[0-1]))[0-9]"
   
   if (is.character(first_date) && 
@@ -175,6 +184,7 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     last_date <- as.Date(last_date, "%Y-%m-%d")
   }
   
+  # Set the first date to 50 years before the last date if it's not set
   if (is.null(first_date) && inherits(last_date, "Date")) {
     first_date <- min(seq.Date(last_date, length.out = 2, by = "-50 years"))
   } 
@@ -183,7 +193,27 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     stop("first_date and last_date must be Date objects or characters in yyyy-mm-dd format.")
   }
   
-  stopifnot(inherits(first_date, "Date"), inherits(last_date, "Date"))
+  # Process dates --------------------------------------------------------------
+
+  # If the input is a date already: no guessing needed!
+  if (inherits(x, c("Date", "POSIXt", "aweek"))) {
+    x <- as.Date(x)
+    x[x < first_date | x > last_date] <- as.Date(NA_character_)
+    return(x)
+  }
+
+  # save the original x for later if nothing is converted
+  ox <- x
+
+  if (is.factor(x)) {
+    x <- as.character(x)
+  }
+
+  if (!is.character(x)) {
+    stop("guess dates will only work for characters and factors")
+  }
+
+  # Process lubridate order list -----------------------------------------------
 
   if (!is.list(orders) && is.character(orders)) {
     orders <- list(orders)
@@ -193,18 +223,40 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     stop("orders must be a list of character vectors")
   }
   
-  ## convert all entries to character strings
-  x_test <- data.frame(lapply(orders, find_lubridate, x), stringsAsFactors = FALSE)
+  # Guess dates ----------------------------------------------------------------
+
+  # create a new environment for the out of bounds dates to live
+  baddies <- new.env()
+
+  # creat output data frame for dates
+  res        <- list(rep(as.Date(NA_character_), length(x)))
+  res        <- rep(res, length(orders))
+  names(res) <- names(orders)
+
+  # loop over each set of lubridate orders and find the dates
+  for (i in seq_along(orders)) {
+
+    # only test the dates if the previous run wasn't successful or the user doesn't want to
+    # keep <- if (!fast || i == 1) TRUE else keep & is.na(res[[i - 1]])
+
+    res[[i]] <- find_and_constrain_date(x, orders[[i]], keep = TRUE, first_date, last_date, baddies)
+
+  }
 
   ## if lubridate fails to do the job, then we should use thibaut's parser.  
-  first_constraint <- constrain_date(x_test, first_date, last_date, x)
-  x_rescued        <- rescue_lubridate_failures(first_constraint$good_dates, x, mxl = modern_excel)
+  x_rescued <- rescue_lubridate_failures(data.frame(res),
+                                         original_dates = x, 
+                                         mxl = modern_excel,
+                                         dmin = first_date,
+                                         dmax = last_date,
+                                         baddies = baddies
+                                         )
 
-  good_and_bad <- constrain_date(x_rescued, first_date, last_date, x)
-  bad_dates    <- c(first_constraint$bad_dates, good_and_bad$bad_dates)
-  bd           <- do.call("c", unname(bad_dates))
+  # process dates that were not parsed -----------------------------------------
+
+  bd <- as.list(baddies) # convert the environment to a list
   
-  if (!all(is.na(bd))) {
+  if (length(bd) > 0) {
     bd     <- utils::stack(bd)     # make a data frame with ind and values
     bd$ind <- as.character(bd$ind) # convert ind to char
     bd     <- unique(bd)           # only consider unique values
@@ -222,10 +274,9 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     warning(sprintf(msg, length(unique(bd$values)), first_date, last_date))
   }
   
-  new_x <- choose_first_good_date(good_and_bad$good_dates)
+  # Select the correct dates and test if we were successful --------------------
 
-
-  ## check how successful we were
+  new_x           <- choose_first_good_date(x_rescued)
   na_before       <- sum(is.na(x))
   na_after        <- sum(is.na(new_x))
   prop_successful <- (length(x) - na_after) / (length(x) - na_before)
@@ -238,82 +289,120 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   }
 }
 
-
-#' lappy-friendly wrapper of parse_date_time
+#' Finds dates with lubridate and constrains them to a date range
 #'
-#' @param orders, a vector of orders to consider
-#' @param x the data
-#' @keywords internal
+#' This takes a character vector and returns a vector of successfully translated
+#' dates within the specified range.
+#'
+#' It will also have the side-effect of populating an environment of bad dates
+#' that can be used for warning the user
+#'
 #' @noRd
-find_lubridate <- function(orders = NULL, x) {
-  suppressWarnings(as.Date(lubridate::parse_date_time(x, orders = orders)))
+#' @param x a character vector that can be converted to dates
+#' @param orders a vector of lubridate orders to consider
+#' @param keep a logical vector indicating the dates to test from `x`
+#' @param dmin the minimum dates
+#' @param dmax the maximum dates
+#' @param baddies an environment that will act as a list of bad dates. 
+#' @keywords internal
+find_and_constrain_date <- function(x, orders = NULL, keep = TRUE, dmin, dmax, baddies) {
+
+  # create an empty date vector
+  res <- rep(as.Date(NA_character_), length(x))
+  
+  # guess at only the subset of dates
+  suppressWarnings(res[keep] <- as.Date(lubridate::parse_date_time(x[keep], orders = orders)))
+  
+  res[keep] <- constrain_dates(res[keep], x[keep], dmin, dmax, baddies)
+  res
+
 }
 
 
 #' Trim dates outside of the defined boundaries
 #'
+#' @noRd
 #' @param date_a_frame a data frame where each column represents several
 #'   different parsings of the original date vector.
 #' @param dmin the minimum date
 #' @param dmax the maximum date
 #' @param original_dates the vector of original dates (to be collected for errors)
 #' @keywords internal
-#' @noRd
-constrain_date <- function(date_a_frame, dmin, dmax, original_dates = NULL) {
-  if (!is.null(original_dates)) {
-    bad_date_list <- lapply(date_a_frame, function(i) {
-      setNames(original_dates, as.character(i))[i < dmin | i > dmax]
-    })
-  } else {
-    bad_date_list <- NULL
-  }
-  for (i in names(date_a_frame)) {
-    tmp <- date_a_frame[[i]]
-    date_a_frame[[i]][tmp < dmin | tmp > dmax] <- NA 
-  }
-  list(good_dates = date_a_frame, bad_dates = bad_date_list)
+constrain_dates <- function(new_dates, original_dates, dmin, dmax, baddies) {
+
+  # filter out the dates that are below the threshold
+  outsiders <- new_dates < dmin | new_dates > dmax
+  outsiders[is.na(outsiders)] <- FALSE
+
+  # record the bad dates in the environment
+  if (any(outsiders)) {
+    for (i in which(outsiders)) {
+      bad <- as.character(new_dates[i])
+      baddies[[bad]] <- c(baddies[[bad]], original_dates[i])
+    }
+  } 
+  # mark the bad dates as NA
+  new_dates[outsiders] <- as.Date(NA_character_)
+  
+  new_dates
+
 }
+
 
 
 #' Choose the first non-missing date from a data frame of dates
 #'
+#' @noRd
 #' @param date_a_frame a data frame where each column contains a different
 #'   parsing of the same date vector
 #' @keywords internal
-#' @noRd
-choose_first_good_date <- function(date_a_frame, original_dates) {
+choose_first_good_date <- function(date_a_frame) {
   n   <- nrow(date_a_frame)
+  date_a_frame <- as.matrix(date_a_frame)
   res <- rep(as.Date(NA), length = n)
   for (i in seq_len(n)) {
-    tmp <- date_a_frame[i, ]
-    res[i] <- tmp[!is.na(tmp)][1]
+    tmp    <- date_a_frame[i, , drop = TRUE]
+    res[i] <- as.Date(tmp[!is.na(tmp)][1])
   }
   res
 }
 
+
 #' Find the dates that lubridate couldn't
 #' 
+#' @noRd
 #' @param date_a_frame a data frame where each column contains a different
 #'   parsing of the same date vector
 #' @param original_dates the vector of original dates.
 #' @param mxl "modern excel" if TRUE, then it uses 1900 as the origin, otherwise
 #'   1904 is used as the origin.
+#' @param dmin the minimum dates
+#' @param dmax the maximum dates
+#' @param baddies an environment that will act as a list of bad dates. 
 #' @keywords internal
-#' @noRd
-rescue_lubridate_failures <- function(date_a_frame, original_dates, mxl = TRUE) {
-  nas     <- is.na(date_a_frame)
+rescue_lubridate_failures <- function(date_a_frame, original_dates, mxl = TRUE, dmin, dmax, baddies) {
+
   # Find places where all rows are missing
+  nas     <- is.na(date_a_frame)
   all_nas <- apply(nas, 1, all)
   numbers <- suppressWarnings(!is.na(o_num <- as.integer(original_dates)))
   go_tibo <- which(all_nas & !numbers)
   go_exel <- all_nas & numbers
-  # Use Thibaut's guesser instead
+
+  # Use Thibaut's guesser 
+  tmpbo   <- rep(as.Date(NA_character_), length(go_tibo))
   for (i in go_tibo) {
-    date_a_frame[i, 1] <- i_extract_date_string(original_dates[i])
+    tmpbo[go_tibo == i] <- i_extract_date_string(original_dates[i])
+    tmpbo <- constrain_dates(tmpbo, original_dates[go_tibo], dmin, dmax, baddies)
   }
+  date_a_frame[[1]][go_tibo] <- tmpbo
+
+  # Use the excel guesser
   if (sum(go_exel)) {
-    origin <- if (mxl) as.Date("1900-01-01") else as.Date("1904-01-01")
-    date_a_frame[go_exel, 1] <- as.Date(o_num[go_exel], origin = origin)
+    origin <- if (mxl) as.Date("1899-12-30") else as.Date("1904-01-01")
+    tmpxl  <- as.Date(o_num[go_exel], origin = origin)
+    date_a_frame[[1]][go_exel] <- constrain_dates(tmpxl, original_dates[go_exel], dmin, dmax, baddies)
   }
+
   date_a_frame
 }

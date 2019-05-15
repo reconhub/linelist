@@ -71,7 +71,7 @@ threshold is exceeded, the original vector is returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.32.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.33.9000</span>
       </span>
     </div>
 
@@ -288,16 +288,16 @@ situation.
 <span class='co'># guess_dates can handle messy dates and tolerate missing data</span>
 
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"01-12-2001"</span>, <span class='st'>"male"</span>, <span class='st'>"female"</span>, <span class='st'>"2018-10-18"</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='st'>"2018_10_17"</span>,
-      <span class='st'>"43387"</span>, <span class='st'>"2018 10 19"</span>, <span class='st'>"// 24/12/1989"</span>, <span class='st'>"this is 24/12/1989!"</span>,
-      <span class='st'>"RECON NGO: 19 Sep 2018 :)"</span>, <span class='st'>"6/9/11"</span>, <span class='st'>"10/10/10"</span>)
+       <span class='st'>"43391"</span>, <span class='st'>"2018 10 19"</span>, <span class='st'>"// 24/12/1989"</span>, <span class='st'>"this is 24/12/1989!"</span>,
+       <span class='st'>"RECON NGO: 19 Sep 2018 :)"</span>, <span class='st'>"6/9/11"</span>, <span class='st'>"10/10/10"</span>)
 
 <span class='fu'>guess_dates</span>(<span class='no'>x</span>, <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='co'># forced conversion</span></div><div class='output co'>#&gt;  [1] "2001-12-01" NA           NA           "2018-10-18" NA          
-#&gt;  [6] NA           "2018-10-17" "2018-10-16" "2018-10-19" "1989-12-24"
+#&gt;  [6] NA           "2018-10-17" "2018-10-18" "2018-10-19" "1989-12-24"
 #&gt; [11] "1989-12-24" "2018-09-19" "2011-09-06" "2010-10-10"</div><div class='input'>
 <span class='fu'>guess_dates</span>(<span class='no'>x</span>, <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.15</span>) <span class='co'># only 15% errors allowed</span></div><div class='output co'>#&gt;  [1] "01-12-2001"                "male"                     
 #&gt;  [3] "female"                    "2018-10-18"               
 #&gt;  [5] NA                          NA                         
-#&gt;  [7] "2018_10_17"                "43387"                    
+#&gt;  [7] "2018_10_17"                "43391"                    
 #&gt;  [9] "2018 10 19"                "// 24/12/1989"            
 #&gt; [11] "this is 24/12/1989!"       "RECON NGO: 19 Sep 2018 :)"
 #&gt; [13] "6/9/11"                    "10/10/10"                 </div><div class='input'>

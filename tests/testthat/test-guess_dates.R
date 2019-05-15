@@ -24,7 +24,7 @@ test_that("mixed formats work", {
 test_that("excel dates work", {
 
   xl <- x
-  xl[1:2] <- expected_result[1:2] - as.Date("1900-01-01")
+  xl[1:2] <- expected_result[1:2] - as.Date("1899-12-30")
   expect_equal(guess_dates(xl, error_tolerance = 0.8, first_date = as.Date("1980-01-01")),
                expected_result)
   xl[1:2] <- expected_result[1:2] - as.Date("1904-01-01")
@@ -38,6 +38,9 @@ test_that("date input requires no guesswork", {
   expect_identical(guess_dates(expected_result), expected_result)
   expect_identical(guess_dates(as.POSIXlt(expected_result)), expected_result)
   expect_identical(guess_dates(as.POSIXct(expected_result)), expected_result)
+
+  er <- c(expected_result, as.Date(NA_character_))
+  expect_identical(guess_dates(c(expected_result, Sys.Date() + 10)), er)
 
 })
 
