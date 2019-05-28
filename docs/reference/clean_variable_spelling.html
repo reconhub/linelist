@@ -296,92 +296,92 @@ numeric and Date columns from conversion to character.</p>
 #&gt; 28      unk     unknown                .global    Inf
 #&gt; 29      oui         yes                .global    Inf
 #&gt; 30 .missing     missing                .global    Inf</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>) <span class='co'># show the data</span></div><div class='output co'>#&gt;   readmission treatment_administered facility age_group has_symptoms followup
-#&gt; 1        &lt;NA&gt;                      1        1         0         &lt;NA&gt;      unk
-#&gt; 2           u                   &lt;NA&gt;        7        40          oui      unk
-#&gt; 3        &lt;NA&gt;                      1        7        10            n        n
-#&gt; 4           y                      1        6        30         &lt;NA&gt;        y
-#&gt; 5           y                      1        6        30            u      oui
-#&gt; 6           n                      0        4         0            y      oui</div><div class='input'>
+#&gt; 1           u                      0        8        20            n        n
+#&gt; 2           u                      1        B        50            u     &lt;NA&gt;
+#&gt; 3           n                      0        B        40          unk      oui
+#&gt; 4        &lt;NA&gt;                      1        8        20          oui      unk
+#&gt; 5           y                      1        4        40            u     &lt;NA&gt;
+#&gt; 6        &lt;NA&gt;                      0        C        40          oui        n</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>, <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>, <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>))</div><div class='output co'>#&gt;   readmission treatment_administered    facility age_group has_symptoms
-#&gt; 1     Missing                     No Facility  1       0-9      missing
-#&gt; 2     Unknown                Missing Facility  7     40-49          yes
-#&gt; 3     Missing                     No Facility  7     10-19           no
-#&gt; 4         Yes                     No Facility  6     30-39      missing
-#&gt; 5         Yes                     No Facility  6     30-39      unknown
-#&gt; 6          No                    Yes Facility  4       0-9          yes
+#&gt; 1     Unknown                    Yes Facility  8     20-29           no
+#&gt; 2     Unknown                     No     Unknown       50+      unknown
+#&gt; 3          No                    Yes     Unknown     40-49      unknown
+#&gt; 4     Missing                     No Facility  8     20-29          yes
+#&gt; 5         Yes                     No Facility  4     40-49      unknown
+#&gt; 6     Missing                    Yes     Unknown     40-49          yes
 #&gt;   followup
-#&gt; 1  unknown
-#&gt; 2  unknown
-#&gt; 3       no
-#&gt; 4      yes
-#&gt; 5      yes
-#&gt; 6      yes</div><div class='input'>
+#&gt; 1       no
+#&gt; 2  missing
+#&gt; 3      yes
+#&gt; 4  unknown
+#&gt; 5  missing
+#&gt; 6       no</div><div class='input'>
 <span class='co'># You can ensure the order of the factors are correct by specifying </span>
 <span class='co'># a column that defines order.</span>
 
 <span class='no'>dat</span>[] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='no'>dat</span>, <span class='no'>as.factor</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>as.list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>))</div><div class='output co'>#&gt; $readmission
-#&gt; [1] &lt;NA&gt; u    &lt;NA&gt; y    y    n   
+#&gt; [1] u    u    n    &lt;NA&gt; y    &lt;NA&gt;
 #&gt; Levels:  n u y
 #&gt; 
 #&gt; $treatment_administered
-#&gt; [1] 1    &lt;NA&gt; 1    1    1    0   
+#&gt; [1] 0 1 0 1 1 0
 #&gt; Levels:  0 1
 #&gt; 
 #&gt; $facility
-#&gt; [1] 1 7 7 6 6 4
-#&gt; Levels: 1 10 3 4 5 6 7 8 9 A B C
+#&gt; [1] 8 B B 8 4 C
+#&gt; Levels: 1 10 2 3 4 5 6 7 8 9 A B C
 #&gt; 
 #&gt; $age_group
-#&gt; [1] 0  40 10 30 30 0 
+#&gt; [1] 20 50 40 20 40 40
 #&gt; Levels: 0 10 20 30 40 50
 #&gt; 
 #&gt; $has_symptoms
-#&gt; [1] &lt;NA&gt; oui  n    &lt;NA&gt; u    y   
-#&gt; Levels:  n oui u unk y
+#&gt; [1] n   u   unk oui u   oui
+#&gt; Levels: n oui u unk y
 #&gt; 
 #&gt; $followup
-#&gt; [1] unk unk n   y   oui oui
+#&gt; [1] n    &lt;NA&gt; oui  unk  &lt;NA&gt; n   
 #&gt; Levels: n oui u unk y
 #&gt; </div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>,
                                <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>,
                                <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
                                <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"orders"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt;   readmission treatment_administered    facility age_group has_symptoms
-#&gt; 1     Missing                     No Facility  1       0-9      missing
-#&gt; 2     Unknown                Missing Facility  7     40-49          yes
-#&gt; 3     Missing                     No Facility  7     10-19           no
-#&gt; 4         Yes                     No Facility  6     30-39      missing
-#&gt; 5         Yes                     No Facility  6     30-39      unknown
-#&gt; 6          No                    Yes Facility  4       0-9          yes
+#&gt; 1     Unknown                    Yes Facility  8     20-29           no
+#&gt; 2     Unknown                     No     Unknown       50+      unknown
+#&gt; 3          No                    Yes     Unknown     40-49      unknown
+#&gt; 4     Missing                     No Facility  8     20-29          yes
+#&gt; 5         Yes                     No Facility  4     40-49      unknown
+#&gt; 6     Missing                    Yes     Unknown     40-49          yes
 #&gt;   followup
-#&gt; 1  unknown
-#&gt; 2  unknown
-#&gt; 3       no
-#&gt; 4      yes
-#&gt; 5      yes
-#&gt; 6      yes</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>as.list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>res</span>))</div><div class='output co'>#&gt; $readmission
-#&gt; [1] Missing Unknown Missing Yes     Yes     No     
+#&gt; 1       no
+#&gt; 2  missing
+#&gt; 3      yes
+#&gt; 4  unknown
+#&gt; 5  missing
+#&gt; 6       no</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>as.list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>res</span>))</div><div class='output co'>#&gt; $readmission
+#&gt; [1] Unknown Unknown No      Missing Yes     Missing
 #&gt; Levels: Yes No Unknown Missing
 #&gt; 
 #&gt; $treatment_administered
-#&gt; [1] No      Missing No      No      No      Yes    
+#&gt; [1] Yes No  Yes No  No  Yes
 #&gt; Levels: Yes No Missing
 #&gt; 
 #&gt; $facility
-#&gt; [1] Facility  1 Facility  7 Facility  7 Facility  6 Facility  6 Facility  4
-#&gt; 10 Levels: Facility  1 Facility  3 Facility  4 Facility  5 ... Unknown
+#&gt; [1] Facility  8 Unknown     Unknown     Facility  8 Facility  4 Unknown    
+#&gt; 11 Levels: Facility  1 Facility  2 Facility  3 Facility  4 ... Unknown
 #&gt; 
 #&gt; $age_group
-#&gt; [1] 0-9   40-49 10-19 30-39 30-39 0-9  
+#&gt; [1] 20-29 50+   40-49 20-29 40-49 40-49
 #&gt; Levels: 0-9 10-19 20-29 30-39 40-49 50+
 #&gt; 
 #&gt; $has_symptoms
-#&gt; [1] missing yes     no      missing unknown yes    
+#&gt; [1] no      unknown unknown yes     unknown yes    
 #&gt; Levels: yes no unknown missing
 #&gt; 
 #&gt; $followup
-#&gt; [1] unknown unknown no      yes     yes     yes    
+#&gt; [1] no      missing yes     unknown missing no     
 #&gt; Levels: yes no unknown missing
 #&gt; </div></pre>
   </div>
