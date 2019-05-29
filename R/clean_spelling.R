@@ -26,8 +26,10 @@
 #' 
 #' The first column of the wordlist will contain the keys that you want to
 #' match in your current data set. These are expected to match exactly with
-#' the exception of two reserved keywords that both start with a full stop:
+#' the exception of three reserved keywords that start with a full stop:
 #'
+#'  - `.regex [pattern]`: will replace anything matching [pattern]. **This
+#'    is executed before any other replacements are made**
 #'  - `.missing`: replaces any missing values (see NOTE)
 #'  - `.default`: replaces **ALL** values that are not defined in the wordlist
 #'                and are not missing. 
@@ -48,7 +50,8 @@
 #'
 #' @note If there are any missing values in the first column (keys), then they
 #' are automatically converted to the character "NA" with a warning. If you want
-#' to target missing data with your wordlist, use the `.missing` keyword.
+#' to target missing data with your wordlist, use the `.missing` keyword. The
+#' `.regex` keyword uses [gsub()] with the `perl = TRUE` option for replacement.
 #'
 #' @return a vector of the same type as `x` with mis-spelled labels cleaned. 
 #'   Note that factors will be arranged by the order presented in the data 
@@ -76,6 +79,13 @@
 #'
 #' clean_spelling(my_data, corrections)
 #'
+#' # You can use regular expressions to simplify your list
+#' corrections <- data.frame(
+#'   bad =  c(".regex f[ou][^m].+?r$", "unknown", ".missing"), 
+#'   good = c("foobar",                ".na",     "missing"),
+#'   stringsAsFactors = FALSE
+#' )
+#'
 #' # You can also set a default value
 #' corrections_with_default <- rbind(corrections, c(bad = ".default", good = "unknown"))
 #' corrections_with_default
@@ -93,11 +103,14 @@
 #' # The can be used for translating survey output
 #'
 #' words <- data.frame(
-#'   option_code = c("Y", "N", "U", ".missing"),
+#'   option_code = c(".regex ^[yY][eE]?[sS]?", 
+#'                   ".regex ^[nN][oO]?", 
+#'                   ".regex ^[uU][nN]?[kK]?", 
+#'                   ".missing"),
 #'   option_name = c("Yes", "No", ".na", "Missing"),
 #'   stringsAsFactors = FALSE
 #' )
-#' clean_spelling(c("Y", "Y", NA, "N", "U", "U", "N"), words)
+#' clean_spelling(c("Y", "Y", NA, "No", "U", "UNK", "N"), words)
 #'
 #' @importFrom forcats fct_recode fct_explicit_na fct_relevel
 #' @importFrom rlang "!!!"
@@ -180,6 +193,7 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
     }
   }
 
+
   dict        <- keys
   names(dict) <- values
   
@@ -189,6 +203,19 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
   default <- dict[!na_posi & default_posi]
   nas     <- dict[na_posi]
   dict    <- dict[!na_posi & !default_posi]
+
+  # replacing regex keys first ------------------------------------------------
+  reg_keys       <- grepl("^\\.regex ", dict)
+  dict[reg_keys] <-  gsub("^\\.regex ", "", dict[reg_keys])
+
+  for (i in seq_along(dict[reg_keys])) {
+    pattern      <- dict[reg_keys][i] 
+    replacement  <- names(dict[reg_keys])[i] 
+    x            <- gsub(pattern, replacement, x, perl = TRUE)
+  }
+
+  # replacing the regex keys with their values
+  dict[reg_keys] <- names(dict)[reg_keys]
 
   # Making "" explicitly NA ---------------------------------------------------
   x <- forcats::fct_recode(x, NULL = "")
