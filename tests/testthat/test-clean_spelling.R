@@ -34,13 +34,20 @@ test_that("regex is possible", {
   datf <- corrections
   datf <- datf[2:5, ]
   # replace foobar, foubar, foobr, fubar, etc with foobar
-  datf$bad[1]  <- ".regex ^f[ou][^m].+r$"
+  datf$bad[1]  <- ".regex f[ou][^m][a-z]+r"
   datf$good[1] <- "foobar"
   
   # replace the literal no importa with dang (shouldn't do anything)
   datf$bad[2]  <- ".regex no importa"
   datf$good[2] <- "dang"
-  expect_identical(clean_spelling(my_data, datf), cleaned_data)
+  
+  # with regex anchors
+  expect_identical(clean_spelling(c(my_data, "dang foobr"), datf),
+                   c(cleaned_data, "dang foobr"))
+  
+  # without anchors
+  expect_identical(clean_spelling(c(my_data, "dang foobr fuuuuber"), datf, anchor_regex = FALSE), 
+                   c(cleaned_data, "dang foobar foobar"))
 
 
 })

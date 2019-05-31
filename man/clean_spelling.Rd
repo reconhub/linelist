@@ -5,7 +5,7 @@
 \title{Rename values in a vector based on a wordlist}
 \usage{
 clean_spelling(x = character(), wordlist = data.frame(),
-  quiet = FALSE, warn_default = TRUE)
+  quiet = FALSE, warn_default = TRUE, anchor_regex = TRUE)
 }
 \arguments{
 \item{x}{a character or factor vector}
@@ -22,6 +22,9 @@ replacement is made; if \code{FALSE}, these warnings will be disabled}
 \code{warn_default = TRUE}, a warning will be issued listing the variables
 that were changed to the default value. This can be used to update your
 wordlist.}
+
+\item{anchor_regex}{a \code{logical}. When \code{TRUE} (default), any regex within
+the keywork}
 }
 \value{
 a vector of the same type as \code{x} with mis-spelled labels cleaned.
@@ -38,8 +41,12 @@ a data wordlist can be imported from a data frame.
 
 The first column of the wordlist will contain the keys that you want to
 match in your current data set. These are expected to match exactly with
-the exception of two reserved keywords that both start with a full stop:
+the exception of three reserved keywords that start with a full stop:
 \itemize{
+\item \code{.regex [pattern]}: will replace anything matching \code{[pattern]}. \strong{This
+is executed before any other replacements are made}. The \code{[pattern]}
+should be an unquoted, valid, PERL-flavored regular expression. Any
+whitespace padding the regular expression is discarded.
 \item \code{.missing}: replaces any missing values (see NOTE)
 \item \code{.default}: replaces \strong{ALL} values that are not defined in the wordlist
 and are not missing.
@@ -63,7 +70,8 @@ between explicit and implicit missing data.
 \note{
 If there are any missing values in the first column (keys), then they
 are automatically converted to the character "NA" with a warning. If you want
-to target missing data with your wordlist, use the \code{.missing} keyword.
+to target missing data with your wordlist, use the \code{.missing} keyword. The
+\code{.regex} keyword uses \code{\link[=gsub]{gsub()}} with the \code{perl = TRUE} option for replacement.
 }
 \examples{
 
@@ -79,6 +87,13 @@ my_data <- c(letters[1:5], sample(corrections$bad[-5], 10, replace = TRUE))
 my_data[sample(6:15, 2)] <- NA  # with missing elements
 
 clean_spelling(my_data, corrections)
+
+# You can use regular expressions to simplify your list
+corrections <- data.frame(
+  bad =  c(".regex f[ou][^m].+?r$", "unknown", ".missing"), 
+  good = c("foobar",                ".na",     "missing"),
+  stringsAsFactors = FALSE
+)
 
 # You can also set a default value
 corrections_with_default <- rbind(corrections, c(bad = ".default", good = "unknown"))
@@ -97,11 +112,14 @@ clean_spelling(letters, corrections)
 # The can be used for translating survey output
 
 words <- data.frame(
-  option_code = c("Y", "N", "U", ".missing"),
+  option_code = c(".regex ^[yY][eE]?[sS]?", 
+                  ".regex ^[nN][oO]?", 
+                  ".regex ^[uU][nN]?[kK]?", 
+                  ".missing"),
   option_name = c("Yes", "No", ".na", "Missing"),
   stringsAsFactors = FALSE
 )
-clean_spelling(c("Y", "Y", NA, "N", "U", "U", "N"), words)
+clean_spelling(c("Y", "Y", NA, "No", "U", "UNK", "N"), words)
 
 }
 \seealso{
