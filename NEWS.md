@@ -1,3 +1,8 @@
+# linelist 0.0.35.9000
+
+* `clean_spelling()` gains the `anchor_regex` argument, which will wrap all
+  regex keyword entries in "^" and "$" before processing. 
+
 # linelist 0.0.34.9000
 
 * `clean_spelling()` now gains the `.regex ` keyword that allows the user to
