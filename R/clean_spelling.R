@@ -172,12 +172,13 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
 
   if (!quiet) {
     the_call  <- match.call()
-    no_keys   <- !any(x %in% keys, na.rm = TRUE)
+    no_regex  <- !any(grepl("^\\.regex ", keys))
+    no_keys   <- !any(x %in% keys, na.rm = TRUE) 
     no_values <- !any(x %in% values, na.rm = TRUE)
     the_x     <- deparse(the_call[["x"]])
     the_words <- deparse(the_call[["wordlist"]])
 
-    if (no_keys && no_values) {
+    if (no_keys && no_values && no_regex) {
       msg <- "None of the variables in %s were found in %s. Did you use the correct wordlist?" 
       msg <- sprintf(msg, the_x, the_words)
       warning(msg)
