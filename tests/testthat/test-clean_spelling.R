@@ -29,6 +29,22 @@ test_that("clean_spelling throws an error with no wordlist", {
 
 })
 
+test_that("regex is possible", {
+
+  datf <- corrections
+  datf <- datf[2:5, ]
+  # replace foobar, foubar, foobr, fubar, etc with foobar
+  datf$bad[1]  <- ".regex ^f[ou][^m].+r$"
+  datf$good[1] <- "foobar"
+  
+  # replace the literal no importa with dang (shouldn't do anything)
+  datf$bad[2]  <- ".regex no importa"
+  datf$good[2] <- "dang"
+  expect_identical(clean_spelling(my_data, datf), cleaned_data)
+
+
+})
+
 test_that("logical values can be coerced", {
 
   res <- clean_spelling(1:5 > 2, data.frame(a = c(FALSE, TRUE), b = c("hell", "yeah")))

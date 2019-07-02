@@ -9,6 +9,10 @@
   linelist class is ressurrected, (e.g. to implement a hxl validator package),
   it can be taken from that commit. This is related to #29
 
+* `clean_spelling()` now gains the `.regex ` keyword that allows the user to
+  supply perl-style regular expressions to change words that may have similar
+  spelling.
+
 # linelist 0.0.33.9000
 
 * `guess_dates()` now processes at double the speed of the previous version.
