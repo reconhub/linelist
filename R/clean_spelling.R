@@ -19,6 +19,9 @@
 #'   that were changed to the default value. This can be used to update your
 #'   wordlist.
 #' 
+#' @param anchor_regex a `logical`. When `TRUE` (default), any regex within
+#'   the keywork 
+#' 
 #'
 #' @details 
 #'
@@ -28,8 +31,10 @@
 #' match in your current data set. These are expected to match exactly with
 #' the exception of three reserved keywords that start with a full stop:
 #'
-#'  - `.regex [pattern]`: will replace anything matching [pattern]. **This
-#'    is executed before any other replacements are made**
+#'  - `.regex [pattern]`: will replace anything matching `[pattern]`. **This
+#'    is executed before any other replacements are made**. The `[pattern]`
+#'    should be an unquoted, valid, PERL-flavored regular expression. Any
+#'    whitespace padding the regular expression is discarded.
 #'  - `.missing`: replaces any missing values (see NOTE)
 #'  - `.default`: replaces **ALL** values that are not defined in the wordlist
 #'                and are not missing. 
@@ -116,7 +121,8 @@
 #' @importFrom rlang "!!!"
 
 clean_spelling <- function(x = character(), wordlist = data.frame(),
-                           quiet = FALSE, warn_default = TRUE) {
+                           quiet = FALSE, warn_default = TRUE,
+                           anchor_regex = TRUE) {
 
   if (length(x) == 0 || !is.atomic(x)) {
     stop("x must be coerceable to a character")
@@ -166,12 +172,13 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
 
   if (!quiet) {
     the_call  <- match.call()
-    no_keys   <- !any(x %in% keys, na.rm = TRUE)
+    no_regex  <- !any(grepl("^\\.regex ", keys))
+    no_keys   <- !any(x %in% keys, na.rm = TRUE) 
     no_values <- !any(x %in% values, na.rm = TRUE)
     the_x     <- deparse(the_call[["x"]])
     the_words <- deparse(the_call[["wordlist"]])
 
-    if (no_keys && no_values) {
+    if (no_keys && no_values && no_regex) {
       msg <- "None of the variables in %s were found in %s. Did you use the correct wordlist?" 
       msg <- sprintf(msg, the_x, the_words)
       warning(msg)
@@ -206,7 +213,11 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
 
   # replacing regex keys first ------------------------------------------------
   reg_keys       <- grepl("^\\.regex ", dict)
-  dict[reg_keys] <-  gsub("^\\.regex ", "", dict[reg_keys])
+  dict[reg_keys] <- trimws(gsub("^\\.regex ", "", dict[reg_keys]))
+  # If the user wants us to automatically add regex anchors.
+  if (anchor_regex) {
+    dict[reg_keys] <- sprintf("^%s$", dict[reg_keys])
+  }
 
   for (i in seq_along(dict[reg_keys])) {
     pattern      <- dict[reg_keys][i] 
