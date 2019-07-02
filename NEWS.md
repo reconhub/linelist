@@ -1,5 +1,14 @@
 # linelist 0.0.34.9000
 
+## BREAKING CHANGES
+
+* The linelist class and all associated epivars/dictionary functions have been
+  removed as out of scope of this package. Without any validation, these 
+  functions were no more than a fancy wrapper to `dplyr::rename()`, thus they
+  are being removed after fda9e18b02f5853cd311ddcc513c427244b21dd7. If the
+  linelist class is ressurrected, (e.g. to implement a hxl validator package),
+  it can be taken from that commit. This is related to #29
+
 * `clean_spelling()` now gains the `.regex ` keyword that allows the user to
   supply perl-style regular expressions to change words that may have similar
   spelling.
