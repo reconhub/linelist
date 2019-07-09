@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.33.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.35.9000</span>
       </span>
     </div>
 
@@ -115,6 +115,14 @@
       <small>Source: <a href='https://github.com/reconhub/linelist/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="linelist-0-0-35-9000" class="section level1">
+<h1 class="page-header">
+<a href="#linelist-0-0-35-9000" class="anchor"></a>linelist 0.0.35.9000</h1>
+<ul>
+<li>
+<code><a href="../reference/clean_spelling.html">clean_spelling()</a></code> gains the <code>anchor_regex</code> argument, which will wrap all regex keyword entries in “^” and “$” before processing.</li>
+</ul>
+</div>
     <div id="linelist-0-0-34-9000" class="section level1">
 <h1 class="page-header">
 <a href="#linelist-0-0-34-9000" class="anchor"></a>linelist 0.0.34.9000</h1>
@@ -122,7 +130,8 @@
 <h2 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>BREAKING CHANGES</h2>
 <ul>
-<li>The linelist class and all associated epivars/dictionary functions have been removed as out of scope of this package. Without any validation, these functions were no more than a fancy wrapper to <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::rename()</a></code>, thus they are being removed after fda9e18b02f5853cd311ddcc513c427244b21dd7. If the linelist class is ressurrected, (e.g. to implement a hxl validator package), it can be taken from that commit. This is related to <a href='https://github.com/reconhub/linelist/issues/29'>#29</a></li>
+<li><p>The linelist class and all associated epivars/dictionary functions have been removed as out of scope of this package. Without any validation, these functions were no more than a fancy wrapper to <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::rename()</a></code>, thus they are being removed after fda9e18b02f5853cd311ddcc513c427244b21dd7. If the linelist class is ressurrected, (e.g. to implement a hxl validator package), it can be taken from that commit. This is related to <a href='https://github.com/reconhub/linelist/issues/29'>#29</a></p></li>
+<li><p><code><a href="../reference/clean_spelling.html">clean_spelling()</a></code> now gains the <code>.regex</code> keyword that allows the user to supply perl-style regular expressions to change words that may have similar spelling.</p></li>
 </ul>
 </div>
 </div>
@@ -417,6 +426,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#linelist-0-0-35-9000">0.0.35.9000</a></li>
         <li><a href="#linelist-0-0-34-9000">0.0.34.9000</a></li>
         <li><a href="#linelist-0-0-33-9000">0.0.33.9000</a></li>
         <li><a href="#linelist-0-0-32-9000">0.0.32.9000</a></li>
