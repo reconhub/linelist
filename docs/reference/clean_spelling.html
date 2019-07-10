@@ -65,7 +65,7 @@ a data wordlist can be imported from a data frame." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.33.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.35.9000</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@ a data wordlist can be imported from a data frame.</p>
     </div>
 
     <pre class="usage"><span class='fu'>clean_spelling</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>wordlist</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(),
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>warn_default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>warn_default</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>anchor_regex</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,6 +158,11 @@ replacement is made; if <code>FALSE</code>, these warnings will be disabled</p><
 that were changed to the default value. This can be used to update your
 wordlist.</p></td>
     </tr>
+    <tr>
+      <th>anchor_regex</th>
+      <td><p>a <code>logical</code>. When <code>TRUE</code> (default), any regex within
+the keywork</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -171,8 +176,12 @@ wordlist; other levels will appear afterwards.</p>
     <h3>Keys (first column)</h3>
     The first column of the wordlist will contain the keys that you want to
 match in your current data set. These are expected to match exactly with
-the exception of two reserved keywords that both start with a full stop:
+the exception of three reserved keywords that start with a full stop:
 <ul>
+<li><p><code>.regex [pattern]</code>: will replace anything matching <code>[pattern]</code>. <strong>This
+is executed before any other replacements are made</strong>. The <code>[pattern]</code>
+should be an unquoted, valid, PERL-flavored regular expression. Any
+whitespace padding the regular expression is discarded.</p></li>
 <li><p><code>.missing</code>: replaces any missing values (see NOTE)</p></li>
 <li><p><code>.default</code>: replaces <strong>ALL</strong> values that are not defined in the wordlist
 and are not missing.</p></li>
@@ -191,7 +200,8 @@ between explicit and implicit missing data.</p></li>
 
     <p>If there are any missing values in the first column (keys), then they
 are automatically converted to the character "NA" with a warning. If you want
-to target missing data with your wordlist, use the <code>.missing</code> keyword.</p>
+to target missing data with your wordlist, use the <code>.missing</code> keyword. The
+<code>.regex</code> keyword uses <code><a href='https://www.rdocumentation.org/packages/base/topics/grep'>gsub()</a></code> with the <code>perl = TRUE</code> option for replacement.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -219,15 +229,20 @@ multiple variables in a data frame.</p></div>
 <span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt;  [1] "a"       "b"       "c"       "d"       "e"       "missing" "foobar" 
 #&gt;  [8] NA        "foobar"  "foobar"  NA        "foobar"  "foobar"  "missing"
 #&gt; [15] "foobar" </div><div class='input'>
+<span class='co'># You can use regular expressions to simplify your list</span>
+<span class='no'>corrections</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>bad</span> <span class='kw'>=</span>  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".regex f[ou][^m].+?r$"</span>, <span class='st'>"unknown"</span>, <span class='st'>".missing"</span>),
+  <span class='kw'>good</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"foobar"</span>,                <span class='st'>".na"</span>,     <span class='st'>"missing"</span>),
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
+
 <span class='co'># You can also set a default value</span>
 <span class='no'>corrections_with_default</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>corrections</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>bad</span> <span class='kw'>=</span> <span class='st'>".default"</span>, <span class='kw'>good</span> <span class='kw'>=</span> <span class='st'>"unknown"</span>))
-<span class='no'>corrections_with_default</span></div><div class='output co'>#&gt;        bad    good
-#&gt; 1   foubar  foobar
-#&gt; 2    foobr  foobar
-#&gt; 3    fubar  foobar
-#&gt; 4  unknown     .na
-#&gt; 5 .missing missing
-#&gt; 6 .default unknown</div><div class='input'>
+<span class='no'>corrections_with_default</span></div><div class='output co'>#&gt;                     bad    good
+#&gt; 1 .regex f[ou][^m].+?r$  foobar
+#&gt; 2               unknown     .na
+#&gt; 3              .missing missing
+#&gt; 4              .default unknown</div><div class='input'>
 <span class='co'># a warning will be issued about the data that were converted</span>
 <span class='fu'>clean_spelling</span>(<span class='no'>my_data</span>, <span class='no'>corrections_with_default</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'a', 'b', 'c', 'd', 'e' were changed to the default value ('unknown')</span></div><div class='output co'>#&gt;  [1] "unknown" "unknown" "unknown" "unknown" "unknown" "missing" "foobar" 
 #&gt;  [8] NA        "foobar"  "foobar"  NA        "foobar"  "foobar"  "missing"
@@ -238,16 +253,19 @@ multiple variables in a data frame.</p></div>
 #&gt; [15] "foobar" </div><div class='input'>
 <span class='co'># The function will give you a warning if the wordlist does not</span>
 <span class='co'># match the data</span>
-<span class='fu'>clean_spelling</span>(<span class='no'>letters</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: None of the variables in letters were found in corrections. Did you use the correct wordlist?</span></div><div class='output co'>#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+<span class='fu'>clean_spelling</span>(<span class='no'>letters</span>, <span class='no'>corrections</span>)</div><div class='output co'>#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
 #&gt; [20] "t" "u" "v" "w" "x" "y" "z"</div><div class='input'>
 <span class='co'># The can be used for translating survey output</span>
 
 <span class='no'>words</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='kw'>option_code</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='st'>".missing"</span>),
+  <span class='kw'>option_code</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".regex ^[yY][eE]?[sS]?"</span>,
+                  <span class='st'>".regex ^[nN][oO]?"</span>,
+                  <span class='st'>".regex ^[uU][nN]?[kK]?"</span>,
+                  <span class='st'>".missing"</span>),
   <span class='kw'>option_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Yes"</span>, <span class='st'>"No"</span>, <span class='st'>".na"</span>, <span class='st'>"Missing"</span>),
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
-<span class='fu'>clean_spelling</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"Y"</span>, <span class='fl'>NA</span>, <span class='st'>"N"</span>, <span class='st'>"U"</span>, <span class='st'>"U"</span>, <span class='st'>"N"</span>), <span class='no'>words</span>)</div><div class='output co'>#&gt; [1] "Yes"     "Yes"     "Missing" "No"      NA        NA        "No"     </div><div class='input'>
+<span class='fu'>clean_spelling</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"Y"</span>, <span class='fl'>NA</span>, <span class='st'>"No"</span>, <span class='st'>"U"</span>, <span class='st'>"UNK"</span>, <span class='st'>"N"</span>), <span class='no'>words</span>)</div><div class='output co'>#&gt; [1] "Yes"     "Yes"     "Missing" "No"      NA        NA        "No"     </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
