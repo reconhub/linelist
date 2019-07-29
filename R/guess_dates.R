@@ -239,18 +239,24 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     # only test the dates if the previous run wasn't successful or the user doesn't want to
     # keep <- if (!fast || i == 1) TRUE else keep & is.na(res[[i - 1]])
 
-    res[[i]] <- find_and_constrain_date(x, orders[[i]], keep = TRUE, first_date, last_date, baddies)
+    res[[i]] <- find_and_constrain_date(x, 
+                                        orders  = orders[[i]],
+                                        keep    = TRUE,
+                                        dmin    = first_date,
+                                        dmax    = last_date,
+                                        baddies = baddies
+                                       )
 
   }
 
   ## if lubridate fails to do the job, then we should use thibaut's parser.  
   x_rescued <- rescue_lubridate_failures(data.frame(res),
-                                         original_dates = x, 
-                                         mxl = modern_excel,
-                                         dmin = first_date,
-                                         dmax = last_date,
-                                         baddies = baddies
-                                         )
+                                         original_dates = x,
+                                         mxl            = modern_excel,
+                                         dmin           = first_date,
+                                         dmax           = last_date,
+                                         baddies        = baddies
+                                        )
 
   # process dates that were not parsed -----------------------------------------
 
@@ -260,8 +266,8 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     bd     <- utils::stack(bd)     # make a data frame with ind and values
     bd$ind <- as.character(bd$ind) # convert ind to char
     bd     <- unique(bd)           # only consider unique values
-    bd     <- bd[!is.na(bd[[1]]) | !is.na(bd[[2]]), ] # remove NA rows
-    bd     <- bd[order(bd[[1]]), ] # sort by value
+    bd     <- bd[!is.na(bd[[1]]) | !is.na(bd[[2]]), , drop = FALSE] # remove NA rows
+    bd     <- bd[order(bd[[1]]), , drop = FALSE] # sort by value
     misses <- sprintf("  %s  |  %s", 
                       format(c("original", "--------", bd$values)), 
                       format(c("parsed",   "------  ", bd$ind))
