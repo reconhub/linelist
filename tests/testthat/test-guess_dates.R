@@ -110,3 +110,18 @@ test_that("passing a non-date as first_date throws an error", {
   expect_failure(expect_error(guess_dates(x, last_date = "2019-01-01"), "first_date and last_date must be Date objects."))
 
 })
+
+
+test_that("thibaut's guesser works", {
+
+  # This is a bug in lubridate: https://github.com/tidyverse/lubridate/issues/752
+  the_test     <- c("something_2019-01-01_report.xlsx", "it's the year 3030")
+  the_expected <- c(as.Date("2019-01-01"), as.Date(NA))
+
+  lstring      <- guess_dates(the_test, e = 1)
+  tstring      <- as.Date(vapply(the_test, i_extract_date_string, character(1)))
+  expect_equal(lstring, the_expected)
+  expect_equal(tstring, the_expected)
+
+
+})
