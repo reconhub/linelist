@@ -16,6 +16,9 @@
 #'
 #' @param replacement a single value to replace the less frequent values with
 #'
+#' @param ties.method how to deal with ties when ranking factor levels. This
+#'   defaults to "first", which is passed on to [rank()]. 
+#'
 #' @param ... further arguments passed to [forcats::fct_lump()].
 #' 
 #' @examples
@@ -28,6 +31,16 @@
 #' top_values(x, 2) # top 2
 #' top_values(x, 2, NA) # top 3, replace with NA
 #' top_values(x, 0) # extreme case, keep nothing
+#' 
+#' ## dealing with ties
+#' x <- c("a", "b", "a", "b", "c")
+#' 
+#' ## in the case of a tie (a, b), the first value is ranked higher than the
+#' ## others
+#' top_values(x, n = 1)
+#'
+#' ## here, the ties are ranked in reverse order, so b comes before a
+#' top_values(x, n = 1, ties.method = "last")
 
 top_values <-  function(x, n, ...) {
   UseMethod("top_values")
@@ -48,7 +61,7 @@ top_values.default <- function(x, n, ...) {
 #' @export
 #' @rdname top_values
 #' @importFrom forcats fct_lump
-top_values.factor <- function(x, n, replacement = "other", ...) {
+top_values.factor <- function(x, n, replacement = "other", ties.method = "first", ...) {
 
   # check if the replacement is missing... fct_lump doesn't like other_level = NA
   other_is_missing <- is.na(replacement)
@@ -57,7 +70,7 @@ top_values.factor <- function(x, n, replacement = "other", ...) {
   other <- if (other_is_missing) sprintf("other%s", Sys.time()) else replacement
   
   # do the work
-  out <- forcats::fct_lump(x, n = n, other_level = other, ...) 
+  out <- forcats::fct_lump(x, n = n, other_level = other, ties.method = ties.method, ...) 
 
   # remove the "other" if other is missing
   if (other_is_missing) {
@@ -71,10 +84,10 @@ top_values.factor <- function(x, n, replacement = "other", ...) {
 
 #' @export
 #' @rdname top_values
-top_values.character <- function(x, n, replacement = "other", ...) {
+top_values.character <- function(x, n, replacement = "other", ties.method = "first", ...) {
 
   # convert to factor, filter, and return as a character again
-  as.character(top_values(factor(x), n = n, replacement = replacement, ...))
+  as.character(top_values(factor(x), n = n, replacement = replacement, ties.method = ties.method, ...))
 
 }
 

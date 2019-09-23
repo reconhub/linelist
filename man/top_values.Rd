@@ -11,9 +11,11 @@ top_values(x, n, ...)
 
 \method{top_values}{default}(x, n, ...)
 
-\method{top_values}{factor}(x, n, replacement = "other", ...)
+\method{top_values}{factor}(x, n, replacement = "other",
+  ties.method = "first", ...)
 
-\method{top_values}{character}(x, n, replacement = "other", ...)
+\method{top_values}{character}(x, n, replacement = "other",
+  ties.method = "first", ...)
 }
 \arguments{
 \item{x}{a \code{factor} or a \code{character} vector}
@@ -23,6 +25,9 @@ top_values(x, n, ...)
 \item{...}{further arguments passed to \code{\link[forcats:fct_lump]{forcats::fct_lump()}}.}
 
 \item{replacement}{a single value to replace the less frequent values with}
+
+\item{ties.method}{how to deal with ties when ranking factor levels. This
+defaults to "first", which is passed on to \code{\link[=rank]{rank()}}.}
 }
 \description{
 This function is a generic, with methods for \code{factor} and \code{character}
@@ -41,6 +46,16 @@ sort(table(x), decreasing = TRUE)
 top_values(x, 2) # top 2
 top_values(x, 2, NA) # top 3, replace with NA
 top_values(x, 0) # extreme case, keep nothing
+
+## dealing with ties
+x <- c("a", "b", "a", "b", "c")
+
+## in the case of a tie (a, b), the first value is ranked higher than the
+## others
+top_values(x, n = 1)
+
+## here, the ties are ranked in reverse order, so b comes before a
+top_values(x, n = 1, ties.method = "last")
 }
 \author{
 Thibaut Jombart, Zhian N. Kamvar

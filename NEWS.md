@@ -1,3 +1,9 @@
+# linelist 0.0.36.9000
+
+* `top_values()` gains the explicit ties.method parameter, which defaults to 
+  "first" to fix issue #88 (thanks to @cwhittaker1000 for spotting the issue
+  and providing a detailed explanation). 
+
 # linelist 0.0.35.9000
 
 * `clean_spelling()` gains the `anchor_regex` argument, which will wrap all
