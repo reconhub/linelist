@@ -16,10 +16,20 @@
 #'
 #' @param replacement a single value to replace the less frequent values with
 #'
-#' @param ties.method how to deal with ties when ranking factor levels. This
-#'   defaults to "first", which is passed on to [rank()]. 
+#' @param ties.method how to deal with ties when ranking factor levels, which is
+#'  passed on to [rank()]. The default is set at "first" (see Details).
 #'
 #' @param ... further arguments passed to [forcats::fct_lump()].
+#'
+#' @details This function is an opinionated wrapper around [forcats::fct_lump()]
+#'   with the following changes:
+#'
+#'   1. characters are not auto-converted to factor
+#'   2. the default ties method defaults to "first" instead of "min"
+#'   3. if `n = nlevels(x) - 1`, then the nth level is still converted to the
+#'      value of `replacement` (forcats will assume you didn't want to convert
+#'      the nth level)
+#'   4. it is possible to convert the replacement to `NA`
 #' 
 #' @examples
 #' 
@@ -41,6 +51,20 @@
 #'
 #' ## here, the ties are ranked in reverse order, so b comes before a
 #' top_values(x, n = 1, ties.method = "last")
+#'
+#' ## top_values differs from forcats::fct_lump in that if the user selects n - 1
+#' ## values, it will force the last value to be "other"
+#' forcats::fct_lump(x, n = 2)
+#' top_values(x, n = 2)
+#'
+#' ## If there is a tie for the last level, then it will drop the level
+#' ## depending on the ties.method
+#' 
+#' # replace "d" with other
+#' top_values(c(x, "d"), n = 3)
+#'
+#' # replace "c" with other
+#' top_values(c(x, "d"), n = 3, ties.method = "last")
 
 top_values <-  function(x, n, ...) {
   UseMethod("top_values")
@@ -71,6 +95,35 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
   
   # do the work
   out <- forcats::fct_lump(x, n = n, other_level = other, ties.method = ties.method, ...) 
+  
+  # check the work -------------------------------------------------------------
+  #
+  # this is the case where fct_lump decided to be helpful and return the
+  # unblemished vector when one one level would be removed. In this case, we
+  # simply change that level.
+  if (identical(out, x) && n < nlevels(x)) {
+    level_counts <- tabulate(x)
+    first_min    <- which.min(level_counts)
+
+    if (ties.method == "last") {
+      the_level <- first_min
+    } else if (ties.method == "random" && stats::runif(1) < 0.5) {
+      the_level <- sample(which(level_counts == level_counts[first_min]), 1L)
+    } else {
+      # if the ties method is not random, then we should choose the last
+      # minimum value in the levels.
+      the_mins  <- level_counts == level_counts[first_min]
+      last_min  <- which.max(seq_along(level_counts)[the_mins])
+      the_level <- if (last_min == 1) first_min else first_min + last_min - 1L
+    }
+
+    the_other_level <- levels(x)[the_level]
+    names(the_other_level) <- other
+
+    out <- forcats::fct_relevel(out, the_other_level, after = Inf)
+    out <- forcats::fct_recode(out, !!!the_other_level)
+    
+  }
 
   # remove the "other" if other is missing
   if (other_is_missing) {

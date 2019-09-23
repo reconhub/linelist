@@ -57,3 +57,34 @@ test_that("top_values() will respect ties in order of factor", {
 
 })
 
+
+test_that("top_values() will change n-1 levels", {
+
+  x <- c("b", "a", "c", "a", "a", "b", "d", "d", "c", "b")
+  xf <- factor(x, levels = c("d", "c", "b", "a"))
+  expect_equal(top_values(x, n = 3), gsub("d", "other", x))
+  expect_equal(levels(top_values(xf, n = 3)), c("d", "b", "a", "other"))
+
+})
+
+
+test_that("top_values() will choose dropped ties based on user input", {
+
+  x <- c("b", "a", "c", "a", "a", "b", "d", "d", "c", "b")
+  xf <- factor(x, levels = c("d", "c", "b", "a"))
+  expect_equal(top_values(x, n = 3, ties.method = "last"), gsub("c", "other", x))
+  expect_equal(levels(top_values(xf, n = 3, ties.method = "last")), c("c", "b", "a", "other"))
+
+})
+
+
+test_that("top_values() will drop a value randomly", {
+
+  set.seed(2019-09-23)
+  lttrs1 <- top_values(letters, n = 25, ties.method = "random")
+  lttrs2 <- top_values(letters, n = 25, ties.method = "random")
+  expect_equal(sum(lttrs1 %in% letters), 25L)
+  expect_equal(sum(lttrs2 %in% letters), 25L)
+  expect_failure(expect_identical(lttrs1, lttrs2))
+
+})
