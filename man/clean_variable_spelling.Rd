@@ -5,7 +5,8 @@
 \title{Check and clean spelling or codes of multiple variables in a data frame}
 \usage{
 clean_variable_spelling(x = data.frame(), wordlists = list(),
-  spelling_vars = 3, sort_by = NULL, classes = NULL, warn = FALSE)
+  spelling_vars = 3, regex_vars = FALSE, sort_by = NULL,
+  classes = NULL, warn = FALSE)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -19,6 +20,10 @@ column must be present to split the wordlists by column in \code{x} (see
 then this column in defines the columns in \code{x} corresponding to each
 section of the \code{wordlists} data frame. This defaults to \code{3}, indicating the
 third column is to be used.}
+
+\item{regex_vars}{Logical indicating whether the spelling_vars should be
+treated as regular expressions to match against columns in \code{x} (TRUE), or
+as strings to be matched only literally (\code{FALSE}). Defaults to \code{FALSE}.}
 
 \item{sort_by}{a character the column to be used for sorting the values in
 each data frame. If the incoming variables are factors, this determines how
@@ -113,12 +118,14 @@ dat <- data.frame(
   readmission = sample(yesno, 50, replace = TRUE),
   treatment_administered = sample(treatment_administered, 50, replace = TRUE),
   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
+  facility_admit = sample(c(rep(".missing", 10), facility[-11], LETTERS[1:3]), 50, replace = TRUE),
   age_group = sample(age_group, 50, replace = TRUE),
   # global values will catch these
   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
   stringsAsFactors = FALSE
 )
+
 missing_data <- dat == ".missing"
 dat[missing_data] <- sample(c("", NA), sum(missing_data), prob = c(0.1, 0.9), replace = TRUE)
 
@@ -127,19 +134,31 @@ dat[missing_data] <- sample(c("", NA), sum(missing_data), prob = c(0.1, 0.9), re
 wordlist # show the wordlist
 head(dat) # show the data
 
-head(clean_variable_spelling(dat, wordlists = wordlist, spelling_vars = "grp"))
+res1 <- clean_variable_spelling(dat,
+                                wordlists = wordlist,
+                                spelling_vars = "grp")
+head(res1)
 
 # You can ensure the order of the factors are correct by specifying 
 # a column that defines order.
 
 dat[] <- lapply(dat, as.factor)
 as.list(head(dat))
-res <- clean_variable_spelling(dat, 
-                               wordlists = wordlist, 
-                               spelling_vars = "grp", 
-                               sort_by = "orders")
-head(res)
-as.list(head(res))
+res2 <- clean_variable_spelling(dat, 
+                                wordlists = wordlist, 
+                                spelling_vars = "grp", 
+                                sort_by = "orders")
+head(res2)
+as.list(head(res2))
+
+# Treat spelling_vars in wordlists as regular expressions, so that "facility"
+# matches columns "facility" AND "facility_admit")
+
+res3 <- clean_variable_spelling(dat,
+                                wordlists = wordlist,
+                                spelling_vars = "grp",
+                                regex_vars = TRUE)
+head(res3)
 }
 \seealso{
 \code{\link[=clean_spelling]{clean_spelling()}}, which this function wraps.

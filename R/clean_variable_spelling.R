@@ -15,6 +15,10 @@
 #'   then this column in defines the columns in `x` corresponding to each
 #'   section of the `wordlists` data frame. This defaults to `3`, indicating the
 #'   third column is to be used.
+#'   
+#' @param regex_vars Logical indicating whether the spelling_vars should be
+#'   treated as regular expressions to match against columns in `x` (TRUE), or
+#'   as strings to be matched only literally (`FALSE`). Defaults to `FALSE`.
 #'
 #' @param sort_by a character the column to be used for sorting the values in
 #'   each data frame. If the incoming variables are factors, this determines how
@@ -106,12 +110,14 @@
 #'   readmission = sample(yesno, 50, replace = TRUE),
 #'   treatment_administered = sample(treatment_administered, 50, replace = TRUE),
 #'   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
+#'   facility_admit = sample(c(rep(".missing", 10), facility[-11], LETTERS[1:3]), 50, replace = TRUE),
 #'   age_group = sample(age_group, 50, replace = TRUE),
 #'   # global values will catch these
 #'   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
 #'   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
 #'   stringsAsFactors = FALSE
 #' )
+#' 
 #' missing_data <- dat == ".missing"
 #' dat[missing_data] <- sample(c("", NA), sum(missing_data), prob = c(0.1, 0.9), replace = TRUE)
 #'
@@ -120,22 +126,36 @@
 #' wordlist # show the wordlist
 #' head(dat) # show the data
 #' 
-#' head(clean_variable_spelling(dat, wordlists = wordlist, spelling_vars = "grp"))
+#' res1 <- clean_variable_spelling(dat,
+#'                                 wordlists = wordlist,
+#'                                 spelling_vars = "grp")
+#' head(res1)
 #' 
 #' # You can ensure the order of the factors are correct by specifying 
 #' # a column that defines order.
 #'
 #' dat[] <- lapply(dat, as.factor)
 #' as.list(head(dat))
-#' res <- clean_variable_spelling(dat, 
-#'                                wordlists = wordlist, 
-#'                                spelling_vars = "grp", 
-#'                                sort_by = "orders")
-#' head(res)
-#' as.list(head(res))
-
-clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelling_vars = 3, sort_by = NULL, classes = NULL, warn = FALSE) {
-
+#' res2 <- clean_variable_spelling(dat, 
+#'                                 wordlists = wordlist, 
+#'                                 spelling_vars = "grp", 
+#'                                 sort_by = "orders")
+#' head(res2)
+#' as.list(head(res2))
+#' 
+#' # Treat spelling_vars in wordlists as regular expressions, so that "facility"
+#' # matches columns "facility" AND "facility_admit")
+#' 
+#' res3 <- clean_variable_spelling(dat,
+#'                                 wordlists = wordlist,
+#'                                 spelling_vars = "grp",
+#'                                 regex_vars = TRUE)
+#' head(res3)
+clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
+                                    spelling_vars = 3, regex_vars = FALSE,
+                                    sort_by = NULL, classes = NULL,
+                                    warn = FALSE) {
+  
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
   }
@@ -211,7 +231,14 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
     wordlists    <- wordlists[names(wordlists) != ".global"]
     has_global   <- !is.null(global_words)
     # Iterate over the names of the dictionaries -----------
-    to_iterate <- intersect(names(wordlists), names(x))
+    
+    if (regex_vars) {
+      col_matches <- lapply(names(wordlists), function(n) grep(n, names(x)))
+      to_iterate <- names(x)[sort(unique(unlist(col_matches)))]
+    } else {
+      to_iterate <- intersect(names(wordlists), names(x))
+    }
+    
     if (has_global) {
       to_iterate <- unique(c(to_iterate, unprotected))
     }
@@ -238,7 +265,15 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(), spelli
 
   # Loop over the variables and clean spelling --------------------------------
   for (i in to_iterate) {
-    d <- if (one_big_dictionary) wordlists else wordlists[[i]] 
+    
+    if (regex_vars) {
+      wl_name <- names(which(vapply(names(wordlists), function(x) grepl(x, i), TRUE)))
+      wl_name <- ifelse(length(wl_name) == 0, NA, wl_name)
+    } else {
+      wl_name <- i
+    }
+    
+    d <- if (one_big_dictionary) wordlists else wordlists[[wl_name]]
 
     if (is.null(d)) {
     # d is null because this is a variable without a specific spelling def
