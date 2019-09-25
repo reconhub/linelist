@@ -22,8 +22,9 @@ section of the \code{wordlists} data frame. This defaults to \code{3}, indicatin
 third column is to be used.}
 
 \item{regex_vars}{Logical indicating whether the spelling_vars should be
-treated as regular expressions to match against columns in \code{x} (TRUE), or
-as strings to be matched only literally (\code{FALSE}). Defaults to \code{FALSE}.}
+treated as perl-style regular expressions to match against columns in \code{x}
+(TRUE), or as strings to be matched only literally (\code{FALSE}). Defaults to
+\code{FALSE}.}
 
 \item{sort_by}{a character the column to be used for sorting the values in
 each data frame. If the incoming variables are factors, this determines how

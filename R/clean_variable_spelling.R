@@ -17,8 +17,9 @@
 #'   third column is to be used.
 #'   
 #' @param regex_vars Logical indicating whether the spelling_vars should be
-#'   treated as regular expressions to match against columns in `x` (TRUE), or
-#'   as strings to be matched only literally (`FALSE`). Defaults to `FALSE`.
+#'   treated as perl-style regular expressions to match against columns in `x`
+#'   (TRUE), or as strings to be matched only literally (`FALSE`). Defaults to
+#'   `FALSE`.
 #'
 #' @param sort_by a character the column to be used for sorting the values in
 #'   each data frame. If the incoming variables are factors, this determines how
@@ -233,7 +234,7 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
     # Iterate over the names of the dictionaries -----------
     
     if (regex_vars) {
-      col_matches <- lapply(names(wordlists), function(n) grep(n, names(x)))
+      col_matches <- lapply(names(wordlists), function(n) grep(n, names(x), perl = TRUE))
       to_iterate <- names(x)[sort(unique(unlist(col_matches)))]
     } else {
       to_iterate <- intersect(names(wordlists), names(x))
@@ -267,7 +268,7 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
   for (i in to_iterate) {
     
     if (regex_vars) {
-      wl_name <- names(which(vapply(names(wordlists), function(x) grepl(x, i), TRUE)))
+      wl_name <- names(which(vapply(names(wordlists), function(x) grepl(x, i, perl = TRUE), TRUE)))
       wl_name <- ifelse(length(wl_name) == 0, NA, wl_name)
     } else {
       wl_name <- i
