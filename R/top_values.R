@@ -146,9 +146,10 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
     # they did, we don't need to do anything. If they didn't (some_fell), then
     # we need to issue a warning. 
     original_levels   <- stats::setNames(tabulate(x), levels(x))
-    penultimate_level <- original_levels[levels(out)[nlevels(out) - 1L]]
-    the_fallen        <- original_levels[original_levels == penultimate_level]
-    some_fell         <- !all(the_fallen %in% levels(out))
+    saved_levels      <- original_levels[levels(out)[-nlevels(out)]]
+    min_level         <- saved_levels[which.min(saved_levels)]
+    the_fallen        <- original_levels[original_levels == min_level]
+    some_fell         <- !all(names(the_fallen) %in% levels(out))
 
     # if there are tied levels that didn't make the cut (some_fell), then we
     # construct a warning message that will list all of the levels that were

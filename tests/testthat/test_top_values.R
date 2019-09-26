@@ -52,7 +52,7 @@ test_that("top_values() will respect ties", {
 test_that("warnings will not be given in the event of a non-tie", {
 
   x <- c("a", "b", "a", "b", "c")
-  expect_failure(expect_warning(res <- top_values(x, n = 2), "a tie among values (a, b), was broken by choosing the first value", fixed = TRUE))
+  expect_failure(expect_warning(res <- top_values(x, n = 2)))
   expect_equal(res, gsub("c", "other", x))
 
 })
@@ -90,7 +90,7 @@ test_that("top_values() will change n-1 levels", {
   expect_warning(tv_char <- top_values(x, n = 3),
                  "a tie among values (c, d) was broken by choosing the first value", fixed = TRUE)
   expect_warning(tv_fact <- top_values(xf, n = 3),
-                 "a tie among values (b, a) was broken by choosing the first value", fixed = TRUE)
+                 "a tie among values (d, c) was broken by choosing the first value", fixed = TRUE)
 
   expect_equal(tv_char, gsub("d", "other", x))
   expect_equal(levels(tv_fact), c("d", "b", "a", "other"))
@@ -107,7 +107,7 @@ test_that("top_values() will choose dropped ties based on user input", {
                  "a tie among values (c, d) was broken by choosing the last value", fixed = TRUE)
 
   expect_warning(tv_fact <- top_values(xf, n = 3, ties.method = "last"),
-                 "a tie among values (b, a) was broken by choosing the last value", fixed = TRUE)
+                 "a tie among values (d, c) was broken by choosing the last value", fixed = TRUE)
 
   expect_equal(tv_char, gsub("c", "other", x))
   expect_equal(levels(tv_fact), c("c", "b", "a", "other"))
