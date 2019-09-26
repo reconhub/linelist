@@ -93,9 +93,13 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
   # use a unique level for the other to avoid overwriting any levels.
   other <- if (other_is_missing) sprintf("other%s", Sys.time()) else replacement
   
+  method_not_recommended <- !ties.method %in% c("first", "last", "random")
+  if (method_not_recommended) {
+    warning("using a ties.method other than first, last, or random can give unpredictable results in the event of a tie", call. = FALSE)
+  }
   # do the work
   out <- forcats::fct_lump(x, n = n, other_level = other, ties.method = ties.method, ...) 
-  
+
   # check the work -------------------------------------------------------------
   #
   # this is the case where fct_lump decided to be helpful and return the
@@ -128,6 +132,42 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
   # remove the "other" if other is missing
   if (other_is_missing) {
     out <- forcats::fct_recode(out, NULL = other)
+  }
+  
+  if (!method_not_recommended) {
+    # give warnings if something was removed ----------------------------------
+    #
+    # Note that we are not warning users if we have already warned them about
+    # their poor choice of ties.method.
+    #
+    # We first count up the original levels, find the last level before the
+    # the "other" level, and then find all of the levels that are tied. 
+    original_levels   <- stats::setNames(tabulate(x), levels(x))
+    penultimate_level <- original_levels[levels(out)[nlevels(out) - 1L]]
+    the_fallen        <- original_levels[original_levels == penultimate_level]
+
+    # if there are tied levels, then we construct a warning message that will
+    # list all of the levels that were candidates and tell the user which one
+    # was chosen and why.
+    if (length(the_fallen) > 1) {
+      the_values <- names(the_fallen)
+      val <- paste0("(", the_values[1], ", ", the_values[2])
+      ues <- paste0(the_values[length(the_values)], ")")
+
+      values <- switch(as.character(length(the_values)),
+                       "2" = paste0(val, ")"),
+                       "3" = paste0(val, ", ", ues),
+                       "4" = paste0(val, ", ", the_values[3], ", ", ues),
+                       paste0(val, ", ..., ", ues)
+      )
+      this_method <- switch(ties.method,
+                            last   = "choosing the last value",
+                            random = "choosing a value at random",
+                            "choosing the first value"
+      )
+      msg <- paste("a tie among values", values, "was broken by", this_method)
+      warning(msg, call. = FALSE)
+    }
   }
 
   out

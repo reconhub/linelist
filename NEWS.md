@@ -2,7 +2,11 @@
 
 * `top_values()` gains the explicit ties.method parameter, which defaults to 
   "first" to fix issue #88 (thanks to @cwhittaker1000 for spotting the issue
-  and providing a detailed explanation). 
+  and providing a detailed explanation).
+*  `top_values()` issues a warning if one of the top values had a tied value
+   that was not included. 
+* `top_values()` issues a warning if the user uses a ties.method that is not
+   guaranteed to return exactly n top values.
 
 # linelist 0.0.35.9000
 
