@@ -141,15 +141,19 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
     # their poor choice of ties.method.
     #
     # We first count up the original levels, find the last level before the
-    # the "other" level, and then find all of the levels that are tied. 
+    # the "other" level, and then find all of the levels that are tied. Once we
+    # have those levels, we can check if they all made it to the final cut. If
+    # they did, we don't need to do anything. If they didn't (some_fell), then
+    # we need to issue a warning. 
     original_levels   <- stats::setNames(tabulate(x), levels(x))
     penultimate_level <- original_levels[levels(out)[nlevels(out) - 1L]]
     the_fallen        <- original_levels[original_levels == penultimate_level]
+    some_fell         <- !all(the_fallen %in% levels(out))
 
-    # if there are tied levels, then we construct a warning message that will
-    # list all of the levels that were candidates and tell the user which one
-    # was chosen and why.
-    if (length(the_fallen) > 1) {
+    # if there are tied levels that didn't make the cut (some_fell), then we
+    # construct a warning message that will list all of the levels that were
+    # candidates and tell the user which one was chosen and why.
+    if (some_fell && length(the_fallen) > 1) {
       the_values <- names(the_fallen)
       val <- paste0("(", the_values[1], ", ", the_values[2])
       ues <- paste0(the_values[length(the_values)], ")")

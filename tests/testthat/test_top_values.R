@@ -47,8 +47,16 @@ test_that("top_values() will respect ties", {
   expect_equal(tv_first, c("a", "other", "a", "other", "other"))
   expect_equal(tv_last, c("other", "b", "other", "b", "other"))
 
+})
+
+test_that("warnings will not be given in the event of a non-tie", {
+
+  x <- c("a", "b", "a", "b", "c")
+  expect_failure(expect_warning(res <- top_values(x, n = 2), "a tie among values (a, b), was broken by choosing the first value", fixed = TRUE))
+  expect_equal(res, gsub("c", "other", x))
 
 })
+
 
 test_that("top_values() will respect ties in order of factor", {
 
