@@ -11,9 +11,11 @@ top_values(x, n, ...)
 
 \method{top_values}{default}(x, n, ...)
 
-\method{top_values}{factor}(x, n, replacement = "other", ...)
+\method{top_values}{factor}(x, n, replacement = "other",
+  ties.method = "first", ...)
 
-\method{top_values}{character}(x, n, replacement = "other", ...)
+\method{top_values}{character}(x, n, replacement = "other",
+  ties.method = "first", ...)
 }
 \arguments{
 \item{x}{a \code{factor} or a \code{character} vector}
@@ -23,6 +25,9 @@ top_values(x, n, ...)
 \item{...}{further arguments passed to \code{\link[forcats:fct_lump]{forcats::fct_lump()}}.}
 
 \item{replacement}{a single value to replace the less frequent values with}
+
+\item{ties.method}{how to deal with ties when ranking factor levels, which is
+passed on to \code{\link[=rank]{rank()}}. The default is set at "first" (see Details).}
 }
 \description{
 This function is a generic, with methods for \code{factor} and \code{character}
@@ -30,6 +35,18 @@ objects. It lists all unique values in the input, ranks them from the most to
 the least frequent, and keeps the top \code{n} values. Other values are replaced
 by the chosen replacement. Under the hood, this uses \code{\link[forcats:fct_lump]{forcats::fct_lump()}}
 and \code{\link[forcats:fct_recode]{forcats::fct_recode()}}.
+}
+\details{
+This function is an opinionated wrapper around \code{\link[forcats:fct_lump]{forcats::fct_lump()}}
+with the following changes:
+\enumerate{
+\item characters are not auto-converted to factor
+\item the default ties method defaults to "first" instead of "min"
+\item if \code{n = nlevels(x) - 1}, then the nth level is still converted to the
+value of \code{replacement} (forcats will assume you didn't want to convert
+the nth level)
+\item it is possible to convert the replacement to \code{NA}
+}
 }
 \examples{
 
@@ -41,6 +58,30 @@ sort(table(x), decreasing = TRUE)
 top_values(x, 2) # top 2
 top_values(x, 2, NA) # top 3, replace with NA
 top_values(x, 0) # extreme case, keep nothing
+
+## dealing with ties
+x <- c("a", "b", "a", "b", "c")
+
+## in the case of a tie (a, b), the first value is ranked higher than the
+## others
+top_values(x, n = 1)
+
+## here, the ties are ranked in reverse order, so b comes before a
+top_values(x, n = 1, ties.method = "last")
+
+## top_values differs from forcats::fct_lump in that if the user selects n - 1
+## values, it will force the last value to be "other"
+forcats::fct_lump(x, n = 2)
+top_values(x, n = 2)
+
+## If there is a tie for the last level, then it will drop the level
+## depending on the ties.method
+
+# replace "d" with other
+top_values(c(x, "d"), n = 3)
+
+# replace "c" with other
+top_values(c(x, "d"), n = 3, ties.method = "last")
 }
 \author{
 Thibaut Jombart, Zhian N. Kamvar
