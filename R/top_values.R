@@ -6,7 +6,8 @@
 #' by the chosen replacement. Under the hood, this uses [forcats::fct_lump()]
 #' and [forcats::fct_recode()].
 #'
-#' @author Thibaut Jombart, Zhian N. Kamvar
+#' @author Original code by Thibaut Jombart, rewriting using `forecats` by Zhian
+#'   N. Kamvar
 #'
 #' @export
 #'
@@ -85,26 +86,50 @@ top_values.default <- function(x, n, ...) {
 #' @export
 #' @rdname top_values
 #' @importFrom forcats fct_lump
-top_values.factor <- function(x, n, replacement = "other", ties_method = "first", ...) {
-
-  # check if the replacement is missing... fct_lump doesn't like other_level = NA
+top_values.factor <- function(x, n, replacement = "other",
+                              subset = NULL, ties_method = "first", ...) {
+  
+  ## check if the replacement is missing... fct_lump doesn't like other_level = NA
   other_is_missing <- is.na(replacement)
 
-  # use a unique level for the other to avoid overwriting any levels.
+  ## use a unique level for the other to avoid overwriting any levels.
   other <- if (other_is_missing) sprintf("other%s", Sys.time()) else replacement
   
   method_not_recommended <- !ties_method %in% c("first", "last", "random")
   if (method_not_recommended) {
-    warning("using a ties_method other than first, last, or random can give unpredictable results in the event of a tie", call. = FALSE)
+    msg <- paste0("using a ties_method other than first, last, or random ",
+                  "can give unpredictable results in the event of a tie")
+    warning(msg, call. = FALSE)
   }
-  # do the work
-  out <- forcats::fct_lump(x, n = n, other_level = other, ties.method = ties_method, ...) 
 
-  # check the work -------------------------------------------------------------
-  #
-  # this is the case where fct_lump decided to be helpful and return the
-  # unblemished vector when one one level would be removed. In this case, we
-  # simply change that level.
+
+  ## subsetting 
+  if (!is.null(subset)) {
+    ## subset and call the function on the subset
+    y <- x[subset]
+    y <- top_values(y, n, replacement,
+                    ties_method = ties_method,
+                    subset = NULL, ...)
+    
+    ## find the levels that were dropped in the subset and replace them with other
+    other_levels <- setdiff(levels(x), levels(y))
+    out <- forcats::fct_other(x, drop = other_levels, other_level = other)
+    
+    return(out)
+  }
+  
+  ## do the work
+  out <- forcats::fct_lump(x, n = n,
+                           other_level = other,
+                           ties.method = ties_method,
+                           ...) 
+
+  ## check the work -------------------------------------------------------------
+  ##
+  ## this is the case where fct_lump decided to be helpful and return the
+  ## unblemished vector when one one level would be removed. In this case, we
+  ## simply change that level
+  
   if (identical(out, x) && n < nlevels(x)) {
     level_counts <- tabulate(x)
     first_min    <- which.min(level_counts)
@@ -114,8 +139,8 @@ top_values.factor <- function(x, n, replacement = "other", ties_method = "first"
     } else if (ties_method == "random" && stats::runif(1) < 0.5) {
       the_level <- sample(which(level_counts == level_counts[first_min]), 1L)
     } else {
-      # if the ties method is not random, then we should choose the last
-      # minimum value in the levels.
+      ## if the ties method is not random, then we should choose the last
+      ## minimum value in the levels.
       the_mins  <- level_counts == level_counts[first_min]
       last_min  <- which.max(seq_along(level_counts)[the_mins])
       the_level <- if (last_min == 1) first_min else first_min + last_min - 1L
@@ -129,31 +154,31 @@ top_values.factor <- function(x, n, replacement = "other", ties_method = "first"
     
   }
 
-  # remove the "other" if other is missing
+  ## remove the "other" if other is missing
   if (other_is_missing) {
     out <- forcats::fct_recode(out, NULL = other)
   }
   
   if (!method_not_recommended) {
-    # give warnings if something was removed ----------------------------------
-    #
-    # Note that we are not warning users if we have already warned them about
-    # their poor choice of ties_method.
-    #
-    # We first count up the original levels, find the last level before the
-    # the "other" level, and then find all of the levels that are tied. Once we
-    # have those levels, we can check if they all made it to the final cut. If
-    # they did, we don't need to do anything. If they didn't (some_fell), then
-    # we need to issue a warning. 
+    ## give warnings if something was removed ----------------------------------
+    ##
+    ## Note that we are not warning users if we have already warned them about
+    ## their poor choice of ties_method.
+    ##
+    ## We first count up the original levels, find the last level before the
+    ## the "other" level, and then find all of the levels that are tied. Once we
+    ## have those levels, we can check if they all made it to the final cut. If
+    ## they did, we don't need to do anything. If they didn't (some_fell), then
+    ## we need to issue a warning. 
     original_levels   <- stats::setNames(tabulate(x), levels(x))
     saved_levels      <- original_levels[levels(out)[-nlevels(out)]]
     min_level         <- saved_levels[which.min(saved_levels)]
     the_fallen        <- original_levels[original_levels == min_level]
     some_fell         <- !all(names(the_fallen) %in% levels(out))
 
-    # if there are tied levels that didn't make the cut (some_fell), then we
-    # construct a warning message that will list all of the levels that were
-    # candidates and tell the user which one was chosen and why.
+    ## if there are tied levels that didn't make the cut (some_fell), then we
+    ## construct a warning message that will list all of the levels that were
+    ## candidates and tell the user which one was chosen and why.
     if (some_fell && length(the_fallen) > 1) {
       the_values <- names(the_fallen)
       val <- paste0("(", the_values[1], ", ", the_values[2])
@@ -182,10 +207,15 @@ top_values.factor <- function(x, n, replacement = "other", ties_method = "first"
 
 #' @export
 #' @rdname top_values
-top_values.character <- function(x, n, replacement = "other", ties_method = "first", ...) {
+top_values.character <- function(x, n, replacement = "other",
+                                 subset = NULL, ties_method = "first", ...) {
 
-  # convert to factor, filter, and return as a character again
-  as.character(top_values(factor(x), n = n, replacement = replacement, ties_method = ties_method, ...))
+  ## convert to factor, filter, and return as a character again
+  as.character(top_values(factor(x),
+                          n = n,
+                          replacement = replacement,
+                          subset = subset,
+                          ties_method = ties_method, ...))
 
 }
 
