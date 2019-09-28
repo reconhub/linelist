@@ -16,7 +16,7 @@
 #'
 #' @param replacement a single value to replace the less frequent values with
 #'
-#' @param ties.method how to deal with ties when ranking factor levels, which is
+#' @param ties_method how to deal with ties when ranking factor levels, which is
 #'  passed on to [rank()]. The default is set at "first" (see Details).
 #'
 #' @param ... further arguments passed to [forcats::fct_lump()].
@@ -50,7 +50,7 @@
 #' top_values(x, n = 1)
 #'
 #' ## here, the ties are ranked in reverse order, so b comes before a
-#' top_values(x, n = 1, ties.method = "last")
+#' top_values(x, n = 1, ties_method = "last")
 #'
 #' ## top_values differs from forcats::fct_lump in that if the user selects n - 1
 #' ## values, it will force the last value to be "other"
@@ -58,13 +58,13 @@
 #' top_values(x, n = 2)
 #'
 #' ## If there is a tie for the last level, then it will drop the level
-#' ## depending on the ties.method
+#' ## depending on the ties_method
 #' 
 #' # replace "d" with other
 #' top_values(c(x, "d"), n = 3)
 #'
 #' # replace "c" with other
-#' top_values(c(x, "d"), n = 3, ties.method = "last")
+#' top_values(c(x, "d"), n = 3, ties_method = "last")
 
 top_values <-  function(x, n, ...) {
   UseMethod("top_values")
@@ -85,7 +85,7 @@ top_values.default <- function(x, n, ...) {
 #' @export
 #' @rdname top_values
 #' @importFrom forcats fct_lump
-top_values.factor <- function(x, n, replacement = "other", ties.method = "first", ...) {
+top_values.factor <- function(x, n, replacement = "other", ties_method = "first", ...) {
 
   # check if the replacement is missing... fct_lump doesn't like other_level = NA
   other_is_missing <- is.na(replacement)
@@ -93,12 +93,12 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
   # use a unique level for the other to avoid overwriting any levels.
   other <- if (other_is_missing) sprintf("other%s", Sys.time()) else replacement
   
-  method_not_recommended <- !ties.method %in% c("first", "last", "random")
+  method_not_recommended <- !ties_method %in% c("first", "last", "random")
   if (method_not_recommended) {
-    warning("using a ties.method other than first, last, or random can give unpredictable results in the event of a tie", call. = FALSE)
+    warning("using a ties_method other than first, last, or random can give unpredictable results in the event of a tie", call. = FALSE)
   }
   # do the work
-  out <- forcats::fct_lump(x, n = n, other_level = other, ties.method = ties.method, ...) 
+  out <- forcats::fct_lump(x, n = n, other_level = other, ties.method = ties_method, ...) 
 
   # check the work -------------------------------------------------------------
   #
@@ -109,9 +109,9 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
     level_counts <- tabulate(x)
     first_min    <- which.min(level_counts)
 
-    if (ties.method == "last") {
+    if (ties_method == "last") {
       the_level <- first_min
-    } else if (ties.method == "random" && stats::runif(1) < 0.5) {
+    } else if (ties_method == "random" && stats::runif(1) < 0.5) {
       the_level <- sample(which(level_counts == level_counts[first_min]), 1L)
     } else {
       # if the ties method is not random, then we should choose the last
@@ -138,7 +138,7 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
     # give warnings if something was removed ----------------------------------
     #
     # Note that we are not warning users if we have already warned them about
-    # their poor choice of ties.method.
+    # their poor choice of ties_method.
     #
     # We first count up the original levels, find the last level before the
     # the "other" level, and then find all of the levels that are tied. Once we
@@ -165,7 +165,7 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
                        "4" = paste0(val, ", ", the_values[3], ", ", ues),
                        paste0(val, ", ..., ", ues)
       )
-      this_method <- switch(ties.method,
+      this_method <- switch(ties_method,
                             last   = "choosing the last value",
                             random = "choosing a value at random",
                             "choosing the first value"
@@ -182,10 +182,10 @@ top_values.factor <- function(x, n, replacement = "other", ties.method = "first"
 
 #' @export
 #' @rdname top_values
-top_values.character <- function(x, n, replacement = "other", ties.method = "first", ...) {
+top_values.character <- function(x, n, replacement = "other", ties_method = "first", ...) {
 
   # convert to factor, filter, and return as a character again
-  as.character(top_values(factor(x), n = n, replacement = replacement, ties.method = ties.method, ...))
+  as.character(top_values(factor(x), n = n, replacement = replacement, ties_method = ties_method, ...))
 
 }
 
