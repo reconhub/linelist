@@ -11,11 +11,11 @@ top_values(x, n, ...)
 
 \method{top_values}{default}(x, n, ...)
 
-\method{top_values}{factor}(x, n, replacement = "other",
-  ties.method = "first", ...)
+\method{top_values}{factor}(x, n, replacement = "other", subset = NULL,
+  ties_method = "first", ...)
 
 \method{top_values}{character}(x, n, replacement = "other",
-  ties.method = "first", ...)
+  subset = NULL, ties_method = "first", ...)
 }
 \arguments{
 \item{x}{a \code{factor} or a \code{character} vector}
@@ -26,15 +26,20 @@ top_values(x, n, ...)
 
 \item{replacement}{a single value to replace the less frequent values with}
 
-\item{ties.method}{how to deal with ties when ranking factor levels, which is
+\item{subset}{a \code{logical}, \code{integer} or \code{character} vector used to subset the
+input; only the subsetted data will be used to define the dominant values,
+which are then used for re-defining values in the entire input}
+
+\item{ties_method}{how to deal with ties when ranking factor levels, which is
 passed on to \code{\link[=rank]{rank()}}. The default is set at "first" (see Details).}
 }
 \description{
 This function is a generic, with methods for \code{factor} and \code{character}
 objects. It lists all unique values in the input, ranks them from the most to
 the least frequent, and keeps the top \code{n} values. Other values are replaced
-by the chosen replacement. Under the hood, this uses \code{\link[forcats:fct_lump]{forcats::fct_lump()}}
-and \code{\link[forcats:fct_recode]{forcats::fct_recode()}}.
+by the chosen replacement. As an option, the user can specify a subset of the
+input data to define dominant values. Under the hood, this uses
+\code{\link[forcats:fct_lump]{forcats::fct_lump()}} and \code{\link[forcats:fct_recode]{forcats::fct_recode()}}.
 }
 \details{
 This function is an opinionated wrapper around \code{\link[forcats:fct_lump]{forcats::fct_lump()}}
@@ -67,7 +72,7 @@ x <- c("a", "b", "a", "b", "c")
 top_values(x, n = 1)
 
 ## here, the ties are ranked in reverse order, so b comes before a
-top_values(x, n = 1, ties.method = "last")
+top_values(x, n = 1, ties_method = "last")
 
 ## top_values differs from forcats::fct_lump in that if the user selects n - 1
 ## values, it will force the last value to be "other"
@@ -75,14 +80,23 @@ forcats::fct_lump(x, n = 2)
 top_values(x, n = 2)
 
 ## If there is a tie for the last level, then it will drop the level
-## depending on the ties.method
+## depending on the ties_method
 
 # replace "d" with other
 top_values(c(x, "d"), n = 3)
 
 # replace "c" with other
-top_values(c(x, "d"), n = 3, ties.method = "last")
+top_values(c(x, "d"), n = 3, ties_method = "last")
+
+## using subset
+x <- c("a", "a", "a", "b", "b", "c")
+x
+top_values(x, n = 1, subset = 4:6)
+top_values(x, n = 2, subset = 4:6)
+top_values(x, n = 1, subset = -1)
+top_values(x, n = 1, subset = -1, ties_method = "last")
 }
 \author{
-Thibaut Jombart, Zhian N. Kamvar
+Original code by Thibaut Jombart, rewriting using \code{forecats} by Zhian
+N. Kamvar
 }
