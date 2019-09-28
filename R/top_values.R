@@ -3,8 +3,9 @@
 #' This function is a generic, with methods for `factor` and `character`
 #' objects. It lists all unique values in the input, ranks them from the most to
 #' the least frequent, and keeps the top `n` values. Other values are replaced
-#' by the chosen replacement. Under the hood, this uses [forcats::fct_lump()]
-#' and [forcats::fct_recode()].
+#' by the chosen replacement. As an option, the user can specify a subset of the
+#' input data to define dominant values. Under the hood, this uses
+#' [forcats::fct_lump()] and [forcats::fct_recode()].
 #'
 #' @author Original code by Thibaut Jombart, rewriting using `forecats` by Zhian
 #'   N. Kamvar
@@ -16,6 +17,10 @@
 #' @param n the number of levels or values to keep
 #'
 #' @param replacement a single value to replace the less frequent values with
+#'
+#' @param subset a `logical`, `integer` or `character` vector used to subset the
+#'   input; only the subsetted data will be used to define the dominant values,
+#'   which are then used for re-defining values in the entire input
 #'
 #' @param ties_method how to deal with ties when ranking factor levels, which is
 #'  passed on to [rank()]. The default is set at "first" (see Details).
@@ -66,6 +71,13 @@
 #'
 #' # replace "c" with other
 #' top_values(c(x, "d"), n = 3, ties_method = "last")
+#'
+#' ## using subset
+#' x <- c("a", "a", "a", "b", "b", "c")
+#' top_values(x, n = 1, subset = 4:6)
+#' top_values(x, n = 2, subset = 4:6)
+#' top_values(x, n = 1, subset = -1)
+#' top_values(x, n = 1, subset = -1, ties_method = "last")
 
 top_values <-  function(x, n, ...) {
   UseMethod("top_values")
