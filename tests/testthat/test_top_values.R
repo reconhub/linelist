@@ -188,4 +188,14 @@ test_that("top_values() with subsetting", {
   expect_identical(res,
                    c("other", "other", "other", "b", "other", "b"))
 
+
+  ## handle subsetting retaining nothing
+  msg <- "`subset` does not retain any input"
+  expect_error(top_values(x, n = 3, subset = FALSE),
+               msg,
+               fixed = TRUE)
+  expect_error(top_values(x, n = 3, subset = integer(0)),
+               msg,
+               fixed = TRUE)
+  
 })

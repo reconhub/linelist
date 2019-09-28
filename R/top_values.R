@@ -120,6 +120,10 @@ top_values.factor <- function(x, n, replacement = "other",
   if (!is.null(subset)) {
     ## subset and call the function on the subset
     y <- x[subset]
+    if (length(y) == 0L) {
+      msg <- "`subset` does not retain any input"
+      stop(msg)
+    }
     y <- top_values(y, n, replacement,
                     ties_method = ties_method,
                     subset = NULL, ...)
