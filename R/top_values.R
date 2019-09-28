@@ -74,6 +74,7 @@
 #'
 #' ## using subset
 #' x <- c("a", "a", "a", "b", "b", "c")
+#' x
 #' top_values(x, n = 1, subset = 4:6)
 #' top_values(x, n = 2, subset = 4:6)
 #' top_values(x, n = 1, subset = -1)
