@@ -199,3 +199,19 @@ test_that("top_values() with subsetting", {
                fixed = TRUE)
   
 })
+
+
+
+test_that("top_values() works with ghost levels", {
+
+  ## this is from issue 92
+  res <- top_values(factor(c('b', 'a'))[-1], n = 1)
+  expect_identical(res, factor("a"))
+
+  ## variant from the original post, using subset
+  x_test_bad <- c("vuhovi", "beni", "beni")
+  x_subset <- c(FALSE, TRUE, TRUE)
+  res <- top_values(x = x_test_bad, n = 1, subset = x_subset)
+  expect_identical(res, c("other", "beni", "beni"))
+  
+})
