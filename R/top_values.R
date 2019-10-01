@@ -101,6 +101,9 @@ top_values.default <- function(x, n, ...) {
 #' @importFrom forcats fct_lump
 top_values.factor <- function(x, n, replacement = "other",
                               subset = NULL, ties_method = "first", ...) {
+
+  ## drop ghost levels
+  x <- droplevels(x)
   
   ## check if the replacement is missing... fct_lump doesn't like other_level = NA
   other_is_missing <- is.na(replacement)
