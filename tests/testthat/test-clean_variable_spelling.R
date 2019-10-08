@@ -43,8 +43,8 @@ test_that("a list of data frames is needed for the second part", {
                "everything in wordlists must be a data frame")
   expect_error(clean_variable_spelling(my_data_frame, c(clist, list(corrections))),
                "all dictionaries must be named")
-  expect_error(clean_variable_spelling(my_data_frame, c(clist, funkytime = list(corrections))),
-               "all dictionaries must match a column in the data")
+  expect_warning(clean_variable_spelling(my_data_frame, c(clist, funkytime = list(corrections))),
+                 "funkytime")
   
 })
 
@@ -131,3 +131,33 @@ test_that("global data frame works if spelling_vars = NULL", {
   expect_identical(global_test$treatment, resorted_trt)
 
 })
+
+
+test_that("regex matching works as expected", { 
+  
+  d1 <- data.frame(val = c("a", "b", "c"),
+                   replace = c("alpha", "bravo", "charlie"),
+                   var = rep(".regex ^column_[[:digit:]]", 3),
+                   stringsAsFactors = FALSE)
+  
+  d2 <- data.frame(val = c("a", "b", "c"),
+                     replace = c("apple", "banana", "cherry"),
+                     var = rep("my_column", 3),
+                     stringsAsFactors = FALSE)
+  
+  dict <- rbind.data.frame(d1, d2)
+  
+  df <- data.frame(column_1 = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   column_2 = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   my_column = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   column_xx = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   stringsAsFactors = FALSE)
+  
+  # clean without regex (only var 'column' matched and cleaned)
+  x1 <- clean_variable_spelling(df, dict)
+  expect_true(all(x1$column_1 %in% d1$replace))
+  expect_true(all(x1$column_2 %in% d1$replace))
+  expect_true(all(x1$my_column %in% d2$replace))
+  expect_identical(x1$column_xx, df$column_xx)
+})
+
