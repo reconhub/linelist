@@ -43,8 +43,8 @@ test_that("a list of data frames is needed for the second part", {
                "everything in wordlists must be a data frame")
   expect_error(clean_variable_spelling(my_data_frame, c(clist, list(corrections))),
                "all dictionaries must be named")
-  expect_error(clean_variable_spelling(my_data_frame, c(clist, funkytime = list(corrections))),
-               "all dictionaries must match a column in the data")
+  expect_warning(clean_variable_spelling(my_data_frame, c(clist, funkytime = list(corrections))),
+                 "funkytime")
   
 })
 

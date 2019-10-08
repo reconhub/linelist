@@ -5,8 +5,7 @@
 \title{Check and clean spelling or codes of multiple variables in a data frame}
 \usage{
 clean_variable_spelling(x = data.frame(), wordlists = list(),
-  spelling_vars = 3, regex_vars = FALSE, sort_by = NULL,
-  classes = NULL, warn = FALSE)
+  spelling_vars = 3, sort_by = NULL, classes = NULL, warn = FALSE)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -20,11 +19,6 @@ column must be present to split the wordlists by column in \code{x} (see
 then this column in defines the columns in \code{x} corresponding to each
 section of the \code{wordlists} data frame. This defaults to \code{3}, indicating the
 third column is to be used.}
-
-\item{regex_vars}{Logical indicating whether the spelling_vars should be
-treated as perl-style regular expressions to match against columns in \code{x}
-(TRUE), or as strings to be matched only literally (\code{FALSE}). Defaults to
-\code{FALSE}.}
 
 \item{sort_by}{a character the column to be used for sorting the values in
 each data frame. If the incoming variables are factors, this determines how
@@ -47,10 +41,10 @@ It has application for addressing mis-spellings and recoding variables (e.g.
 from electronic survey data).
 }
 \details{
-By default, this applies the function \code{\link[=clean_spelling]{clean_spelling()}} to all columns
-specified by the column names listed in \code{spelling_vars}, or, if a global
-dictionary is used, this includes all \code{character} and \code{factor} columns as
-well.
+By default, this applies the function \code{\link[=clean_spelling]{clean_spelling()}} to all
+columns specified by the column names listed in \code{spelling_vars}, or, if a
+global dictionary is used, this includes all \code{character} and \code{factor}
+columns as well.
 
 \subsection{Global wordlists}{
 
@@ -65,9 +59,9 @@ errors. \emph{NOTE: specific variable definitions will override global
 defintions.} For example: if you have a column for cardinal directions
 and a definiton for \code{N = North}, then the global variable \code{N = no} will
 not override that. See Example.
-\item \strong{\code{spelling_var = NULL}}: If you want your data frame to be applied to
+\item \strong{\code{spelling_vars = NULL}}: If you want your data frame to be applied to
 all character/factor columns indiscriminantly, then setting
-\code{spelling_var = NULL} will use that wordlist globally.
+\code{spelling_vars = NULL} will use that wordlist globally.
 }
 
 }
@@ -83,8 +77,8 @@ numeric and Date columns from conversion to character.
 yesno  <- c("y", "n", "u", ".missing")
 dyesno <- c("Yes", "No", "Unknown", "Missing")
 
-treatment_administered  <- c(0:1, ".missing")
-dtreatment_administered <- c("Yes", "No", "Missing")
+treated  <- c(0:1, ".missing")
+dtreated <- c("Yes", "No", "Missing")
 
 facility  <- c(1:10, ".default") # define a .default key
 dfacility <- c(sprintf("Facility \%s", format(1:10)), "Unknown")
@@ -92,12 +86,16 @@ dfacility <- c(sprintf("Facility \%s", format(1:10)), "Unknown")
 age_group  <- c(0, 10, 20, 30, 40, 50)
 dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
 
+result <- c("neg", "negatif", "pos", "positif")
+dresult <- c("Negative", "Negative", "Positive", "Positive")
+
 wordlist <- data.frame(
-  options = c(yesno, treatment_administered, facility, age_group),
-  values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
-  grp = rep(c("readmission", "treatment_administered", "facility", "age_group"),
-            c(4, 3, 11, 6)),
-  orders  = c(1:4, 1:3, 1:11, 1:6),
+  options = c(yesno, treated, facility, age_group, result),
+  values  = c(dyesno, dtreated, dfacility, dage_group, dresult),
+  grp = rep(c("readmission", "treated", "facility", "age_group",
+              ".regex ^result_"),
+            c(4, 3, 11, 6, 4)),
+  orders  = c(1:4, 1:3, 1:11, 1:6, 1:4),
   stringsAsFactors = FALSE
 )
 
@@ -117,13 +115,15 @@ wordlist <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
 dat <- data.frame(
   # these have been defined
   readmission = sample(yesno, 50, replace = TRUE),
-  treatment_administered = sample(treatment_administered, 50, replace = TRUE),
+  treated = sample(treated, 50, replace = TRUE),
   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
-  facility_admit = sample(c(rep(".missing", 10), facility[-11], LETTERS[1:3]), 50, replace = TRUE),
   age_group = sample(age_group, 50, replace = TRUE),
   # global values will catch these
   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
+  result_01 = sample(c(result, "unk"), 50, replace = TRUE),
+  result_02 = sample(c(result, "unk"), 50, replace = TRUE),
+  result_03 = sample(c(result, "unk"), 50, replace = TRUE),
   stringsAsFactors = FALSE
 )
 
@@ -152,14 +152,6 @@ res2 <- clean_variable_spelling(dat,
 head(res2)
 as.list(head(res2))
 
-# Treat spelling_vars in wordlists as regular expressions, so that "facility"
-# matches columns "facility" AND "facility_admit")
-
-res3 <- clean_variable_spelling(dat,
-                                wordlists = wordlist,
-                                spelling_vars = "grp",
-                                regex_vars = TRUE)
-head(res3)
 }
 \seealso{
 \code{\link[=clean_spelling]{clean_spelling()}}, which this function wraps.
