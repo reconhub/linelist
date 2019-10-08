@@ -46,6 +46,19 @@ columns specified by the column names listed in \code{spelling_vars}, or, if a
 global dictionary is used, this includes all \code{character} and \code{factor}
 columns as well.
 
+\subsection{spelling_vars}{
+
+Spelling variables within \code{wordlists} represent keys that you want to match
+to column names in \code{x} (the data set). These are expected to match exactly
+with the exception of two reserved keywords that starts with a full stop:
+\itemize{
+\item \code{.regex [pattern]}: any column whose name is matched by \code{[pattern]}. The
+\code{[pattern]} should be an unquoted, valid, PERL-flavored regular expression.
+\item \code{.global}: any column (see Section \emph{Global wordlists})
+}
+
+}
+
 \subsection{Global wordlists}{
 
 A global wordlist is a set of definitions applied to all valid columns of \code{x}
