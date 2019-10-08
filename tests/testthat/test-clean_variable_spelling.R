@@ -135,22 +135,29 @@ test_that("global data frame works if spelling_vars = NULL", {
 
 test_that("regex matching works as expected", { 
   
-  dict <- data.frame(val = c("a", "b", "c"),
-                     replace = c("alpha", "bravo", "charlie"),
-                     var = c("column", "column", "column"),
+  d1 <- data.frame(val = c("a", "b", "c"),
+                   replace = c("alpha", "bravo", "charlie"),
+                   var = rep(".regex ^column_[[:digit:]]", 3),
+                   stringsAsFactors = FALSE)
+  
+  d2 <- data.frame(val = c("a", "b", "c"),
+                     replace = c("apple", "banana", "cherry"),
+                     var = rep("my_column", 3),
                      stringsAsFactors = FALSE)
   
-  df <- data.frame(column = sample(c("a", "b", "c"), 10, replace = TRUE),
+  dict <- rbind.data.frame(d1, d2)
+  
+  df <- data.frame(column_1 = sample(c("a", "b", "c"), 10, replace = TRUE),
                    column_2 = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   my_column = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   column_xx = sample(c("a", "b", "c"), 10, replace = TRUE),
                    stringsAsFactors = FALSE)
   
   # clean without regex (only var 'column' matched and cleaned)
   x1 <- clean_variable_spelling(df, dict)
-  expect_true(all(x1$column %in% dict$replace))
-  expect_identical(x1$column_2, df$column_2)
-  
-  # clean with regex (vars 'column' and 'column_2' matched and cleaned)
-  x2 <- clean_variable_spelling(df, dict, regex_vars = TRUE)
-  expect_true(all(x2$column %in% dict$replace))
-  expect_true(all(x2$column_2 %in% dict$replace))
+  expect_true(all(x1$column_1 %in% d1$replace))
+  expect_true(all(x1$column_2 %in% d1$replace))
+  expect_true(all(x1$my_column %in% d2$replace))
+  expect_identical(x1$column_xx, df$column_xx)
 })
+
