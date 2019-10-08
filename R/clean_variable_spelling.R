@@ -289,9 +289,8 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
   # Prepare warning/error labels ---------------------------------------------
   warns <- errs <- vector(mode = "list", length = length(to_iterate_x))
   iter_print <- gsub(" ", "_", format(to_iterate_x))
-  names(iter_print) <- to_iterate_x
+  names(iter_print) <- names(warns) <- names(errs) <- to_iterate_x
 
-  i <- 1
   # Loop over the variables and clean spelling --------------------------------
   for (i in seq_along(to_iterate_x)) {
     
@@ -325,8 +324,8 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
     w      <- withWarnings(clean_spelling(x[[i_x]], d, quiet = FALSE))
     x[[i_x]] <- if(is.null(w$val)) x[[i_x]] else w$val
     if (warn) {
-      warns[[i_x]] <- c(warns[[i]], collect_ya_errs(w$warnings, iter_print[i_x]))
-      errs[[i_x]]  <- c(errs[[i]], collect_ya_errs(w$errors, iter_print[i_x]))
+      warns[[i_x]] <- c(warns[[i_x]], collect_ya_errs(w$warnings, iter_print[i_x]))
+      errs[[i_x]]  <- c(errs[[i_x]], collect_ya_errs(w$errors, iter_print[i_x]))
     }
   }
 
