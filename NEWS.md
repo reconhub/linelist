@@ -1,9 +1,21 @@
+# linelist 0.0.38.9000
+
+* `top_values()` no longer throws a spurious warning when the levels in the 
+  subset data are identical to the levels in the full data (#96)
+
+# linelist 0.0.37.9000
+
+* `top_values()` gains a new `subset` argument that allows the user to retain
+  the top levels of a subset of a vector. This is particularly useful for
+  retrospective analysis based on current trends (fixes #92 via #94 and #95, 
+  @thibautjombart)
+
 # linelist 0.0.36.9000
 
 * `top_values()` gains the explicit ties.method parameter, which defaults to 
   "first" to fix issue #88 (thanks to @cwhittaker1000 for spotting the issue
   and providing a detailed explanation).
-*  `top_values()` issues a warning if one of the top values had a tied value
+* `top_values()` issues a warning if one of the top values had a tied value
    that was not included. 
 * `top_values()` issues a warning if the user uses a ties.method that is not
    guaranteed to return exactly n top values.
