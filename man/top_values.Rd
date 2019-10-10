@@ -97,6 +97,5 @@ top_values(x, n = 1, subset = -1)
 top_values(x, n = 1, subset = -1, ties_method = "last")
 }
 \author{
-Original code by Thibaut Jombart, rewriting using \code{forecats} by Zhian
-N. Kamvar
+Thibaut Jombart and Zhian N. Kamvar
 }

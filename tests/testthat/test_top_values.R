@@ -200,6 +200,12 @@ test_that("top_values() with subsetting", {
   
 })
 
+test_that("top_values() will not return a warning if there is nothing to label as other", {
+
+ ## see https://github.com/reconhub/linelist/issues/96
+ expect_failure(expect_warning(top_values(c("b", "b", "b"), n = 1, subset = c(FALSE, TRUE, TRUE))))
+
+})
 
 
 test_that("top_values() works with ghost levels", {
