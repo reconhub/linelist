@@ -7,8 +7,7 @@
 #' input data to define dominant values. Under the hood, this uses
 #' [forcats::fct_lump()] and [forcats::fct_recode()].
 #'
-#' @author Original code by Thibaut Jombart, rewriting using `forecats` by Zhian
-#'   N. Kamvar
+#' @author Thibaut Jombart and Zhian N. Kamvar
 #'
 #' @export
 #'
@@ -133,7 +132,12 @@ top_values.factor <- function(x, n, replacement = "other",
     
     ## find the levels that were dropped in the subset and replace them with other
     other_levels <- setdiff(levels(x), levels(y))
-    out <- forcats::fct_other(x, drop = other_levels, other_level = other)
+
+    if (length(other_levels)) {
+      out <- forcats::fct_other(x, drop = other_levels, other_level = other)
+    } else {
+      out <- x
+    }
     
     return(out)
   }
