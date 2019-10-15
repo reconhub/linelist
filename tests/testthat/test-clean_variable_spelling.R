@@ -156,16 +156,27 @@ test_that("regex matching works as expected", {
                    stringsAsFactors = FALSE)
   
   # clean
-  x1 <- clean_variable_spelling(df, dict)
+  df_clean <- clean_variable_spelling(df, dict)
   
   # column_[[:digit:]] cols matched by wordlist d1 (via .regex keyword)
-  expect_true(all(x1$column_1 %in% d1$replace))
-  expect_true(all(x1$column_2 %in% d1$replace))
+  expect_true(all(df_clean$column_1 %in% d1$replace))
+  expect_true(all(df_clean$column_2 %in% d1$replace))
   
   # my_column matched literally by wordlist d2
-  expect_true(all(x1$my_column %in% d2$replace))
+  expect_true(all(df_clean$my_column %in% d2$replace))
   
   # column_xx not matched by wordlist, so unchanged
-  expect_identical(x1$column_xx, df$column_xx)
+  expect_identical(df_clean$column_xx, df$column_xx)
+  
+  
+  ### expect warning if a .regex key doesn't match any columns in x
+  d3 <- data.frame(val = c("a", "b", "c"),
+                   replace = c("A", "B", "C"),
+                   var = rep(".regex capitalize", 3),
+                   stringsAsFactors = FALSE)
+  
+  dict <- rbind.data.frame(d1, d2, d3)
+  
+  expect_warning(clean_variable_spelling(df, dict), "\\.regex capitalize")
 })
 
