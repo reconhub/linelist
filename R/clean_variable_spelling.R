@@ -243,11 +243,10 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
     vars_check_regex <- vars_check[is_var_regex]
     vars_check_regex_extract <- gsub("\\.regex[[:space:]]", "", vars_check_regex)
     
-    # which cols in df match each regex var
-    vars_regex_match_list <- sapply(
+    # which cols in x match each regex var (returns 1 list element for each .regex key)
+    vars_regex_match_list <- lapply(
       vars_check_regex_extract,
-      function(j) names(x)[grepl(j, names(x), perl = TRUE)],
-      simplify = FALSE
+      function(j) names(x)[grepl(j, names(x), perl = TRUE)]
     )
     
     # check for wordlist variables with no match in x
