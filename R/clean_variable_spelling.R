@@ -123,12 +123,12 @@
 #'   treated = sample(treated, 50, replace = TRUE),
 #'   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
 #'   age_group = sample(age_group, 50, replace = TRUE),
-#'   # global values will catch these
-#'   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
-#'   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
 #'   lab_result_01 = sample(c(lab_result, "unk"), 50, replace = TRUE),
 #'   lab_result_02 = sample(c(lab_result, "unk"), 50, replace = TRUE),
 #'   lab_result_03 = sample(c(lab_result, "unk"), 50, replace = TRUE),
+#'   # global values will catch these
+#'   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
+#'   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
 #'   stringsAsFactors = FALSE
 #' )
 #' 
