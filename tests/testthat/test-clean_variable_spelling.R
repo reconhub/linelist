@@ -135,6 +135,7 @@ test_that("global data frame works if spelling_vars = NULL", {
 
 test_that("regex matching works as expected", { 
   
+  # create wordlists
   d1 <- data.frame(val = c("a", "b", "c"),
                    replace = c("alpha", "bravo", "charlie"),
                    var = rep(".regex ^column_[[:digit:]]", 3),
@@ -147,17 +148,24 @@ test_that("regex matching works as expected", {
   
   dict <- rbind.data.frame(d1, d2)
   
+  # create data
   df <- data.frame(column_1 = sample(c("a", "b", "c"), 10, replace = TRUE),
                    column_2 = sample(c("a", "b", "c"), 10, replace = TRUE),
                    my_column = sample(c("a", "b", "c"), 10, replace = TRUE),
                    column_xx = sample(c("a", "b", "c"), 10, replace = TRUE),
                    stringsAsFactors = FALSE)
   
-  # clean without regex (only var 'column' matched and cleaned)
+  # clean
   x1 <- clean_variable_spelling(df, dict)
+  
+  # column_[[:digit:]] cols matched by wordlist d1 (via .regex keyword)
   expect_true(all(x1$column_1 %in% d1$replace))
   expect_true(all(x1$column_2 %in% d1$replace))
+  
+  # my_column matched literally by wordlist d2
   expect_true(all(x1$my_column %in% d2$replace))
+  
+  # column_xx not matched by wordlist, so unchanged
   expect_identical(x1$column_xx, df$column_xx)
 })
 
