@@ -72,6 +72,7 @@
 #' @seealso [clean_spelling()], which this function wraps.
 #'
 #' @author Zhian N. Kamvar
+#' @author Patrick Barks
 #'
 #' @export
 #'

@@ -171,4 +171,6 @@ as.list(head(res2))
 }
 \author{
 Zhian N. Kamvar
+
+Patrick Barks
 }
