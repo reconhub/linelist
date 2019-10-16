@@ -159,11 +159,11 @@ test_that("regex matching works as expected", {
   df_clean <- clean_variable_spelling(df, dict)
   
   # column_[[:digit:]] cols matched by wordlist d1 (via .regex keyword)
-  expect_true(all(df_clean$column_1 %in% d1$replace))
-  expect_true(all(df_clean$column_2 %in% d1$replace))
+  expect_setequal(df_clean$column_1, d1$replace)
+  expect_setequal(df_clean$column_2, d1$replace)
   
   # my_column matched literally by wordlist d2
-  expect_true(all(df_clean$my_column %in% d2$replace))
+  expect_setequal(df_clean$my_column, d2$replace)
   
   # column_xx not matched by wordlist, so unchanged
   expect_identical(df_clean$column_xx, df$column_xx)

@@ -91,8 +91,8 @@
 #' age_group  <- c(0, 10, 20, 30, 40, 50)
 #' dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
 #' 
-#' lab_result <- c("neg", "pos", "inc")
-#' dlab_result <- c("Negative", "Positive", "Inconclusive")
+#' lab_result <- c("high", "norm", "inc")
+#' dlab_result <- c("High", "Normal", "Inconclusive")
 #'
 #' wordlist <- data.frame(
 #'   options = c(yesno, treated, facility, age_group, lab_result),
@@ -172,12 +172,11 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
   # Because this is a global manipulator, only work on characters or factors
   unprotected <- names(x)[classes %in% c("character", "factor")]
   
-  
   if (length(wordlists) == 0 || !is.list(wordlists)) {
     stop("wordlists must be a list of data frames")
   } 
 
-  # There is one big dictionary with spelling_varss -----------------------------------
+  # There is one big dictionary with spelling_vars -----------------------------
   if (is.data.frame(wordlists)) {
 
     # There is a spelling_vars column ----------------------------------------
@@ -210,7 +209,6 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
 
   one_big_dictionary <- is.data.frame(wordlists)
   exists_sort_by     <- !is.null(sort_by)
-
   
   if (one_big_dictionary) {
     # If there is one big dictionary ------------------------------------
@@ -233,49 +231,62 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
     global_words <- wordlists[[".global"]]
     wordlists    <- wordlists[names(wordlists) != ".global"]
     has_global   <- !is.null(global_words)
-    # Iterate over the names of the dictionaries -----------
     
+    # Identify columns of x to clean, and matching entry in wordlists ----------
     
-    # extract vars to check from wordlists (both plain and regex)
+    # Extract vars to check from wordlists (both plain and regex) ------------
     vars_check <- names(wordlists)
-    is_var_regex <- grepl("^\\.regex", vars_check)
-    vars_check_plain <- vars_check[!is_var_regex]
-    vars_check_regex <- vars_check[is_var_regex]
-    vars_check_regex_extract <- gsub("\\.regex[[:space:]]", "", vars_check_regex)
+    is_var_regex <- grepl("^\\.regex[[:space:]]", vars_check)
     
-    # which cols in x match each regex var (returns 1 list element for each .regex key)
-    vars_regex_match_list <- lapply(
-      vars_check_regex_extract,
-      function(j) names(x)[grepl(j, names(x), perl = TRUE)]
-    )
+    # If any .regex keys... ------------
+    if (any(is_var_regex)) {
+      
+      vars_check_plain <- vars_check[!is_var_regex]
+      vars_check_regex <- vars_check[is_var_regex]
+      vars_check_regex_extract <- gsub("\\.regex[[:space:]]", "", vars_check_regex)
+      
+      # which cols in x match each regex var (1 element for each .regex key)
+      vars_regex_match_list <- lapply(
+        vars_check_regex_extract,
+        FUN = grep,
+        x = names(x), value = TRUE, perl = TRUE
+      )
+      
+      # check for wordlist variables with no match in x
+      vars_regex_match_n <- lengths(vars_regex_match_list)
+      vars_plain_nomatch <- vars_check_plain[!vars_check_plain %in% names(x)]
+      vars_regex_nomatch <- vars_check_regex[vars_regex_match_n == 0]
+      vars_nomatch <- unique(c(vars_plain_nomatch, vars_regex_nomatch))
+      
+      # all columns of x that match variable in wordlists
+      cols_match_plain <- vars_check_plain[vars_check_plain %in% names(x)]
+      cols_match_regex <- unlist(vars_regex_match_list, use.names = FALSE)
+      cols_match <- c(cols_match_plain, cols_match_regex)
+      
+      # wordlist variable name corresponding to each matching column in x
+      matching_var_plain <- cols_match_plain
+      matching_var_regex <- rep(vars_check_regex, vars_regex_match_n)
+      matching_var <- c(matching_var_plain, matching_var_regex)
+      
+      # columns of x to iterate over, and matching key from wordlist
+      to_iterate_x <- cols_match
+      to_iterate_wordlist <- matching_var
+      
+    # Else no .regex keys, column names in x and wordlist keys matched literally
+    } else { 
+      
+      to_iterate_x <- to_iterate_wordlist <- intersect(vars_check, names(x))
+      vars_nomatch <- setdiff(vars_check, names(x))
+    }
     
-    # check for wordlist variables with no match in x
-    vars_regex_match_n <- vapply(vars_regex_match_list, length, 0L)
-    vars_plain_nomatch <- vars_check_plain[!vars_check_plain %in% names(x)]
-    vars_regex_nomatch <- vars_check_regex[vars_regex_match_n == 0]
-    vars_nomatch <- unique(c(vars_plain_nomatch, vars_regex_nomatch))
-    
-    # Some dictionaries aren't in the data ------------------------------
-    # (warn if variables in wordlist don't match any columns in x) ------
+    # Warn if any variables in wordlist don't match any columns in x ------
     if (length(vars_nomatch) > 0) {
       warning("The following variable(s) in 'wordlist' did not match any ",
               "columns in 'x': ", paste(vars_nomatch, collapse = ", "),
               call. = FALSE)
     }
     
-    # all columns of x that match variable in wordlists
-    cols_match_plain <- vars_check_plain[vars_check_plain %in% names(x)]
-    cols_match_regex <- unlist(vars_regex_match_list, use.names = FALSE)
-    cols_match <- c(cols_match_plain, cols_match_regex)
-    
-    # wordlist variable name corresponding to each matching column in x
-    matching_var_plain <- cols_match_plain
-    matching_var_regex <- rep(vars_check_regex, vars_regex_match_n)
-    matching_var <- c(matching_var_plain, matching_var_regex)
-    
-    to_iterate_x <- cols_match
-    to_iterate_wordlist <- matching_var
-    
+    # If .global keyword in wordlists, add all uprotected columns to to_iterate_
     if (has_global) {
       unprotected_to_add <- setdiff(unprotected, to_iterate_x)
       to_iterate_x <- c(to_iterate_x, unprotected_to_add)
@@ -297,6 +308,7 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
     stop("the .default keyword cannot be used with .global")
   
   }
+  
   # Prepare warning/error labels ---------------------------------------------
   warns <- errs <- vector(mode = "list", length = length(to_iterate_x))
   iter_print <- gsub(" ", "_", format(to_iterate_x))

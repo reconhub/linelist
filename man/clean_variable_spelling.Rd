@@ -99,8 +99,8 @@ dfacility <- c(sprintf("Facility \%s", format(1:10)), "Unknown")
 age_group  <- c(0, 10, 20, 30, 40, 50)
 dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
 
-lab_result <- c("neg", "pos", "inc")
-dlab_result <- c("Negative", "Positive", "Inconclusive")
+lab_result <- c("high", "norm", "inc")
+dlab_result <- c("High", "Normal", "Inconclusive")
 
 wordlist <- data.frame(
   options = c(yesno, treated, facility, age_group, lab_result),
