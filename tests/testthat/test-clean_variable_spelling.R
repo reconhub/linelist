@@ -43,8 +43,8 @@ test_that("a list of data frames is needed for the second part", {
                "everything in wordlists must be a data frame")
   expect_error(clean_variable_spelling(my_data_frame, c(clist, list(corrections))),
                "all dictionaries must be named")
-  expect_error(clean_variable_spelling(my_data_frame, c(clist, funkytime = list(corrections))),
-               "all dictionaries must match a column in the data")
+  expect_warning(clean_variable_spelling(my_data_frame, c(clist, funkytime = list(corrections))),
+                 "funkytime")
   
 })
 
@@ -131,3 +131,52 @@ test_that("global data frame works if spelling_vars = NULL", {
   expect_identical(global_test$treatment, resorted_trt)
 
 })
+
+
+test_that("regex matching works as expected", { 
+  
+  # create wordlists
+  d1 <- data.frame(val = c("a", "b", "c"),
+                   replace = c("alpha", "bravo", "charlie"),
+                   var = rep(".regex ^column_[[:digit:]]", 3),
+                   stringsAsFactors = FALSE)
+  
+  d2 <- data.frame(val = c("a", "b", "c"),
+                     replace = c("apple", "banana", "cherry"),
+                     var = rep("my_column", 3),
+                     stringsAsFactors = FALSE)
+  
+  dict <- rbind.data.frame(d1, d2)
+  
+  # create data
+  df <- data.frame(column_1 = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   column_2 = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   my_column = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   column_xx = sample(c("a", "b", "c"), 10, replace = TRUE),
+                   stringsAsFactors = FALSE)
+  
+  # clean
+  df_clean <- clean_variable_spelling(df, dict)
+  
+  # column_[[:digit:]] cols matched by wordlist d1 (via .regex keyword)
+  expect_setequal(df_clean$column_1, d1$replace)
+  expect_setequal(df_clean$column_2, d1$replace)
+  
+  # my_column matched literally by wordlist d2
+  expect_setequal(df_clean$my_column, d2$replace)
+  
+  # column_xx not matched by wordlist, so unchanged
+  expect_identical(df_clean$column_xx, df$column_xx)
+  
+  
+  ### expect warning if a .regex key doesn't match any columns in x
+  d3 <- data.frame(val = c("a", "b", "c"),
+                   replace = c("A", "B", "C"),
+                   var = rep(".regex capitalize", 3),
+                   stringsAsFactors = FALSE)
+  
+  dict <- rbind.data.frame(d1, d2, d3)
+  
+  expect_warning(clean_variable_spelling(df, dict), "\\.regex capitalize")
+})
+

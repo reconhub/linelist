@@ -41,10 +41,23 @@ It has application for addressing mis-spellings and recoding variables (e.g.
 from electronic survey data).
 }
 \details{
-By default, this applies the function \code{\link[=clean_spelling]{clean_spelling()}} to all columns
-specified by the column names listed in \code{spelling_vars}, or, if a global
-dictionary is used, this includes all \code{character} and \code{factor} columns as
-well.
+By default, this applies the function \code{\link[=clean_spelling]{clean_spelling()}} to all
+columns specified by the column names listed in \code{spelling_vars}, or, if a
+global dictionary is used, this includes all \code{character} and \code{factor}
+columns as well.
+
+\subsection{spelling_vars}{
+
+Spelling variables within \code{wordlists} represent keys that you want to match
+to column names in \code{x} (the data set). These are expected to match exactly
+with the exception of two reserved keywords that starts with a full stop:
+\itemize{
+\item \code{.regex [pattern]}: any column whose name is matched by \code{[pattern]}. The
+\code{[pattern]} should be an unquoted, valid, PERL-flavored regular expression.
+\item \code{.global}: any column (see Section \emph{Global wordlists})
+}
+
+}
 
 \subsection{Global wordlists}{
 
@@ -59,9 +72,9 @@ errors. \emph{NOTE: specific variable definitions will override global
 defintions.} For example: if you have a column for cardinal directions
 and a definiton for \code{N = North}, then the global variable \code{N = no} will
 not override that. See Example.
-\item \strong{\code{spelling_var = NULL}}: If you want your data frame to be applied to
+\item \strong{\code{spelling_vars = NULL}}: If you want your data frame to be applied to
 all character/factor columns indiscriminantly, then setting
-\code{spelling_var = NULL} will use that wordlist globally.
+\code{spelling_vars = NULL} will use that wordlist globally.
 }
 
 }
@@ -77,8 +90,8 @@ numeric and Date columns from conversion to character.
 yesno  <- c("y", "n", "u", ".missing")
 dyesno <- c("Yes", "No", "Unknown", "Missing")
 
-treatment_administered  <- c(0:1, ".missing")
-dtreatment_administered <- c("Yes", "No", "Missing")
+treated  <- c(0:1, ".missing")
+dtreated <- c("Yes", "No", "Missing")
 
 facility  <- c(1:10, ".default") # define a .default key
 dfacility <- c(sprintf("Facility \%s", format(1:10)), "Unknown")
@@ -86,12 +99,16 @@ dfacility <- c(sprintf("Facility \%s", format(1:10)), "Unknown")
 age_group  <- c(0, 10, 20, 30, 40, 50)
 dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
 
+lab_result <- c("high", "norm", "inc")
+dlab_result <- c("High", "Normal", "Inconclusive")
+
 wordlist <- data.frame(
-  options = c(yesno, treatment_administered, facility, age_group),
-  values  = c(dyesno, dtreatment_administered, dfacility, dage_group),
-  grp = rep(c("readmission", "treatment_administered", "facility", "age_group"),
-            c(4, 3, 11, 6)),
-  orders  = c(1:4, 1:3, 1:11, 1:6),
+  options = c(yesno, treated, facility, age_group, lab_result),
+  values  = c(dyesno, dtreated, dfacility, dage_group, dlab_result),
+  grp = rep(c("readmission", "treated", "facility", "age_group",
+              ".regex ^lab_result_"),
+            c(4, 3, 11, 6, 3)),
+  orders  = c(1:4, 1:3, 1:11, 1:6, 1:3),
   stringsAsFactors = FALSE
 )
 
@@ -111,14 +128,18 @@ wordlist <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
 dat <- data.frame(
   # these have been defined
   readmission = sample(yesno, 50, replace = TRUE),
-  treatment_administered = sample(treatment_administered, 50, replace = TRUE),
+  treated = sample(treated, 50, replace = TRUE),
   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
   age_group = sample(age_group, 50, replace = TRUE),
+  lab_result_01 = sample(c(lab_result, "unk"), 50, replace = TRUE),
+  lab_result_02 = sample(c(lab_result, "unk"), 50, replace = TRUE),
+  lab_result_03 = sample(c(lab_result, "unk"), 50, replace = TRUE),
   # global values will catch these
   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
   stringsAsFactors = FALSE
 )
+
 missing_data <- dat == ".missing"
 dat[missing_data] <- sample(c("", NA), sum(missing_data), prob = c(0.1, 0.9), replace = TRUE)
 
@@ -127,23 +148,29 @@ dat[missing_data] <- sample(c("", NA), sum(missing_data), prob = c(0.1, 0.9), re
 wordlist # show the wordlist
 head(dat) # show the data
 
-head(clean_variable_spelling(dat, wordlists = wordlist, spelling_vars = "grp"))
+res1 <- clean_variable_spelling(dat,
+                                wordlists = wordlist,
+                                spelling_vars = "grp")
+head(res1)
 
 # You can ensure the order of the factors are correct by specifying 
 # a column that defines order.
 
 dat[] <- lapply(dat, as.factor)
 as.list(head(dat))
-res <- clean_variable_spelling(dat, 
-                               wordlists = wordlist, 
-                               spelling_vars = "grp", 
-                               sort_by = "orders")
-head(res)
-as.list(head(res))
+res2 <- clean_variable_spelling(dat, 
+                                wordlists = wordlist, 
+                                spelling_vars = "grp", 
+                                sort_by = "orders")
+head(res2)
+as.list(head(res2))
+
 }
 \seealso{
 \code{\link[=clean_spelling]{clean_spelling()}}, which this function wraps.
 }
 \author{
 Zhian N. Kamvar
+
+Patrick Barks
 }
