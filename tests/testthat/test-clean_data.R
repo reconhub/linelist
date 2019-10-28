@@ -42,6 +42,32 @@ expected_colnames <- c("id", "date_of_onset", "discharge", "gender",
                        "time_of_discharge", "location")
 expected_comment <- setNames(names(md), expected_colnames)
 
+test_that("clean_data() will add suffixes to duplicated column names", {
+                       
+  iris2 <- iris
+  iris2$sepal.width <- iris$Sepal.Width
+  expect_warning(res <- clean_data(iris2), 
+                 "  sepal.width -> sepal_width_1",
+                 fixed = TRUE)
+  expect_named(res, c("sepal_length", "sepal_width", "petal_length",
+                      "petal_width", "species", "sepal_width_1"))
+
+})
+
+test_that("clean_data() will respect protected columns when cleaning names", {
+
+  iris2 <- iris
+  iris2$sepal_width <- iris$Sepal.Width
+  expect_warning(res <- clean_data(iris2, protect = which(names(iris2) == "sepal_width")), 
+                 "  Sepal.Width -> sepal_width_1",
+                 fixed = TRUE)
+  expect_named(res, c("sepal_length", "sepal_width_1", "petal_length",
+                      "petal_width", "species", "sepal_width"))
+
+})
+
+
+
 test_that("clean_data() needs a data frame with columns and/or rows", {
   expect_error(clean_data(DAT), "DAT is not a data frame")
   expect_error(clean_data(data.frame()), "data.frame\\(\\) has no columns")
