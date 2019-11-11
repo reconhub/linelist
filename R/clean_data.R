@@ -39,15 +39,16 @@
 #'
 #'
 #' ## clean variable names, store in new object, show results
-#' clean_data <- clean_data(toy_data, error_tolerance = 0.1)
+#' clean_data <- clean_data(toy_data, guess_dates = TRUE, error_tolerance = 0.1)
 #' clean_data
 #'
-#' clean_data2 <- clean_data(toy_data, error_tolerance = 0.8)
+#' clean_data2 <- clean_data(toy_data, guess_dates = TRUE, error_tolerance = 0.8)
 #' clean_data2
 #' 
 #' ## clean variable names, but keep our "messy/dates" column
 #' to_protect <- names(toy_data) %in% "messy/dates"
 #' clean_data3 <- clean_data(toy_data, 
+#'                           guess_dates = TRUE,
 #'                           error_tolerance = 0.8,
 #'                           protect = to_protect
 #'                          )
@@ -81,7 +82,7 @@
 #' clean_data4$location
 
 
-clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE, 
+clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = FALSE, 
                        error_tolerance = 0.5, wordlists = NULL, 
                        spelling_vars = 3, sort_by = NULL, warn_spelling = FALSE,
                        protect = FALSE, ...) {
@@ -95,15 +96,15 @@ clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
     stop(sprintf("%s has no columns", xname))
   }
 
-  # Find classes and protect the ones that should not be manipulated -----------
+  ## Find classes and protect the ones that should not be manipulated -----------
   classes <- i_find_classes(x)
   protect <- i_logical_from_int(protect, classes)
   classes[protect] <- "protected"
 
-  # Cleaning column names ------------------------------------------------------
+  ## Cleaning column names ------------------------------------------------------
   out <- clean_variable_names(x, protect = protect, sep = sep)
 
-  # Cleaning variables ---------------------------------------------------------
+  ## Cleaning variables ---------------------------------------------------------
   out <- clean_variables(out, 
                          sep = sep, 
                          wordlists = wordlists,
@@ -112,7 +113,7 @@ clean_data <- function(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
                          warn_spelling = warn_spelling,
                          classes = classes)
   
-  # Cleaning and guessing dates ------------------------------------------------
+  ## Cleaning and guessing dates ------------------------------------------------
   out <- clean_dates(out,
                      force_Date = force_Date,
                      guess_dates = guess_dates,

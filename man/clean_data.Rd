@@ -4,7 +4,7 @@
 \alias{clean_data}
 \title{Clean a data.frame}
 \usage{
-clean_data(x, sep = "_", force_Date = TRUE, guess_dates = TRUE,
+clean_data(x, sep = "_", force_Date = TRUE, guess_dates = FALSE,
   error_tolerance = 0.5, wordlists = NULL, spelling_vars = 3,
   sort_by = NULL, warn_spelling = FALSE, protect = FALSE, ...)
 }
@@ -84,15 +84,16 @@ toy_data
 
 
 ## clean variable names, store in new object, show results
-clean_data <- clean_data(toy_data, error_tolerance = 0.1)
+clean_data <- clean_data(toy_data, guess_dates = TRUE, error_tolerance = 0.1)
 clean_data
 
-clean_data2 <- clean_data(toy_data, error_tolerance = 0.8)
+clean_data2 <- clean_data(toy_data, guess_dates = TRUE, error_tolerance = 0.8)
 clean_data2
 
 ## clean variable names, but keep our "messy/dates" column
 to_protect <- names(toy_data) \%in\% "messy/dates"
 clean_data3 <- clean_data(toy_data, 
+                          guess_dates = TRUE,
                           error_tolerance = 0.8,
                           protect = to_protect
                          )
