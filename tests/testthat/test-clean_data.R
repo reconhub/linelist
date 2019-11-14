@@ -74,10 +74,10 @@ test_that("clean_data() needs a data frame with columns and/or rows", {
 }) 
 
 test_that("messy data will be clean", {
-  cd <- clean_data(md, error_tolerance = 0.8)
-  # The names are cleaned
+  cd <- clean_data(md, guess_dates = TRUE, error_tolerance = 0.8)
+  ## The names are cleaned
   expect_named(cd, expected_colnames)
-  # The original names are preserved as a comment
+  ## The original names are preserved as a comment
   expect_identical(comment(cd), expected_comment)
   expect_is(cd$id, "character")
   expect_is(cd$date_of_onset, "Date")
@@ -95,8 +95,8 @@ test_that("messy data will be clean", {
 
 
 test_that("columns can be protected", {
-  cd  <- clean_data(md, error_tolerance = 0.8)
-  cdp <- clean_data(md, protect = 6, error_tolerance = 0.8)
+  cd  <- clean_data(md, guess_dates = TRUE, error_tolerance = 0.8)
+  cdp <- clean_data(md, guess_dates = TRUE, protect = 6, error_tolerance = 0.8)
   expect_identical(cdp[-6], cd[-6])
   expect_identical(cdp[6], md[6])
   expect_identical(comment(cdp)[-6], expected_comment[-6])
@@ -107,7 +107,7 @@ test_that("numbers or logicals are required for protection", {
 })
 
 test_that("Dates won't be forced", {
-  cdd <- clean_data(md, force_Date = FALSE, error_tolerance = 0.8)
+  cdd <- clean_data(md, guess_dates = TRUE, force_Date = FALSE, error_tolerance = 0.8)
   expect_named(cdd, expected_colnames)
   # The original names are preserved as a comment
   expect_identical(comment(cdd), expected_comment)
@@ -127,7 +127,10 @@ test_that("Dates won't be forced", {
 })
 
 test_that("protect overrides columns specified in force_Date and guess_dates", {
-  cdf <- clean_data(md, force_Date = 11, guess_dates = 6, protect = c(6, 11))
+  cdf <- clean_data(md,
+                    force_Date = 11,
+                    guess_dates = 6,
+                    protect = c(6, 11))
   expect_identical(md[6], cdf[6])
   expect_identical(md[11], cdf[11])
 })
