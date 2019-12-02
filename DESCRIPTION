@@ -1,6 +1,6 @@
 Package: linelist
 Title: Tools to Import and Tidy Case Linelist Data
-Version: 0.0.38.9000
+Version: 0.0.39.9000
 Authors@R: c(person("Thibaut", "Jombart", email = "thibautjombart@gmail.com", role = c("aut", "cre")),
     person("Zhian N.", "Kamvar", email = "zkamvar@gmail.com", role = c("aut")),
     person("Patrick", "Barks", email = "patrick.barks@epicentre.msf.org", role = c("ctb")))
