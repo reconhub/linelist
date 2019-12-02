@@ -4,8 +4,16 @@
 \alias{clean_variable_spelling}
 \title{Check and clean spelling or codes of multiple variables in a data frame}
 \usage{
-clean_variable_spelling(x = data.frame(), wordlists = list(),
-  spelling_vars = 3, sort_by = NULL, classes = NULL, warn = FALSE)
+clean_variable_spelling(
+  x = data.frame(),
+  wordlists = list(),
+  from = 1,
+  to = 2,
+  spelling_vars = 3,
+  sort_by = NULL,
+  classes = NULL,
+  warn = FALSE
+)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -14,6 +22,10 @@ clean_variable_spelling(x = data.frame(), wordlists = list(),
 columns defining the word list to be used. If this is a data frame, a third
 column must be present to split the wordlists by column in \code{x} (see
 \code{spelling_vars}).}
+
+\item{from}{a column name or position defining words or keys to be replaced}
+
+\item{to}{a column name or position defining replacement values}
 
 \item{spelling_vars}{character or integer. If \code{wordlists} is a data frame,
 then this column in defines the columns in \code{x} corresponding to each
@@ -52,8 +64,8 @@ Spelling variables within \code{wordlists} represent keys that you want to match
 to column names in \code{x} (the data set). These are expected to match exactly
 with the exception of two reserved keywords that starts with a full stop:
 \itemize{
-\item \code{.regex [pattern]}: any column whose name is matched by \code{[pattern]}. The
-\code{[pattern]} should be an unquoted, valid, PERL-flavored regular expression.
+\item \code{.regex [pattern]}: any column whose name is matched by \verb{[pattern]}. The
+\verb{[pattern]} should be an unquoted, valid, PERL-flavored regular expression.
 \item \code{.global}: any column (see Section \emph{Global wordlists})
 }
 

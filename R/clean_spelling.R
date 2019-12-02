@@ -6,10 +6,14 @@
 #'
 #' @param x a character or factor vector
 #'
-#' @param wordlist a two-column matrix or data frame defining mis-spelled words
-#' in the first column (keys) and replacements (values) in the second column.
-#' There are keywords that can be appended to the first column for addressing
-#' default values and missing data.
+#' @param wordlist a matrix or data frame defining mis-spelled words or keys
+#' in one column (`from`) and replacement values (`to`) in another
+#' column. There are keywords that can be appended to the `from` column for
+#' addressing default values and missing data.
+#'
+#' @param from a column name or position defining words or keys to be replaced
+#'
+#' @param to a column name or position defining replacement values
 #'
 #' @param quiet a `logical` indicating if warnings should be issued if no
 #'   replacement is made; if `FALSE`, these warnings will be disabled
@@ -25,9 +29,9 @@
 #'
 #' @details 
 #'
-#' \subsection{Keys (first column)}{
+#' \subsection{Keys (`from` column)}{
 #' 
-#' The first column of the wordlist will contain the keys that you want to
+#' The `from` column of the wordlist will contain the keys that you want to
 #' match in your current data set. These are expected to match exactly with
 #' the exception of three reserved keywords that start with a full stop:
 #'
@@ -44,7 +48,7 @@
 #' 
 #' The values will replace their respective keys exactly as they are presented.
 #'
-#' There is currently one recognised keyword that can be placed in the second
+#' There is currently one recognised keyword that can be placed in the `to` 
 #' column of your wordlist:
 #'
 #'  - `.na`: Replace keys with missing data. When used in combination with the
@@ -53,7 +57,7 @@
 #' 
 #' }
 #'
-#' @note If there are any missing values in the first column (keys), then they
+#' @note If there are any missing values in the `from` column (keys), then they
 #' are automatically converted to the character "NA" with a warning. If you want
 #' to target missing data with your wordlist, use the `.missing` keyword. The
 #' `.regex` keyword uses [gsub()] with the `perl = TRUE` option for replacement.
@@ -121,6 +125,7 @@
 #' @importFrom rlang "!!!"
 
 clean_spelling <- function(x = character(), wordlist = data.frame(),
+                           from = 1, to = 2,
                            quiet = FALSE, warn_default = TRUE,
                            anchor_regex = TRUE) {
 
@@ -133,7 +138,7 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
   wl_is_data_frame  <- is.data.frame(wordlist)
   
   wl_is_rectangular <- (wl_is_data_frame || is.matrix(wordlist)) &&
-                       ncol(wordlist) >= 2
+                        ncol(wordlist) >= 2
  
   if (!wl_is_rectangular) {
     stop("wordlist must be a data frame with at least two columns")
@@ -143,8 +148,15 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
     wordlist <- as.data.frame(wordlist, stringsAsFactors = FALSE)
   }
 
-  keys   <- wordlist[[1]]
-  values <- wordlist[[2]]
+  from_exists <- i_check_scalar(from) && i_check_column_name(from, names(wordlist))
+  to_exists   <- i_check_scalar(to)   && i_check_column_name(to, names(wordlist))
+
+  if (!from_exists || !to_exists) {
+    stop("`from` and `to` must refer to columns in the wordlist")
+  }
+
+  keys   <- wordlist[[from]]
+  values <- wordlist[[to]]
 
   if (!is.atomic(keys) || !is.atomic(values)) {
     stop("wordlist must have two columns coerceable to a character")
@@ -185,7 +197,7 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
     }
 
     if (any(na_present)) {
-      msg <- "NA was present in the first column of %s; replacing with the character 'NA'"
+      msg <- "NA was present in the `from` column of %s; replacing with the character 'NA'"
       msg <- paste(msg, 
                    "If you want to indicate missing data, use the '.missing' keyword.", 
                    collapse = "\n")
@@ -194,7 +206,7 @@ clean_spelling <- function(x = character(), wordlist = data.frame(),
     }
 
     if (length(dkeys) > 0) {
-      msg <- 'Duplicate keys were found in the first column of %s: "%s"\nonly the first instance will be used.'
+      msg <- 'Duplicate keys were found in the `from` column of %s: "%s"\nonly the first instance will be used.'
       msg <- sprintf(msg, the_words, paste(dkeys, collapse = '", "'))
       warning(msg)
     }

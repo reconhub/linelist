@@ -29,6 +29,40 @@ test_that("clean_spelling throws an error with no wordlist", {
 
 })
 
+
+test_that("clean_spelling can take different arrangements of wordlist", {
+
+  expect_identical(clean_spelling(my_data, corrections[2:1], from = 2, to = 1),
+                   cleaned_data)
+  expect_identical(clean_spelling(my_data, corrections[2:1], from = "bad", to = "good"),
+                   cleaned_data)
+  expect_identical(clean_spelling(my_data, corrections[2:1], from = "bad", to = 1),
+                   cleaned_data)
+  expect_identical(clean_spelling(my_data, corrections[2:1], from = 2, to = "good"),
+                   cleaned_data)
+
+})
+
+test_that("clean_spelling throws an error if the columns are incorrect", {
+
+  expect_error(clean_spelling(my_data, corrections, from = "you", to = "me"), 
+               "`from` and `to` must refer to columns in the wordlist", 
+               fixed = TRUE)
+  expect_error(clean_spelling(my_data, corrections, from = 1, to = "me"), 
+               "`from` and `to` must refer to columns in the wordlist", 
+               fixed = TRUE)
+  expect_error(clean_spelling(my_data, corrections, from = "me", to = 2), 
+               "`from` and `to` must refer to columns in the wordlist", 
+               fixed = TRUE)
+  expect_error(clean_spelling(my_data, corrections, from = 6, to = 9), 
+               "`from` and `to` must refer to columns in the wordlist", 
+               fixed = TRUE)
+  expect_error(clean_spelling(my_data, corrections, from = 0, to = 2), 
+               "`from` and `to` must refer to columns in the wordlist", 
+               fixed = TRUE)
+
+})
+
 test_that("regex is possible", {
 
   datf <- corrections

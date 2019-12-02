@@ -4,16 +4,27 @@
 \alias{clean_spelling}
 \title{Rename values in a vector based on a wordlist}
 \usage{
-clean_spelling(x = character(), wordlist = data.frame(),
-  quiet = FALSE, warn_default = TRUE, anchor_regex = TRUE)
+clean_spelling(
+  x = character(),
+  wordlist = data.frame(),
+  from = 1,
+  to = 2,
+  quiet = FALSE,
+  warn_default = TRUE,
+  anchor_regex = TRUE
+)
 }
 \arguments{
 \item{x}{a character or factor vector}
 
-\item{wordlist}{a two-column matrix or data frame defining mis-spelled words
-in the first column (keys) and replacements (values) in the second column.
-There are keywords that can be appended to the first column for addressing
-default values and missing data.}
+\item{wordlist}{a matrix or data frame defining mis-spelled words or keys
+in one column (\code{from}) and replacement values (\code{to}) in another
+column. There are keywords that can be appended to the \code{from} column for
+addressing default values and missing data.}
+
+\item{from}{a column name or position defining words or keys to be replaced}
+
+\item{to}{a column name or position defining replacement values}
 
 \item{quiet}{a \code{logical} indicating if warnings should be issued if no
 replacement is made; if \code{FALSE}, these warnings will be disabled}
@@ -37,14 +48,14 @@ This function provides an interface for \code{\link[forcats:fct_recode]{forcats:
 a data wordlist can be imported from a data frame.
 }
 \details{
-\subsection{Keys (first column)}{
+\subsection{Keys (\code{from} column)}{
 
-The first column of the wordlist will contain the keys that you want to
+The \code{from} column of the wordlist will contain the keys that you want to
 match in your current data set. These are expected to match exactly with
 the exception of three reserved keywords that start with a full stop:
 \itemize{
-\item \code{.regex [pattern]}: will replace anything matching \code{[pattern]}. \strong{This
-is executed before any other replacements are made}. The \code{[pattern]}
+\item \code{.regex [pattern]}: will replace anything matching \verb{[pattern]}. \strong{This
+is executed before any other replacements are made}. The \verb{[pattern]}
 should be an unquoted, valid, PERL-flavored regular expression. Any
 whitespace padding the regular expression is discarded.
 \item \code{.missing}: replaces any missing values (see NOTE)
@@ -57,7 +68,7 @@ and are not missing.
 
 The values will replace their respective keys exactly as they are presented.
 
-There is currently one recognised keyword that can be placed in the second
+There is currently one recognised keyword that can be placed in the \code{to}
 column of your wordlist:
 \itemize{
 \item \code{.na}: Replace keys with missing data. When used in combination with the
@@ -68,7 +79,7 @@ between explicit and implicit missing data.
 }
 }
 \note{
-If there are any missing values in the first column (keys), then they
+If there are any missing values in the \code{from} column (keys), then they
 are automatically converted to the character "NA" with a warning. If you want
 to target missing data with your wordlist, use the \code{.missing} keyword. The
 \code{.regex} keyword uses \code{\link[=gsub]{gsub()}} with the \code{perl = TRUE} option for replacement.
