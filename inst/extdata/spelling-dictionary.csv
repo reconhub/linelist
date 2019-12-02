@@ -1,0 +1,34 @@
+options,values,grp,orders
+y,Yes,readmission,1
+n,No,readmission,2
+u,Unknown,readmission,3
+.missing,Missing,readmission,4
+0,Yes,treated,1
+1,No,treated,2
+.missing,Missing,treated,3
+1,Facility  1,facility,1
+2,Facility  2,facility,2
+3,Facility  3,facility,3
+4,Facility  4,facility,4
+5,Facility  5,facility,5
+6,Facility  6,facility,6
+7,Facility  7,facility,7
+8,Facility  8,facility,8
+9,Facility  9,facility,9
+10,Facility 10,facility,10
+.default,Unknown,facility,11
+0,0-9,age_group,1
+10,10-19,age_group,2
+20,20-29,age_group,3
+30,30-39,age_group,4
+40,40-49,age_group,5
+50,50+,age_group,6
+high,High,.regex ^lab_result_,1
+norm,Normal,.regex ^lab_result_,2
+inc,Inconclusive,.regex ^lab_result_,3
+y,yes,.global,Inf
+n,no,.global,Inf
+u,unknown,.global,Inf
+unk,unknown,.global,Inf
+oui,yes,.global,Inf
+.missing,missing,.global,Inf

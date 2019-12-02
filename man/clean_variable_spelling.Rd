@@ -97,63 +97,13 @@ numeric and Date columns from conversion to character.
 }
 \examples{
 
-# Set up wordlist ------------------------------------------------ 
+# Read in dictionary and coded date examples --------------------
 
-yesno  <- c("y", "n", "u", ".missing")
-dyesno <- c("Yes", "No", "Unknown", "Missing")
-
-treated  <- c(0:1, ".missing")
-dtreated <- c("Yes", "No", "Missing")
-
-facility  <- c(1:10, ".default") # define a .default key
-dfacility <- c(sprintf("Facility \%s", format(1:10)), "Unknown")
-
-age_group  <- c(0, 10, 20, 30, 40, 50)
-dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
-
-lab_result <- c("high", "norm", "inc")
-dlab_result <- c("High", "Normal", "Inconclusive")
-
-wordlist <- data.frame(
-  options = c(yesno, treated, facility, age_group, lab_result),
-  values  = c(dyesno, dtreated, dfacility, dage_group, dlab_result),
-  grp = rep(c("readmission", "treated", "facility", "age_group",
-              ".regex ^lab_result_"),
-            c(4, 3, 11, 6, 3)),
-  orders  = c(1:4, 1:3, 1:11, 1:6, 1:3),
-  stringsAsFactors = FALSE
-)
-
-# Assigning global values ----------------------------------------
-
-global_words <- data.frame(
-  options = c("y", "n", "u", "unk", "oui", ".missing"),
-  values  = c("yes", "no", "unknown", "unknown", "yes", "missing"),
-  grp     = rep(".global", 6),
-  orders  = rep(Inf, 6),
-  stringsAsFactors = FALSE
-)
-
-wordlist <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
-
-# Generate example data ------------------------------------------
-dat <- data.frame(
-  # these have been defined
-  readmission = sample(yesno, 50, replace = TRUE),
-  treated = sample(treated, 50, replace = TRUE),
-  facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
-  age_group = sample(age_group, 50, replace = TRUE),
-  lab_result_01 = sample(c(lab_result, "unk"), 50, replace = TRUE),
-  lab_result_02 = sample(c(lab_result, "unk"), 50, replace = TRUE),
-  lab_result_03 = sample(c(lab_result, "unk"), 50, replace = TRUE),
-  # global values will catch these
-  has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
-  followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
-  stringsAsFactors = FALSE
-)
-
-missing_data <- dat == ".missing"
-dat[missing_data] <- sample(c("", NA), sum(missing_data), prob = c(0.1, 0.9), replace = TRUE)
+wordlist <- read.csv(linelist_example("spelling-dictionary.csv"), 
+                     stringsAsFactors = FALSE)
+dat      <- read.csv(linelist_example("coded-data.csv"), 
+                     stringsAsFactors = FALSE)
+dat$date <- as.Date(dat$date)
 
 # Clean spelling based on wordlist ------------------------------ 
 
@@ -162,6 +112,8 @@ head(dat) # show the data
 
 res1 <- clean_variable_spelling(dat,
                                 wordlists = wordlist,
+                                from = "options",
+                                to = "values",
                                 spelling_vars = "grp")
 head(res1)
 
@@ -172,6 +124,8 @@ dat[] <- lapply(dat, as.factor)
 as.list(head(dat))
 res2 <- clean_variable_spelling(dat, 
                                 wordlists = wordlist, 
+                                from = "options",
+                                to = "values",
                                 spelling_vars = "grp", 
                                 sort_by = "orders")
 head(res2)
