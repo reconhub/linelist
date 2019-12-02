@@ -22,6 +22,6 @@ linelist_example <- function(name = NULL) {
   if (is.null(name)) {
     list.files(system.file("extdata", package = "linelist"))
   } else {
-    system.file("extdata", name, package = "linelist")
+    system.file("extdata", name, package = "linelist", mustWork = TRUE)
   }
 }
