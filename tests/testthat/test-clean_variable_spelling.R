@@ -35,6 +35,7 @@ test_that("a data frame is needed for the first part", {
 })
 
 
+
 test_that("a list of data frames is needed for the second part", {
 
   expect_error(clean_variable_spelling(my_data_frame),
@@ -48,6 +49,36 @@ test_that("a list of data frames is needed for the second part", {
   
 })
 
+test_that("columns can be specified for the data despite order", {
+
+  expect_identical(clean_variable_spelling(my_data_frame, corrections[sample(4)],
+                                           from = "bad", 
+                                           to = "good",
+                                           spelling_vars = "column"
+                                          ),
+                   cleaned_data)
+            
+})
+
+test_that("a single error will be thrown if the columns are not in the correct order", {
+
+  expect_error(clean_variable_spelling(my_data_frame, corrections,
+                                       from = "hello", to = "there"),
+               "`from` and `to` must refer to columns in the wordlist")
+  expect_error(clean_variable_spelling(my_data_frame, corrections,
+                                       from = 0, to = 11),
+               "`from` and `to` must refer to columns in the wordlist")
+  expect_error(clean_variable_spelling(my_data_frame, corrections,
+                                       from = 1, to = 11),
+               "`from` and `to` must refer to columns in the wordlist")
+  expect_error(clean_variable_spelling(my_data_frame, corrections,
+                                       from = 6, to = "good"),
+               "`from` and `to` must refer to columns in the wordlist")
+  expect_error(clean_variable_spelling(my_data_frame, corrections,
+                                       from = "bad", to = 99),
+               "`from` and `to` must refer to columns in the wordlist")
+
+})
 
 test_that("spelling cleaning works as expected", {
 
@@ -136,24 +167,25 @@ test_that("global data frame works if spelling_vars = NULL", {
 test_that("regex matching works as expected", { 
   
   # create wordlists
-  d1 <- data.frame(val = c("a", "b", "c"),
+  d1 <- data.frame(val     = c("a", "b", "c"),
                    replace = c("alpha", "bravo", "charlie"),
-                   var = rep(".regex ^column_[[:digit:]]", 3),
+                   var     = rep(".regex ^column_[[:digit:]]", 3),
                    stringsAsFactors = FALSE)
   
-  d2 <- data.frame(val = c("a", "b", "c"),
-                     replace = c("apple", "banana", "cherry"),
-                     var = rep("my_column", 3),
-                     stringsAsFactors = FALSE)
+  d2 <- data.frame(val     = c("a", "b", "c"),
+                   replace = c("apple", "banana", "cherry"),
+                   var     = rep("my_column", 3),
+                   stringsAsFactors = FALSE)
   
   dict <- rbind.data.frame(d1, d2)
   
   # create data
-  df <- data.frame(column_1 = sample(c("a", "b", "c"), 10, replace = TRUE),
-                   column_2 = sample(c("a", "b", "c"), 10, replace = TRUE),
-                   my_column = sample(c("a", "b", "c"), 10, replace = TRUE),
-                   column_xx = sample(c("a", "b", "c"), 10, replace = TRUE),
-                   stringsAsFactors = FALSE)
+  df <- data.frame(stringsAsFactors=FALSE,
+      column_1 = c("a", "a", "b", "b", "c", "c", "b", "b", "b", "b"),
+      column_2 = c("b", "b", "b", "c", "b", "a", "a", "b", "a", "b"),
+     my_column = c("b", "b", "a", "a", "c", "c", "a", "b", "c", "b"),
+     column_xx = c("b", "a", "a", "c", "b", "a", "b", "c", "b", "b")
+  )
   
   # clean
   df_clean <- clean_variable_spelling(df, dict)

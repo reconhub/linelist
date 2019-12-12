@@ -5,7 +5,6 @@
 #' It has application for addressing mis-spellings and recoding variables (e.g.
 #' from electronic survey data). 
 #'
-#'
 #' @param wordlists a data frame or named list of data frames with at least two
 #'   columns defining the word list to be used. If this is a data frame, a third
 #'   column must be present to split the wordlists by column in `x` (see
@@ -24,7 +23,7 @@
 #'   shown as a single warning. Defaults to `FALSE`, which shows nothing.
 #'
 #' @inheritParams clean_variable_labels
-#' 
+#' @inheritParams clean_spelling
 #'
 #' @details By default, this applies the function [clean_spelling()] to all
 #'   columns specified by the column names listed in `spelling_vars`, or, if a
@@ -78,63 +77,13 @@
 #'
 #' @examples
 #' 
-#' # Set up wordlist ------------------------------------------------ 
+#' # Read in dictionary and coded date examples --------------------
 #'
-#' yesno  <- c("y", "n", "u", ".missing")
-#' dyesno <- c("Yes", "No", "Unknown", "Missing")
-#'
-#' treated  <- c(0:1, ".missing")
-#' dtreated <- c("Yes", "No", "Missing")
-#'
-#' facility  <- c(1:10, ".default") # define a .default key
-#' dfacility <- c(sprintf("Facility %s", format(1:10)), "Unknown")
-#'
-#' age_group  <- c(0, 10, 20, 30, 40, 50)
-#' dage_group <- c("0-9", "10-19", "20-29", "30-39", "40-49", "50+")
-#' 
-#' lab_result <- c("high", "norm", "inc")
-#' dlab_result <- c("High", "Normal", "Inconclusive")
-#'
-#' wordlist <- data.frame(
-#'   options = c(yesno, treated, facility, age_group, lab_result),
-#'   values  = c(dyesno, dtreated, dfacility, dage_group, dlab_result),
-#'   grp = rep(c("readmission", "treated", "facility", "age_group",
-#'               ".regex ^lab_result_"),
-#'             c(4, 3, 11, 6, 3)),
-#'   orders  = c(1:4, 1:3, 1:11, 1:6, 1:3),
-#'   stringsAsFactors = FALSE
-#' )
-#'
-#' # Assigning global values ----------------------------------------
-#'
-#' global_words <- data.frame(
-#'   options = c("y", "n", "u", "unk", "oui", ".missing"),
-#'   values  = c("yes", "no", "unknown", "unknown", "yes", "missing"),
-#'   grp     = rep(".global", 6),
-#'   orders  = rep(Inf, 6),
-#'   stringsAsFactors = FALSE
-#' )
-#' 
-#' wordlist <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
-#'
-#' # Generate example data ------------------------------------------
-#' dat <- data.frame(
-#'   # these have been defined
-#'   readmission = sample(yesno, 50, replace = TRUE),
-#'   treated = sample(treated, 50, replace = TRUE),
-#'   facility = sample(c(facility[-11], LETTERS[1:3]), 50, replace = TRUE),
-#'   age_group = sample(age_group, 50, replace = TRUE),
-#'   lab_result_01 = sample(c(lab_result, "unk"), 50, replace = TRUE),
-#'   lab_result_02 = sample(c(lab_result, "unk"), 50, replace = TRUE),
-#'   lab_result_03 = sample(c(lab_result, "unk"), 50, replace = TRUE),
-#'   # global values will catch these
-#'   has_symptoms = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
-#'   followup = sample(c(yesno, "unk", "oui"), 50, replace = TRUE),
-#'   stringsAsFactors = FALSE
-#' )
-#' 
-#' missing_data <- dat == ".missing"
-#' dat[missing_data] <- sample(c("", NA), sum(missing_data), prob = c(0.1, 0.9), replace = TRUE)
+#' wordlist <- read.csv(linelist_example("spelling-dictionary.csv"), 
+#'                      stringsAsFactors = FALSE)
+#' dat      <- read.csv(linelist_example("coded-data.csv"), 
+#'                      stringsAsFactors = FALSE)
+#' dat$date <- as.Date(dat$date)
 #'
 #' # Clean spelling based on wordlist ------------------------------ 
 #'
@@ -143,6 +92,8 @@
 #' 
 #' res1 <- clean_variable_spelling(dat,
 #'                                 wordlists = wordlist,
+#'                                 from = "options",
+#'                                 to = "values",
 #'                                 spelling_vars = "grp")
 #' head(res1)
 #' 
@@ -153,14 +104,17 @@
 #' as.list(head(dat))
 #' res2 <- clean_variable_spelling(dat, 
 #'                                 wordlists = wordlist, 
+#'                                 from = "options",
+#'                                 to = "values",
 #'                                 spelling_vars = "grp", 
 #'                                 sort_by = "orders")
 #' head(res2)
 #' as.list(head(res2))
 #' 
 clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
-                                    spelling_vars = 3, sort_by = NULL,
-                                    classes = NULL, warn = FALSE) {
+                                    from = 1, to = 2, spelling_vars = 3,
+                                    sort_by = NULL, classes = NULL, 
+                                    warn = FALSE) {
   
   if (length(x) == 0 || !is.data.frame(x)) {
     stop("x must be a data frame")
@@ -180,15 +134,20 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
   # There is one big dictionary with spelling_vars -----------------------------
   if (is.data.frame(wordlists)) {
 
-    # There is a spelling_vars column ----------------------------------------
-    if (!is.null(spelling_vars) && length(spelling_vars) == 1) {
-      is_number <- is.numeric(spelling_vars) &&          # spelling_vars is a number
-        as.integer(spelling_vars) == spelling_vars && # ... and an integer
-          spelling_vars <= ncol(wordlists)      # ... and is within the bounds
+    # the from and to columns exist
+    from_exists <- i_check_scalar(from) && i_check_column_name(from, names(wordlists))
+    to_exists   <- i_check_scalar(to)   && i_check_column_name(to, names(wordlists))
 
-      is_name   <- is.character(spelling_vars) &&         # spelling_vars is a name
-        any(names(wordlists) == spelling_vars) # ... in the wordlists
-      if (is_number || is_name) {
+    if (!from_exists || !to_exists) {
+      stop("`from` and `to` must refer to columns in the wordlist")
+    }
+
+    # There is a spelling_vars column ----------------------------------------
+    spelling_vars_exists <- i_check_scalar(spelling_vars)
+
+    if (spelling_vars_exists) {
+      valid_spelling_vars <- i_check_column_name(spelling_vars, names(wordlists))
+      if (valid_spelling_vars) {
         wordlists <- split(wordlists, wordlists[[spelling_vars]])
       } else {
         stop("spelling_vars must be the name or position of a column in the wordlist")
@@ -196,6 +155,7 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
     } else {
       warning("Using wordlist globally across all character/factor columns.")
     }
+
   } else {
     # Not everything is a data frame :( ---------------------------------------
     if (!all(vapply(wordlists, is.data.frame, logical(1)))) {
@@ -332,8 +292,10 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
       gw <- !global_words[[1]] %in% d[[1]]
       if (sum(gw) > 0) {
       # If there are still global words to clean, pass them through
-        g      <- global_words[gw, , drop = FALSE]
-        w      <- withWarnings(clean_spelling(x[[i_x]], g, quiet = FALSE))
+        g <- global_words[gw, , drop = FALSE]
+        w <- withWarnings({
+          clean_spelling(x[[i_x]], g, from = from, to = to, quiet = FALSE)
+        })
         x[[i_x]] <- if(is.null(w$val)) x[[i_x]] else w$val
         if (warn) {
           warns[[i_x]] <- collect_ya_errs(w$warnings, iter_print[i_x])
@@ -345,7 +307,9 @@ clean_variable_spelling <- function(x = data.frame(), wordlists = list(),
       d <- d
     }
     # Evaluate and collect any warnings/errors that pop up
-    w      <- withWarnings(clean_spelling(x[[i_x]], d, quiet = FALSE))
+    w <- withWarnings({
+      clean_spelling(x[[i_x]], d, from = from, to = to, quiet = FALSE)
+    })
     x[[i_x]] <- if(is.null(w$val)) x[[i_x]] else w$val
     if (warn) {
       warns[[i_x]] <- c(warns[[i_x]], collect_ya_errs(w$warnings, iter_print[i_x]))

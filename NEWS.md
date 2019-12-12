@@ -1,3 +1,13 @@
+# linelist 0.0.39.9000
+
+* `clean_variable_spelling()` and `clean_spelling()` gain the option to specify
+  which columns contain the keys (`from`) and values (`to`). These default to
+  1 and 2, respectively, which ensure that backwards compatibility is retained.
+  (this fixes #99).
+* `linelist_example()` is a new function that serves as an alias for 
+  `system.file("extdata", thing, package = "linelist")`, which is much easier
+  for new R users to understand.
+
 # linelist 0.0.38.9000
 
 * `top_values()` no longer throws a spurious warning when the levels in the 
