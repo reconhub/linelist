@@ -8,21 +8,25 @@
 
 <title>Try and guess dates from a characters — guess_dates • linelist</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +34,8 @@
 
 
 
-<meta property="og:title" content="Try and guess dates from a characters — guess_dates" />
 
+<meta property="og:title" content="Try and guess dates from a characters — guess_dates" />
 <meta property="og:description" content="Note that THIS FEATURE IS STILL EXPERIMENTAL: we strongly recommend checking
 a few converted dates manually. This function tries to extract dates from a
 character vector or a factor. It treats each entry independently, using
@@ -45,6 +49,7 @@ threshold is exceeded, the original vector is returned." />
 
 
 
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -53,6 +58,7 @@ threshold is exceeded, the original vector is returned." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -71,7 +77,7 @@ threshold is exceeded, the original vector is returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.35.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.40.9000</span>
       </span>
     </div>
 
@@ -79,7 +85,7 @@ threshold is exceeded, the original vector is returned." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -102,11 +108,10 @@ threshold is exceeded, the original vector is returned." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/reconhub/linelist">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -117,6 +122,7 @@ threshold is exceeded, the original vector is returned." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -128,7 +134,6 @@ threshold is exceeded, the original vector is returned." />
     </div>
 
     <div class="ref-description">
-    
     <p>Note that THIS FEATURE IS STILL EXPERIMENTAL: we strongly recommend checking
 a few converted dates manually. This function tries to extract dates from a
 <code>character</code> vector or a <code>factor</code>. It treats each entry independently, using
@@ -138,13 +143,18 @@ successful it converts that entry to a standard <code>Date</code> with the <em>Y
 error threshold can be used to define the maximum number of resulting <code>NA</code>
 (i.e. entries without an identified date) that can be tolerated. If this
 threshold is exceeded, the original vector is returned.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>guess_dates</span>(<span class='no'>x</span>, <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>first_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>last_date</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.time'>Sys.Date</a></span>(), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>),
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>modern_excel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>guess_dates</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>error_tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>first_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>last_date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(),
+  <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>),
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>modern_excel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -175,7 +185,7 @@ current date.</p></td>
 parsing of mixed dates. If a list is supplied, that list will be used for
 successive tries in parsing.  This is passed on to
 <code><a href='http://lubridate.tidyverse.org/reference/parse_date_time.html'>lubridate::parse_date_time()</a></code>. Default orders
-(<code><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption("linelist_guess_orders")</a></code>) parse World dmy/dby dates before US
+(<code><a href='https://rdrr.io/r/base/options.html'>getOption("linelist_guess_orders")</a></code>) parse World dmy/dby dates before US
 mdy/bdy dates.</p></td>
     </tr>
     <tr>
@@ -194,7 +204,7 @@ or a 2011 or later version of Excel for OSX. Set this parameter to <code>FALSE</
 if the data came from an OSX version of Excel before 2011.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Converting ambiguous character strings to dates is difficult for
@@ -205,7 +215,8 @@ many reasons:</p><ul>
 <li><p>the behaviour of <code>as.Date</code> in the presence of non-date is hard to predict,
 sometimes returning <code>NA</code>, sometimes issuing an error.</p></li>
 </ul>
-    <p>This function tries to address all the above issues. Dates with the following
+
+<p>This function tries to address all the above issues. Dates with the following
 format should be automatically detected, irrespective of separators
 (e.g. "-", " ", "/") and surrounding text:</p><ul>
 <li><p>"19 09 2018"</p></li>
@@ -214,39 +225,42 @@ format should be automatically detected, irrespective of separators
 <li><p>"2018 Sep 19"</p></li>
 <li><p>"Sep 19 2018"</p></li>
 </ul>
-    <h3>How it works</h3>
-    This function relies heavily on <code><a href='http://lubridate.tidyverse.org/reference/parse_date_time.html'>lubridate::parse_date_time()</a></code>, which is an
+
+<h3>How it works</h3>
+
+
+<p>This function relies heavily on <code><a href='http://lubridate.tidyverse.org/reference/parse_date_time.html'>lubridate::parse_date_time()</a></code>, which is an
 extremely flexible date parser that works well for consistent date formats,
 but can quickly become unweildy and may produce spurious results.
 <code>guess_dates()</code> will use a list of formats in the <code>orders</code> argument to run
 <code>parse_date_time()</code> with each format vector separately and take the first
 correctly parsed date from all the trials. By default, the orders are in
-<code><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption("linelist_guess_orders")</a></code>:<pre>list(
+<code><a href='https://rdrr.io/r/base/options.html'>getOption("linelist_guess_orders")</a></code>:</p><pre>list(
   world_named_months = c("Ybd", "dby"),
   world_digit_months = c("dmy", "Ymd"), 
   US_formats         = c("Omdy", "YOmd")
 )
 </pre>
-    In this case, the dates 03 Jan 2018, 07/03/1982, and 08/20/85 are correctly
+
+<p>In this case, the dates 03 Jan 2018, 07/03/1982, and 08/20/85 are correctly
 intepreted as 2018-01-03, 1982-03-07, and 1985-08-20. The examples section
 will show how you can manipulate the <code>orders</code> to be customised for your
-situation.
-    
+situation.</p>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='clean_dates.html'>clean_dates()</a></code> for cleaning of data frames</p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Mixed format date -----------------------------------------</span>
 
-<span class='fu'>guess_dates</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>)) <span class='co'># default</span></div><div class='output co'>#&gt; [1] "2018-01-03" "1982-03-07" "1985-08-20"</div><div class='input'>
+<span class='fu'>guess_dates</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>)) <span class='co'># default</span></div><div class='output co'>#&gt; [1] "2018-01-03" "1982-03-07" "1985-08-20"</div><div class='input'>
 <span class='co'># Prioritizing specific date formats ------------------------</span>
 <span class='co'># </span>
 <span class='co'># The default orders prioritize world date ordering over American-style.</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>))</div><div class='output co'>#&gt; $world_named_months
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>))</div><div class='output co'>#&gt; $world_named_months
 #&gt; [1] "Ybd" "dby"
 #&gt; 
 #&gt; $world_digit_months
@@ -258,7 +272,7 @@ situation.
 <span class='co'># if you want to prioritize American-style dates with numeric months, you</span>
 <span class='co'># can switch the second and third elements of the default orders</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>))</div><div class='output co'>#&gt; $world_named_months
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"linelist_guess_orders"</span>))</div><div class='output co'>#&gt; $world_named_months
 #&gt; [1] "Ybd" "dby"
 #&gt; 
 #&gt; $world_digit_months
@@ -266,7 +280,7 @@ situation.
 #&gt; 
 #&gt; $US_formats
 #&gt; [1] "Omdy" "YOmd"
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>us_ord</span> <span class='kw'>&lt;-</span> <span class='no'>ord</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>2</span>)])</div><div class='output co'>#&gt; $world_named_months
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>us_ord</span> <span class='kw'>&lt;-</span> <span class='no'>ord</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>2</span>)])</div><div class='output co'>#&gt; $world_named_months
 #&gt; [1] "Ybd" "dby"
 #&gt; 
 #&gt; $US_formats
@@ -274,20 +288,20 @@ situation.
 #&gt; 
 #&gt; $world_digit_months
 #&gt; [1] "dmy" "Ymd"
-#&gt; </div><div class='input'><span class='fu'>guess_dates</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='no'>us_ord</span>)</div><div class='output co'>#&gt; [1] "2018-01-03" "1982-07-03" "1985-08-20"</div><div class='input'>
+#&gt; </div><div class='input'><span class='fu'>guess_dates</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='no'>us_ord</span>)</div><div class='output co'>#&gt; [1] "2018-01-03" "1982-07-03" "1985-08-20"</div><div class='input'>
 <span class='co'># Handling dates with time formats --------------------------</span>
 <span class='co'>#</span>
 <span class='co'># If you have a format with hours, minutes and seconds, you can also add that</span>
 <span class='co'># to the list of formats. Note, however, that this function will drop levels</span>
 <span class='co'># below day.</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>ord</span>$<span class='no'>ymdhms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Ymdhms"</span>, <span class='st'>"Ymdhm"</span>))</div><div class='output co'>#&gt; [1] "Ymdhms" "Ymdhm" </div><div class='input'>
-<span class='fu'>guess_dates</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2014_04_05_23:15:43"</span>, <span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='no'>ord</span>)</div><div class='output co'>#&gt; [1] "2014-04-05" "2018-01-03" "1982-03-07" "1985-08-20"</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>ord</span>$<span class='no'>ymdhms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Ymdhms"</span>, <span class='st'>"Ymdhm"</span>))</div><div class='output co'>#&gt; [1] "Ymdhms" "Ymdhm" </div><div class='input'>
+<span class='fu'>guess_dates</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"2014_04_05_23:15:43"</span>, <span class='st'>"03 Jan 2018"</span>, <span class='st'>"07/03/1982"</span>, <span class='st'>"08/20/85"</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='no'>ord</span>)</div><div class='output co'>#&gt; [1] "2014-04-05" "2018-01-03" "1982-03-07" "1985-08-20"</div><div class='input'>
 <span class='co'># Handling  missing and nonsense data -----------------------</span>
 <span class='co'># </span>
 <span class='co'># guess_dates can handle messy dates and tolerate missing data</span>
 
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"01-12-2001"</span>, <span class='st'>"male"</span>, <span class='st'>"female"</span>, <span class='st'>"2018-10-18"</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='st'>"2018_10_17"</span>,
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"01-12-2001"</span>, <span class='st'>"male"</span>, <span class='st'>"female"</span>, <span class='st'>"2018-10-18"</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='st'>"2018_10_17"</span>,
        <span class='st'>"43391"</span>, <span class='st'>"2018 10 19"</span>, <span class='st'>"// 24/12/1989"</span>, <span class='st'>"this is 24/12/1989!"</span>,
        <span class='st'>"RECON NGO: 19 Sep 2018 :)"</span>, <span class='st'>"6/9/11"</span>, <span class='st'>"10/10/10"</span>)
 
@@ -307,11 +321,8 @@ situation.
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -320,19 +331,23 @@ situation.
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Thibaut Jombart, Zhian N. Kamvar.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

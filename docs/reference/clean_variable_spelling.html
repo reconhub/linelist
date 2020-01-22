@@ -8,21 +8,25 @@
 
 <title>Check and clean spelling or codes of multiple variables in a data frame — clean_variable_spelling • linelist</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,13 +34,14 @@
 
 
 
-<meta property="og:title" content="Check and clean spelling or codes of multiple variables in a data frame — clean_variable_spelling" />
 
+<meta property="og:title" content="Check and clean spelling or codes of multiple variables in a data frame — clean_variable_spelling" />
 <meta property="og:description" content="This function allows you to clean your data according to
 pre-defined rules encapsulated in either a data frame or list of data frames.
 It has application for addressing mis-spellings and recoding variables (e.g.
 from electronic survey data)." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -48,6 +53,7 @@ from electronic survey data)." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -66,7 +72,7 @@ from electronic survey data)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">linelist</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.35.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.40.9000</span>
       </span>
     </div>
 
@@ -74,7 +80,7 @@ from electronic survey data)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,11 +103,10 @@ from electronic survey data)." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/reconhub/linelist">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,6 +117,7 @@ from electronic survey data)." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -123,17 +129,23 @@ from electronic survey data)." />
     </div>
 
     <div class="ref-description">
-    
     <p>This function allows you to clean your data according to
 pre-defined rules encapsulated in either a data frame or list of data frames.
 It has application for addressing mis-spellings and recoding variables (e.g.
 from electronic survey data).</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>clean_variable_spelling</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(), <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(),
-  <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>clean_variable_spelling</span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(),
+  <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -147,6 +159,14 @@ from electronic survey data).</p>
 columns defining the word list to be used. If this is a data frame, a third
 column must be present to split the wordlists by column in <code>x</code> (see
 <code>spelling_vars</code>).</p></td>
+    </tr>
+    <tr>
+      <th>from</th>
+      <td><p>a column name or position defining words or keys to be replaced</p></td>
+    </tr>
+    <tr>
+      <th>to</th>
+      <td><p>a column name or position defining replacement values</p></td>
     </tr>
     <tr>
       <th>spelling_vars</th>
@@ -173,21 +193,34 @@ Practically, this is used in <code><a href='clean_data.html'>clean_data()</a></c
 shown as a single warning. Defaults to <code>FALSE</code>, which shows nothing.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a data frame with re-defined data based on the dictionary</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>By default, this applies the function <code><a href='clean_spelling.html'>clean_spelling()</a></code> to all columns
-specified by the column names listed in <code>spelling_vars</code>, or, if a global
-dictionary is used, this includes all <code>character</code> and <code>factor</code> columns as
-well.</p>
+    <p>By default, this applies the function <code><a href='clean_spelling.html'>clean_spelling()</a></code> to all
+columns specified by the column names listed in <code>spelling_vars</code>, or, if a
+global dictionary is used, this includes all <code>character</code> and <code>factor</code>
+columns as well.</p>
+<h3>spelling_vars</h3>
+
+
+<p>Spelling variables within <code>wordlists</code> represent keys that you want to match
+to column names in <code>x</code> (the data set). These are expected to match exactly
+with the exception of two reserved keywords that starts with a full stop:</p><ul>
+<li><p><code>.regex [pattern]</code>: any column whose name is matched by <code>[pattern]</code>. The
+<code>[pattern]</code> should be an unquoted, valid, PERL-flavored regular expression.</p></li>
+<li><p><code>.global</code>: any column (see Section <em>Global wordlists</em>)</p></li>
+</ul>
+
+
+
 <h3>Global wordlists</h3>
-    A global wordlist is a set of definitions applied to all valid columns of <code>x</code>
-indiscriminantly.
-<ul>
+
+
+<p>A global wordlist is a set of definitions applied to all valid columns of <code>x</code>
+indiscriminantly.</p><ul>
 <li><p><strong>.global spelling_var</strong>: If you want to apply a set of definitions to all
 valid columns in addition to specified columns, then you can include a
 <code>.global</code> group in the <code>spelling_var</code> column of your <code>wordlists</code> data
@@ -196,215 +229,231 @@ errors. <em>NOTE: specific variable definitions will override global
 defintions.</em> For example: if you have a column for cardinal directions
 and a definiton for <code>N = North</code>, then the global variable <code>N = no</code> will
 not override that. See Example.</p></li>
-<li><p><strong><code>spelling_var = NULL</code></strong>: If you want your data frame to be applied to
+<li><p><strong><code>spelling_vars = NULL</code></strong>: If you want your data frame to be applied to
 all character/factor columns indiscriminantly, then setting
-<code>spelling_var = NULL</code> will use that wordlist globally.</p></li>
+<code>spelling_vars = NULL</code> will use that wordlist globally.</p></li>
 </ul>
-    
+
+
+
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function will only parse character and factor columns to protect
 numeric and Date columns from conversion to character.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='clean_spelling.html'>clean_spelling()</a></code>, which this function wraps.</p></div>
-    
+    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/matchmaker/man/match_df.html'>matchmaker::match_df()</a></code>, which this function wraps.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'># Set up wordlist ------------------------------------------------ </span>
+<span class='co'># Read in dictionary and coded date examples --------------------</span>
 
-<span class='no'>yesno</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"y"</span>, <span class='st'>"n"</span>, <span class='st'>"u"</span>, <span class='st'>".missing"</span>)
-<span class='no'>dyesno</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Yes"</span>, <span class='st'>"No"</span>, <span class='st'>"Unknown"</span>, <span class='st'>"Missing"</span>)
-
-<span class='no'>treatment_administered</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='st'>".missing"</span>)
-<span class='no'>dtreatment_administered</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Yes"</span>, <span class='st'>"No"</span>, <span class='st'>"Missing"</span>)
-
-<span class='no'>facility</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='st'>".default"</span>) <span class='co'># define a .default key</span>
-<span class='no'>dfacility</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sprintf'>sprintf</a></span>(<span class='st'>"Facility %s"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/format'>format</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>)), <span class='st'>"Unknown"</span>)
-
-<span class='no'>age_group</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>30</span>, <span class='fl'>40</span>, <span class='fl'>50</span>)
-<span class='no'>dage_group</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0-9"</span>, <span class='st'>"10-19"</span>, <span class='st'>"20-29"</span>, <span class='st'>"30-39"</span>, <span class='st'>"40-49"</span>, <span class='st'>"50+"</span>)
-
-<span class='no'>wordlist</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>yesno</span>, <span class='no'>treatment_administered</span>, <span class='no'>facility</span>, <span class='no'>age_group</span>),
-  <span class='kw'>values</span>  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>dyesno</span>, <span class='no'>dtreatment_administered</span>, <span class='no'>dfacility</span>, <span class='no'>dage_group</span>),
-  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"readmission"</span>, <span class='st'>"treatment_administered"</span>, <span class='st'>"facility"</span>, <span class='st'>"age_group"</span>),
-            <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>11</span>, <span class='fl'>6</span>)),
-  <span class='kw'>orders</span>  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='fl'>1</span>:<span class='fl'>11</span>, <span class='fl'>1</span>:<span class='fl'>6</span>),
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-
-<span class='co'># Assigning global values ----------------------------------------</span>
-
-<span class='no'>global_words</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"y"</span>, <span class='st'>"n"</span>, <span class='st'>"u"</span>, <span class='st'>"unk"</span>, <span class='st'>"oui"</span>, <span class='st'>".missing"</span>),
-  <span class='kw'>values</span>  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"yes"</span>, <span class='st'>"no"</span>, <span class='st'>"unknown"</span>, <span class='st'>"unknown"</span>, <span class='st'>"yes"</span>, <span class='st'>"missing"</span>),
-  <span class='kw'>grp</span>     <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='st'>".global"</span>, <span class='fl'>6</span>),
-  <span class='kw'>orders</span>  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>Inf</span>, <span class='fl'>6</span>),
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-
-<span class='no'>wordlist</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>wordlist</span>, <span class='no'>global_words</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='co'># Generate example data ------------------------------------------</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='co'># these have been defined</span>
-  <span class='kw'>readmission</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>yesno</span>, <span class='fl'>50</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='kw'>treatment_administered</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>treatment_administered</span>, <span class='fl'>50</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='kw'>facility</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>facility</span>[-<span class='fl'>11</span>], <span class='no'>LETTERS</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]), <span class='fl'>50</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='kw'>age_group</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>age_group</span>, <span class='fl'>50</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='co'># global values will catch these</span>
-  <span class='kw'>has_symptoms</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>yesno</span>, <span class='st'>"unk"</span>, <span class='st'>"oui"</span>), <span class='fl'>50</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='kw'>followup</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>yesno</span>, <span class='st'>"unk"</span>, <span class='st'>"oui"</span>), <span class='fl'>50</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-<span class='no'>missing_data</span> <span class='kw'>&lt;-</span> <span class='no'>dat</span> <span class='kw'>==</span> <span class='st'>".missing"</span>
-<span class='no'>dat</span>[<span class='no'>missing_data</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>""</span>, <span class='fl'>NA</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>missing_data</span>), <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.9</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>wordlist</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='fu'><a href='linelist_example.html'>linelist_example</a></span>(<span class='st'>"spelling-dictionary.csv"</span>),
+                     <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>dat</span>      <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='fu'><a href='linelist_example.html'>linelist_example</a></span>(<span class='st'>"coded-data.csv"</span>),
+                     <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>dat</span>$<span class='no'>date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='no'>dat</span>$<span class='no'>date</span>)
 
 <span class='co'># Clean spelling based on wordlist ------------------------------ </span>
 
-<span class='no'>wordlist</span> <span class='co'># show the wordlist</span></div><div class='output co'>#&gt;     options      values                    grp orders
-#&gt; 1         y         Yes            readmission      1
-#&gt; 2         n          No            readmission      2
-#&gt; 3         u     Unknown            readmission      3
-#&gt; 4  .missing     Missing            readmission      4
-#&gt; 5         0         Yes treatment_administered      1
-#&gt; 6         1          No treatment_administered      2
-#&gt; 7  .missing     Missing treatment_administered      3
-#&gt; 8         1 Facility  1               facility      1
-#&gt; 9         2 Facility  2               facility      2
-#&gt; 10        3 Facility  3               facility      3
-#&gt; 11        4 Facility  4               facility      4
-#&gt; 12        5 Facility  5               facility      5
-#&gt; 13        6 Facility  6               facility      6
-#&gt; 14        7 Facility  7               facility      7
-#&gt; 15        8 Facility  8               facility      8
-#&gt; 16        9 Facility  9               facility      9
-#&gt; 17       10 Facility 10               facility     10
-#&gt; 18 .default     Unknown               facility     11
-#&gt; 19        0         0-9              age_group      1
-#&gt; 20       10       10-19              age_group      2
-#&gt; 21       20       20-29              age_group      3
-#&gt; 22       30       30-39              age_group      4
-#&gt; 23       40       40-49              age_group      5
-#&gt; 24       50         50+              age_group      6
-#&gt; 25        y         yes                .global    Inf
-#&gt; 26        n          no                .global    Inf
-#&gt; 27        u     unknown                .global    Inf
-#&gt; 28      unk     unknown                .global    Inf
-#&gt; 29      oui         yes                .global    Inf
-#&gt; 30 .missing     missing                .global    Inf</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>) <span class='co'># show the data</span></div><div class='output co'>#&gt;   readmission treatment_administered facility age_group has_symptoms followup
-#&gt; 1           u                      0        8        20            n        n
-#&gt; 2           u                      1        B        50            u     &lt;NA&gt;
-#&gt; 3           n                      0        B        40          unk      oui
-#&gt; 4        &lt;NA&gt;                      1        8        20          oui      unk
-#&gt; 5           y                      1        4        40            u     &lt;NA&gt;
-#&gt; 6        &lt;NA&gt;                      0        C        40          oui        n</div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>, <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>, <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>))</div><div class='output co'>#&gt;   readmission treatment_administered    facility age_group has_symptoms
-#&gt; 1     Unknown                    Yes Facility  8     20-29           no
-#&gt; 2     Unknown                     No     Unknown       50+      unknown
-#&gt; 3          No                    Yes     Unknown     40-49      unknown
-#&gt; 4     Missing                     No Facility  8     20-29          yes
-#&gt; 5         Yes                     No Facility  4     40-49      unknown
-#&gt; 6     Missing                    Yes     Unknown     40-49          yes
-#&gt;   followup
-#&gt; 1       no
-#&gt; 2  missing
-#&gt; 3      yes
-#&gt; 4  unknown
-#&gt; 5  missing
-#&gt; 6       no</div><div class='input'>
+<span class='no'>wordlist</span> <span class='co'># show the wordlist</span></div><div class='output co'>#&gt;     options       values                 grp orders
+#&gt; 1         y          Yes         readmission      1
+#&gt; 2         n           No         readmission      2
+#&gt; 3         u      Unknown         readmission      3
+#&gt; 4  .missing      Missing         readmission      4
+#&gt; 5         0          Yes             treated      1
+#&gt; 6         1           No             treated      2
+#&gt; 7  .missing      Missing             treated      3
+#&gt; 8         1  Facility  1            facility      1
+#&gt; 9         2  Facility  2            facility      2
+#&gt; 10        3  Facility  3            facility      3
+#&gt; 11        4  Facility  4            facility      4
+#&gt; 12        5  Facility  5            facility      5
+#&gt; 13        6  Facility  6            facility      6
+#&gt; 14        7  Facility  7            facility      7
+#&gt; 15        8  Facility  8            facility      8
+#&gt; 16        9  Facility  9            facility      9
+#&gt; 17       10  Facility 10            facility     10
+#&gt; 18 .default      Unknown            facility     11
+#&gt; 19        0          0-9           age_group      1
+#&gt; 20       10        10-19           age_group      2
+#&gt; 21       20        20-29           age_group      3
+#&gt; 22       30        30-39           age_group      4
+#&gt; 23       40        40-49           age_group      5
+#&gt; 24       50          50+           age_group      6
+#&gt; 25     high         High .regex ^lab_result_      1
+#&gt; 26     norm       Normal .regex ^lab_result_      2
+#&gt; 27      inc Inconclusive .regex ^lab_result_      3
+#&gt; 28        y          yes             .global    Inf
+#&gt; 29        n           no             .global    Inf
+#&gt; 30        u      unknown             .global    Inf
+#&gt; 31      unk      unknown             .global    Inf
+#&gt; 32      oui          yes             .global    Inf
+#&gt; 33 .missing      missing             .global    Inf</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>dat</span>) <span class='co'># show the data</span></div><div class='output co'>#&gt;       id       date readmission treated facility age_group lab_result_01
+#&gt; 1 ef267c 2019-07-08        &lt;NA&gt;       0        C        10           unk
+#&gt; 2 e80a37 2019-07-07           y       0        3        10           inc
+#&gt; 3 b72883 2019-07-07           y       1        8        30           inc
+#&gt; 4 c9ee86 2019-07-09           n       1        4        40           inc
+#&gt; 5 40bc7a 2019-07-12           n       1        6         0          norm
+#&gt; 6 46566e 2019-07-14           y      NA        B        50           unk
+#&gt;   lab_result_02 lab_result_03 has_symptoms followup
+#&gt; 1          high           inc         &lt;NA&gt;        u
+#&gt; 2           unk          norm            y      oui
+#&gt; 3          norm           inc                   oui
+#&gt; 4           inc           unk            y      oui
+#&gt; 5           unk          norm         &lt;NA&gt;        n
+#&gt; 6           unk           inc         &lt;NA&gt;     &lt;NA&gt;</div><div class='input'>
+<span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>,
+                                <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>,
+                                <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
+                                <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
+                                <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>res1</span>)</div><div class='output co'>#&gt;       id       date readmission treated    facility age_group lab_result_01
+#&gt; 1 ef267c 2019-07-08     Missing     Yes     Unknown     10-19       unknown
+#&gt; 2 e80a37 2019-07-07         Yes     Yes Facility  3     10-19  Inconclusive
+#&gt; 3 b72883 2019-07-07         Yes      No Facility  8     30-39  Inconclusive
+#&gt; 4 c9ee86 2019-07-09          No      No Facility  4     40-49  Inconclusive
+#&gt; 5 40bc7a 2019-07-12          No      No Facility  6       0-9        Normal
+#&gt; 6 46566e 2019-07-14         Yes Missing     Unknown       50+       unknown
+#&gt;   lab_result_02 lab_result_03 has_symptoms followup
+#&gt; 1          High  Inconclusive      missing  unknown
+#&gt; 2       unknown        Normal          yes      yes
+#&gt; 3        Normal  Inconclusive      missing      yes
+#&gt; 4  Inconclusive       unknown          yes      yes
+#&gt; 5       unknown        Normal      missing       no
+#&gt; 6       unknown  Inconclusive      missing  missing</div><div class='input'>
 <span class='co'># You can ensure the order of the factors are correct by specifying </span>
 <span class='co'># a column that defines order.</span>
 
-<span class='no'>dat</span>[] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='no'>dat</span>, <span class='no'>as.factor</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>as.list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>dat</span>))</div><div class='output co'>#&gt; $readmission
-#&gt; [1] u    u    n    &lt;NA&gt; y    &lt;NA&gt;
+<span class='no'>dat</span>[] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='no'>dat</span>, <span class='no'>as.factor</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>dat</span>))</div><div class='output co'>#&gt; $id
+#&gt; [1] ef267c e80a37 b72883 c9ee86 40bc7a 46566e
+#&gt; 50 Levels: 00220d 0ab27b 0f4fd2 0ff1e1 1513bb 174713 1793eb 25be8f ... fa5389
+#&gt; 
+#&gt; $date
+#&gt; [1] 2019-07-08 2019-07-07 2019-07-07 2019-07-09 2019-07-12 2019-07-14
+#&gt; 10 Levels: 2019-07-07 2019-07-08 2019-07-09 2019-07-10 ... 2019-07-16
+#&gt; 
+#&gt; $readmission
+#&gt; [1] &lt;NA&gt; y    y    n    n    y   
 #&gt; Levels:  n u y
 #&gt; 
-#&gt; $treatment_administered
-#&gt; [1] 0 1 0 1 1 0
-#&gt; Levels:  0 1
+#&gt; $treated
+#&gt; [1] 0    0    1    1    1    &lt;NA&gt;
+#&gt; Levels: 0 1
 #&gt; 
 #&gt; $facility
-#&gt; [1] 8 B B 8 4 C
+#&gt; [1] C 3 8 4 6 B
 #&gt; Levels: 1 10 2 3 4 5 6 7 8 9 A B C
 #&gt; 
 #&gt; $age_group
-#&gt; [1] 20 50 40 20 40 40
+#&gt; [1] 10 10 30 40 0  50
 #&gt; Levels: 0 10 20 30 40 50
 #&gt; 
+#&gt; $lab_result_01
+#&gt; [1] unk  inc  inc  inc  norm unk 
+#&gt; Levels: high inc norm unk
+#&gt; 
+#&gt; $lab_result_02
+#&gt; [1] high unk  norm inc  unk  unk 
+#&gt; Levels: high inc norm unk
+#&gt; 
+#&gt; $lab_result_03
+#&gt; [1] inc  norm inc  unk  norm inc 
+#&gt; Levels: high inc norm unk
+#&gt; 
 #&gt; $has_symptoms
-#&gt; [1] n   u   unk oui u   oui
-#&gt; Levels: n oui u unk y
+#&gt; [1] &lt;NA&gt; y         y    &lt;NA&gt; &lt;NA&gt;
+#&gt; Levels:  n oui u unk y
 #&gt; 
 #&gt; $followup
-#&gt; [1] n    &lt;NA&gt; oui  unk  &lt;NA&gt; n   
+#&gt; [1] u    oui  oui  oui  n    &lt;NA&gt;
 #&gt; Levels: n oui u unk y
-#&gt; </div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>,
-                               <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>,
-                               <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
-                               <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"orders"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt;   readmission treatment_administered    facility age_group has_symptoms
-#&gt; 1     Unknown                    Yes Facility  8     20-29           no
-#&gt; 2     Unknown                     No     Unknown       50+      unknown
-#&gt; 3          No                    Yes     Unknown     40-49      unknown
-#&gt; 4     Missing                     No Facility  8     20-29          yes
-#&gt; 5         Yes                     No Facility  4     40-49      unknown
-#&gt; 6     Missing                    Yes     Unknown     40-49          yes
-#&gt;   followup
-#&gt; 1       no
-#&gt; 2  missing
-#&gt; 3      yes
-#&gt; 4  unknown
-#&gt; 5  missing
-#&gt; 6       no</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>as.list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>res</span>))</div><div class='output co'>#&gt; $readmission
-#&gt; [1] Unknown Unknown No      Missing Yes     Missing
+#&gt; </div><div class='input'><span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'>clean_variable_spelling</span>(<span class='no'>dat</span>,
+                                <span class='kw'>wordlists</span> <span class='kw'>=</span> <span class='no'>wordlist</span>,
+                                <span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"options"</span>,
+                                <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"values"</span>,
+                                <span class='kw'>spelling_vars</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
+                                <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"orders"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>res2</span>)</div><div class='output co'>#&gt;       id       date readmission treated    facility age_group lab_result_01
+#&gt; 1 ef267c 2019-07-08     Missing     Yes     Unknown     10-19       unknown
+#&gt; 2 e80a37 2019-07-07         Yes     Yes Facility  3     10-19  Inconclusive
+#&gt; 3 b72883 2019-07-07         Yes      No Facility  8     30-39  Inconclusive
+#&gt; 4 c9ee86 2019-07-09          No      No Facility  4     40-49  Inconclusive
+#&gt; 5 40bc7a 2019-07-12          No      No Facility  6       0-9        Normal
+#&gt; 6 46566e 2019-07-14         Yes Missing     Unknown       50+       unknown
+#&gt;   lab_result_02 lab_result_03 has_symptoms followup
+#&gt; 1          High  Inconclusive      missing  unknown
+#&gt; 2       unknown        Normal          yes      yes
+#&gt; 3        Normal  Inconclusive      missing      yes
+#&gt; 4  Inconclusive       unknown          yes      yes
+#&gt; 5       unknown        Normal      missing       no
+#&gt; 6       unknown  Inconclusive      missing  missing</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>res2</span>))</div><div class='output co'>#&gt; $id
+#&gt; [1] ef267c e80a37 b72883 c9ee86 40bc7a 46566e
+#&gt; 50 Levels: 00220d 0ab27b 0f4fd2 0ff1e1 1513bb 174713 1793eb 25be8f ... fa5389
+#&gt; 
+#&gt; $date
+#&gt; [1] 2019-07-08 2019-07-07 2019-07-07 2019-07-09 2019-07-12 2019-07-14
+#&gt; 10 Levels: 2019-07-07 2019-07-08 2019-07-09 2019-07-10 ... 2019-07-16
+#&gt; 
+#&gt; $readmission
+#&gt; [1] Missing Yes     Yes     No      No      Yes    
 #&gt; Levels: Yes No Unknown Missing
 #&gt; 
-#&gt; $treatment_administered
-#&gt; [1] Yes No  Yes No  No  Yes
+#&gt; $treated
+#&gt; [1] Yes     Yes     No      No      No      Missing
 #&gt; Levels: Yes No Missing
 #&gt; 
 #&gt; $facility
-#&gt; [1] Facility  8 Unknown     Unknown     Facility  8 Facility  4 Unknown    
+#&gt; [1] Unknown     Facility  3 Facility  8 Facility  4 Facility  6 Unknown    
 #&gt; 11 Levels: Facility  1 Facility  2 Facility  3 Facility  4 ... Unknown
 #&gt; 
 #&gt; $age_group
-#&gt; [1] 20-29 50+   40-49 20-29 40-49 40-49
+#&gt; [1] 10-19 10-19 30-39 40-49 0-9   50+  
 #&gt; Levels: 0-9 10-19 20-29 30-39 40-49 50+
 #&gt; 
+#&gt; $lab_result_01
+#&gt; [1] unknown      Inconclusive Inconclusive Inconclusive Normal      
+#&gt; [6] unknown     
+#&gt; Levels: High Normal Inconclusive unknown
+#&gt; 
+#&gt; $lab_result_02
+#&gt; [1] High         unknown      Normal       Inconclusive unknown     
+#&gt; [6] unknown     
+#&gt; Levels: High Normal Inconclusive unknown
+#&gt; 
+#&gt; $lab_result_03
+#&gt; [1] Inconclusive Normal       Inconclusive unknown      Normal      
+#&gt; [6] Inconclusive
+#&gt; Levels: High Normal Inconclusive unknown
+#&gt; 
 #&gt; $has_symptoms
-#&gt; [1] no      unknown unknown yes     unknown yes    
+#&gt; [1] missing yes     missing yes     missing missing
 #&gt; Levels: yes no unknown missing
 #&gt; 
 #&gt; $followup
-#&gt; [1] no      missing yes     unknown missing no     
+#&gt; [1] unknown yes     yes     yes     no      missing
 #&gt; Levels: yes no unknown missing
-#&gt; </div></pre>
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
     <p>Zhian N. Kamvar</p>
+<p>Patrick Barks</p>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -412,13 +461,16 @@ numeric and Date columns from conversion to character.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
