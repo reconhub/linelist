@@ -68,7 +68,8 @@
 #'
 #' @author Zhian N. Kamvar
 #'
-#' @seealso [clean_variable_spelling()] for an implementation that acts across
+#' @seealso [matchmaker::match_vec()], which this function wraps and
+#'   [matchmaker::match_df()] for an implementation that acts across
 #'   multiple variables in a data frame.
 #'
 #' @export
@@ -121,158 +122,16 @@
 #' )
 #' clean_spelling(c("Y", "Y", NA, "No", "U", "UNK", "N"), words)
 #'
-#' @importFrom forcats fct_recode fct_explicit_na fct_relevel
-#' @importFrom rlang "!!!"
-
 clean_spelling <- function(x = character(), wordlist = data.frame(),
                            from = 1, to = 2,
                            quiet = FALSE, warn_default = TRUE,
                            anchor_regex = TRUE) {
-
-  if (length(x) == 0 || !is.atomic(x)) {
-    stop("x must be coerceable to a character")
-  } else if (!is.factor(x)) {
-    x <- as.character(x)
-  }
-
-  wl_is_data_frame  <- is.data.frame(wordlist)
-  
-  wl_is_rectangular <- (wl_is_data_frame || is.matrix(wordlist)) &&
-                        ncol(wordlist) >= 2
- 
-  if (!wl_is_rectangular) {
-    stop("wordlist must be a data frame with at least two columns")
-  } 
-  
-  if (!wl_is_data_frame) {
-    wordlist <- as.data.frame(wordlist, stringsAsFactors = FALSE)
-  }
-
-  from_exists <- i_check_scalar(from) && i_check_column_name(from, names(wordlist))
-  to_exists   <- i_check_scalar(to)   && i_check_column_name(to, names(wordlist))
-
-  if (!from_exists || !to_exists) {
-    stop("`from` and `to` must refer to columns in the wordlist")
-  }
-
-  keys   <- wordlist[[from]]
-  values <- wordlist[[to]]
-
-  if (!is.atomic(keys) || !is.atomic(values)) {
-    stop("wordlist must have two columns coerceable to a character")
-  }
-
-  keys <- as.character(keys)
-  values <- as.character(values)
-
-
-  x_is_factor <- is.factor(x)
-
-  # replace missing with "NA" if NA is present in data
-  na_present <- is.na(keys)
-  keys[na_present] <- "NA"
-
-  # replace missing keyword with NA
-  missing_kw       <- keys == ".missing" | keys == ""
-  keys[missing_kw] <- NA_character_
-
-  # removing duplicated keys
-  duplikeys <- duplicated(keys)
-  dkeys     <- keys[duplikeys]
-  keys      <- keys[!duplikeys]
-  values    <- values[!duplikeys]
-
-  if (!quiet) {
-    the_call  <- match.call()
-    no_regex  <- !any(grepl("^\\.regex ", keys))
-    no_keys   <- !any(x %in% keys, na.rm = TRUE) 
-    no_values <- !any(x %in% values, na.rm = TRUE)
-    the_x     <- deparse(the_call[["x"]])
-    the_words <- deparse(the_call[["wordlist"]])
-
-    if (no_keys && no_values && no_regex) {
-      msg <- "None of the variables in %s were found in %s. Did you use the correct wordlist?" 
-      msg <- sprintf(msg, the_x, the_words)
-      warning(msg)
-    }
-
-    if (any(na_present)) {
-      msg <- "NA was present in the `from` column of %s; replacing with the character 'NA'"
-      msg <- paste(msg, 
-                   "If you want to indicate missing data, use the '.missing' keyword.", 
-                   collapse = "\n")
-      msg <- sprintf(msg, the_words)
-      warning(msg)
-    }
-
-    if (length(dkeys) > 0) {
-      msg <- 'Duplicate keys were found in the `from` column of %s: "%s"\nonly the first instance will be used.'
-      msg <- sprintf(msg, the_words, paste(dkeys, collapse = '", "'))
-      warning(msg)
-    }
-  }
-
-
-  dict        <- keys
-  names(dict) <- values
-  
-  na_posi      <- is.na(dict)
-  default_posi <- dict == ".default" 
-
-  default <- dict[!na_posi & default_posi]
-  nas     <- dict[na_posi]
-  dict    <- dict[!na_posi & !default_posi]
-
-  # replacing regex keys first ------------------------------------------------
-  reg_keys       <- grepl("^\\.regex ", dict)
-  dict[reg_keys] <- trimws(gsub("^\\.regex ", "", dict[reg_keys]))
-  # If the user wants us to automatically add regex anchors.
-  if (anchor_regex) {
-    dict[reg_keys] <- sprintf("^%s$", dict[reg_keys])
-  }
-
-  for (i in seq_along(dict[reg_keys])) {
-    pattern      <- dict[reg_keys][i] 
-    replacement  <- names(dict[reg_keys])[i] 
-    x            <- gsub(pattern, replacement, x, perl = TRUE)
-  }
-
-  # replacing the regex keys with their values
-  dict[reg_keys] <- names(dict)[reg_keys]
-
-  # Making "" explicitly NA ---------------------------------------------------
-  x <- forcats::fct_recode(x, NULL = "")
-
-  # Recode data with forcats --------------------------------------------------
-  suppressWarnings(x <- forcats::fct_recode(x, !!! dict))
-
-  # Replace NAs if there are any ----------------------------------------------
-  if (length(nas) > 0) {
-    x <- forcats::fct_explicit_na(x, na_level = names(nas))
-  }
-  
-  # Make certain values missing if ".na" is in the values
-  x <- forcats::fct_recode(x, NULL = ".na")
-
-  # Replace any untranslated variables if .default is defined -----------------
-  if (length(default) > 0) {
-    default_vars <- levels(x)[!levels(x) %in% c(names(dict), names(nas))]
-    if (warn_default && length(default_vars) > 0) {
-      was <- if (length(default_vars) > 1) "were" else "was"
-      msg <- "'%s' %s changed to the default value ('%s')"
-      warning(sprintf(msg, paste(default_vars, collapse = "', '"), was, names(default)))
-    }
-    suppressWarnings({
-      x <- forcats::fct_other(x, keep = c(names(dict), names(nas)), other = names(default))
-    })
-  }
-
-  # Make sure order is preserved if it's a factor -----------------------------
-  if (x_is_factor) {
-    suppressWarnings(x <- forcats::fct_relevel(x, unique(values)))
-  } else {
-    x <- as.character(x)
-  }
-
-  x
+  matchmaker::match_vec(
+    x = x,
+    dictionary = wordlist,
+    from = from,
+    to = to,
+    warn_default = warn_default,
+    anchor_regex = anchor_regex
+  )
 }

@@ -4,8 +4,14 @@
 \alias{clean_dates}
 \title{Handle dates data}
 \usage{
-clean_dates(x, force_Date = TRUE, guess_dates = TRUE,
-  error_tolerance = 0.5, ..., classes = NULL)
+clean_dates(
+  x,
+  force_Date = TRUE,
+  guess_dates = TRUE,
+  error_tolerance = 0.5,
+  ...,
+  classes = NULL
+)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
@@ -42,7 +48,7 @@ various pre-defined formats (see \emph{details}). For each variable, the most
 common date format is automatically detected, and dates not following it are
 set to \code{NA} (i.e. missing). It uses a tolerance threshold for the amount of
 entries which cannot be converted to date (\code{error_tolerance}). By default,
-tolerance is set to \code{0.1}, meaning 10% of errors in dates entry is allowed
+tolerance is set to \code{0.1}, meaning 10\% of errors in dates entry is allowed
 for a given variable. If there are more errors, this variable is assumed not
 to be a date, and left untouched.
 }

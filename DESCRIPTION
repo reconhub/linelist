@@ -19,12 +19,12 @@ Suggests:
   tibble,
   dplyr,
   magrittr
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.2
 Imports:
-  lubridate,
-  rlang,
-  epitrix,
+  matchmaker (>= 0.1.0),
   forcats,
+  lubridate,
+  epitrix,
   utils,
   stats,
   crayon

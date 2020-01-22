@@ -149,9 +149,7 @@ test_that("A global wordlist can be implemented alongside the wordlist", {
   wl <- rbind(wordlist, global_words, stringsAsFactors = FALSE)
 
 
-  expect_warning({
-    clean_global <- clean_data(md, wordlists = wl, warn = TRUE)
-  }, "epi_case_definition__:")
+  clean_global <- clean_data(md, wordlists = wl, warn = FALSE)
 
   expect_is(clean_global$location, "factor")
 
@@ -177,7 +175,7 @@ test_that("A global wordlist can be implemented as-is", {
                                sort_by = "orders", 
                                spelling_vars = NULL 
                               )
-  }, "Using wordlist globally across all character/factor columns.")
+  }, "Using dictionary globally across all character/factor columns.")
 
 
   expect_true("HOSPITAL" %in% clean_global$location)

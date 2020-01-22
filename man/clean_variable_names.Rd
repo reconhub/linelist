@@ -14,7 +14,7 @@ protect from manipulation}
 
 \item{...}{further arguments passed to \code{\link[epitrix:clean_labels]{epitrix::clean_labels()}}; the most
 important is \code{sep}, which refers to the separator used between words,
-and defaults to the underscore \code{_}.}
+and defaults to the underscore \verb{_}.}
 }
 \value{
 A \code{data.frame} with standardised variable names.

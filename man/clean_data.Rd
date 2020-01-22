@@ -4,15 +4,25 @@
 \alias{clean_data}
 \title{Clean a data.frame}
 \usage{
-clean_data(x, sep = "_", force_Date = TRUE, guess_dates = FALSE,
-  error_tolerance = 0.5, wordlists = NULL, spelling_vars = 3,
-  sort_by = NULL, warn_spelling = FALSE, protect = FALSE, ...)
+clean_data(
+  x,
+  sep = "_",
+  force_Date = TRUE,
+  guess_dates = FALSE,
+  error_tolerance = 0.5,
+  wordlists = NULL,
+  spelling_vars = 3,
+  sort_by = NULL,
+  warn_spelling = FALSE,
+  protect = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
 
 \item{sep}{The separator used between words, and defaults to the underscore
-\code{_}.}
+\verb{_}.}
 
 \item{force_Date}{a \code{logical} or \code{integer} vector indicating the columns .
 If \code{logical}, indicating if \code{POSIXct} and \code{POSIXlt} objects should be
@@ -102,8 +112,8 @@ clean_data3
 ## Using a wordlist  -------------------------------
 
 # location data with mis-spellings, French, and English.
-messy_locations <- c("hopsital", "h\\u00f4pital", "hospital", 
-                     "m\\u00e9dical", "clinic", 
+messy_locations <- c("hopsital", "h\u00f4pital", "hospital", 
+                     "m\u00e9dical", "clinic", 
                      "feild", "field")
 toy_data$location <- factor(sample(messy_locations, 20, replace = TRUE))
 

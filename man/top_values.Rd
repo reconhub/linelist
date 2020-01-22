@@ -11,11 +11,23 @@ top_values(x, n, ...)
 
 \method{top_values}{default}(x, n, ...)
 
-\method{top_values}{factor}(x, n, replacement = "other", subset = NULL,
-  ties_method = "first", ...)
+\method{top_values}{factor}(
+  x,
+  n,
+  replacement = "other",
+  subset = NULL,
+  ties_method = "first",
+  ...
+)
 
-\method{top_values}{character}(x, n, replacement = "other",
-  subset = NULL, ties_method = "first", ...)
+\method{top_values}{character}(
+  x,
+  n,
+  replacement = "other",
+  subset = NULL,
+  ties_method = "first",
+  ...
+)
 }
 \arguments{
 \item{x}{a \code{factor} or a \code{character} vector}

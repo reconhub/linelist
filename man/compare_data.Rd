@@ -12,14 +12,20 @@ compare_data(ref, x, ...)
 
 \method{compare_data}{default}(ref, x, ...)
 
-\method{compare_data}{data_structure}(ref, x, use_dim = TRUE,
-  use_names = TRUE, use_classes = TRUE, use_values = TRUE,
-  columns = TRUE, ...)
+\method{compare_data}{data_structure}(
+  ref,
+  x,
+  use_dim = TRUE,
+  use_names = TRUE,
+  use_classes = TRUE,
+  use_values = TRUE,
+  columns = TRUE,
+  ...
+)
 
 \method{compare_data}{data.frame}(ref, x, ...)
 
-\method{print}{data_comparison}(x, ..., common_values = TRUE,
-  diff_only = TRUE)
+\method{print}{data_comparison}(x, ..., common_values = TRUE, diff_only = TRUE)
 }
 \arguments{
 \item{ref}{the reference \code{data.frame}}
