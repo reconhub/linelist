@@ -15,6 +15,12 @@ test_that("only characters and factors are expected", {
 
 })
 
+test_that("vectors of all missing values are returned unharmed", {
+  na <- factor(c(NA, NA))
+  expect_warning({  
+    expect_identical(guess_dates(na), na) 
+  }, "all dates were missing, returning data unchanged")
+})
 
 test_that("mixed formats work", {
   expect_equal(guess_dates(x, error_tolerance = 0.8, first_date = as.Date("1980-01-01")),
