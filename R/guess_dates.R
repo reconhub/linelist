@@ -205,6 +205,11 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
   # save the original x for later if nothing is converted
   ox <- x
 
+  if (all(is.na(x))) {
+    warning("all dates were missing, returning data unchanged", call. = FALSE)
+    return(ox)
+  }
+
   if (is.factor(x)) {
     x <- as.character(x)
   }
@@ -213,10 +218,6 @@ guess_dates <- function(x, error_tolerance = 0.1, first_date = NULL,
     stop("guess dates will only work for characters and factors")
   }
 
-  if (all(is.na(x))) {
-    warning("all dates were missing, returning data unchanged", call. = FALSE)
-    return(ox)
-  }
 
 
   # Process lubridate order list -----------------------------------------------

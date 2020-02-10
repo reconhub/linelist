@@ -10,7 +10,6 @@ expected_result <- structure(c(4417, 17793, 11323, 15321, 15647, 16052,
 
 test_that("only characters and factors are expected", {
        
-  expect_error(guess_dates(NULL), "guess dates will only work for characters and factors")
   expect_error(guess_dates(pi), "guess dates will only work for characters and factors")
 
 })
@@ -19,6 +18,9 @@ test_that("vectors of all missing values are returned unharmed", {
   na <- factor(c(NA, NA))
   expect_warning({  
     expect_identical(guess_dates(na), na) 
+  }, "all dates were missing, returning data unchanged")
+  expect_warning({  
+    expect_identical(guess_dates(NULL), NULL) 
   }, "all dates were missing, returning data unchanged")
 })
 
