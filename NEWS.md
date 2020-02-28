@@ -1,10 +1,13 @@
 # linelist 0.0.40.9000
 
+
 * Both `clean_variable_spelling()` and `clean_spelling()` have been migrated over
   to the {matchmaker} package and arguments from the aformentioned functions are
   passed to the {matchmaker} functions. Tests and documentation have been
   updated to reflect this.
 * Remove {rlang} from imports (but is still imported by {matchmaker}).
+* `guess_dates()` will now return entirely missing vectors unchanged instead of
+  throwing an error. This fixes #108 via #109.
 
 # linelist 0.0.39.9000
 
