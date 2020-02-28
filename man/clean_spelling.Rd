@@ -134,7 +134,8 @@ clean_spelling(c("Y", "Y", NA, "No", "U", "UNK", "N"), words)
 
 }
 \seealso{
-\code{\link[=clean_variable_spelling]{clean_variable_spelling()}} for an implementation that acts across
+\code{\link[matchmaker:match_vec]{matchmaker::match_vec()}}, which this function wraps and
+\code{\link[matchmaker:match_df]{matchmaker::match_df()}} for an implementation that acts across
 multiple variables in a data frame.
 }
 \author{

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract the structure of a dataset — get_structure • linelist</title>
+<title>show the path to a linelist example file — linelist_example • linelist</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,8 @@
 
 
 
-<meta property="og:title" content="Extract the structure of a dataset — get_structure" />
-<meta property="og:description" content="This function extracts the structure and content of a data.frame, storing
-the following information:" />
+<meta property="og:title" content="show the path to a linelist example file — linelist_example" />
+<meta property="og:description" content="show the path to a linelist example file" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -121,90 +120,94 @@ the following information:" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract the structure of a dataset</h1>
-    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/get_structure.R'><code>R/get_structure.R</code></a></small>
-    <div class="hidden name"><code>get_structure.Rd</code></div>
+    <h1>show the path to a linelist example file</h1>
+    <small class="dont-index">Source: <a href='https://github.com/reconhub/linelist/blob/master/R/linelist_example.R'><code>R/linelist_example.R</code></a></small>
+    <div class="hidden name"><code>linelist_example.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function extracts the structure and content of a <code>data.frame</code>, storing
-the following information:</p>
+    <p>show the path to a linelist example file</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_structure</span>(<span class='no'>x</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>linelist_example</span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>a <code>data.frame</code> to be checked</p></td>
-    </tr>
-    <tr>
-      <th>columns</th>
-      <td><p>the names or indices of columns to compare. Defaults to <code>TRUE</code>
-which will keep all columns by default.</p></td>
+      <th>name</th>
+      <td><p>the name of a linelist example file</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing:</p><ul>
-<li><p><code>dim</code>: the dimensions of the dataset (rows, columns)</p></li>
-<li><p><code>names</code>: the names of the dataset</p></li>
-<li><p><code>classes</code>: the corresponding classes (if a column has several classes, only
-the first one is kept)</p></li>
-<li><p><code>values</code>: the list of sorted, unique values for each categorical column
-(<code>factor</code> or <code>character</code>)</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>names and order of columns</p></li>
-<li><p>class of the columns</p></li>
-<li><p>values of the columns, for <code>factors</code> and <code>characters</code></p></li>
-</ul>
-
+    <p>a path to a linelist example file</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-#&gt; 1          5.1         3.5          1.4         0.2  setosa
-#&gt; 2          4.9         3.0          1.4         0.2  setosa
-#&gt; 3          4.7         3.2          1.3         0.2  setosa
-#&gt; 4          4.6         3.1          1.5         0.2  setosa
-#&gt; 5          5.0         3.6          1.4         0.2  setosa
-#&gt; 6          5.4         3.9          1.7         0.4  setosa</div><div class='input'><span class='fu'>get_structure</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; $dim
-#&gt; [1] 150   5
-#&gt; 
-#&gt; $names
-#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"     
-#&gt; 
-#&gt; $classes
-#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width      Species 
-#&gt;    "numeric"    "numeric"    "numeric"    "numeric"     "factor" 
-#&gt; 
-#&gt; $values
-#&gt; $values$Species
-#&gt; [1] "setosa"     "versicolor" "virginica" 
-#&gt; 
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "data_structure"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>linelist_example</span>() <span class='co'># list all of the example files</span></div><div class='output co'>#&gt; [1] "coded-data.csv"          "spelling-dictionary.csv"</div><div class='input'>
+<span class='co'># read in example spelling dictionary</span>
+<span class='no'>sd</span> <span class='kw'>&lt;-</span> <span class='fu'>linelist_example</span>(<span class='st'>"spelling-dictionary.csv"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='no'>sd</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;     options       values                 grp orders
+#&gt; 1         y          Yes         readmission      1
+#&gt; 2         n           No         readmission      2
+#&gt; 3         u      Unknown         readmission      3
+#&gt; 4  .missing      Missing         readmission      4
+#&gt; 5         0          Yes             treated      1
+#&gt; 6         1           No             treated      2
+#&gt; 7  .missing      Missing             treated      3
+#&gt; 8         1  Facility  1            facility      1
+#&gt; 9         2  Facility  2            facility      2
+#&gt; 10        3  Facility  3            facility      3
+#&gt; 11        4  Facility  4            facility      4
+#&gt; 12        5  Facility  5            facility      5
+#&gt; 13        6  Facility  6            facility      6
+#&gt; 14        7  Facility  7            facility      7
+#&gt; 15        8  Facility  8            facility      8
+#&gt; 16        9  Facility  9            facility      9
+#&gt; 17       10  Facility 10            facility     10
+#&gt; 18 .default      Unknown            facility     11
+#&gt; 19        0          0-9           age_group      1
+#&gt; 20       10        10-19           age_group      2
+#&gt; 21       20        20-29           age_group      3
+#&gt; 22       30        30-39           age_group      4
+#&gt; 23       40        40-49           age_group      5
+#&gt; 24       50          50+           age_group      6
+#&gt; 25     high         High .regex ^lab_result_      1
+#&gt; 26     norm       Normal .regex ^lab_result_      2
+#&gt; 27      inc Inconclusive .regex ^lab_result_      3
+#&gt; 28        y          yes             .global    Inf
+#&gt; 29        n           no             .global    Inf
+#&gt; 30        u      unknown             .global    Inf
+#&gt; 31      unk      unknown             .global    Inf
+#&gt; 32      oui          yes             .global    Inf
+#&gt; 33 .missing      missing             .global    Inf</div><div class='input'>
+<span class='co'># read in example coded data</span>
+<span class='no'>coded_data</span> <span class='kw'>&lt;-</span> <span class='fu'>linelist_example</span>(<span class='st'>"coded-data.csv"</span>)
+<span class='no'>coded_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='no'>coded_data</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>coded_data</span>)</div><div class='output co'>#&gt; 'data.frame':	50 obs. of  11 variables:
+#&gt;  $ id           : chr  "ef267c" "e80a37" "b72883" "c9ee86" ...
+#&gt;  $ date         : chr  "2019-07-08" "2019-07-07" "2019-07-07" "2019-07-09" ...
+#&gt;  $ readmission  : chr  NA "y" "y" "n" ...
+#&gt;  $ treated      : int  0 0 1 1 1 NA NA 0 1 1 ...
+#&gt;  $ facility     : chr  "C" "3" "8" "4" ...
+#&gt;  $ age_group    : int  10 10 30 40 0 50 40 0 50 50 ...
+#&gt;  $ lab_result_01: chr  "unk" "inc" "inc" "inc" ...
+#&gt;  $ lab_result_02: chr  "high" "unk" "norm" "inc" ...
+#&gt;  $ lab_result_03: chr  "inc" "norm" "inc" "unk" ...
+#&gt;  $ has_symptoms : chr  NA "y" "" "y" ...
+#&gt;  $ followup     : chr  "u" "oui" "oui" "oui" ...</div><div class='input'><span class='no'>coded_data</span>$<span class='no'>date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='no'>coded_data</span>$<span class='no'>date</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
-    <p>Thibaut Jombart</p>
+    <p>Zhian N. Kamvar</p>
   </div>
 </div>
 

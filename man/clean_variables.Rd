@@ -4,15 +4,22 @@
 \alias{clean_variables}
 \title{Clean variable labels and fix spelling according to a wordlist}
 \usage{
-clean_variables(x, sep = "_", wordlists = NULL, spelling_vars = 3,
-  sort_by = NULL, protect = FALSE, classes = NULL,
-  warn_spelling = FALSE)
+clean_variables(
+  x,
+  sep = "_",
+  wordlists = NULL,
+  spelling_vars = 3,
+  sort_by = NULL,
+  protect = FALSE,
+  classes = NULL,
+  warn_spelling = FALSE
+)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
 
 \item{sep}{The separator used between words, and defaults to the underscore
-\code{_}.}
+\verb{_}.}
 
 \item{wordlists}{a data frame or named list of data frames with at least two
 columns defining the word list to be used. If this is a data frame, a third
@@ -50,8 +57,8 @@ Clean variable labels and fix spelling according to a wordlist
 toy_data <- messy_data(20)
 
 # location data with mis-spellings, French, and English.
-messy_locations <- c("hopsital", "h\\u00f4pital", "hospital", 
-                     "m\\u00e9dical", "clinic", 
+messy_locations <- c("hopsital", "h\u00f4pital", "hospital", 
+                     "m\u00e9dical", "clinic", 
                      "feild", "field")
 toy_data$location <- sample(messy_locations, 20, replace = TRUE)
 

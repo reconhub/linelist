@@ -133,7 +133,7 @@ as.list(head(res2))
 
 }
 \seealso{
-\code{\link[=clean_spelling]{clean_spelling()}}, which this function wraps.
+\code{\link[matchmaker:match_df]{matchmaker::match_df()}}, which this function wraps.
 }
 \author{
 Zhian N. Kamvar

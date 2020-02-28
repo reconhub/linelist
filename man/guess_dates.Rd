@@ -4,9 +4,15 @@
 \alias{guess_dates}
 \title{Try and guess dates from a characters}
 \usage{
-guess_dates(x, error_tolerance = 0.1, first_date = NULL,
-  last_date = Sys.Date(), orders = getOption("linelist_guess_orders"),
-  quiet = TRUE, modern_excel = TRUE)
+guess_dates(
+  x,
+  error_tolerance = 0.1,
+  first_date = NULL,
+  last_date = Sys.Date(),
+  orders = getOption("linelist_guess_orders"),
+  quiet = TRUE,
+  modern_excel = TRUE
+)
 }
 \arguments{
 \item{x}{a \code{character} vector or a \code{factor}}

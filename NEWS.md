@@ -1,3 +1,11 @@
+# linelist 0.0.40.9000
+
+* Both `clean_variable_spelling()` and `clean_spelling()` have been migrated over
+  to the {matchmaker} package and arguments from the aformentioned functions are
+  passed to the {matchmaker} functions. Tests and documentation have been
+  updated to reflect this.
+* Remove {rlang} from imports (but is still imported by {matchmaker}).
+
 # linelist 0.0.39.9000
 
 * `clean_variable_spelling()` and `clean_spelling()` gain the option to specify
