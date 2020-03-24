@@ -1,0 +1,80 @@
+---
+title: "Getting Started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Basic usage
+Let us consider some messy `data.frame` as a toy example: 
+
+```{r toy_data}
+library(linelist)
+ll_sample <- messy_data()
+```
+
+We can use `clean_data()` with defaults to let the package to do its best to clean up the data.
+
+```{r}
+clean_data(ll_sample)
+```
+
+## Intermediate use
+The `clean_data()` function comes with switches for many of the cleaning capabilities so that you can define a bespoke cleaning process.
+
+```{r}
+clean_data(ll_sample, guess_dates = TRUE, error_tolerance = 0.1)
+```
+
+We can prevent the cleaning process from operating on certain columns.
+
+```{r}
+clean_data(ll_sample, guess_dates = TRUE, protect = names(ll_sample) == "messy/dates")
+```
+
+If we have values that are multi-lingual or possibly have typos, we can generate a wordlist that contains two columns, `from` and `to`, that will be used to transform any found values in specified columns.
+
+```{r}
+wordlist <- data.frame(
+ from  = c("hopsital", "hopital",  "medical", "feild"),
+ to    = c("hospital", "hospital", "clinic",  "field"),
+ variables = rep("location", 4),
+ stringsAsFactors = FALSE
+)
+
+# location data with mis-spellings, French, and English.
+messy_locations <- c("hopsital", "h\u00f4pital", "hospital", 
+                     "m\u00e9dical", "clinic", 
+                     "feild", "field")
+llsample_spell <- messy_data()
+llsample_spell$location <- factor(sample(messy_locations, 20, replace = TRUE))
+
+clean_data(llsample_spell, wordlists = wordlist, spelling_vars = "variables" )
+```
+
+## Advanced usage
+As well as the configurable `clean_data()` function, many of the capabilities are exposed individually, supporting data pipelines.
+
+```{r}
+llsample_pipe <- ll_sample
+llsample_pipe <- clean_dates(llsample_pipe)
+llsample_pipe <- clean_variable_names(llsample_pipe)
+```
+
+This gives you highly granular control over the process and is advised when building functions for processing data in your specific usecase / environment.
+
+You can then see the impact of changes by comparing two linelist data.frames.
+
+```{r}
+compare_data(ll_sample, llsample_pipe)
+```

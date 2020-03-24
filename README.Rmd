@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/reconhub/linelist/branch/master/graph/badge.svg)](https://codecov.io/gh/reconhub/linelist?branch=master)
 
 This package is dedicated to simplifying the cleaning and standardisation of
-linelist data. Considering a case linelist `data.frame`, it aims to:
+[line list](https://outbreaktools.ca/background/line-lists/) data. Considering a case line list `data.frame`, it aims to:
 
 - standardise the variables names, replacing all non-ascii characters with their
   closest latin equivalent, removing blank spaces and other separators,
@@ -54,10 +54,24 @@ devtools::install_github("reconhub/linelist")
 
 Note that this requires the package *devtools* installed.
 
+# Quick example
+
+Let us consider a messy `data.frame` as an example: 
+
+```{r toy_data}
+library(linelist)
+example_data <- messy_data(10)
+example_data
+```
+
+We then use the `clean_data()` command to get nice, clean data!
+
+```{r clean_data}
+clean_data(example_data, guess_dates = TRUE)
+```
+
 
 # What does it do?
-
-## Data cleaning
 
 Procedures to clean data, first and foremost aimed at `data.frame` formats,
 include:
@@ -78,47 +92,6 @@ include:
 - `guess_dates()`: find dates in various, unspecified formats in a messy
   `character` vector
   
-  
-
-# Worked example
-
-Let us consider some messy `data.frame` as a toy example: 
-
-```{r toy_data}
-
-## make toy data
-onsets <- as.Date("2018-01-01") + sample(1:10, 20, replace = TRUE)
-discharge <- format(as.Date(onsets) + 10, "%d/%m/%Y")
-genders <- c("male", "female", "FEMALE", "Male", "Female", "MALE")
-gender <- sample(genders, 20, replace = TRUE)
-case_types <- c("confirmed", "probable", "suspected", "not a case",
-                "Confirmed", "PROBABLE", "suspected  ", "Not.a.Case")
-messy_dates <- sample(
-                 c("01-12-2001", "male", "female", "2018-10-18", "2018_10_17",
-                   "2018 10 19", "// 24//12//1989", NA, "that's 24/12/1989!"),
-                 20, replace = TRUE)
-case <- factor(sample(case_types, 20, replace = TRUE))
-toy_data <- data.frame("Date of Onset." = onsets,
-                       "DisCharge.." = discharge,
-                       "SeX_ " = gender,
-                       "Épi.Case_définition" = case,
-                       "messy/dates" = messy_dates)
-## show data
-toy_data
-
-```
-
-We start by cleaning these data:
-
-```{r clean_data}
-## load library
-library(linelist)
-
-## clean data with defaults
-x <- clean_data(toy_data)
-x
-
-```
 
 
 

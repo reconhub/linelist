@@ -10,15 +10,16 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests:
-  outbreaks,
-  incidence,
-  testthat,
-  knitr,
-  roxygen2,
-  covr,
-  tibble,
-  dplyr,
-  magrittr
+    outbreaks,
+    incidence,
+    testthat,
+    knitr,
+    roxygen2,
+    covr,
+    tibble,
+    dplyr,
+    magrittr,
+    rmarkdown
 RoxygenNote: 7.0.2
 Imports:
   matchmaker (>= 0.1.0),

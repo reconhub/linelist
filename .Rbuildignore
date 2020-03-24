@@ -7,3 +7,8 @@ README.html
 ^.*\.Rproj$
 ^\.Rproj\.user$
 docs/
+^\.github$
+^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
