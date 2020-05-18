@@ -359,7 +359,7 @@ constrain_dates <- function(new_dates, original_dates, dmin, dmax, baddies) {
 choose_first_good_date <- function(date_a_frame) {
   n   <- nrow(date_a_frame)
   date_a_frame <- as.matrix(date_a_frame)
-  res <- rep(as.Date(NA), length = n)
+  res <- rep(as.Date(NA), length.out = n)
   for (i in seq_len(n)) {
     tmp    <- date_a_frame[i, , drop = TRUE]
     res[i] <- as.Date(tmp[!is.na(tmp)][1])
